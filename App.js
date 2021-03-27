@@ -6,25 +6,14 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { ReactReduxFirebaseProvider, firebaseReducer } from 'react-redux-firebase'
 import { Provider } from 'react-redux'
-import { createStore, combineReducers, compose } from 'redux'
+import { createStore, combineReducers } from 'redux'
 
-// Navigation
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import DiscoverScreen from './Screens/BottomTabScreens/DiscoverScreen';
-import SearchScreen from './Screens/BottomTabScreens/SearchScreen';
-import CreateScreen from './Screens/BottomTabScreens/CreateScreen';
-import SpiritScreen from './Screens/BottomTabScreens/SpiritScreen';
-import ProfileScreen from './Screens/BottomTabScreens/ProfileScreen';
-
-const Tab = createBottomTabNavigator();
+import Main from './Main.js';
 
 // react-redux-firebase config
 const rrfConfig = {
   userProfile: 'users'
 }
-
-console.log(firebaseConfig)
 
 // Initialize firebase instance
 try {
@@ -46,20 +35,12 @@ const rrfProps = {
   dispatch: store.dispatch
 }
 
+// Application container wrapped in the React-Redux-Firebase State
 const App = () => {
-
   return (
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <NavigationContainer>
-            <Tab.Navigator>
-              <Tab.Screen name="Discover" component={DiscoverScreen} />
-              <Tab.Screen name="Search" component={SearchScreen} />
-              <Tab.Screen name="Create" component={CreateScreen} />
-              <Tab.Screen name="Spirit" component={SpiritScreen} />
-              <Tab.Screen name="Profile" component={ProfileScreen} />
-            </Tab.Navigator>
-        </NavigationContainer>
+        <Main />
         </ReactReduxFirebaseProvider>
       </Provider>
   )
