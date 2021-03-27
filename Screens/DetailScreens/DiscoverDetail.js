@@ -1,13 +1,11 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text, SafeAreaView } from 'react-native';
-
-const Stack = createStackNavigator();
+import { Text, SafeAreaView } from 'react-native';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const DiscoverDetail = ({ route }) => {
     return (
-        <SafeAreaView>
-            <Text>This is the DiscoverDetail</Text>
+        <SafeAreaView style={GlobalStyles.headerSafeArea}>
+            <Text>This is the Hello</Text>
         </SafeAreaView>
     );
 }
