@@ -1,6 +1,6 @@
 // Dummy data for drink list
 const initState = {
- "allDrinks" : [ {
+ "drinks" : [ {
   "description" : "We don't need a train to enjoy this play on the 20th Century Cocktail. The 21st Century Man is sweet and citrusy and less boozy for a more refreshing taste.",
   "id" : "1",
   "instructions" : "Combine all ingredients in a shaker. Add ice, seal, & shake vigorously for 10 secs. Strain into rocks glass over large cut ice cube.Express lemon peel over cocktail. Rub peel around rim of glass & place into drink.",
@@ -64,8 +64,13 @@ const drinkReducer = (state = initState, action) => {
     switch (action.type) {
         case 'CREATE_DRINK':
             console.log('created drink', action.drink);
+            return state;
+        case 'CREATE_DRINK_ERROR':
+            console.log('create project error: ', action.err);
+            return state;
+        default:
+            return state;
     }
-    return state;
 }
 
 export default drinkReducer;
