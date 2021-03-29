@@ -3,11 +3,11 @@ import React from 'react';
 // Application-Wide State Management
 import firebaseConfig from './API/fbConfig';
 import firebase from './API/FirebaseSetup';
-import { ReactReduxFirebaseProvider, getFirebase } from 'react-redux-firebase';
-import { createStore, applyMiddleware, compose } from 'redux'
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
-import { reduxFirestore, getFirestore, createFirestoreInstance } from 'redux-firestore';
+import { createFirestoreInstance } from 'redux-firestore';
 import rootReducer from './Store/Reducers/RootReducer';
 
 import Main from './Main.js';
