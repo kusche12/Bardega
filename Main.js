@@ -1,6 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux'
-import { useFirebaseConnect } from 'react-redux-firebase'
 
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

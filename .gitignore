@@ -14,3 +14,4 @@ web-build/
 
 /API
 FirebaseSetup.js
+fbConfig.js
