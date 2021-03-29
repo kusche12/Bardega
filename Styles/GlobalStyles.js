@@ -4,4 +4,8 @@ export default StyleSheet.create({
         flex: 1,
         top: Platform.OS === 'ios' ? 50 : 40
     },
+    flexCenter: {
+        flex: 1,
+        alignItems: 'center'
+    }
 });

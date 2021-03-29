@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text, SafeAreaView } from 'react-native';
-
-const Stack = createStackNavigator();
+import CreateDetail from '../DetailScreens/CreateDetail';
+import Header from '../../Components/Main/Header';
 
 const CreateScreen = ({ route }) => {
     return (
-        <SafeAreaView>
-            <Text>This is the CreateScreen</Text>
-        </SafeAreaView>
+        <Header route={route} name="Create" component={CreateDetail} />
     );
 }
 
