@@ -10,7 +10,11 @@ const { width } = Dimensions.get('window');
 const Header = ({ route, component, name }) => {
 
     return (
-        <Stack.Navigator>
+        <Stack.Navigator
+            screenOptions={{
+            headerStyle: { elevation: 0 },
+            cardStyle: { backgroundColor: '#fff' }
+        }}>
             <Stack.Screen
                 name={name}
                 component={component}

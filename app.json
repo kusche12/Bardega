@@ -23,7 +23,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "androidStatusBar": {
+  "backgroundColor": "#000000"
+}
     },
     "web": {
       "favicon": "./assets/favicon.png"

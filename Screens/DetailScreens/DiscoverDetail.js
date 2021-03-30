@@ -49,7 +49,7 @@ const DiscoverDetail = ({ drinks, queries }) => {
             <SafeAreaView style={GlobalStyles.headerSafeArea}>
                 <Text>Discover</Text>
                 {selectedDrinks.map((drinks, index) => {
-                    return <HorizontalList drinks={drinks} index={index} query={selectedQueries[index].name} />
+                    return <HorizontalList drinks={drinks} key={index} query={selectedQueries[index].name} />
                 })}
             </SafeAreaView>
             );
