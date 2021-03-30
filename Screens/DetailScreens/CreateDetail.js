@@ -9,18 +9,21 @@ import CreateStyles from '../../Styles/CreateStyles';
 const customIngr = [
     {
         type: 'gin',
-        amount: 1.5,
-        unit: 'oz'
+        amount: '1.5',
+        unit: 'oz',
+        id: '0'
     },
     {
         type: 'fresh lemon juice',
-        amount: .75,
-        unit: 'oz'
+        amount: '.75',
+        unit: 'oz',
+        id: '1'
     },
     {
         type: 'sweet vermouth',
-        amount: .5,
-        unit: 'oz'
+        amount: '.5',
+        unit: 'oz',
+        id: '2'
     },
 ]
 
@@ -64,21 +67,42 @@ const CreateDetail = ({ route }) => {
     };
 
     // Update ingredient type/text input
-    const updateIngredientType = (type, index, newId) => {
-        let newIngredients = [ingredients];
+    const updateIngredientType = (type, index) => {
+        let newIngredients = [...ingredients];
         newIngredients[index] = {
             amount: ingredients[index].amount,
             unit: ingredients[index].unit,
-            ingredient: type,
-            id: newId,
+            type: type,
+            id: ingredients[index].id,
         };
         setIngredients(newIngredients);
     };
 
-    const deleteIngredient = (list, id) => {
+    const deleteIngredient = (id) => {
         let newIngredients = ingredients.filter(ing => ing.id !== id);
         setIngredients(newIngredients);
     }
+
+    // Add new item to the ingredients list
+    const addIngredient = () => {
+        let newId = -1;
+        // Find the largest ID (as to not copy the others)
+        ingredients.forEach(ing => {
+            newId = Math.max(parseInt(ing.id, 10), newId);
+        });
+
+        newId++;
+        newId = '' + newId;
+
+        let newIngredients = ingredients.concat({
+            id: newId,
+            amount: '0',
+            unit: ' ',
+            ingredient: '',
+        });
+
+        setIngredients(newIngredients);
+    };
 
     return (
         <KeyboardAwareScrollView
@@ -120,7 +144,11 @@ const CreateDetail = ({ route }) => {
                     </View>
                 </TouchableWithoutFeedback>
 
-                <CreateIngredients {...{ingredients, setIngredients, updateIngredient, deleteIngredient, updateIngredientType}} />
+                <CreateIngredients {...{
+                    ingredients, setIngredients,
+                    updateIngredient, deleteIngredient,
+                    updateIngredientType, addIngredient
+                }} />
         
                 </SafeAreaView>
             </KeyboardAwareScrollView>

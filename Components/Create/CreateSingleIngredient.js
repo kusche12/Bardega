@@ -2,24 +2,44 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Dimensions, TouchableWithoutFeedback, Platform } from 'react-native';
 import { Col, Grid } from 'react-native-easy-grid';
 import SegmentedPicker from 'react-native-segmented-picker';
-import { AntDesign, Ionicons, Feather } from '@expo/vector-icons';
+import { AntDesign, Feather } from '@expo/vector-icons';
 import PickerOptions from '../../API/pickerOptions';
 
 const WIDTH = Dimensions.get('screen').width;
 
-// TODO: Convert any floating point amounts into two columns. The right column being the fraction of the decimal.
 const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIngredientType, deleteIngredient }) => {
 
     const [showPicker, setShowPicker] = useState(false);
-    console.log(PickerOptions);
+
     // Handle update for the amount and unit of the ingredient
-    // TODO: Test this. Like, ASAP.
     const onPickerConfirm = (selections) => {
-        let newAmount = selections.column1.label;
+        let newInt = selections.column1.label;
+        let fraction = selections.column2.label;
         let newUnit = selections.column3.label;
 
-        updateIngredient(newAmount, newUnit, ingredient.type, key);
+        let newAmount = '' + (parseInt(newInt, 10) + fractionToDec(fraction));
+
+        updateIngredient(newAmount, newUnit, ingredient.type, index);
         setShowPicker(false);
+    }
+
+    const renderIngredientAmount = () => {
+        if (ingredient.amount !== '') {
+            const amount = parseFloat(ingredient.amount, 10);
+            if (amount < 1) {
+                // Render normal sized fraction
+                return <Text style={styles.font1}>{decToFraction(amount)}</Text>
+            } else if (amount > 1) {
+                // Render normal sized int and small fraction
+                return <View style={styles.fractionWrapper}>
+                    <Text style={styles.font1}>{Math.trunc(amount)}</Text>
+                    <Text style={styles.font2}>{decToFraction(amount % 1)}</Text>
+                </View>
+            } else {
+                // Render normal sized 1
+                return <Text style={styles.font1}>{amount}</Text>
+            }
+        }
     }
 
     return (
@@ -29,28 +49,27 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
                 <Col size={2}>
                     <TouchableWithoutFeedback onPress={() => setShowPicker(!showPicker)}>
                         <View style={styles.amount}>
-                            {ingredient.amount !== '0' && <Text style={styles.font1}>{ingredient.amount}</Text>}
+                            {renderIngredientAmount()}
                             <Text style={styles.font2}> </Text>
                             <Text style={styles.font2}>{ingredient.unit}</Text>
-                            <AntDesign name="down" size={18} color="#a1a1a1" style={styles.arrow} />
+                            {/* <AntDesign name="down" size={18} color="#a1a1a1" style={styles.arrow} /> */}
                         </View>
                     </TouchableWithoutFeedback>
                 </Col>
 
                 {/* Ingredient type */}
-                <Col size={5}>
+                <Col size={4}>
                     <View style={styles.ingredient}>
                         <TextInput
                             style={styles.ingredientText}
-                            autoCapitalize="words"
                             value={ingredient.type}
-                            onChangeText={(text) => updateIngredientType(text, index, ingredient.id)}
+                            onChangeText={(text) => updateIngredientType(text, index)}
                         />
                     </View>
                 </Col>
                 <Col size={1}>
                     <View style={styles.delete}>
-                        <TouchableWithoutFeedback onPress={() => deleteIngredient("Ingredient", ingredient.id)}>
+                        <TouchableWithoutFeedback onPress={() => deleteIngredient(ingredient.id)}>
                             <Feather name="x" size={Platform.isPad ? 26 : 20} color="#a1a1a1" style={styles.x} />
                         </TouchableWithoutFeedback>
                     </View>
@@ -61,15 +80,64 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
                 onConfirm={onPickerConfirm}
                 onCancel={() => setShowPicker(!showPicker)}
                 visible={showPicker}
-                //options={PickerOptions}
+                options={PickerOptions}
                 defaultSelections={{ column1: ingredient.amount, column2: ingredient.amount, column3: ingredient.unit }}
-                toolbarBackground="#64CAF6"
-                toolbarBorderColor="#56b9e3"
+                toolbarBackground={PINK}
+                toolbarBorderColor={PINK}
                 confirmTextColor="white"
             />
         </View>
     );
 }
+
+// Helper function to turn fraction string into a decimal number
+const fractionToDec = (fract) => {
+    switch (fract) {
+        case ' ':
+            return 0;
+        case '1/8':
+            return .125;
+        case '1/4':
+            return .25;
+        case '1/3':
+            return .33;
+        case '1/2':
+            return .5;
+        case '2/3':
+            return .66;
+        case '3/4':
+            return .75;
+        default:
+            return 0;
+    }
+}
+
+// Helper function to do the opposite
+const decToFraction = (dec) => {
+    if (.32 < dec && dec < .34) {
+        dec = .33;
+    } else if (.65 < dec && dec < .67) {
+        dec = .66;
+    }
+    switch (dec) {
+        case .125:
+            return '1/8';
+        case .25:
+            return '1/4';
+        case .33:
+            return '1/3';
+        case .5:
+            return '1/2';
+        case .66:
+            return '2/3';
+        case .75:
+            return '3/4';
+        default:
+            return '';
+    }
+}
+
+
 const PINK = '#F29288';
 const GRAY = '#a1a1a1';
 
@@ -105,6 +173,11 @@ const styles = StyleSheet.create({
         color: GRAY,
         fontSize: 12,
         fontStyle: 'italic',
+    },
+    fractionWrapper: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        overflow: 'hidden'
     },
     arrow: {
         position: 'absolute',

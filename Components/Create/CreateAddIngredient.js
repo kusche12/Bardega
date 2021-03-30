@@ -6,10 +6,10 @@ const width = Dimensions.get('window').width;
 const PINK = '#F29288';
 const GRAY = '#a1a1a1';
 
-const CreateAddIngredient = ({ item, addItem }) => {
+const CreateAddIngredient = ({ addIngredient }) => {
     return (   
         <View>
-            <TouchableOpacity onPress={() => addItem(item)}> 
+            <TouchableOpacity onPress={() => addIngredient()}> 
                 <View style={styles.add}>
                     <AntDesign name="pluscircleo" size={Platform.isPad ? 26 : 20} color={GRAY} />
                     <Text style={Platform.isPad ? styles.padAddText : styles.addText}>Add an Ingredient</Text>

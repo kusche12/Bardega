@@ -5,8 +5,7 @@ import CreateSingleIngredient from './CreateSingleIngredient';
 import CreateStyles from '../../Styles/CreateStyles';
 
 // TODO: If the ingredients array is empty, render the first page of the Adobe XD
-const CreateIngredients = ({ingredients, setIngredients, updateIngredient, updateIngredientType, deleteIngredient}) => {
-    console.log(ingredients);
+const CreateIngredients = ({ingredients, addIngredient, updateIngredient, updateIngredientType, deleteIngredient}) => {
     if (ingredients.length == 0) {
         return <Text>Loading ingredients...</Text>
     } else {
@@ -22,10 +21,13 @@ const CreateIngredients = ({ingredients, setIngredients, updateIngredient, updat
                 <ScrollView scrollEnabled={false}>
                     {ingredients.map((ingredient, index) => {
                         return <CreateSingleIngredient
-                            {...{ updateIngredient, ingredient, updateIngredientType, deleteIngredient, index }} key={index}
+                            {...{
+                                updateIngredient, ingredient,
+                                updateIngredientType, deleteIngredient, index
+                            }} key={index}
                         />
                     })}
-                    <CreateAddIngredient />
+                    <CreateAddIngredient {...{addIngredient}}/>
                 </ScrollView>
             </View>
         )
