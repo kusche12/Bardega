@@ -10,7 +10,7 @@ import thunk from 'redux-thunk';
 import { createFirestoreInstance } from 'redux-firestore';
 import rootReducer from './Store/Reducers/RootReducer';
 
-import Main from './Main.js';
+import Main from './Navigation/Main.js';
 
 // Create store enhanced with redux reducers and firestore database
 // const store = createStore(rootReducer, {});

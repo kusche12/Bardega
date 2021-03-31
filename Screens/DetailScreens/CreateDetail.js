@@ -44,16 +44,15 @@ const customTag = [
 
 // TODO: Image handling
 // TODO: Font setting
-// TODO: Tagging component
 // TODO: Submit Drink Button (to database)
 const CreateDetail = ({ tags }) => {
 
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
     const [drinkImage, setDrinkImage] = useState(null);
-    const [ingredients, setIngredients] = useState(customIngr2);
+    const [ingredients, setIngredients] = useState([]);
     const [direction, setDirection] = useState(null);
-    const [selectedTags, setSelectedTags] = useState(customTag);
+    const [selectedTags, setSelectedTags] = useState([]);
 
     // Renders the image container with either an empty box or the picture of the drink
     const renderDrinkContainer = () => {
@@ -124,6 +123,11 @@ const CreateDetail = ({ tags }) => {
 
         setIngredients(newIngredients);
     };
+
+    // Give the tags some time to load from firestore
+    if (tags === undefined) {
+        return <Text>Loading...</Text>
+    }
 
     return (
         <KeyboardAwareScrollView

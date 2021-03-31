@@ -8,5 +8,15 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+    tabBarIcon: {
+        width: 35,
+        height: 35,
+        resizeMode: 'contain'
+    },
+    tabBarIconMD: {
+        width: 43,
+        height: 43,
+        resizeMode: 'contain'
+    },
 });
