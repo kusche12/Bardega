@@ -10,11 +10,10 @@ export const getDrinksWithQuery = (drinks, query) => {
 
             if (drinks[i].tags) {
                 for (let j = 0; j < drinks[i].tags.length; j++) {
-                    if (drinks[i].tags && drinks[i].tags.length > 0) {
+                    if (drinks[i].tags) {
                         const tag = drinks[i].tags[j];
                         if (drinks[i].tags && tag === query.filterName) {
                             result.push(drinks[i]);
-                            break;
                         }
                     }
                 }

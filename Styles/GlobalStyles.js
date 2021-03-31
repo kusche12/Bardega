@@ -2,7 +2,7 @@ import { StyleSheet, Platform } from 'react-native';
 export default StyleSheet.create({
     headerSafeArea: {
         flex: 1,
-        top: Platform.OS === 'ios' ? 50 : 40
+        top: Platform.OS === 'ios' ? 50 : 40,
     },
     flexCenter: {
         flex: 1,
