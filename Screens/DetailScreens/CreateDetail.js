@@ -4,6 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import CreateIngredients from '../../Components/Create/CreateIngredients';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
+import CreateDirections from '../../Components/Create/CreateDirections';
 
 // Dummy data for ingredients
 const customIngr = [
@@ -27,13 +28,20 @@ const customIngr = [
     },
 ]
 
+const customIngr2 = [];
 
+// TODO: Image handling
+// TODO: Font setting
+// TODO: Tagging component
+// TODO: Submit Drink Button (to database)
 const CreateDetail = ({ route }) => {
 
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
     const [drinkImage, setDrinkImage] = useState(null);
-    const [ingredients, setIngredients] = useState(customIngr);
+    const [ingredients, setIngredients] = useState(customIngr2);
+    //const [direction, setDirection] = useState('This is a direction to make the drink. It is very tasty. Yummy yummy in my tummy.')
+    const [direction, setDirection] = useState(null)
 
     // Renders the image container with either an empty box or the picture of the drink
     const renderDrinkContainer = () => {
@@ -78,6 +86,7 @@ const CreateDetail = ({ route }) => {
         setIngredients(newIngredients);
     };
 
+    // Delete ingredient from list
     const deleteIngredient = (id) => {
         let newIngredients = ingredients.filter(ing => ing.id !== id);
         setIngredients(newIngredients);
@@ -145,10 +154,12 @@ const CreateDetail = ({ route }) => {
                 </TouchableWithoutFeedback>
 
                 <CreateIngredients {...{
-                    ingredients, setIngredients,
+                    ingredients,
                     updateIngredient, deleteIngredient,
                     updateIngredientType, addIngredient
                 }} />
+
+                <CreateDirections {...{direction, setDirection}} />
         
                 </SafeAreaView>
             </KeyboardAwareScrollView>

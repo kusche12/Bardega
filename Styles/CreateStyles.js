@@ -57,7 +57,7 @@ export default StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         borderRadius: RADIUS,
-        marginBottom: 80, // Temp fix for development purposes
+        marginBottom: 100, // Temp fix for development purposes
 
         shadowColor: "#000",
         shadowOpacity: 0.23,
@@ -80,7 +80,22 @@ export default StyleSheet.create({
         alignSelf: 'stretch',
         height: 1.5,
         backgroundColor: PINK,
-        marginBottom: 20,
+        marginBottom: 30,
         marginTop: 6,
-    }
+    },
+    ingrsubTitle: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignSelf: 'stretch',
+        marginBottom: 4
+    },
+    ingrsubText: {
+        fontSize: 10,
+        color: GRAY
+    },
+    dirInput: {
+        fontSize: SUBFONT,
+        color: GRAY,
+        paddingHorizontal: 10
+    },
 });
