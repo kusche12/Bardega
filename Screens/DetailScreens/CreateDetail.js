@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableWithoutFeedback, Text, SafeAreaView, TextInput, View, Image, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
+
 import CreateIngredients from '../../Components/Create/CreateIngredients';
+import CreateDirections from '../../Components/Create/CreateDirections';
+import CreateTags from '../../Components/Create/CreateTags';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
-import CreateDirections from '../../Components/Create/CreateDirections';
 
 // Dummy data for ingredients
 const customIngr = [
@@ -30,18 +35,25 @@ const customIngr = [
 
 const customIngr2 = [];
 
+const customTag = [
+    {
+        id: '1ZqnH2zScUMqkStAYb9a',
+        name: 'Fruity'
+    }
+]
+
 // TODO: Image handling
 // TODO: Font setting
 // TODO: Tagging component
 // TODO: Submit Drink Button (to database)
-const CreateDetail = ({ route }) => {
+const CreateDetail = ({ tags }) => {
 
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
     const [drinkImage, setDrinkImage] = useState(null);
     const [ingredients, setIngredients] = useState(customIngr2);
-    //const [direction, setDirection] = useState('This is a direction to make the drink. It is very tasty. Yummy yummy in my tummy.')
-    const [direction, setDirection] = useState(null)
+    const [direction, setDirection] = useState(null);
+    const [selectedTags, setSelectedTags] = useState(customTag);
 
     // Renders the image container with either an empty box or the picture of the drink
     const renderDrinkContainer = () => {
@@ -160,10 +172,21 @@ const CreateDetail = ({ route }) => {
                 }} />
 
                 <CreateDirections {...{direction, setDirection}} />
+
+                <CreateTags {...{tags, setSelectedTags, selectedTags }} />
         
                 </SafeAreaView>
             </KeyboardAwareScrollView>
     );
 }
 
-export default CreateDetail;
+const mapStateToProps = (state) => {
+    return {
+        tags: state.firestore.ordered.tags,
+    }
+}
+
+export default compose(
+    firestoreConnect(() => ['tags']),
+    connect(mapStateToProps)
+)(CreateDetail);

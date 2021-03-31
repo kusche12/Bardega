@@ -11,6 +11,7 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        marginBottom: 40,
     },
     title: {
         fontSize: 22
@@ -54,10 +55,11 @@ export default StyleSheet.create({
         width: width * .8,
         paddingHorizontal: 12,
         paddingTop: 14,
+        paddingBottom: 12,
         backgroundColor: 'white',
         alignItems: 'center',
         borderRadius: RADIUS,
-        marginBottom: 100, // Temp fix for development purposes
+        marginBottom: 40, // Temp fix for development purposes
 
         shadowColor: "#000",
         shadowOpacity: 0.23,
@@ -98,4 +100,23 @@ export default StyleSheet.create({
         color: GRAY,
         paddingHorizontal: 10
     },
+    tagContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',
+        flex: 1
+    },
+    tag: {
+        backgroundColor: PINK,
+        borderRadius: 10,
+        marginHorizontal: 2,
+        marginVertical: 2,
+        paddingHorizontal: 4,
+        paddingVertical: 3,
+        flexGrow: 1,
+        alignItems: 'center',
+        width: width * .18,
+        maxWidth: width * .23,
+        opacity: .5
+    }
 });
