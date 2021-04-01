@@ -337,7 +337,7 @@ const TEST_DATA = [{
 // TODO: Fix the algorithm. It should not have repeat drinks per query filter
 const DiscoverDetail = ({ drinks, queries, navigation }) => {
     
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(true); // TODO: Set this to false while testing DB
     const [selectedDrinks, setSelectedDrinks] = useState(null);
     const [selectedQueries, setSelectedQueries] = useState(null);
 

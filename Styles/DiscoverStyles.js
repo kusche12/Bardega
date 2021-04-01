@@ -22,7 +22,7 @@ export default StyleSheet.create({
         fontWeight: '700'
     },
     horizontalContainer: {
-        flex: 1,
+        height: 220,
     },
     cardContainer: {
         width: 130,

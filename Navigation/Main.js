@@ -11,7 +11,7 @@ import SpiritScreen from '../Screens/BottomTabScreens/SpiritScreen';
 import ProfileScreen from '../Screens/BottomTabScreens/ProfileScreen';
 import GlobalStyles from '../Styles/GlobalStyles';
 
-const PINK = '#F7D2CF';
+const LIGHTPINK = '#F7D2CF';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,10 +22,10 @@ const Main = () => {
             <Tab.Navigator
                 initialRouteName='Discover'
                 tabBarOptions={{
-                    activeBackgroundColor: PINK,
-                    inactiveBackgroundColor: PINK,
+                    activeBackgroundColor: LIGHTPINK,
+                    inactiveBackgroundColor: LIGHTPINK,
                     style: {
-                        backgroundColor: PINK,
+                        backgroundColor: LIGHTPINK,
                     },
                     showLabel: false,
                 }}
