@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Image, TouchableOpacity, Dimensions, Text, View } from 'react-native';
+import { Image, TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import DrinkDetailScreen from '../../Screens/DetailScreens/DrinkDetailScreen';
 
@@ -8,8 +8,9 @@ const Stack = createStackNavigator();
 const { width } = Dimensions.get('window');
 const LIGHTPINK = '#F7D2CF';
 
-
 // Renders the top header for each main screen.
+// TODO: Get the back button to show up on the headerLeft.
+// TODO: Customize the drinkDetail page and make sure it has access to the specific drink data
 const Header = ({ route, component, name, navigation }) => {
     return (
         <Stack.Navigator
@@ -57,9 +58,15 @@ const Header = ({ route, component, name, navigation }) => {
                                 resizeMode='contain'
                             />
                         ),
-                        headerBackImage: () => {
-                            null
-                        },
+                        headerLeft: () => (
+                            <TouchableWithoutFeedback onPress={() => console.log('go back')}>
+                                <Image
+                                    style={{ height: 20, width: 20 }}
+                                    source={require('./back_button.png')}
+                                    resizeMode='contain'
+                                />
+                            </TouchableWithoutFeedback>
+                        ),
                         headerTitleStyle: { flex: 1, textAlign: 'center' },
                         headerTitleAlign: 'center',
                         headerBackTitleVisible: false,
