@@ -48,7 +48,7 @@ const Header = ({ route, component, name, navigation }) => {
             <Stack.Screen
                 name='DrinkDetailScreen'
                 component={DrinkDetailScreen}
-                initialParams={route.params, navigation}
+                initialParams={route, navigation}
                 options={
                     {
                         headerTitle: () => (

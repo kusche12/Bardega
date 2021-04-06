@@ -5,7 +5,7 @@ import DiscoverStyles from '../../Styles/DiscoverStyles';
 const HorizontalList = ({ data, query, navigation }) => {
     const renderItem = ({ item }) => {
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen')}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drinkID: item.id })}>
                 <View style={DiscoverStyles.cardContainer}>
                     <Image source={require('./tempDrink.png')} style={DiscoverStyles.drinkImg} />
                     <Text style={DiscoverStyles.cardTitle}>{item.name}</Text>
