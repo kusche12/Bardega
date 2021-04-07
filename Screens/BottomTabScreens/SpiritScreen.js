@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text, SafeAreaView } from 'react-native';
+import Header from '../../Components/Main/Header';
+import SpiritDetail from '../DetailScreens/SpiritDetail';
 
-const Stack = createStackNavigator();
-
-const SpiritScreen = ({ route }) => {
+const SpiritScreen = ({ route, navigation }) => {
     return (
-        <SafeAreaView>
-            <Text>This is the SpiritScreen</Text>
-        </SafeAreaView>
+        <Header route={route} name="Search" component={SpiritDetail} navigation={navigation} />
     );
 }
 

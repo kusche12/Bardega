@@ -45,6 +45,8 @@ const customTag = [
 // TODO: Image handling
 // TODO: Font setting
 // TODO: Submit Drink Button (to database)
+    // When the submission is being processed, the image should be uploaded to Google Storage with
+    // the file name <drinkID>.png (or jpg). This is how it will be referenced for the remainder of this drink object
 const CreateDetail = ({ tags }) => {
 
     const [drinkName, setDrinkName] = useState('');

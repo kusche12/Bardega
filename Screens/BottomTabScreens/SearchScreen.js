@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text, SafeAreaView } from 'react-native';
+import Header from '../../Components/Main/Header';
+import SearchDetail from '../DetailScreens/SearchDetail';
 
-const Stack = createStackNavigator();
-
-const SearchScreen = ({ route }) => {
+const SearchScreen = ({ route, navigation }) => {
     return (
-        <SafeAreaView>
-            <Text>This is the SearchScreen</Text>
-        </SafeAreaView>
+        <Header route={route} name="Search" component={SearchDetail} navigation={navigation} />
     );
 }
 
