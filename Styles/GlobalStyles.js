@@ -1,4 +1,6 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, Dimensions } from 'react-native';
+const width = Dimensions.get('screen').width;
+
 export default StyleSheet.create({
     headerSafeArea: {
         flex: 1,
@@ -18,5 +20,12 @@ export default StyleSheet.create({
         width: 43,
         height: 43,
         resizeMode: 'contain'
+    },
+    headerWithButtons: {
+        alignSelf: 'stretch',
+        width: width,
+        height: 50,
+        justifyContent: 'center',
+        paddingHorizontal: 12,
     },
 });

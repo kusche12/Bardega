@@ -47,5 +47,39 @@ photoContainer: {
         width: width * .3,
         alignItems: 'flex-end',
         paddingRight: 12
+    },
+    commentContainer: {
+        alignItems: 'flex-start'
+    },
+    commentImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 100,
+    },
+    commentRow: {
+        flexDirection: 'row',
+        width: width * .6,
+    },
+    commentDetail: {
+        paddingLeft: 8,
+    },
+    commentText2: {
+        color: '#F7D48B'
+    },
+    commentText3: {
+        color: GRAY,
+        alignSelf: 'center'
+    },
+    submitRow: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    submitContainer: {
+        width: width * .8,
+        marginBottom: 40,
+        alignItems: 'flex-start'
+    },
+    submitText: {
+        fontSize: 22,
     }
 });

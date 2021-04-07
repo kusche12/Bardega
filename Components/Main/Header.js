@@ -3,21 +3,20 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Image, TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import DrinkDetailScreen from '../../Screens/DetailScreens/DrinkDetailScreen';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const Stack = createStackNavigator();
 const { width } = Dimensions.get('window');
 const LIGHTPINK = '#F7D2CF';
 
 // Renders the top header for each main screen.
-// TODO: Get the back button to show up on the headerLeft.
-// TODO: Customize the drinkDetail page and make sure it has access to the specific drink data
 const Header = ({ route, component, name, navigation }) => {
     return (
         <Stack.Navigator
             headerMode='screen' // SUPER IMPORTANT. This fixed screen transition glitch
             screenOptions={{
             headerStyle: { elevation: 0 },
-            cardStyle: { opacity: 1 }
+            cardStyle: { backgroundColor: '#FFFFFF' },
         }}>
             <Stack.Screen
                 name={name}
@@ -58,14 +57,16 @@ const Header = ({ route, component, name, navigation }) => {
                                 resizeMode='contain'
                             />
                         ),
-                        headerLeft: () => (
-                            <TouchableWithoutFeedback onPress={() => console.log('go back')}>
-                                <Image
-                                    style={{ height: 20, width: 20 }}
-                                    source={require('./back_button.png')}
-                                    resizeMode='contain'
-                                />
-                            </TouchableWithoutFeedback>
+                        headerRight: () => (
+                            <View style={GlobalStyles.headerWithButtons}>
+                                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+                                    <Image
+                                        style={{ height: 20, width: 20 }}
+                                        source={require('./back_button.png')}
+                                        resizeMode='contain'
+                                    />
+                                </TouchableWithoutFeedback>
+                            </View>
                         ),
                         headerTitleStyle: { flex: 1, textAlign: 'center' },
                         headerTitleAlign: 'center',

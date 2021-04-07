@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, Image } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
@@ -53,18 +53,26 @@ const comments = [
             date: 'Feb. 02',
             text: 'SOO easy and tasty!! :)'
         }
-    ]
+]
+const author = {
+    fName: 'Kyle',
+    lName: 'Kusche',
+    imageURL: 'wererwerewwer'
+}
 
 
 // TODO: Render the actual drink from the database using the route.params.drinkID
 // TODO: If the drink's authorID and currently authed userID are equal. Then add an "edit drink" button / route
 // TODO: Get the actual image ID from the imageID in the drink data and fire storage
 // TODO: Get the actual comments using the commentID in the drink data
+// TODO: Get the full author image, fname, and lname from the authorID
 // TODO: Set the comment backend schema to include an authorID. This ID will access the author fName, lName, and Image
     // For UI purposes, use the schema provided below
+// TODO: Add a "submitted by" button / component at the bottom of the detail screen that takes you to the author's profile page
 const DrinkDetailScreen = ({ navigation, route }) => {
     // const drink = route.params.drinkID
     // const comments = (some async api call to get comments with commentID)
+    // const author = (some async api all to get the author info)
 
     const renderRecipe = () => {
         let result = [];
@@ -92,17 +100,22 @@ const DrinkDetailScreen = ({ navigation, route }) => {
         if (comments.length < 1) {
             return <Text>This drink has no comments yet! Leave the first one below :)</Text>
         } else {
-            for (let i = 0; i < comments.length; i++) {
+            let i = 0;
+            while (i < 2 || i < comments.length) {
                 const comment = comments[i];
                 result.push(
-                    <View key={i} style={DetailStyles.row}>
-                        <Image source={require('./face.png')} style={DetailStyles.commentImage} />
-                        <View style={DetailStyles.commentDetail}>
-                            <Text>{comment.text}</Text>
-                            <Text style={DetailStyles.commentText2}>- {comment.authorFirstName} {comment.authorLastName} | {comment.date}</Text>
+                    <>
+                        <View key={i} style={DetailStyles.commentRow}>
+                            <Image source={require('./face.png')} style={DetailStyles.commentImage} />
+                            <View style={DetailStyles.commentDetail}>
+                                <Text style={{marginBottom: 6}}>{comment.text}</Text>
+                                <Text style={DetailStyles.commentText2}>- {comment.authorFirstName} {comment.authorLastName} | {comment.date}</Text>
+                            </View>
                         </View>
-                    </View>
+                        <View style={[CreateStyles.ingrLine, { marginBottom: 8 }]}></View>
+                    </>
                 )
+                i++;
             }
             return result;
         }
@@ -142,28 +155,35 @@ const DrinkDetailScreen = ({ navigation, route }) => {
                 </View>
                 }
 
-                <View style={CreateStyles.ingrContainer}>
-                    <Text style={CreateStyles.ingrTitle}>COMMENTS</Text>
+                <TouchableWithoutFeedback onPress={() => console.log('navigate to comments page')}>
+                    <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
+                        <Text style={[CreateStyles.ingrTitle, {alignSelf: 'center'}]}>COMMENTS</Text>
 
-                    <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
-                    {renderComments()}
+                        <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+                        {renderComments()}
 
-                    {/* The design makes this a text input, but component should be moved to a comments page I think */}
-                    {/* <View>
-                        <Image source={require('./comment.png')} style={DetailStyles.commentImage} />
-                        <TextInput
-                            style={DetailStyles.commentInput}
-                            onChangeText={setDrinkName}
-                            value={drinkName}
-                            placeholder='Give your drink a name'
-                            multiline={false}
-                            placeholderTextColor='#b3b3b3'
-                        />
-                    </View> */}
+                        {/* The design makes this a text input, but component should be moved to a comments page I think */}
+                        {
+                            comments.length > 2
+                                ? <Text style={DetailStyles.commentText3}>View +{comments.length - 2} more comments</Text>
+                                : <Text style={DetailStyles.commentText3}>View more comments</Text>
+                        }
 
-                </View>
-                    
-                
+                    </View>
+                </TouchableWithoutFeedback>
+
+                <TouchableWithoutFeedback onPress={() => console.log('navigate to drink authors profile page')}>
+                    <View style={[CreateStyles.ingrContainer, DetailStyles.submitContainer]}>
+                        <Text style={[CreateStyles.ingrTitle, {alignSelf: 'center'}]}>SUBMITTED BY</Text>
+
+                        <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+
+                        <View style={DetailStyles.submitRow}>
+                            <Image source={require('./face.png')} style={[DetailStyles.commentImage, {marginRight: 4}]}></Image>
+                            <Text style={DetailStyles.textBlack}>{author.fName} {author.lName}</Text>
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
 
             </SafeAreaView>
         </KeyboardAwareScrollView>
