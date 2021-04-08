@@ -11,7 +11,6 @@ export default StyleSheet.create({
     photoContainer: {
         width: width * .8,
         height: height * .4,
-        // borderColor: '#707070',
         borderWidth: 0,
         borderRadius: RADIUS,
         alignItems: 'center',
@@ -87,5 +86,25 @@ export default StyleSheet.create({
     },
     submitText: {
         fontSize: 22,
+    },
+    commentInputRow: {
+        alignSelf: 'stretch',
+        height: 24,
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'relative',
+    },
+    commentInputImage: {
+        width: 14,
+        height: 14,
+        position: 'absolute',
+    },
+    commentInput: {
+        borderColor: GRAY,
+        borderRadius: 4,
+        borderWidth: 1,
+        paddingLeft: 20,
+        width: width * .7,
+        height: 24,
     }
 });

@@ -1,47 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import Loading from '../../Components/Main/Loading';
+import InputComment from '../../Components/DrinkDetail/InputComment';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 
 
-const comments = [
-    {
-        commentID: 1,
-        authorFirstName: 'Joe',
-        authorLastName: 'Rowan',
-        date: 'Feb. 19',
-        text: 'Love this, made it without the orange though.'
-    },
-    {
-        commentID: 2,
-        authorFirstName: 'Allie',
-        authorLastName: 'Bishop',
-        date: 'Feb. 02',
-        text: 'SOO easy and tasty!! :)'
-    }
-]
-
 // TODO: Add a "bookmark" button that allows the user to add this drink to one of their favorite's buckets
 // TODO: If the drink's .authorID and currently authed userID are equal. Then add an "edit drink" button / route
 // TODO: Get the actual comments using the .commentID in the drink data
-// TODO: Set the comment backend schema to include an authorID. This ID will access the author fName, lName, and Image
-// For UI purposes, use the schema provided below
-// TODO: Add a "submitted by" button / component at the bottom of the detail screen that takes you to the author's profile page
-const DrinkDetailScreen = ({ navigation, route, author }) => {
+// TODO: Add a "submitted by" button that takes you to the author's profile page
+const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => {
     const drink = route.params.drink;
-
     const [isLoading, setIsLoading] = useState(true);
+
+    // Load the component after all props are set
     useEffect(() => {
-        if (author !== null) {
+        if (author !== null && authors !== null) {
             setIsLoading(false);
         }
-    }, [author]);
+    }, [author, comments, authors]);
 
     const renderRecipe = () => {
         let result = [];
@@ -66,12 +49,20 @@ const DrinkDetailScreen = ({ navigation, route, author }) => {
 
     const renderComments = () => {
         let result = [];
-        if (comments.length < 1) {
-            return <Text>This drink has no comments yet! Leave the first one below :)</Text>
+        if (comments === null) {
+            return (
+                <View>
+                    <Text>Looks like no one has commented on this drink yet! Leave the first review below.</Text>
+                    <View style={[CreateStyles.ingrLine, { marginBottom: 8 }]}></View>
+                    <InputComment />
+                </View>
+            )
         } else {
             let i = 0;
             while (i < 2 || i < comments.length) {
                 const comment = comments[i];
+                const author = authors[comment.authorID];
+                console.log(author);
                 result.push(
                     <View key={i}>
                         <View style={DetailStyles.commentRow}>
@@ -137,11 +128,11 @@ const DrinkDetailScreen = ({ navigation, route, author }) => {
                             {renderComments()}
 
                             {/* The design makes this a text input, but component should be moved to a comments page I think */}
-                            {
+                            {/* {
                                 comments.length > 2
                                     ? <Text style={DetailStyles.commentText3}>View +{comments.length - 2} more comments</Text>
                                     : <Text style={DetailStyles.commentText3}>View more comments</Text>
-                            }
+                            } */}
 
                         </View>
                     </TouchableWithoutFeedback>
@@ -165,13 +156,18 @@ const DrinkDetailScreen = ({ navigation, route, author }) => {
     }
 }
 
-// TODO: Get the comments object from the commentID aswell
 const mapStateToProps = (state, ownProps) => {
     const authorID = ownProps.route.params.drink.authorID;
     const profiles = state.firestore.data.profiles;
-    const profile = profiles ? profiles[authorID] : null
+    const profile = profiles ? profiles[authorID] : null;
+
+    const commentID = ownProps.route.params.drink.commentID;
+    const allComments = state.firestore.data.comments;
+    const comments = allComments ? allComments[commentID] : null;
     return {
-        author: profile
+        author: profile,
+        comments: comments,
+        authors: state.firestore.data.profiles
     }
 }
 
@@ -179,3 +175,4 @@ export default compose(
     connect(mapStateToProps),
     firestoreConnect(() => ['profiles'])
 )(DrinkDetailScreen);
+
