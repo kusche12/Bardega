@@ -8,7 +8,7 @@ const HorizontalList = ({ data, query, navigation }) => {
             <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item })}>
                 {/* <TouchableWithoutFeedback onPress={() => console.log(item)}> */}
                 <View style={DiscoverStyles.cardContainer}>
-                    <Image source={require('./tempDrink.png')} style={DiscoverStyles.drinkImg} />
+                    <Image source={{ uri: item.imageURL }} style={DiscoverStyles.drinkImg} />
                     <Text style={DiscoverStyles.cardTitle}>{item.name}</Text>
                 </View>
             </TouchableWithoutFeedback>

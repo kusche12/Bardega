@@ -29,7 +29,6 @@ const comments = [
 
 // TODO: Add a "bookmark" button that allows the user to add this drink to one of their favorite's buckets
 // TODO: If the drink's .authorID and currently authed userID are equal. Then add an "edit drink" button / route
-// TODO: Get the actual image ID from the .id in the drink data and fire storage
 // TODO: Get the actual comments using the .commentID in the drink data
 // TODO: Set the comment backend schema to include an authorID. This ID will access the author fName, lName, and Image
 // For UI purposes, use the schema provided below
@@ -102,8 +101,10 @@ const DrinkDetailScreen = ({ navigation, route, author }) => {
             >
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]} >
                     <Text style={CreateStyles.title}>{drink.name}</Text>
-                    <View style={DetailStyles.photoContainer}>
-                        <Image source={require('./plus.png')} style={CreateStyles.plusImage} />
+                    <View style={DetailStyles.shadowContainer}>
+                        <View style={DetailStyles.photoContainer}>
+                            <Image source={{ uri: drink.imageURL }} style={DetailStyles.drinkImage} />
+                        </View>
                     </View>
 
                     {drink.recipe &&

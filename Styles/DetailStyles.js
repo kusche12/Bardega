@@ -8,25 +8,31 @@ const RADIUS = 22;
 const SUBFONT = 15;
 
 export default StyleSheet.create({
-photoContainer: {
+    photoContainer: {
         width: width * .8,
         height: height * .4,
-        borderColor: '#707070',
-        borderWidth: 1,
+        // borderColor: '#707070',
+        borderWidth: 0,
         borderRadius: RADIUS,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
         marginBottom: 20,
-        
+        overflow: 'hidden',
+    },
+    shadowContainer: {
         shadowColor: "#000",
         shadowOpacity: 0.23,
-        shadowRadius: 2.62,
+        shadowRadius: 3.62,
         shadowOffset: {
             width: 0,
             height: 2
         },
         elevation: 4
+    },
+    drinkImage: {
+        alignSelf: 'stretch',
+        height: height * .4,
     },
     recipeContainer: {
         alignSelf: 'stretch',
