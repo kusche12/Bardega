@@ -380,7 +380,7 @@ const DiscoverDetail = ({ drinks, queries, navigation }) => {
                 <View style={DiscoverStyles.titleContainer}>
                     <Text style={DiscoverStyles.title}>DISCOVER</Text>
                 </View>
-                {selectedDrinks.map((drinks, index) => {
+                {/* {selectedDrinks.map((drinks, index) => {
                     return <HorizontalList
                         data={drinks}
                         index={index}
@@ -388,7 +388,14 @@ const DiscoverDetail = ({ drinks, queries, navigation }) => {
                         query={selectedQueries[index].name}
                         navigation={navigation}
                     />
-                })}
+                })} */}
+                {/* Testing purposes, use only one horizontal list */}
+                <HorizontalList
+                    data={selectedDrinks[0]}
+                    index={0}
+                    query={selectedQueries[0].name}
+                    navigation={navigation}
+                />
             </SafeAreaView>
         </KeyboardAwareScrollView>
     );

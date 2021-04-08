@@ -39,8 +39,9 @@ const DrinkDetailScreen = ({ navigation, route, author }) => {
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        console.log(author.userName);
-        setIsLoading(false);
+        if (author !== null) {
+            setIsLoading(false);
+        }
     }, [author]);
 
     const renderRecipe = () => {
@@ -90,74 +91,77 @@ const DrinkDetailScreen = ({ navigation, route, author }) => {
         }
     }
 
-    if (isLoading) return <Loading />
-    return (
-        <KeyboardAwareScrollView
-            enableOnAndroid={true}
-            enableAutomaticScroll={(Platform.OS === 'ios')}
-            contentContainerStyle={{ flexGrow: 1 }}
-        >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]} >
-                <Text style={CreateStyles.title}>{drink.name}</Text>
-                <View style={DetailStyles.photoContainer}>
-                    <Image source={require('./plus.png')} style={CreateStyles.plusImage} />
-                </View>
+    if (isLoading) {
+        return <Loading />
+    } else {
+        return (
+            <KeyboardAwareScrollView
+                enableOnAndroid={true}
+                enableAutomaticScroll={(Platform.OS === 'ios')}
+                contentContainerStyle={{ flexGrow: 1 }}
+            >
+                <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]} >
+                    <Text style={CreateStyles.title}>{drink.name}</Text>
+                    <View style={DetailStyles.photoContainer}>
+                        <Image source={require('./plus.png')} style={CreateStyles.plusImage} />
+                    </View>
 
-                {drink.recipe &&
-                    <View style={CreateStyles.ingrContainer}>
-                        <Text style={CreateStyles.ingrTitle}>INGREDIENTS</Text>
+                    {drink.recipe &&
+                        <View style={CreateStyles.ingrContainer}>
+                            <Text style={CreateStyles.ingrTitle}>INGREDIENTS</Text>
 
-                        <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+                            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
 
-                        <View style={DetailStyles.recipeContainer}>
-                            {renderRecipe()}
+                            <View style={DetailStyles.recipeContainer}>
+                                {renderRecipe()}
+                            </View>
                         </View>
-                    </View>
-                }
+                    }
 
-                {drink.directions &&
-                    <View style={CreateStyles.ingrContainer}>
-                        <Text style={CreateStyles.ingrTitle}>DIRECTIONS</Text>
+                    {drink.directions &&
+                        <View style={CreateStyles.ingrContainer}>
+                            <Text style={CreateStyles.ingrTitle}>DIRECTIONS</Text>
 
-                        <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
-                        <Text style={DetailStyles.textBlack}>{drink.directions}</Text>
+                            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+                            <Text style={DetailStyles.textBlack}>{drink.directions}</Text>
 
-                    </View>
-                }
-
-                <TouchableWithoutFeedback onPress={() => console.log('navigate to comments page')}>
-                    <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
-                        <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>COMMENTS</Text>
-
-                        <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
-                        {renderComments()}
-
-                        {/* The design makes this a text input, but component should be moved to a comments page I think */}
-                        {
-                            comments.length > 2
-                                ? <Text style={DetailStyles.commentText3}>View +{comments.length - 2} more comments</Text>
-                                : <Text style={DetailStyles.commentText3}>View more comments</Text>
-                        }
-
-                    </View>
-                </TouchableWithoutFeedback>
-
-                <TouchableWithoutFeedback onPress={() => console.log('navigate to drink authors profile page')}>
-                    <View style={[CreateStyles.ingrContainer, DetailStyles.submitContainer]}>
-                        <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>SUBMITTED BY</Text>
-
-                        <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
-
-                        <View style={DetailStyles.submitRow}>
-                            <Image source={require('./face.png')} style={[DetailStyles.commentImage, { marginRight: 4 }]}></Image>
-                            <Text style={DetailStyles.textBlack}>{author.userName}</Text>
                         </View>
-                    </View>
-                </TouchableWithoutFeedback>
+                    }
 
-            </SafeAreaView>
-        </KeyboardAwareScrollView>
-    )
+                    <TouchableWithoutFeedback onPress={() => console.log('navigate to comments page')}>
+                        <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
+                            <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>COMMENTS</Text>
+
+                            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+                            {renderComments()}
+
+                            {/* The design makes this a text input, but component should be moved to a comments page I think */}
+                            {
+                                comments.length > 2
+                                    ? <Text style={DetailStyles.commentText3}>View +{comments.length - 2} more comments</Text>
+                                    : <Text style={DetailStyles.commentText3}>View more comments</Text>
+                            }
+
+                        </View>
+                    </TouchableWithoutFeedback>
+
+                    <TouchableWithoutFeedback onPress={() => console.log('navigate to drink authors profile page')}>
+                        <View style={[CreateStyles.ingrContainer, DetailStyles.submitContainer]}>
+                            <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>SUBMITTED BY</Text>
+
+                            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+
+                            <View style={DetailStyles.submitRow}>
+                                <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { marginRight: 4 }]}></Image>
+                                <Text style={DetailStyles.textBlack}>{author.userName}</Text>
+                            </View>
+                        </View>
+                    </TouchableWithoutFeedback>
+
+                </SafeAreaView>
+            </KeyboardAwareScrollView>
+        )
+    }
 }
 
 // TODO: Get the comments object from the commentID aswell
