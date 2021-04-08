@@ -43,10 +43,12 @@ const customTag = [
 ]
 
 // TODO: Image handling
-// TODO: Font setting
+// TODO: Set the correct font given by Care
 // TODO: Submit Drink Button (to database)
-    // When the submission is being processed, the image should be uploaded to Google Storage with
-    // the file name <drinkID>.png (or jpg). This is how it will be referenced for the remainder of this drink object
+// TODO: When the submission is being processed, the image should be uploaded to Google Storage with
+// the file name <drinkID>.png (or jpg). This is how it will be referenced for the remainder of this drink object
+// TODO: Also make sure to set the drink's 'id' attribute equal to the one given by firebase
+// TODO: Also make sure it has an AuthorID which is the ID of the currently authed user
 const CreateDetail = ({ tags }) => {
 
     const [drinkName, setDrinkName] = useState('');
@@ -138,7 +140,7 @@ const CreateDetail = ({ tags }) => {
             contentContainerStyle={{ flexGrow: 1 }}
         >
             <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]}>
-            
+
                 <Text style={CreateStyles.title}>CREATE A COCKTAIL</Text>
 
                 <View style={CreateStyles.inputBox}>
@@ -177,12 +179,12 @@ const CreateDetail = ({ tags }) => {
                     updateIngredientType, addIngredient
                 }} />
 
-                <CreateDirections {...{direction, setDirection}} />
+                <CreateDirections {...{ direction, setDirection }} />
 
-                <CreateTags {...{tags, setSelectedTags, selectedTags }} />
-        
-                </SafeAreaView>
-            </KeyboardAwareScrollView>
+                <CreateTags {...{ tags, setSelectedTags, selectedTags }} />
+
+            </SafeAreaView>
+        </KeyboardAwareScrollView>
     );
 }
 

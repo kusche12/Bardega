@@ -5,7 +5,8 @@ import DiscoverStyles from '../../Styles/DiscoverStyles';
 const HorizontalList = ({ data, query, navigation }) => {
     const renderItem = ({ item }) => {
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drinkID: item.id })}>
+            // <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drinkID: item.id })}>
+            <TouchableWithoutFeedback onPress={() => console.log(item)}>
                 <View style={DiscoverStyles.cardContainer}>
                     <Image source={require('./tempDrink.png')} style={DiscoverStyles.drinkImg} />
                     <Text style={DiscoverStyles.cardTitle}>{item.name}</Text>
@@ -20,7 +21,7 @@ const HorizontalList = ({ data, query, navigation }) => {
                 <FlatList
                     horizontal={true}
                     data={data}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item, index) => '' + index}
                     renderItem={renderItem}
                 />
         </View>

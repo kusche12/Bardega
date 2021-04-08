@@ -1,33 +1,34 @@
 // Get an array of all drinks that fit a certain search filter. Can be either tag or prep time
-// TODO: Get the 10 drinks for the array at random locations around the drinks list (not just the first 10 found)
 export const getDrinksWithQuery = (drinks, query) => {
+    let nums = randomUniqueNum(drinks.length, drinks.length);
+    console.log(nums);
+
     let result = [];
     if (query.filterType === 'tag') {
-        for (let i = 0; i < drinks.length; i++) {
+        for (let i in nums) {
             if (result.length === 10) {
                 return result;
             }
 
-            if (drinks[i].tags) {
-                for (let j = 0; j < drinks[i].tags.length; j++) {
-                    if (drinks[i].tags) {
-                        const tag = drinks[i].tags[j];
-                        if (drinks[i].tags && tag === query.filterName) {
-                            result.push(drinks[i]);
-                        }
+            if (drinks[nums[i]].tags) {
+                for (let j = 0; j < drinks[nums[i]].tags.length; j++) {
+                    const tag = drinks[nums[i]].tags[j];
+                    if (tag === query.filterName) {
+                        result.push(drinks[nums[i]]);
                     }
                 }
             }
         }
+
         return result;
     } else if (query.filterType === 'prepTime') {
-        for (let i = 0; i < drinks.length; i++) {
+        for (let i in nums) {
             if (result.length === 10) {
                 return result;
             }
-            const prepTime = drinks[i].prepTime;
+            const prepTime = drinks[nums[i]].prepTime;
             if (prepTime.toLowerCase() === query.filterName.toLowerCase()) {
-                result.push(drinks[i]);
+                result.push(drinks[nums[i]]);
             }
         }
         return result;
@@ -48,18 +49,18 @@ export const getRandomQueries = (queries, amount) => {
 
 // Generate OUTPUTCOUNT unique numbers from 0 to RANGE-1
 function randomUniqueNum(range, outputCount) {
-  let arr = []
-  for (let i = 0; i < range; i++) {
-    arr.push(i)
-  }
+    let arr = []
+    for (let i = 0; i < range; i++) {
+        arr.push(i)
+    }
 
-  let result = [];
+    let result = [];
 
-  for (let i = 1; i <= outputCount; i++) {
-    const random = Math.floor(Math.random() * (range - i));
-    result.push(arr[random]);
-    arr[random] = arr[range - i];
-  }
+    for (let i = 1; i <= outputCount; i++) {
+        const random = Math.floor(Math.random() * (range - i));
+        result.push(arr[random]);
+        arr[random] = arr[range - i];
+    }
 
-  return result;
+    return result;
 }
