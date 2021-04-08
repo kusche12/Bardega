@@ -13,8 +13,6 @@ import rootReducer from './Store/Reducers/RootReducer';
 import Main from './Navigation/Main.js';
 
 // Create store enhanced with redux reducers and firestore database
-// const store = createStore(rootReducer, {});
-
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const rrfProps = {

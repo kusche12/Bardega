@@ -1,78 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
+import Loading from '../../Components/Main/Loading';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 
-// Temporary data for UI code
-const drink = {
-    "description": "We don't need a train to enjoy this play on the 20th Century Cocktail. The 21st Century Man is sweet and citrusy and less boozy for a more refreshing taste.",
-    "id": "1",
-    "instructions": "Combine all ingredients in a shaker. Add ice, seal, & shake vigorously for 10 secs. Strain into rocks glass over large cut ice cube.Express lemon peel over cocktail. Rub peel around rim of glass & place into drink.",
-    "name": "21st Century Man",
-    "prepTime": "light",
-    "recipe": [{
-        "amount": "1.5",
-        "type": "gin",
-        "unit": "oz"
-    }, {
-        "amount": ".75",
-        "type": "fresh lemon juice",
-        "unit": "oz"
-    }, {
-        "amount": ".5",
-        "type": "sweet vermouth",
-        "unit": "oz"
-    }, {
-        "amount": ".5",
-        "type": "crème de cacao",
-        "unit": "oz"
-    }, {
-        "amount": "",
-        "type": "lemon peel",
-        "unit": "garnish"
-    }],
-    "spirit": "gin",
-    "tags": ["Sweet", "Citrusy"],
-    "directions": "1. Combine gin, Camapri and Vermouth in a high ball glass filled with ice.\n2. Top with chilled tonic water and stir. \n3. Garnish with an orange twist and rosemary swig. "
-};
 
 const comments = [
-        {
-            commentID: 1,
-            authorFirstName: 'Joe',
-            authorLastName: 'Rowan',
-            date: 'Feb. 19',
-            text: 'Love this, made it without the orange though.'
-        },
-        {
-            commentID: 2,
-            authorFirstName: 'Allie',
-            authorLastName: 'Bishop',
-            date: 'Feb. 02',
-            text: 'SOO easy and tasty!! :)'
-        }
+    {
+        commentID: 1,
+        authorFirstName: 'Joe',
+        authorLastName: 'Rowan',
+        date: 'Feb. 19',
+        text: 'Love this, made it without the orange though.'
+    },
+    {
+        commentID: 2,
+        authorFirstName: 'Allie',
+        authorLastName: 'Bishop',
+        date: 'Feb. 02',
+        text: 'SOO easy and tasty!! :)'
+    }
 ]
-const author = {
-    fName: 'Kyle',
-    lName: 'Kusche',
-    imageURL: 'wererwerewwer'
-}
 
-
-// TODO: Render the actual drink from the database using the route.params.drinkID
-// TODO: If the drink's authorID and currently authed userID are equal. Then add an "edit drink" button / route
-// TODO: Get the actual image ID from the imageID in the drink data and fire storage
-// TODO: Get the actual comments using the commentID in the drink data
-// TODO: Get the full author image, fname, and lname from the authorID
+// TODO: Add a "bookmark" button that allows the user to add this drink to one of their favorite's buckets
+// TODO: If the drink's .authorID and currently authed userID are equal. Then add an "edit drink" button / route
+// TODO: Get the actual image ID from the .id in the drink data and fire storage
+// TODO: Get the actual comments using the .commentID in the drink data
 // TODO: Set the comment backend schema to include an authorID. This ID will access the author fName, lName, and Image
-    // For UI purposes, use the schema provided below
+// For UI purposes, use the schema provided below
 // TODO: Add a "submitted by" button / component at the bottom of the detail screen that takes you to the author's profile page
-const DrinkDetailScreen = ({ navigation, route }) => {
-    // const drink = route.params.drinkID
-    // const comments = (some async api call to get comments with commentID)
-    // const author = (some async api all to get the author info)
+const DrinkDetailScreen = ({ navigation, route, author }) => {
+    const drink = route.params.drink;
+
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        console.log(author.userName);
+        setIsLoading(false);
+    }, [author]);
 
     const renderRecipe = () => {
         let result = [];
@@ -104,16 +73,16 @@ const DrinkDetailScreen = ({ navigation, route }) => {
             while (i < 2 || i < comments.length) {
                 const comment = comments[i];
                 result.push(
-                    <>
-                        <View key={i} style={DetailStyles.commentRow}>
+                    <View key={i}>
+                        <View style={DetailStyles.commentRow}>
                             <Image source={require('./face.png')} style={DetailStyles.commentImage} />
                             <View style={DetailStyles.commentDetail}>
-                                <Text style={{marginBottom: 6}}>{comment.text}</Text>
+                                <Text style={{ marginBottom: 6 }}>{comment.text}</Text>
                                 <Text style={DetailStyles.commentText2}>- {comment.authorFirstName} {comment.authorLastName} | {comment.date}</Text>
                             </View>
                         </View>
                         <View style={[CreateStyles.ingrLine, { marginBottom: 8 }]}></View>
-                    </>
+                    </View>
                 )
                 i++;
             }
@@ -121,6 +90,7 @@ const DrinkDetailScreen = ({ navigation, route }) => {
         }
     }
 
+    if (isLoading) return <Loading />
     return (
         <KeyboardAwareScrollView
             enableOnAndroid={true}
@@ -133,31 +103,31 @@ const DrinkDetailScreen = ({ navigation, route }) => {
                     <Image source={require('./plus.png')} style={CreateStyles.plusImage} />
                 </View>
 
-                { drink.recipe && 
-                <View style={CreateStyles.ingrContainer}>
-                    <Text style={CreateStyles.ingrTitle}>INGREDIENTS</Text>
+                {drink.recipe &&
+                    <View style={CreateStyles.ingrContainer}>
+                        <Text style={CreateStyles.ingrTitle}>INGREDIENTS</Text>
 
-                    <View style={[CreateStyles.ingrLine, {marginBottom: 5}]}></View>
+                        <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
 
-                    <View style={DetailStyles.recipeContainer}>
-                        {renderRecipe()}
+                        <View style={DetailStyles.recipeContainer}>
+                            {renderRecipe()}
+                        </View>
                     </View>
-                </View>    
                 }
 
-                { drink.directions &&
-                <View style={CreateStyles.ingrContainer}>
-                    <Text style={CreateStyles.ingrTitle}>DIRECTIONS</Text>
+                {drink.directions &&
+                    <View style={CreateStyles.ingrContainer}>
+                        <Text style={CreateStyles.ingrTitle}>DIRECTIONS</Text>
 
-                    <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
-                    <Text style={DetailStyles.textBlack}>{drink.directions}</Text>
+                        <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+                        <Text style={DetailStyles.textBlack}>{drink.directions}</Text>
 
-                </View>
+                    </View>
                 }
 
                 <TouchableWithoutFeedback onPress={() => console.log('navigate to comments page')}>
                     <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
-                        <Text style={[CreateStyles.ingrTitle, {alignSelf: 'center'}]}>COMMENTS</Text>
+                        <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>COMMENTS</Text>
 
                         <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
                         {renderComments()}
@@ -174,13 +144,13 @@ const DrinkDetailScreen = ({ navigation, route }) => {
 
                 <TouchableWithoutFeedback onPress={() => console.log('navigate to drink authors profile page')}>
                     <View style={[CreateStyles.ingrContainer, DetailStyles.submitContainer]}>
-                        <Text style={[CreateStyles.ingrTitle, {alignSelf: 'center'}]}>SUBMITTED BY</Text>
+                        <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>SUBMITTED BY</Text>
 
                         <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
 
                         <View style={DetailStyles.submitRow}>
-                            <Image source={require('./face.png')} style={[DetailStyles.commentImage, {marginRight: 4}]}></Image>
-                            <Text style={DetailStyles.textBlack}>{author.fName} {author.lName}</Text>
+                            <Image source={require('./face.png')} style={[DetailStyles.commentImage, { marginRight: 4 }]}></Image>
+                            <Text style={DetailStyles.textBlack}>{author.userName}</Text>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
@@ -190,4 +160,17 @@ const DrinkDetailScreen = ({ navigation, route }) => {
     )
 }
 
-export default DrinkDetailScreen;
+// TODO: Get the comments object from the commentID aswell
+const mapStateToProps = (state, ownProps) => {
+    const authorID = ownProps.route.params.drink.authorID;
+    const profiles = state.firestore.data.profiles;
+    const profile = profiles ? profiles[authorID] : null
+    return {
+        author: profile
+    }
+}
+
+export default compose(
+    connect(mapStateToProps),
+    firestoreConnect(() => ['profiles'])
+)(DrinkDetailScreen);

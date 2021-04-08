@@ -381,7 +381,13 @@ const DiscoverDetail = ({ drinks, queries, navigation }) => {
                     <Text style={DiscoverStyles.title}>DISCOVER</Text>
                 </View>
                 {selectedDrinks.map((drinks, index) => {
-                    return <HorizontalList data={drinks} index={index} key={index} query={selectedQueries[index].name} />
+                    return <HorizontalList
+                        data={drinks}
+                        index={index}
+                        key={index}
+                        query={selectedQueries[index].name}
+                        navigation={navigation}
+                    />
                 })}
             </SafeAreaView>
         </KeyboardAwareScrollView>
