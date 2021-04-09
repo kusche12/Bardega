@@ -1,15 +1,38 @@
-import * as React from 'react';
-import { TouchableOpacity, Text, SafeAreaView, View, TouchableWithoutFeedback, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Loading from '../../Components/Main/Loading';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 
+// TODO: Delete this after development, lol
+//LogBox.ignoreAllLogs()
+
 // TODO: Render the profile info for the currently authed user
-const ProfileDetail = ({ route, drinks, user }) => {
-    //console.log(user);
+const ProfileDetail = ({ navigation, route, drinks, user }) => {
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [userDrinks, setUserDrinks] = useState(null);
+
+    // Only get all the drink images after the user and drinks are loaded to the DB
+    useEffect(() => {
+        if (user && drinks) {
+            loadUserDrinks();
+        }
+    }, []);
+
+    const loadUserDrinks = async () => {
+        let res = [];
+        for (let i = 0; i < user.drinks.length; i++) {
+            const drink = await drinks[user.drinks[i].id];
+            res.push(drink)
+        }
+        await setUserDrinks(res);
+        setIsLoading(false);
+    }
 
     // TODO: Implement the rule below
     // If currently authed user, then render edit profile and favorite routes
@@ -35,45 +58,80 @@ const ProfileDetail = ({ route, drinks, user }) => {
     // Renders either the recipes, followers, or following stat box given parameter type
     const renderStatBox = (num, type) => {
         return (
-            <TouchableWithoutFeedback>
-                <View style={UserStyles.statBox}>
-                    <Text style={UserStyles.title}>{num}</Text>
+            <TouchableWithoutFeedback onPress={() => routeStatBox(type)}>
+                <View style={[UserStyles.statBox, GlobalStyles.boxShadow]}>
+                    <Text style={[UserStyles.title, { marginBottom: 8 }]}>{num}</Text>
                     <Text style={UserStyles.subtitle}>{type}</Text>
                 </View>
             </TouchableWithoutFeedback>
         )
     }
 
-    return (
-        <KeyboardAwareScrollView
-            enableOnAndroid={true}
-            enableAutomaticScroll={(Platform.OS === 'ios')}
-            contentContainerStyle={{ flexGrow: 1 }}
-        >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, UserStyles.container]} >
+    // Decides which screen to route to on click of the Followers or Following button
+    const routeStatBox = (type) => {
+        if (type === 'Followers') {
+            navigation.navigate('FollowScreen', { users: user.followers, name: 'Followers' });
+        }
+    }
 
-                <View style={UserStyles.infoContainer}>
-                    <View style={UserStyles.infoRow}>
-                        <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
-                        <View style={UserStyles.infoTextContainer}>
-                            <Text style={UserStyles.title}>{user.userName}</Text>
-                            <Text style={[UserStyles.subtitle, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
-                            {renderInfoButtons()}
+    // Renders a drink image that, when clicked, routes to the drink detail page
+    const renderDrink = ({ item }) => {
+        return (
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item })}>
+                <View style={UserStyles.drinkContainer}>
+                    <Image source={{ uri: item.imageURL }} style={UserStyles.drinkImage} />
+                </View>
+            </TouchableWithoutFeedback>
+        )
+    }
+
+    if (isLoading) {
+        return <Loading />
+    } else {
+        return (
+            <KeyboardAwareScrollView
+                enableOnAndroid={true}
+                enableAutomaticScroll={(Platform.OS === 'ios')}
+                contentContainerStyle={{ flexGrow: 1 }}
+            >
+                <SafeAreaView style={[GlobalStyles.headerSafeArea, UserStyles.container]} >
+
+                    <View style={UserStyles.infoContainer}>
+                        <View style={UserStyles.infoRow}>
+                            <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
+                            <View style={UserStyles.infoTextContainer}>
+                                <Text style={UserStyles.title}>{user.userName}</Text>
+                                <Text style={[UserStyles.subtitle, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                                {renderInfoButtons()}
+                            </View>
                         </View>
                     </View>
-                </View>
 
-                <View style={UserStyles.infoContainer}>
-                    <Text style={UserStyles.subtitle}>{user.bio}</Text>
-                </View>
+                    <View style={UserStyles.infoContainer}>
+                        <Text style={UserStyles.subtitle}>{user.bio}</Text>
+                    </View>
 
-                <View style={[UserStyles.infoContainer, { flexDirection: 'row' }]}>
-                    {renderStatBox(user.drinks.length, 'Recipes')}
-                </View>
+                    <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>
+                        {renderStatBox(user.drinks.length, 'Recipes')}
+                        {renderStatBox(user.followers.length, 'Followers')}
+                        {renderStatBox(user.following.length, 'Following')}
+                    </View>
 
-            </SafeAreaView>
-        </KeyboardAwareScrollView>
-    );
+                    <View style={UserStyles.allDrinksContainer}>
+                        <FlatList
+                            data={userDrinks}
+                            renderItem={renderDrink}
+                            keyExtractor={item => item.id}
+                            numColumns={3}
+                            scrollEnabled={false}
+                            horizontal={false}
+                        />
+                    </View>
+
+                </SafeAreaView>
+            </KeyboardAwareScrollView>
+        );
+    }
 }
 
 const mapStateToProps = (state) => {

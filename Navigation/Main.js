@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { Image } from 'react-native';
 
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -20,7 +20,7 @@ const Main = () => {
     return (
         <NavigationContainer>
             <Tab.Navigator
-                initialRouteName='Profile'
+                initialRouteName='Profile' // TODO: Change back to Discover after editing
                 tabBarOptions={{
                     activeBackgroundColor: LIGHTPINK,
                     inactiveBackgroundColor: LIGHTPINK,

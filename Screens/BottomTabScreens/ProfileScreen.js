@@ -2,9 +2,9 @@ import * as React from 'react';
 import ProfileDetail from '../DetailScreens/ProfileDetail'
 import Header from '../../Components/Main/Header';
 
-const ProfileScreen = ({ route }) => {
+const ProfileScreen = ({ route, navigation }) => {
     return (
-        <Header route={route} name="Profile" component={ProfileDetail} />
+        <Header route={route} navigation={navigation} name="Profile" component={ProfileDetail} />
     );
 }
 

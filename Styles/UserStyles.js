@@ -12,8 +12,7 @@ export default StyleSheet.create({
     },
     infoContainer: {
         width: width * .9,
-        backgroundColor: 'red',
-        marginBottom: 10
+        marginBottom: 30
     },
     profileImage: {
         borderRadius: 100,
@@ -57,5 +56,33 @@ export default StyleSheet.create({
     statBox: {
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center',
+        height: height * .11,
+        width: width * .27,
+        borderWidth: 1,
+        borderColor: 'transparent',
+        borderRadius: 4,
+        backgroundColor: 'white',
+    },
+    statContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
+    },
+    drinkContainer: {
+        flex: 1,
+        borderRadius: 6,
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        borderColor: 'white',
+        borderWidth: 1,
+        resizeMode: 'contain'
+    },
+    drinkImage: {
+        width: width * .333,
+        height: width * .333,
+    },
+    allDrinksContainer: {
+        width: width
     }
 });
