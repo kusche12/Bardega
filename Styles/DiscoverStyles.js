@@ -22,32 +22,23 @@ export default StyleSheet.create({
         fontWeight: "700",
     },
     horizontalContainer: {
-        height: 220,
+        height: 240,
         marginBottom: 30,
     },
     cardContainer: {
-        width: 130,
-        height: 170,
+        width: 140,
+        height: 200,
         borderRadius: 5,
         alignItems: "center",
         marginRight: 8,
         backgroundColor: "white",
         borderColor: "red",
-        shadowColor: "#000",
-        overflow: 'hidden',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.23,
-        shadowRadius: 2.62,
 
-        elevation: 4,
     },
     drinkImg: {
-        width: 130,
-        height: 130,
-        borderRadius: 5,
+        width: 140,
+        height: 150,
+        borderRadius: 4,
     },
     queryTitle: {
         fontSize: 20,
@@ -60,5 +51,7 @@ export default StyleSheet.create({
         marginTop: 8,
         marginBottom: 10,
         textAlign: "center",
+        paddingHorizontal: 4,
+        paddingTop: 4,
     },
 });

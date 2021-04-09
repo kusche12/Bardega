@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, TextInput } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -39,7 +39,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                         }
                     </View>
                     <View style={DetailStyles.col2}>
-                        <Text style={DetailStyles.textBlack}>{recipe.type}</Text>
+                        <Text style={[DetailStyles.textBlack, DetailStyles.wrapRecipeText]}>{recipe.type}</Text>
                     </View>
                 </View>
             );
@@ -52,8 +52,9 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
         if (comments === null) {
             return (
                 <View>
-                    <Text>Looks like no one has commented on this drink yet! Leave the first review below.</Text>
-                    <View style={[CreateStyles.ingrLine, { marginBottom: 8 }]}></View>
+                    <Text style={DetailStyles.commentText3}>There are no comments for this drink yet!</Text>
+                    <Text style={DetailStyles.commentText3}>Share your thoughts with us here</Text>
+                    <View style={[CreateStyles.ingrLine, { marginBottom: 8, marginTop: 16 }]}></View>
                     <InputComment />
                 </View>
             )
@@ -77,7 +78,13 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                 )
                 i++;
             }
-            return result;
+            return (
+                <>
+                    {result}
+                    <Text style={DetailStyles.commentText3}>View +{comments.length} more comments</Text>
+                </>
+
+            )
         }
     }
 
@@ -124,15 +131,8 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                         <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
                             <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>COMMENTS</Text>
 
-                            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+                            <View style={[CreateStyles.ingrLine, { marginBottom: 16 }]}></View>
                             {renderComments()}
-
-                            {/* The design makes this a text input, but component should be moved to a comments page I think */}
-                            {/* {
-                                comments.length > 2
-                                    ? <Text style={DetailStyles.commentText3}>View +{comments.length - 2} more comments</Text>
-                                    : <Text style={DetailStyles.commentText3}>View more comments</Text>
-                            } */}
 
                         </View>
                     </TouchableWithoutFeedback>

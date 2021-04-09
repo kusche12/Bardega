@@ -45,13 +45,19 @@ export default StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        marginBottom: 4,
+        marginBottom: 6,
     },
     col1: {
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         width: width * .3,
         alignItems: 'flex-end',
         paddingRight: 12
+    },
+    col2: {
+        width: width * .4,
+    },
+    wrapRecipeText: {
+        flexWrap: 'wrap'
     },
     commentContainer: {
         alignItems: 'flex-start'
@@ -95,16 +101,24 @@ export default StyleSheet.create({
         position: 'relative',
     },
     commentInputImage: {
-        width: 14,
-        height: 14,
+        width: 18,
+        height: 15,
+    },
+    imageContainer: {
+        width: 22,
+        height: 22,
+        resizeMode: 'contain',
         position: 'absolute',
+        left: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     commentInput: {
-        borderColor: GRAY,
-        borderRadius: 4,
+        borderColor: '#979797',
+        borderRadius: 10,
         borderWidth: 1,
-        paddingLeft: 20,
-        width: width * .7,
-        height: 24,
+        paddingLeft: 36,
+        width: width * .75,
+        height: 30,
     }
 });

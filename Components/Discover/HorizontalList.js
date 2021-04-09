@@ -1,15 +1,17 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableWithoutFeedback, Image, SafeAreaView } from 'react-native';
+import DetailStyles from '../../Styles/DetailStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
 const HorizontalList = ({ data, query, navigation }) => {
     const renderItem = ({ item }) => {
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item })}>
-                {/* <TouchableWithoutFeedback onPress={() => console.log(item)}> */}
-                <View style={DiscoverStyles.cardContainer}>
-                    <Image source={{ uri: item.imageURL }} style={DiscoverStyles.drinkImg} />
-                    <Text style={DiscoverStyles.cardTitle}>{item.name}</Text>
+                <View style={DetailStyles.shadowContainer}>
+                    <View style={DiscoverStyles.cardContainer}>
+                        <Image source={{ uri: item.imageURL }} style={DiscoverStyles.drinkImg} />
+                        <Text style={DiscoverStyles.cardTitle}>{item.name}</Text>
+                    </View>
                 </View>
             </TouchableWithoutFeedback>
         )
@@ -23,6 +25,7 @@ const HorizontalList = ({ data, query, navigation }) => {
                 data={data}
                 keyExtractor={(item, index) => '' + index}
                 renderItem={renderItem}
+                showsHorizontalScrollIndicator={false}
             />
         </View>
     )

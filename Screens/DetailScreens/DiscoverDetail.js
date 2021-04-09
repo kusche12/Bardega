@@ -8,6 +8,7 @@ import { compose } from 'redux';
 import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
+import Loading from '../../Components/Main/Loading';
 
 // Dummy data for testing purposes
 const TEST_DATA = [{
@@ -366,7 +367,7 @@ const DiscoverDetail = ({ drinks, queries, navigation }) => {
     if (!isLoaded) {
         return (
             <SafeAreaView style={[GlobalStyles.headerSafeArea, { paddingLeft: 8 }]}>
-                <Text>Loading drinks...</Text>
+                <Loading />
             </SafeAreaView>
         );
     }

@@ -7,7 +7,9 @@ const InputComment = () => {
 
     return (
         <View style={DetailStyles.commentInputRow}>
-            <Image source={require('./comment.png')} style={DetailStyles.commentInputImage} />
+            <View style={DetailStyles.imageContainer}>
+                <Image source={require('./comment.png')} style={DetailStyles.commentInputImage} />
+            </View>
             <TextInput
                 style={DetailStyles.commentInput}
                 onChangeText={setComment}

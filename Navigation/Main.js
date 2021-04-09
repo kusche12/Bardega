@@ -20,7 +20,7 @@ const Main = () => {
     return (
         <NavigationContainer>
             <Tab.Navigator
-                initialRouteName='Discover'
+                initialRouteName='Profile'
                 tabBarOptions={{
                     activeBackgroundColor: LIGHTPINK,
                     inactiveBackgroundColor: LIGHTPINK,
@@ -55,7 +55,7 @@ const Main = () => {
                             }
                         },
                     }}
-                    />
+                />
                 <Tab.Screen
                     name="Create"
                     component={CreateScreen}
@@ -68,7 +68,7 @@ const Main = () => {
                             }
                         },
                     }}
-              />
+                />
                 <Tab.Screen
                     name="Spirit"
                     component={SpiritScreen}
@@ -81,7 +81,7 @@ const Main = () => {
                             }
                         },
                     }}
-                    />
+                />
                 <Tab.Screen
                     name="Profile"
                     component={ProfileScreen}
@@ -94,7 +94,7 @@ const Main = () => {
                             }
                         },
                     }}
-                    />
+                />
             </Tab.Navigator>
         </NavigationContainer>
     )

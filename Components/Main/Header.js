@@ -15,21 +15,21 @@ const Header = ({ route, component, name, navigation }) => {
         <Stack.Navigator
             headerMode='screen' // SUPER IMPORTANT. This fixed screen transition glitch
             screenOptions={{
-            headerStyle: { elevation: 0 },
-            cardStyle: { backgroundColor: '#FFFFFF' },
-        }}>
+                headerStyle: { elevation: 0 },
+                cardStyle: { backgroundColor: '#FFFFFF' },
+            }}>
             <Stack.Screen
                 name={name}
                 component={component}
                 initialParams={route.params, navigation}
                 options={{
                     headerTitle: props => (
-                            <Image
-                                style={{ width: width, height: 150 }}
-                                source={require('./bardega_logo.png')}
-                                resizeMode='cover'
-                            />
-                        ),
+                        <Image
+                            style={{ width: width, height: 150 }}
+                            source={require('./bardega_logo.png')}
+                            resizeMode='cover'
+                        />
+                    ),
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerRight: () => {
