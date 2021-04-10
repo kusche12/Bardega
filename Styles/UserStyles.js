@@ -84,5 +84,28 @@ export default StyleSheet.create({
     },
     allDrinksContainer: {
         width: width
-    }
+    },
+    followerHeader: {
+        height: height * .05,
+        width: width,
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    title2: {
+        fontWeight: '500',
+        fontSize: 20,
+    },
+    followRow: {
+        width: width,
+        height: 60,
+        flexDirection: 'row',
+        paddingLeft: 20,
+        alignItems: 'center'
+    },
+    followImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 100
+    },
+
 });

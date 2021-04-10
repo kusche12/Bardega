@@ -20,7 +20,7 @@ const Main = () => {
     return (
         <NavigationContainer>
             <Tab.Navigator
-                initialRouteName='Profile' // TODO: Change back to Discover after editing
+                initialRouteName='Discover' // TODO: Change back to Discover after editing
                 tabBarOptions={{
                     activeBackgroundColor: LIGHTPINK,
                     inactiveBackgroundColor: LIGHTPINK,
