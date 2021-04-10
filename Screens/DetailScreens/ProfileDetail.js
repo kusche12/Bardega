@@ -77,7 +77,7 @@ const ProfileDetail = ({ navigation, route, drinks, user }) => {
     // Renders a drink image that, when clicked, routes to the drink detail page
     const renderDrink = ({ item }) => {
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item })}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item, fromScreen: 'Profile' })}>
                 <View style={UserStyles.drinkContainer}>
                     <Image source={{ uri: item.imageURL }} style={UserStyles.drinkImage} />
                 </View>

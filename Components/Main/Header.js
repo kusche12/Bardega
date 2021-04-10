@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Image, TouchableOpacity, TouchableWithoutFeedback, Dimensions, Text, View } from 'react-native';
+import { NavigationActions } from '@react-navigation/compat';
+import { Image, TouchableOpacity, TouchableWithoutFeedback, Dimensions, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import DrinkDetailScreen from '../../Screens/DetailScreens/DrinkDetailScreen';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -10,6 +11,8 @@ const { width } = Dimensions.get('window');
 const LIGHTPINK = '#F7D2CF';
 
 // Renders the top header for each main screen.
+// This header includes all of the tab bar screens AND 
+// the drink detail screen which can be accessed from any other screen
 const Header = ({ route, component, name, navigation }) => {
     return (
         <Stack.Navigator
@@ -58,8 +61,8 @@ const Header = ({ route, component, name, navigation }) => {
                             />
                         ),
                         headerRight: () => (
-                            <View style={GlobalStyles.headerWithButtons}>
-                                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+                            <View style={GlobalStyles.headerWithButtons} >
+                                <TouchableWithoutFeedback onPress={() => navigation.goBack(null)}>
                                     <Image
                                         style={{ height: 20, width: 20 }}
                                         source={require('./back_button.png')}

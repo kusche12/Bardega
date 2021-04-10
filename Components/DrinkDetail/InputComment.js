@@ -16,7 +16,7 @@ const InputComment = () => {
                 value={comment}
                 placeholder="Add Review / Comment"
                 multiline={false}
-                placeholderTextColor='##979797'
+                placeholderTextColor='#979797'
             />
         </View>
     )
