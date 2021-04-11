@@ -9,7 +9,6 @@ import UserStyles from '../../Styles/UserStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 
 const width = Dimensions.get('screen').width;
-const Stack = createStackNavigator();
 
 // TODO: If the currently authed user does not follow one of the users on the list
 //      Render a "follow" button (like on Instagram)

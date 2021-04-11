@@ -4,6 +4,7 @@ import { Image, TouchableOpacity, TouchableWithoutFeedback, Dimensions, View } f
 import { Feather } from '@expo/vector-icons';
 import DrinkDetailScreen from '../../Screens/DetailScreens/DrinkDetailScreen';
 import GlobalStyles from '../../Styles/GlobalStyles';
+import FollowScreen from '../../Screens/DetailScreens/FollowScreen';
 
 const Stack = createStackNavigator();
 const { width } = Dimensions.get('window');
@@ -49,6 +50,38 @@ const Header = ({ route, component, name, navigation }) => {
             <Stack.Screen
                 name='DrinkDetailScreen'
                 component={DrinkDetailScreen}
+                initialParams={route, navigation}
+                options={
+                    {
+                        headerTitle: () => (
+                            <Image
+                                style={{ height: 150 }}
+                                source={require('./bardega_logo.png')}
+                                resizeMode='contain'
+                            />
+                        ),
+                        headerRight: () => (
+                            <View style={GlobalStyles.headerWithButtons} >
+                                {/* The below code allows the user to goBack to the previous screen in its stack navigator */}
+                                <TouchableWithoutFeedback onPress={() => navigation.navigate(name, { screen: name })}>
+                                    <Image
+                                        style={{ height: 20, width: 20 }}
+                                        source={require('./back_button.png')}
+                                        resizeMode='contain'
+                                    />
+                                </TouchableWithoutFeedback>
+                            </View>
+                        ),
+                        headerTitleStyle: { flex: 1, textAlign: 'center' },
+                        headerTitleAlign: 'center',
+                        headerBackTitleVisible: false,
+                        headerTintColor: LIGHTPINK
+                    }
+                }
+            />
+            <Stack.Screen
+                name='FollowScreen'
+                component={FollowScreen}
                 initialParams={route, navigation}
                 options={
                     {
