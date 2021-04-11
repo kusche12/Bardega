@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationActions } from '@react-navigation/compat';
 import { Image, TouchableOpacity, TouchableWithoutFeedback, Dimensions, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import DrinkDetailScreen from '../../Screens/DetailScreens/DrinkDetailScreen';
@@ -62,7 +61,8 @@ const Header = ({ route, component, name, navigation }) => {
                         ),
                         headerRight: () => (
                             <View style={GlobalStyles.headerWithButtons} >
-                                <TouchableWithoutFeedback onPress={() => navigation.goBack(null)}>
+                                {/* The below code allows the user to goBack to the previous screen in its stack navigator */}
+                                <TouchableWithoutFeedback onPress={() => navigation.navigate(name, { screen: name })}>
                                     <Image
                                         style={{ height: 20, width: 20 }}
                                         source={require('./back_button.png')}

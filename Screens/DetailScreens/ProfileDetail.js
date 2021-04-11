@@ -9,16 +9,17 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 
 // TODO: Delete this after development, lol
-//LogBox.ignoreAllLogs()
+LogBox.ignoreAllLogs()
 
-// TODO: Render the profile info for the currently authed user
-const ProfileDetail = ({ navigation, route, drinks, user }) => {
+// TODO: Get the data from the currently authed user
+const ProfileDetail = ({ navigation, drinks, user }) => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
 
     // Only get all the drink images after the user and drinks are loaded to the DB
     useEffect(() => {
+        console.log(user);
         if (user && drinks) {
             loadUserDrinks();
         }
@@ -30,7 +31,7 @@ const ProfileDetail = ({ navigation, route, drinks, user }) => {
             const drink = await drinks[user.drinks[i].id];
             res.push(drink)
         }
-        await setUserDrinks(res);
+        setUserDrinks(res);
         setIsLoading(false);
     }
 
@@ -71,6 +72,8 @@ const ProfileDetail = ({ navigation, route, drinks, user }) => {
     const routeStatBox = (type) => {
         if (type === 'Followers') {
             navigation.navigate('FollowScreen', { users: user.followers, name: 'Followers' });
+        } else if (type === 'Following') {
+            navigation.navigate('FollowScreen', { users: user.following, name: 'Following' });
         }
     }
 
@@ -134,13 +137,19 @@ const ProfileDetail = ({ navigation, route, drinks, user }) => {
     }
 }
 
-const mapStateToProps = (state) => {
-    const profiles = state.firestore.data.profiles;
-    const profile = profiles ? profiles['culture-admin'] : null;
-
-    return {
-        drinks: state.firestore.data.drinks,
-        user: profile
+const mapStateToProps = (state, ownProps) => {
+    if (ownProps.route.params.user !== undefined) {
+        return {
+            drinks: state.firestore.data.drinks,
+            user: ownProps.route.params.user
+        }
+    } else {
+        const profiles = state.firestore.data.profiles;
+        const profile = profiles ? profiles['culture-admin'] : null;
+        return {
+            drinks: state.firestore.data.drinks,
+            user: profile
+        }
     }
 }
 
