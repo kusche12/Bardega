@@ -3,8 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Image, TouchableOpacity, TouchableWithoutFeedback, Dimensions, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import DrinkDetailScreen from '../../Screens/DetailScreens/DrinkDetailScreen';
-import GlobalStyles from '../../Styles/GlobalStyles';
 import FollowScreen from '../../Screens/DetailScreens/FollowScreen';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const Stack = createStackNavigator();
 const { width } = Dimensions.get('window');
