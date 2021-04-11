@@ -137,13 +137,19 @@ const ProfileDetail = ({ navigation, drinks, user }) => {
     }
 }
 
-const mapStateToProps = (state) => {
-    const profiles = state.firestore.data.profiles;
-    const profile = profiles ? profiles['culture-admin'] : null;
-
-    return {
-        drinks: state.firestore.data.drinks,
-        user: profile
+const mapStateToProps = (state, ownProps) => {
+    if (ownProps.route.params.user) {
+        return {
+            drinks: state.firestore.data.drinks,
+            user: ownProps.route.params.user
+        }
+    } else {
+        const profiles = state.firestore.data.profiles;
+        const profile = profiles ? profiles['culture-admin'] : null;
+        return {
+            drinks: state.firestore.data.drinks,
+            user: profile
+        }
     }
 }
 
