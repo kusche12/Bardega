@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Image, TouchableWithoutFeedback, Dimensions, View, Alert, Text } from 'react-native';
+import { Image, TouchableWithoutFeedback, View, Alert, Text } from 'react-native';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
 import FavoritesScreen from '../../Screens/ProfileScreens/FavoritesScreen';
@@ -9,12 +9,15 @@ import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import { Entypo } from '@expo/vector-icons';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import ProfileScreen from '../../Screens/Main/ProfileScreen';
+import MainHeader from '../../Components/TopNavbar/MainHeader';
+import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
 
 const Stack = createStackNavigator();
-const { width } = Dimensions.get('window');
 const LIGHTPINK = '#F7D2CF';
 
 const ProfileNavigator = ({ route, navigation }) => {
+    const { header } = route.params;
+
     return (
         <Stack.Navigator
             headerMode='screen'
@@ -27,13 +30,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={ProfileScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
-                    headerTitle: () => (
-                        <Image
-                            style={{ width: width, height: 150 }}
-                            source={require('./bardega_logo.png')}
-                            resizeMode='cover'
-                        />
-                    ),
+                    headerTitle: () => <MainHeader header={header} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                 })}
@@ -42,25 +39,8 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='DrinkDetailScreen'
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
-
-                    headerTitle: () => (
-                        <Image
-                            style={{ height: 150 }}
-                            source={require('./bardega_logo.png')}
-                            resizeMode='contain'
-                        />
-                    ),
-                    headerRight: () => (
-                        <View style={GlobalStyles.headerWithButtons} >
-                            <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-                                <Image
-                                    style={{ height: 20, width: 20 }}
-                                    source={require('./back_button.png')}
-                                    resizeMode='contain'
-                                />
-                            </TouchableWithoutFeedback>
-                        </View>
-                    ),
+                    headerTitle: () => <MainHeader header={header} />,
+                    headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -72,26 +52,8 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='FollowScreen'
                 component={FollowScreen}
                 options={({ route, navigation }) => ({
-
-                    headerTitle: () => (
-                        <Image
-                            style={{ height: 150 }}
-                            source={require('./bardega_logo.png')}
-                            resizeMode='contain'
-                        />
-                    ),
-                    headerRight: () => (
-                        <View style={GlobalStyles.headerWithButtons} >
-                            {/* The below code allows the user to goBack to the previous screen in its stack navigator */}
-                            <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-                                <Image
-                                    style={{ height: 20, width: 20 }}
-                                    source={require('./back_button.png')}
-                                    resizeMode='contain'
-                                />
-                            </TouchableWithoutFeedback>
-                        </View>
-                    ),
+                    headerTitle: () => <MainHeader header={header} />,
+                    headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -102,24 +64,8 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='FavoritesScreen'
                 component={FavoritesScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => (
-                        <Image
-                            style={{ height: 150 }}
-                            source={require('./bardega_logo.png')}
-                            resizeMode='contain'
-                        />
-                    ),
-                    headerRight: () => (
-                        <View style={GlobalStyles.headerWithButtons} >
-                            <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-                                <Image
-                                    style={{ height: 20, width: 20 }}
-                                    source={require('./back_button.png')}
-                                    resizeMode='contain'
-                                />
-                            </TouchableWithoutFeedback>
-                        </View>
-                    ),
+                    headerTitle: () => <MainHeader header={header} />,
+                    headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -130,14 +76,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='DrinkListScreen'
                 component={DrinkListScreen}
                 options={({ route, navigation }) => ({
-
-                    headerTitle: () => (
-                        <Image
-                            style={{ height: 150 }}
-                            source={require('./bardega_logo.png')}
-                            resizeMode='contain'
-                        />
-                    ),
+                    headerTitle: () => <MainHeader header={header} />,
                     headerRight: () => {
                         const handleEditCollection = () => {
                             return Alert.alert(
@@ -207,13 +146,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='EditCollectionScreen'
                 component={EditCollectionScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => (
-                        <Image
-                            style={{ height: 150 }}
-                            source={require('./bardega_logo.png')}
-                            resizeMode='contain'
-                        />
-                    ),
+                    headerTitle: () => <MainHeader header={header} />,
                     headerRight: () => {
 
                         // TODO: Save edits to DB

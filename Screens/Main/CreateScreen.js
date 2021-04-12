@@ -45,8 +45,7 @@ const customTag = [
 // TODO: Image handling
 // TODO: Set the correct font given by Care
 // TODO: Submit Drink Button (to database)
-// TODO: When the submission is being processed, the image should be uploaded to Google Storage with
-// the file name <drinkID>.png (or jpg). This is how it will be referenced for the remainder of this drink object
+// TODO: Shrink the image on submission for faster load times and less load space
 // TODO: Also make sure to set the drink's 'id' attribute equal to the one given by firebase
 // TODO: Also make sure it has an AuthorID which is the ID of the currently authed user
 const CreateScreen = ({ tags }) => {

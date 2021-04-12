@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Image, Text, Vibration, Alert, TouchableHighlight } from 'react-native';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
+
+// TODO: Implement the delete item from collection in react-redux-firebase 
 const SearchResult = ({ drink, navigation, removable }) => {
     const [backgroundColor, setBackgroundColor] = useState('white');
 
