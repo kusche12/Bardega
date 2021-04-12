@@ -149,5 +149,22 @@ export default StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         textAlign: 'center'
+    },
+    collectionInputContainer: {
+        paddingLeft: 16,
+    },
+    collectionText: {
+        fontWeight: '500',
+        fontSize: 16,
+        marginBottom: 24
+    },
+    collectionDelete: {
+        color: 'red',
+        fontSize: 16,
+        marginBottom: 16
+    },
+    collectionSubtitle: {
+        fontSize: 12,
+        color: GRAY
     }
 });
