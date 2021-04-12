@@ -23,11 +23,14 @@ export default StyleSheet.create({
         resizeMode: 'contain'
     },
     headerWithButtons: {
+        top: 6,
         alignSelf: 'stretch',
         width: width,
         height: 50,
-        justifyContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         paddingHorizontal: 12,
+        flexDirection: 'row'
     },
     boxShadow: {
         shadowColor: "#000",

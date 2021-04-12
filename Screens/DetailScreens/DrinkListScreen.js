@@ -1,25 +1,27 @@
-import React from 'react';
-import { FlatList, Text, SafeAreaView, View, Dimensions } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useEffect } from 'react';
+import { FlatList, Text, SafeAreaView, View } from 'react-native';
 import SearchResult from '../../Components/Main/SearchResult';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
-import CreateStyles from '../../Styles/CreateStyles';
-const width = Dimensions.get('screen').width;
 
 const DrinkListScreen = ({ route, navigation }) => {
-    const { drinks, name } = route.params;
+    const { drinks, collection } = route.params;
+
+    useEffect(() => {
+        if (route.params) {
+            navigation.setParams({ collection: collection })
+        }
+    }, [])
 
     const renderItem = ({ item }) => {
-        return <SearchResult navigation={navigation} drink={item} />
+        return <SearchResult navigation={navigation} drink={item} removable={true} />
     }
 
     return (
         <SafeAreaView style={[GlobalStyles.headerSafeArea]} >
             <View style={DiscoverStyles.searchHeader}>
-                <Text style={DiscoverStyles.title}>Results for {name}</Text>
+                <Text style={DiscoverStyles.title}>Results for {collection.name}</Text>
             </View>
-            {/* <View style={[GlobalStyles.line, { width: width, alignSelf: 'center' }]}></View> */}
             <FlatList
                 data={drinks}
                 renderItem={renderItem}
