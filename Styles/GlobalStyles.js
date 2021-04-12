@@ -1,5 +1,6 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
 const width = Dimensions.get('screen').width;
+const PINK = '#F29288';
 
 export default StyleSheet.create({
     headerSafeArea: {
@@ -37,5 +38,10 @@ export default StyleSheet.create({
             height: 2
         },
         elevation: 4
-    }
+    },
+    line: {
+        alignSelf: 'stretch',
+        height: 1.5,
+        backgroundColor: PINK,
+    },
 });

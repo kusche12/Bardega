@@ -15,7 +15,7 @@ export default StyleSheet.create({
         alignSelf: "stretch",
         alignItems: "center",
         justifyContent: "center",
-        height: height * 0.08,
+        marginBottom: 20,
     },
     title: {
         fontSize: 22,
@@ -32,13 +32,12 @@ export default StyleSheet.create({
         alignItems: "center",
         marginRight: 8,
         backgroundColor: "white",
-        borderColor: "red",
-
+        overflow: 'hidden'
     },
     drinkImg: {
         width: 140,
         height: 150,
-        borderRadius: 4,
+        borderRadius: 5,
     },
     queryTitle: {
         fontSize: 20,
@@ -53,5 +52,23 @@ export default StyleSheet.create({
         textAlign: "center",
         paddingHorizontal: 4,
         paddingTop: 4,
+    },
+    searchHeader: {
+        marginBottom: 8,
+        paddingLeft: 16
+    },
+    searchContainer: {
+        width: width,
+        flexDirection: 'row',
+        paddingLeft: 16,
+        paddingVertical: 8,
+        borderBottomColor: GRAY,
+        borderBottomWidth: 1
+    },
+    searchImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 5,
+        marginRight: 4
     },
 });

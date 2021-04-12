@@ -24,7 +24,7 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
     const renderBox = ({ item }) => {
         return (
             <View style={UserStyles.favoritesBox}>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkListScreen', { drinks: item.drinks })}>
+                <TouchableWithoutFeedback onPress={() => getDrinkDataAndNavigate(item)}>
                     <View>
                         {renderBoxImages(item.drinks)}
                         <Text style={UserStyles.favoritesTitle}>{item.name}</Text>
@@ -59,6 +59,16 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
         }
     }
 
+    const getDrinkDataAndNavigate = async (item) => {
+        let fullDrinks = [];
+        for (let i = 0; i < item.drinks.length; i++) {
+            const drink = await drinks[item.drinks[i].id]
+            fullDrinks.push(drink);
+        }
+
+        await navigation.navigate('DrinkListScreen', { drinks: fullDrinks, name: item.name });
+    }
+
     if (isLoading) {
         return <Loading />
     } else {
@@ -70,7 +80,7 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
             >
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, UserStyles.container]} >
                     <View style={DiscoverStyles.titleContainer}>
-                        <Text style={DiscoverStyles.title}>DISCOVER</Text>
+                        <Text style={DiscoverStyles.title}>FAVORITES</Text>
                     </View>
 
                     <View style={UserStyles.favoritesContainer}>

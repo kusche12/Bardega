@@ -1,19 +1,12 @@
 import React from 'react';
-import { View, Text, FlatList, TouchableWithoutFeedback, Image, SafeAreaView } from 'react-native';
-import DetailStyles from '../../Styles/DetailStyles';
+import { View, Text, FlatList } from 'react-native';
+import DrinkCard from '../Main/DrinkCard';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
 const HorizontalList = ({ data, query, navigation }) => {
     const renderItem = ({ item }) => {
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item, prev: 'DiscoverDetail' })}>
-                <View style={DetailStyles.shadowContainer}>
-                    <View style={DiscoverStyles.cardContainer}>
-                        <Image source={{ uri: item.imageURL }} style={DiscoverStyles.drinkImg} />
-                        <Text style={DiscoverStyles.cardTitle}>{item.name}</Text>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
+            <DrinkCard drink={item} navigation={navigation} prev={'Discover'} />
         )
     }
 
