@@ -4,11 +4,11 @@ import { Image } from 'react-native';
 // Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import DiscoverScreen from '../Screens/BottomTabScreens/DiscoverScreen';
-import SearchScreen from '../Screens/BottomTabScreens/SearchScreen';
-import CreateScreen from '../Screens/BottomTabScreens/CreateScreen';
-import SpiritScreen from '../Screens/BottomTabScreens/SpiritScreen';
-import ProfileScreen from '../Screens/BottomTabScreens/ProfileScreen';
+import DiscoverNavigator from './StackNavigators/DiscoverNavigator';
+import SearchNavigator from './StackNavigators/SearchNavigator';
+import CreateNavigator from '../Navigation/StackNavigators/CreateNavigator';
+import SpiritNavigator from '../Navigation/StackNavigators/SpiritNavigator';
+import ProfileNavigator from '../Navigation/StackNavigators/ProfileNavigator';
 import GlobalStyles from '../Styles/GlobalStyles';
 
 const LIGHTPINK = '#F7D2CF';
@@ -20,7 +20,7 @@ const Main = () => {
     return (
         <NavigationContainer>
             <Tab.Navigator
-                initialRouteName='Discover' // TODO: Change back to Discover after editing
+                initialRouteName='Discover'
                 tabBarOptions={{
                     activeBackgroundColor: LIGHTPINK,
                     inactiveBackgroundColor: LIGHTPINK,
@@ -32,7 +32,7 @@ const Main = () => {
             >
                 <Tab.Screen
                     name="Discover"
-                    component={DiscoverScreen}
+                    component={DiscoverNavigator}
                     options={{
                         tabBarIcon: ({ focused }) => {
                             if (focused) {
@@ -45,7 +45,7 @@ const Main = () => {
                 />
                 <Tab.Screen
                     name="Search"
-                    component={SearchScreen}
+                    component={SearchNavigator}
                     options={{
                         tabBarIcon: ({ focused }) => {
                             if (focused) {
@@ -58,7 +58,7 @@ const Main = () => {
                 />
                 <Tab.Screen
                     name="Create"
-                    component={CreateScreen}
+                    component={CreateNavigator}
                     options={{
                         tabBarIcon: ({ focused }) => {
                             if (focused) {
@@ -71,7 +71,7 @@ const Main = () => {
                 />
                 <Tab.Screen
                     name="Spirit"
-                    component={SpiritScreen}
+                    component={SpiritNavigator}
                     options={{
                         tabBarIcon: ({ focused }) => {
                             if (focused) {
@@ -84,7 +84,7 @@ const Main = () => {
                 />
                 <Tab.Screen
                     name="Profile"
-                    component={ProfileScreen}
+                    component={ProfileNavigator}
                     options={{
                         tabBarIcon: ({ focused }) => {
                             if (focused) {

@@ -12,7 +12,7 @@ import UserStyles from '../../Styles/UserStyles';
 LogBox.ignoreAllLogs()
 
 // TODO: Get the data from the currently authed user
-const ProfileDetail = ({ navigation, drinks, user }) => {
+const ProfileScreen = ({ navigation, drinks, user }) => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
@@ -155,4 +155,4 @@ const mapStateToProps = (state, ownProps) => {
 export default compose(
     connect(mapStateToProps),
     firestoreConnect(() => ['drinks', 'profiles'])
-)(ProfileDetail);
+)(ProfileScreen);

@@ -2,12 +2,12 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Text, SafeAreaView } from 'react-native';
 
-const SearchDetail = ({ route }) => {
+const SpiritScreen = ({ route }) => {
     return (
         <SafeAreaView>
-            <Text>This is the SearchDetail</Text>
+            <Text>This is the SpiritScreen</Text>
         </SafeAreaView>
     );
 }
 
-export default SearchDetail;
+export default SpiritScreen;

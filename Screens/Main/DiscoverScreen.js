@@ -13,7 +13,7 @@ import Loading from '../../Components/Main/Loading';
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of 10 drinks that fit each query
-const DiscoverDetail = ({ drinks, queries, navigation }) => {
+const DiscoverScreen = ({ drinks, queries, navigation }) => {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [selectedDrinks, setSelectedDrinks] = useState(null);
@@ -92,4 +92,4 @@ const mapStateToProps = (state) => {
 export default compose(
     firestoreConnect(() => ['drinks', 'queries']),
     connect(mapStateToProps)
-)(DiscoverDetail);
+)(DiscoverScreen);

@@ -49,7 +49,7 @@ const customTag = [
 // the file name <drinkID>.png (or jpg). This is how it will be referenced for the remainder of this drink object
 // TODO: Also make sure to set the drink's 'id' attribute equal to the one given by firebase
 // TODO: Also make sure it has an AuthorID which is the ID of the currently authed user
-const CreateDetail = ({ tags }) => {
+const CreateScreen = ({ tags }) => {
 
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
@@ -197,4 +197,4 @@ const mapStateToProps = (state) => {
 export default compose(
     firestoreConnect(() => ['tags']),
     connect(mapStateToProps)
-)(CreateDetail);
+)(CreateScreen);
