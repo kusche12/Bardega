@@ -19,7 +19,6 @@ const ProfileDetail = ({ navigation, drinks, user }) => {
 
     // Only get all the drink images after the user and drinks are loaded to the DB
     useEffect(() => {
-        console.log(user);
         if (user && drinks) {
             loadUserDrinks();
         }
@@ -46,7 +45,7 @@ const ProfileDetail = ({ navigation, drinks, user }) => {
                         <Text style={UserStyles.subtitle}>Edit Profile</Text>
                     </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate('FavoritesScreen', { favorites: user.favorites })}>
                     <View style={[UserStyles.button, UserStyles.buttonFavorites]}>
                         <Image source={require('./heart.png')} style={UserStyles.heartImg} />
                         <Text style={UserStyles.subtitle}>Favorites</Text>

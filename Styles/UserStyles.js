@@ -6,6 +6,8 @@ const GRAY = '#a1a1a1'
 const RADIUS = 22;
 const SUBFONT = 15;
 
+const FAVEIMAGEWIDTH = width * .45;
+
 export default StyleSheet.create({
     container: {
         alignItems: 'center'
@@ -107,5 +109,45 @@ export default StyleSheet.create({
         height: 50,
         borderRadius: 100
     },
+    faveImage1: {
+        width: FAVEIMAGEWIDTH,
+        height: FAVEIMAGEWIDTH
+    },
+    faveImage2: {
+        width: FAVEIMAGEWIDTH / 2,
+        width: FAVEIMAGEWIDTH / 2,
+        borderWidth: 1,
+        borderColor: 'white',
+    },
+    faveImage3: {
+        width: FAVEIMAGEWIDTH,
+        height: FAVEIMAGEWIDTH,
+        bottom: FAVEIMAGEWIDTH / 4,
+        zIndex: 1
+    },
+    favoriteImagesContainer: {
+        width: FAVEIMAGEWIDTH,
+        height: FAVEIMAGEWIDTH,
+        overflow: 'hidden',
+        borderRadius: RADIUS,
+    },
+    favoriteRow: {
+        flexDirection: 'row',
+        height: FAVEIMAGEWIDTH / 2,
+        overflow: 'hidden',
+        zIndex: 900,
+        borderBottomWidth: 1,
+        borderBottomColor: 'white',
 
+    },
+    favoritesBox: {
+        marginLeft: 6,
+        marginRight: 6,
+        alignContent: 'center'
+    },
+    favoritesTitle: {
+        fontSize: 14,
+        fontWeight: '500',
+        textAlign: 'center'
+    }
 });
