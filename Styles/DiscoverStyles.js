@@ -63,7 +63,7 @@ export default StyleSheet.create({
         paddingLeft: 16,
         paddingVertical: 8,
         borderBottomColor: GRAY,
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
     },
     searchImage: {
         width: 60,

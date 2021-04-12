@@ -1,15 +1,9 @@
-import React from 'react';
-import { View, Image, TouchableWithoutFeedback, Text, LogBox } from 'react-native';
+import React, { useState } from 'react';
+import { View, Image, Text, Vibration, Alert, TouchableHighlight } from 'react-native';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
-// TODO: Delete me
-LogBox.ignoreAllLogs()
-
-
-// TODO: If search result for favorites, add a trash can that allows user to remove from favorites
-// Also create an Alert message that clarifies if this is was the user really wants to do
-// TODO: Do the same alert / delete when holding down the component
 const SearchResult = ({ drink, navigation, removable }) => {
+    const [backgroundColor, setBackgroundColor] = useState('white');
 
     const renderTags = () => {
         let res = '';
@@ -20,29 +14,41 @@ const SearchResult = ({ drink, navigation, removable }) => {
         return <Text style={{ fontWeight: '300' }}>{res}</Text>
     }
 
-    // If the search result is from the favorites drink list, then render a removable icon on it
-    const renderRemove = () => {
-        if (removable) {
-            return (
-                <View>
-
-                </View>
-            )
-        }
-        return null;
+    const handleRemove = () => {
+        Vibration.vibrate([0, 100]);
+        setBackgroundColor('#ededed');
+        return Alert.alert(
+            "Remove from collection?",
+            "If you delete this from your collection, the drink will still be saved in the app.",
+            [
+                {
+                    text: "Remove",
+                    onPress: () => console.log('DELETE FROM COLLECTION'),
+                    style: "destructive"
+                },
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                },
+            ],
+            { cancelable: true }
+        );
     }
 
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: drink })}>
+        <TouchableHighlight
+            onLongPress={() => removable && handleRemove()}
+            onPress={() => navigation.navigate('DrinkDetailScreen', { drink: drink })}
+            underlayColor={'#d6d6d6'}
+        >
             <View style={DiscoverStyles.searchContainer}>
                 <Image source={{ uri: drink.imageURL }} style={DiscoverStyles.searchImage} />
                 <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
                     <Text style={{ fontWeight: '700' }}>{drink.name}</Text>
                     {renderTags()}
                 </View>
-                {renderRemove()}
             </View>
-        </TouchableWithoutFeedback>
+        </TouchableHighlight>
     )
 }
 
