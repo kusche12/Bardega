@@ -5,16 +5,7 @@ import Loading from '../../Components/Main/Loading';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 
-const comments = [
-    {
-        id: '1',
-        authorID: '123',
-        text: 'hello world',
-        dateCreated: ''
-    }
-]
-
-const CommentsScreen = () => {
+const CommentsScreen = ({ comments }) => {
 
     return (
         <SafeAreaView style={GlobalStyles.headerSafeArea} >
