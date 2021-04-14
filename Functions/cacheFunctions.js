@@ -14,3 +14,7 @@ export const cacheFirebaseAssets = (ref) => {
         querySnapShot.forEach((doc) => cacheImages(doc.data.image, doc.id))
     )
 }
+
+export const getCachedImage = (docID) => {
+    return '' + FileSystem.documentDirectory + docID.toString() + ".jpg"
+}

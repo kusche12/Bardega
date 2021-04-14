@@ -5,6 +5,7 @@ import Loading from '../../Components/Main/Loading';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 
@@ -28,6 +29,7 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
         let res = [];
         for (let i = 0; i < user.drinks.length; i++) {
             const drink = await drinks[user.drinks[i].id];
+            cacheImages(drink.imageURL, drink.id);
             res.push(drink)
         }
         setUserDrinks(res);
@@ -81,7 +83,7 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item, fromScreen: 'Profile' })}>
                 <View style={UserStyles.drinkContainer}>
-                    <Image source={{ uri: item.imageURL }} style={UserStyles.drinkImage} />
+                    <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={UserStyles.drinkImage} />
                 </View>
             </TouchableWithoutFeedback>
         )

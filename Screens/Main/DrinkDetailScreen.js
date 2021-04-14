@@ -4,6 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Loading from '../../Components/Main/Loading';
 import InputComment from '../../Components/DrinkDetail/InputComment';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -22,6 +23,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
     // Load the component after all props are set
     useEffect(() => {
         if (author !== null && authors !== null) {
+            cacheImages(drink.imageURL, drink.id)
             setIsLoading(false);
         }
     }, [author, comments, authors]);
@@ -101,7 +103,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                     <Text style={CreateStyles.title}>{drink.name}</Text>
                     <View style={DetailStyles.shadowContainer}>
                         <View style={DetailStyles.photoContainer}>
-                            <Image source={{ uri: drink.imageURL }} style={DetailStyles.drinkImage} />
+                            <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DetailStyles.drinkImage} />
                         </View>
                     </View>
 
