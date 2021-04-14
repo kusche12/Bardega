@@ -5,6 +5,7 @@ import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
 import DiscoverScreen from '../../Screens/Main/DiscoverScreen';
+import CommentsScreen from '../../Screens/Main/CommentsScreen';
 
 const Stack = createStackNavigator();
 const LIGHTPINK = '#F7D2CF';
@@ -44,6 +45,18 @@ const DiscoverNavigator = ({ route, navigation }) => {
             <Stack.Screen
                 name='DrinkListScreen'
                 component={DrinkListScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader header={header} />,
+                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: LIGHTPINK
+                })}
+            />
+            <Stack.Screen
+                name='CommentsScreen'
+                component={CommentsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader header={header} />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,

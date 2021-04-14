@@ -12,9 +12,6 @@ import rootReducer from './Store/Reducers/RootReducer';
 
 import Main from './Navigation/Main.js';
 
-// TODO: Make sure that images are rendered before transitioning to the next screen.
-//       It's not a good look seeing an empty white space before the image loads in every time
-
 // Create store enhanced with redux reducers and firestore database
 const store = createStore(rootReducer, applyMiddleware(thunk));
 

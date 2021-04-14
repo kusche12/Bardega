@@ -65,14 +65,13 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
             while (i < 2 || i < comments.length) {
                 const comment = comments[i];
                 const author = authors[comment.authorID];
-                console.log(author);
                 result.push(
                     <View key={i}>
                         <View style={DetailStyles.commentRow}>
-                            <Image source={require('./face.png')} style={DetailStyles.commentImage} />
+                            <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage} />
                             <View style={DetailStyles.commentDetail}>
                                 <Text style={{ marginBottom: 6 }}>{comment.text}</Text>
-                                <Text style={DetailStyles.commentText2}>- {comment.authorFirstName} {comment.authorLastName} | {comment.date}</Text>
+                                <Text style={DetailStyles.commentText2}>- {author.fName} {author.lName} | {comment.dateCreated}</Text>
                             </View>
                         </View>
                         <View style={[CreateStyles.ingrLine, { marginBottom: 8 }]}></View>
@@ -129,7 +128,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                         </View>
                     }
 
-                    <TouchableWithoutFeedback onPress={() => console.log('navigate to comments page')}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { comments: comments })}>
                         <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
                             <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>COMMENTS</Text>
 
@@ -165,7 +164,7 @@ const mapStateToProps = (state, ownProps) => {
 
     const commentID = ownProps.route.params.drink.commentID;
     const allComments = state.firestore.data.comments;
-    const comments = allComments ? allComments[commentID] : null;
+    const comments = allComments ? allComments[commentID].comments : null;
     return {
         author: profile,
         comments: comments,
@@ -175,6 +174,6 @@ const mapStateToProps = (state, ownProps) => {
 
 export default compose(
     connect(mapStateToProps),
-    firestoreConnect(() => ['profiles'])
+    firestoreConnect(() => ['profiles', 'comments'])
 )(DrinkDetailScreen);
 
