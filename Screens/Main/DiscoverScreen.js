@@ -40,8 +40,6 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
         setIsLoaded(true);
     }
 
-
-
     if (!isLoaded) {
         return (
             <SafeAreaView style={[GlobalStyles.headerSafeArea, { paddingLeft: 8 }]}>
