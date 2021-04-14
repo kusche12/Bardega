@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Image, Text, Vibration, Alert, TouchableHighlight } from 'react-native';
+import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
 
 // TODO: Implement the delete item from collection in react-redux-firebase 
 const SearchResult = ({ drink, navigation, removable }) => {
-    const [backgroundColor, setBackgroundColor] = useState('white');
-
     const renderTags = () => {
         let res = '';
         for (let i = 0; i < drink.tags.length; i++) {
@@ -18,7 +17,6 @@ const SearchResult = ({ drink, navigation, removable }) => {
 
     const handleRemove = () => {
         Vibration.vibrate([0, 100]);
-        setBackgroundColor('#ededed');
         return Alert.alert(
             "Remove from collection?",
             "If you delete this from your collection, the drink will still be saved in the app.",
@@ -44,7 +42,7 @@ const SearchResult = ({ drink, navigation, removable }) => {
             underlayColor={'#d6d6d6'}
         >
             <View style={DiscoverStyles.searchContainer}>
-                <Image source={{ uri: drink.imageURL }} style={DiscoverStyles.searchImage} />
+                <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.searchImage} />
                 <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
                     <Text style={{ fontWeight: '700' }}>{drink.name}</Text>
                     {renderTags()}

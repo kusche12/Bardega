@@ -5,6 +5,7 @@ import Loading from '../../Components/Main/Loading';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
@@ -36,23 +37,28 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
 
     const renderBoxImages = (items) => {
         if (items.length < 3) {
+            const image1 = drinks[items[0].id];
+            cacheImages(image1.imageURL, image1.id);
             return (
                 <View style={UserStyles.favoriteImagesContainer}>
-                    <Image source={{ uri: drinks[items[0].id].imageURL }} style={UserStyles.faveImage1} />
+                    <Image source={{ uri: getCachedImage(image1.id) }} style={UserStyles.faveImage1} />
                 </View>
             );
         } else {
-            const image1 = drinks[items[0].id].imageURL;
-            const image2 = drinks[items[1].id].imageURL;
-            const image3 = drinks[items[2].id].imageURL;
+            const image1 = drinks[items[0].id];
+            const image2 = drinks[items[1].id];
+            const image3 = drinks[items[2].id];
+            cacheImages(image1.imageURL, image1.id);
+            cacheImages(image2.imageURL, image2.id);
+            cacheImages(image3.imageURL, image3.id);
             return (
                 <View style={UserStyles.favoriteImagesContainer}>
                     <View style={UserStyles.favoriteRow}>
-                        <Image source={{ uri: image1 }} style={UserStyles.faveImage2} />
-                        <Image source={{ uri: image2 }} style={UserStyles.faveImage2} />
+                        <Image source={{ uri: getCachedImage(image1.id) }} style={UserStyles.faveImage2} />
+                        <Image source={{ uri: getCachedImage(image2.id) }} style={UserStyles.faveImage2} />
                     </View>
                     <View style={{ overflow: 'hidden' }}>
-                        <Image source={{ uri: image3 }} style={UserStyles.faveImage3} />
+                        <Image source={{ uri: getCachedImage(image3.id) }} style={UserStyles.faveImage3} />
                     </View>
                 </View>
             );
