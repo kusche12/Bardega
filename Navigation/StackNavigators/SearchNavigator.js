@@ -4,6 +4,7 @@ import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import SearchScreen from '../../Screens/Main/SearchScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
+import SearchHeader from '../../Components/TopNavbar/SearchHeader'
 import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
 
 const Stack = createStackNavigator();
@@ -23,8 +24,8 @@ const SearchNavigator = ({ route, navigation }) => {
                 component={SearchScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
-                    headerTitle: () => <MainHeader header={header} />,
-                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitle: () => <SearchHeader />,
+                    headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: LIGHTPINK },
                     headerTitleAlign: 'center',
                 })}
             />
