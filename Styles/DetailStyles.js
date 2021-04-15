@@ -121,5 +121,19 @@ export default StyleSheet.create({
         paddingLeft: 36,
         width: width * .75,
         height: 30,
+    },
+    commentHeaderImage: {
+        width: 60,
+        height: 60,
+        borderRadius: RADIUS,
+        marginRight: 12
+    },
+    commentHeaderRow: {
+        flexDirection: 'row',
+        paddingLeft: 12,
+        marginBottom: 24,
+        borderBottomColor: '#EEE',
+        borderBottomWidth: 1,
+        paddingBottom: 12
     }
 });

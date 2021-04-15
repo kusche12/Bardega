@@ -131,7 +131,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                         </View>
                     }
 
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { comments: comments })}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { comments: comments, drink: drink })}>
                         <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
                             <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>COMMENTS</Text>
 
