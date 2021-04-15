@@ -1,11 +1,11 @@
 // Get an array of all drinks that fit a certain search filter. Can be either tag or prep time
-export const getDrinksWithQuery = (drinks, query) => {
+export const getDrinksWithQuery = (drinks, query, max) => {
     let nums = randomUniqueNum(drinks.length, drinks.length);
 
     let result = [];
     if (query.filterType === 'tag') {
         for (let i in nums) {
-            if (result.length === 10) {
+            if (result.length === max) {
                 return result;
             }
 
@@ -22,7 +22,7 @@ export const getDrinksWithQuery = (drinks, query) => {
         return result;
     } else if (query.filterType === 'prepTime') {
         for (let i in nums) {
-            if (result.length === 10) {
+            if (result.length === max) {
                 return result;
             }
             const prepTime = drinks[nums[i]].prepTime;

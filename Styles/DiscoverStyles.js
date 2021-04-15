@@ -39,10 +39,20 @@ export default StyleSheet.create({
         height: 150,
         borderRadius: 5,
     },
+    horizRow: {
+        marginBottom: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingRight: 12,
+        alignItems: 'flex-end'
+    },
     queryTitle: {
         fontSize: 20,
         fontWeight: "700",
-        marginBottom: 10,
+    },
+    querySubtitle: {
+        fontSize: 13,
+        fontWeight: '700',
     },
     cardTitle: {
         fontSize: 14,

@@ -16,7 +16,7 @@ const SearchResult = ({ drink, navigation, removable }) => {
     }
 
     const handleRemove = () => {
-        Vibration.vibrate([0, 100]);
+        Vibration.vibrate([0, 500]);
         return Alert.alert(
             "Remove from collection?",
             "If you delete this from your collection, the drink will still be saved in the app.",

@@ -121,6 +121,7 @@ export default StyleSheet.create({
         paddingLeft: 36,
         width: width * .75,
         height: 30,
+        justifyContent: 'center'
     },
     commentHeaderImage: {
         width: 60,

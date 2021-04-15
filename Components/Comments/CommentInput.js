@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 
-// TODO: Fix the keyboard avoiding view on android. Right now it looks bad.
 const CommentInput = () => {
 
     const [text, setText] = useState();
@@ -16,6 +15,7 @@ const CommentInput = () => {
 
     return (
         <KeyboardAvoidingView
+            keyboardVerticalOffset={Platform.select({ ios: 0, android: -300 })}
             behavior='position'
             style={isFocused && Platform.OS === 'ios'
                 ? { paddingBottom: 150 }

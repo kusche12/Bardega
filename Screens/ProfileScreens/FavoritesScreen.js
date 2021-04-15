@@ -72,7 +72,7 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
             fullDrinks.push(drink);
         }
 
-        await navigation.navigate('DrinkListScreen', { drinks: fullDrinks, collection: item });
+        await navigation.navigate('DrinkListScreen', { drinks: fullDrinks, collection: item, removable: true });
     }
 
     if (isLoading) {

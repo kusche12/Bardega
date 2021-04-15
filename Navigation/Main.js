@@ -4,12 +4,11 @@ import { Image } from 'react-native';
 // For image caching
 import { cacheImages } from '../Functions/cacheFunctions';
 import { Asset } from 'expo-asset';
-import Loading from '../Components/Main/Loading';
 import * as FileSystem from 'expo-file-system';
 
 // For navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import DiscoverNavigator from './StackNavigators/DiscoverNavigator';
 import SearchNavigator from './StackNavigators/SearchNavigator';
 import CreateNavigator from '../Navigation/StackNavigators/CreateNavigator';
@@ -39,13 +38,8 @@ const Main = () => {
         setIsLoading(false);
     }
 
-    // TODO: Implement this on every stack that has a comment screen
-    // https://www.youtube.com/watch?v=bGGeD5RkdzQ
-    // Find the route name, if it is "CommentsScreen", then do not render tab bar
     const getTabBarVisibility = (route) => {
-        const routeName = route.state
-            ? route.state.routes[route.state.index].name
-            : '';
+        const routeName = getFocusedRouteNameFromRoute(route);
 
         if (routeName === 'CommentsScreen') {
             return false;
@@ -73,7 +67,8 @@ const Main = () => {
                         name="Discover"
                         component={DiscoverNavigator}
                         initialParams={{ header: header }}
-                        options={{
+                        options={({ route }) => ({
+                            tabBarVisible: getTabBarVisibility(route),
                             tabBarIcon: ({ focused }) => {
                                 if (focused) {
                                     return <Image source={require('./discover.png')} style={GlobalStyles.tabBarIcon} />
@@ -81,13 +76,14 @@ const Main = () => {
                                     return <Image source={require('./discoverUnfocused.png')} style={GlobalStyles.tabBarIcon} />
                                 }
                             },
-                        }}
+                        })}
                     />
                     <Tab.Screen
                         name="Search"
                         component={SearchNavigator}
                         initialParams={{ header: header }}
-                        options={{
+                        options={({ route }) => ({
+                            tabBarVisible: getTabBarVisibility(route),
                             tabBarIcon: ({ focused }) => {
                                 if (focused) {
                                     return <Image source={require('./search.png')} style={GlobalStyles.tabBarIcon} />
@@ -95,7 +91,7 @@ const Main = () => {
                                     return <Image source={require('./searchUnfocused.png')} style={GlobalStyles.tabBarIcon} />
                                 }
                             },
-                        }}
+                        })}
                     />
                     <Tab.Screen
                         name="Create"
@@ -115,7 +111,8 @@ const Main = () => {
                         name="Spirit"
                         component={SpiritNavigator}
                         initialParams={{ header: header }}
-                        options={{
+                        options={({ route }) => ({
+                            tabBarVisible: getTabBarVisibility(route),
                             tabBarIcon: ({ focused }) => {
                                 if (focused) {
                                     return <Image source={require('./spirit.png')} style={GlobalStyles.tabBarIconMD} />
@@ -123,7 +120,7 @@ const Main = () => {
                                     return <Image source={require('./spiritUnfocused.png')} style={GlobalStyles.tabBarIconMD} />
                                 }
                             },
-                        }}
+                        })}
                     />
                     <Tab.Screen
                         name="Profile"

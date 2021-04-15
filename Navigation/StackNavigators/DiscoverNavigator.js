@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
+import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
@@ -64,6 +65,16 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
                     headerTintColor: LIGHTPINK
+                })}
+            />
+            <Stack.Screen
+                name='ProfileScreen'
+                component={ProfileScreen}
+                initialParams={route.params, navigation}
+                options={() => ({
+                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
                 })}
             />
         </Stack.Navigator>

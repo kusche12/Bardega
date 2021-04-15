@@ -33,9 +33,15 @@ const CommentsScreen = ({ route, profiles, navigation }) => {
 
             </View>
             <ScrollView>
-                {comments.map((comment, index) =>
-                    <Comment comment={comment} key={index} author={profiles[comment.authorID]} navigation={navigation} />
-                )}
+                {comments && comments.length > 0
+                    ?
+                    comments.map((comment, index) =>
+                        <Comment comment={comment} key={index} author={profiles[comment.authorID]} navigation={navigation} />
+                    )
+                    : null
+
+                }
+
             </ScrollView>
             <CommentInput />
         </View>
@@ -43,7 +49,6 @@ const CommentsScreen = ({ route, profiles, navigation }) => {
 }
 
 const mapStateToProps = (state) => {
-
     return {
         profiles: state.firestore.data.profiles
     }

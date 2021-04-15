@@ -15,8 +15,6 @@ import DetailStyles from '../../Styles/DetailStyles';
 
 // TODO: Add a "bookmark" button that allows the user to add this drink to one of their favorite's buckets
 // TODO: If the drink's .authorID and currently authed userID are equal. Then add an "edit drink" button / route
-// TODO: Get the actual comments using the .commentID in the drink data
-// TODO: Add a "submitted by" button that takes you to the author's profile page
 const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => {
     const drink = route.params.drink;
     const [isLoading, setIsLoading] = useState(true);
@@ -141,7 +139,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                         </View>
                     </TouchableWithoutFeedback>
 
-                    <TouchableWithoutFeedback onPress={() => console.log('navigate to drink authors profile page')}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: authors[drink.authorID] })}>
                         <View style={[CreateStyles.ingrContainer, DetailStyles.submitContainer]}>
                             <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>SUBMITTED BY</Text>
 

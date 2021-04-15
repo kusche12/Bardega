@@ -5,16 +5,16 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
 const DrinkListScreen = ({ route, navigation }) => {
-    const { drinks, collection } = route.params;
+    const { drinks, collection, removable } = route.params;
 
     useEffect(() => {
         if (route.params) {
             navigation.setParams({ collection: collection })
         }
-    }, [])
+    }, []);
 
     const renderItem = ({ item }) => {
-        return <SearchResult navigation={navigation} drink={item} removable={true} />
+        return <SearchResult navigation={navigation} drink={item} removable={removable} />
     }
 
     return (

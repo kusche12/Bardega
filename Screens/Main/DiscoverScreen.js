@@ -32,7 +32,7 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
 
         let drinkMatrix = [];
         for (let i = 0; i < ranQueries.length; i++) {
-            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i]);
+            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
             drinkMatrix.push(drinkRow);
         }
 
@@ -63,7 +63,7 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
                         data={drinks}
                         index={index}
                         key={index}
-                        query={selectedQueries[index].name}
+                        query={selectedQueries[index]}
                         navigation={navigation}
                     />
                 })} */}
@@ -71,7 +71,7 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
                 <HorizontalList
                     data={selectedDrinks[0]}
                     index={0}
-                    query={selectedQueries[0].name}
+                    query={selectedQueries[0]}
                     navigation={navigation}
                 />
             </SafeAreaView>

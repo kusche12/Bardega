@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, TextInput } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import DetailStyles from '../../Styles/DetailStyles';
 
 const InputComment = () => {
@@ -10,14 +10,9 @@ const InputComment = () => {
             <View style={DetailStyles.imageContainer}>
                 <Image source={require('./comment.png')} style={DetailStyles.commentInputImage} />
             </View>
-            <TextInput
-                style={DetailStyles.commentInput}
-                onChangeText={setComment}
-                value={comment}
-                placeholder="Add Review / Comment"
-                multiline={false}
-                placeholderTextColor='#979797'
-            />
+            <View style={DetailStyles.commentInput}>
+                <Text style={{ color: '#979797' }}>Add a comment...</Text>
+            </View>
         </View>
     )
 }
