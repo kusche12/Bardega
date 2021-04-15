@@ -59,7 +59,7 @@ export default StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         borderRadius: RADIUS,
-        marginBottom: 40, // Temp fix for development purposes
+        marginBottom: 40, // TODO: Only a temp fix for development purposes
 
         shadowColor: "#000",
         shadowOpacity: 0.23,

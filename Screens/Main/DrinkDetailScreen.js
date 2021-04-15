@@ -7,6 +7,7 @@ import { compose } from 'redux';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Loading from '../../Components/Main/Loading';
 import InputComment from '../../Components/DrinkDetail/InputComment';
+import moment from 'moment';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
@@ -71,7 +72,9 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                             <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage} />
                             <View style={DetailStyles.commentDetail}>
                                 <Text style={{ marginBottom: 6 }}>{comment.text}</Text>
-                                <Text style={DetailStyles.commentText2}>- {author.fName} {author.lName} | {comment.dateCreated}</Text>
+                                <Text
+                                    style={DetailStyles.commentText2}>- {author.fName} {author.lName} | {moment(comment.dateCreated, "YYYYMMDD").fromNow()}
+                                </Text>
                             </View>
                         </View>
                         <View style={[CreateStyles.ingrLine, { marginBottom: 8 }]}></View>
@@ -167,7 +170,7 @@ const mapStateToProps = (state, ownProps) => {
     const comments = allComments ? allComments[commentID].comments : null;
     return {
         author: profile,
-        comments: comments,
+        comments: comments ? comments : null,
         authors: state.firestore.data.profiles
     }
 }

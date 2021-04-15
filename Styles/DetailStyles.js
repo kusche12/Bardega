@@ -60,7 +60,7 @@ export default StyleSheet.create({
         flexWrap: 'wrap'
     },
     commentContainer: {
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
     },
     commentImage: {
         width: 40,
@@ -69,7 +69,8 @@ export default StyleSheet.create({
     },
     commentRow: {
         flexDirection: 'row',
-        width: width * .6,
+        width: width * .75,
+        paddingRight: 36,
     },
     commentDetail: {
         paddingLeft: 8,
