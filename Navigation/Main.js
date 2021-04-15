@@ -39,6 +39,20 @@ const Main = () => {
         setIsLoading(false);
     }
 
+    // TODO: Implement this on every stack that has a comment screen
+    // https://www.youtube.com/watch?v=bGGeD5RkdzQ
+    // Find the route name, if it is "CommentsScreen", then do not render tab bar
+    const getTabBarVisibility = (route) => {
+        const routeName = route.state
+            ? route.state.routes[route.state.index].name
+            : '';
+
+        if (routeName === 'CommentsScreen') {
+            return false;
+        }
+        return true;
+    }
+
     if (isLoading) {
         return null
     } else {
@@ -115,7 +129,8 @@ const Main = () => {
                         name="Profile"
                         component={ProfileNavigator}
                         initialParams={{ header: header }}
-                        options={{
+                        options={({ route }) => ({
+                            tabBarVisible: getTabBarVisibility(route),
                             tabBarIcon: ({ focused }) => {
                                 if (focused) {
                                     return <Image source={require('./profile.png')} style={GlobalStyles.tabBarIcon} />
@@ -123,7 +138,7 @@ const Main = () => {
                                     return <Image source={require('./profileUnfocused.png')} style={GlobalStyles.tabBarIcon} />
                                 }
                             },
-                        }}
+                        })}
                     />
                 </Tab.Navigator>
             </NavigationContainer>

@@ -7,6 +7,9 @@ export default StyleSheet.create({
         flex: 1,
         top: Platform.OS === 'ios' ? 50 : 40,
     },
+    footerSafeArea: {
+        paddingBottom: Platform.OS === 'ios' ? 80 : 60,
+    },
     flexCenter: {
         flex: 1,
         alignItems: 'center',
