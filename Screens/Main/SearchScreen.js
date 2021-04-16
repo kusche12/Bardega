@@ -1,12 +1,26 @@
-import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text, SafeAreaView } from 'react-native';
+import React from 'react';
+import { Text, Dimensions, View, FlatList } from 'react-native';
+import SearchResult from '../../Components/Main/SearchResult';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
-const SearchScreen = ({ route }) => {
+const width = Dimensions.get('screen').width;
+const LIGHTPINK = '#F7D2CF';
+
+const SearchScreen = ({ route, navigation }) => {
+    const drinks = route.params.results;
+
+    const renderItem = ({ item }) => {
+        return <SearchResult navigation={navigation} drink={item} removable={false} />
+    }
+
     return (
-        <SafeAreaView>
-            <Text>This is the SearchDetail</Text>
-        </SafeAreaView>
+        <View>
+            <View style={{ width: width, height: 10, backgroundColor: LIGHTPINK }}></View>
+            <FlatList
+                data={drinks}
+                renderItem={renderItem}
+            />
+        </View>
     );
 }
 

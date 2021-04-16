@@ -8,11 +8,14 @@ import DiscoverStyles from '../../Styles/DiscoverStyles';
 const SearchResult = ({ drink, navigation, removable }) => {
     const renderTags = () => {
         let res = '';
-        for (let i = 0; i < drink.tags.length; i++) {
-            res += drink.tags[i] + ', '
-        };
-        res = res.substr(0, res.length - 2);
-        return <Text style={{ fontWeight: '300' }}>{res}</Text>
+        if (drink.tags) {
+            for (let i = 0; i < drink.tags.length; i++) {
+                res += drink.tags[i] + ', '
+            };
+            res = res.substr(0, res.length - 2);
+            return <Text style={{ fontWeight: '300' }}>{res}</Text>
+        }
+        return null;
     }
 
     const handleRemove = () => {

@@ -23,7 +23,7 @@ export default StyleSheet.create({
     },
     horizontalContainer: {
         height: 240,
-        marginBottom: 30,
+        marginBottom: 60,
     },
     cardContainer: {
         width: 140,

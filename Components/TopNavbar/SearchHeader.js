@@ -1,51 +1,64 @@
-import React, { useState } from 'react';
-import { Dimensions, Image, View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Dimensions, Image, View, StyleSheet, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
 import Autocomplete from 'react-native-autocomplete-input';
 
 const width = Dimensions.get('screen').width;
-const RADIUS = 22;
-const GRAY = '#a1a1a1'
 const LIGHTPINK = '#F7D2CF';
+const GRAY = '#a1a1a1'
 
 
-const data = [
-    {
-        name: 'drink1',
-        value: 'hello'
-    },
-    {
-        name: 'drink2',
-        value: 'bye'
+const comp = (a, b) => {
+    return a.toLowerCase().trim() === b.toLowerCase().trim();
+}
+
+const findDrink = (query, drinks) => {
+    if (query === '') {
+        return [];
     }
-]
+    const regex = new RegExp(`${query.trim()}`, 'i');
+    return drinks.filter((drink) => drink.name.search(regex) >= 0);
+}
 
 //TODO: UI Styling
 // TODO: Render suggestions on the screen below using the SearchResult component
-const SearchHeader = () => {
-    const [value, setValue] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
+const SearchHeader = ({ drinks, navigation }) => {
+    const [query, setQuery] = useState('');
+    const [currentDrinks, setCurrentDrinks] = useState([]);
 
-    const renderItem = ({ item }) => {
-        return (
-            <Text>{item.name}</Text>
-        )
+    useEffect(() => {
+        const res = findDrink(query, drinks);
+        setCurrentDrinks(res);
+        navigation.setParams({ results: currentDrinks });
+    }, [query])
+
+    const handleCancel = () => {
+        setQuery('');
+        Keyboard.dismiss();
+        setCurrentDrinks([]);
     }
 
     return (
         <View style={styles.container}>
             <View style={styles.inputImageRow}>
-
-                <Autocomplete
-                    data={data}
-                    value={value}
-                    containerStyle={styles.inputContainer}
-                    inputContainerStyle={styles.input}
-                    onChangeText={setValue}
-                    flatListProps={{
-                        keyExtractor: (_, idx) => idx,
-                        renderItem: renderItem
-                    }}
-                />
+                <View style={{ backgroundColor: 'white', width: width * .9, height: 42 }}>
+                    <Autocomplete
+                        clearButtonMode={'always'}
+                        data={currentDrinks && currentDrinks.length === 1 && comp(query, currentDrinks[0].name) ? [] : currentDrinks}
+                        query={query}
+                        inputContainerStyle={styles.inputContainerStyle}
+                        onChangeText={setQuery}
+                        hideResults={true}
+                        autoCorrect={false}
+                    />
+                </View>
+                {/* {query.length > 0 &&
+                    <TouchableWithoutFeedback style={{ width: 20, height: 20 }} onPress={() => handleCancel()}>
+                        <Image source={require('./cancel.png')} style={styles.cancelImg} />
+                    </TouchableWithoutFeedback>
+                } */}
                 <Image source={require('./search.png')} style={styles.image} />
             </View>
 
@@ -58,31 +71,44 @@ const styles = StyleSheet.create({
         width: width,
         alignItems: 'center',
         backgroundColor: LIGHTPINK,
-        flex: 1
+        flex: 1,
     },
-    inputContainer: {
+    inputContainerStyle: {
         width: width * .9,
-        borderRadius: 8,
-        borderWidth: 1,
+        borderWidth: 2,
+        paddingLeft: 35,
+        borderColor: GRAY,
+        alignSelf: 'center'
     },
     inputImageRow: {
         flexDirection: 'row',
         position: 'relative',
     },
-    input: {
-        zIndex: 1,
-
-    },
     image: {
-        width: 15,
-        height: 15,
-        bottom: 15,
-        right: 15,
+        width: 18,
+        height: 18,
+        top: 13,
+        left: 12,
         position: 'absolute',
         zIndex: 900
     },
+    cancelImg: {
+        width: 18,
+        height: 18,
+        position: 'absolute',
+        right: 12,
+        bottom: 12,
+    }
 })
 
 
+const mapStateToProps = (state) => {
+    return {
+        drinks: state.firestore.ordered.drinks
+    }
+}
 
-export default SearchHeader;
+export default compose(
+    connect(mapStateToProps),
+    firestoreConnect(() => ['drinks'])
+)(SearchHeader);

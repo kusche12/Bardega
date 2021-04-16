@@ -57,8 +57,7 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
                 <View style={DiscoverStyles.titleContainer}>
                     <Text style={DiscoverStyles.title}>DISCOVER</Text>
                 </View>
-                {/* TODO: Uncomment this and delete the below horizontal list for production */}
-                {/* {selectedDrinks.map((drinks, index) => {
+                {selectedDrinks.map((drinks, index) => {
                     return <HorizontalList
                         data={drinks}
                         index={index}
@@ -66,14 +65,7 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
                         query={selectedQueries[index]}
                         navigation={navigation}
                     />
-                })} */}
-                {/* Testing purposes, use only one horizontal list */}
-                <HorizontalList
-                    data={selectedDrinks[0]}
-                    index={0}
-                    query={selectedQueries[0]}
-                    navigation={navigation}
-                />
+                })}
             </SafeAreaView>
         </KeyboardAwareScrollView>
     );

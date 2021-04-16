@@ -56,5 +56,5 @@ const mapStateToProps = (state) => {
 
 export default compose(
     connect(mapStateToProps),
-    firestoreConnect(() => ['profiles', 'comments'])
+    firestoreConnect(() => ['profiles'])
 )(CommentsScreen);
