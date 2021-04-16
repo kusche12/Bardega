@@ -8,39 +8,9 @@ import { firestoreConnect } from 'react-redux-firebase';
 import CreateIngredients from '../../Components/Create/CreateIngredients';
 import CreateDirections from '../../Components/Create/CreateDirections';
 import CreateTags from '../../Components/Create/CreateTags';
+import CreateImage from '../../Components/Create/CreateImage'
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
-
-// Dummy data for ingredients
-const customIngr = [
-    {
-        type: 'gin',
-        amount: '1.5',
-        unit: 'oz',
-        id: '0'
-    },
-    {
-        type: 'fresh lemon juice',
-        amount: '.75',
-        unit: 'oz',
-        id: '1'
-    },
-    {
-        type: 'sweet vermouth',
-        amount: '.5',
-        unit: 'oz',
-        id: '2'
-    },
-]
-
-const customIngr2 = [];
-
-const customTag = [
-    {
-        id: '1ZqnH2zScUMqkStAYb9a',
-        name: 'Fruity'
-    }
-]
 
 // TODO: Image handling
 // TODO: Set the correct font given by Care
@@ -56,26 +26,6 @@ const CreateScreen = ({ tags }) => {
     const [ingredients, setIngredients] = useState([]);
     const [direction, setDirection] = useState(null);
     const [selectedTags, setSelectedTags] = useState([]);
-
-    // Renders the image container with either an empty box or the picture of the drink
-    const renderDrinkContainer = () => {
-        if (drinkImage === null) {
-            return (
-                <View style={GlobalStyles.flexCenter}>
-                    <Image source={require('./plus.png')} style={CreateStyles.plusImage} />
-                    <Text style={CreateStyles.photoText}>Add photo from photo album</Text>
-                </View>
-            );
-        } else {
-            return (
-                <Image />
-            )
-        }
-    }
-
-    const handleImageUpload = () => {
-        console.log('hey')
-    }
 
     // Update ingredient amount due to picker and text input
     const updateIngredient = (amount, unit, type, index) => {
@@ -166,11 +116,7 @@ const CreateScreen = ({ tags }) => {
                     />
                 </View>
 
-                <TouchableWithoutFeedback onPress={() => handleImageUpload()}>
-                    <View style={CreateStyles.photoContainer}>
-                        {renderDrinkContainer()}
-                    </View>
-                </TouchableWithoutFeedback>
+                <CreateImage {...{ drinkImage, setDrinkImage }} />
 
                 <CreateIngredients {...{
                     ingredients,

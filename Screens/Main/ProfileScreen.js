@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox } from 'react-native';
+import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loading from '../../Components/Main/Loading';
 import { connect } from 'react-redux';
@@ -49,7 +49,10 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => navigation.navigate('FavoritesScreen', { favorites: user.favorites })}>
                     <View style={[UserStyles.button, UserStyles.buttonFavorites]}>
-                        <Image source={require('./heart.png')} style={UserStyles.heartImg} />
+                        <Image source={require('./heart.png')}
+                            style={[UserStyles.heartImg, Platform.OS === 'android' && { marginTop: 2, marginLeft: 2 }]}
+
+                        />
                         <Text style={UserStyles.subtitle}>Favorites</Text>
                     </View>
                 </TouchableWithoutFeedback>

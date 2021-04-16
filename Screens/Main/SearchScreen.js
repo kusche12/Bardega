@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Dimensions, View, FlatList } from 'react-native';
+import { Text, Dimensions, View, FlatList, Platform } from 'react-native';
 import SearchResult from '../../Components/Main/SearchResult';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
@@ -15,7 +15,9 @@ const SearchScreen = ({ route, navigation }) => {
 
     return (
         <View>
-            <View style={{ width: width, height: 10, backgroundColor: LIGHTPINK }}></View>
+            {Platform.OS === 'ios' &&
+                <View style={{ width: width, height: 10, backgroundColor: LIGHTPINK }}></View>
+            }
             <FlatList
                 data={drinks}
                 renderItem={renderItem}
