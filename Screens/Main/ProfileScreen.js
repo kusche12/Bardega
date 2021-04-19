@@ -142,6 +142,8 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
+    console.log(state.firebase);
+    // If we entered this screen with a link from another user's profile
     if (ownProps.route.params.user !== undefined) {
         return {
             drinks: state.firestore.data.drinks,
