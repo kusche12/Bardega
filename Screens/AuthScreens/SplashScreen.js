@@ -1,13 +1,14 @@
 import React from 'react';
 import { Image, View } from 'react-native';
-import AuthStyles from '../../Styles/AuthStyles'
+import Images from '../../Images/Images';
+import AuthStyles from '../../Styles/AuthStyles';
 
 const SplashScreen = () => {
 
     return (
         <View>
-            <Image source={require('./splash_background.png')} style={AuthStyles.splashBackground} />
-            <Image source={require('./bardega_logo.png')} style={AuthStyles.bardegaLogo} />
+            <Image source={Images.background} style={AuthStyles.splashBackground} />
+            <Image source={Images.bardegaLogo} style={AuthStyles.bardegaLogo} />
         </View>
     )
 }

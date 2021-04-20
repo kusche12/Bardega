@@ -6,6 +6,7 @@ import { Asset } from 'expo-asset';
 import { connect } from 'react-redux';
 import { signUp } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
+import Images from '../../Images/Images';
 import AuthStyles from '../../Styles/AuthStyles';
 
 const DARKPINK = '#f06656';
@@ -19,7 +20,7 @@ const CreateAccountScreen = ({ navigation, signUp, authError }) => {
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        const imageURI = Asset.fromModule(require('./splash_background.png')).uri;
+        const imageURI = Asset.fromModule(Images.background).uri;
         cacheImages(imageURI, 0);
     }, []);
 
@@ -39,7 +40,7 @@ const CreateAccountScreen = ({ navigation, signUp, authError }) => {
                 contentContainerStyle={{ flexGrow: 1 }}
             >
 
-                <Image source={require('./bardega_logo_full.png')} style={AuthStyles.screenLogo} />
+                <Image source={Images.bardegaLogo} style={AuthStyles.screenLogo} />
 
                 <View style={AuthStyles.form}>
                     <AuthInput image={'user'} value={name} setValue={setName} type={'Firstname Lastname'} />
@@ -58,13 +59,13 @@ const CreateAccountScreen = ({ navigation, signUp, authError }) => {
 
                 <View style={AuthStyles.thirdPartyButtons}>
                     <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
-                        <Image source={require('./facebook.png')} style={AuthStyles.thirdPartyAuth} />
+                        <Image source={Images.thirdPartyApp.facebook} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
-                        <Image source={require('./twitter.png')} style={AuthStyles.thirdPartyAuth} />
+                        <Image source={Images.thirdPartyApp.twitter} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
-                        <Image source={require('./google.png')} style={AuthStyles.thirdPartyAuth} />
+                        <Image source={Images.thirdPartyApp.google} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
                 </View>
 

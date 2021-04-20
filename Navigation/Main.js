@@ -21,7 +21,7 @@ const Main = ({ user }) => {
     console.log(user);
     // Cache the local header image file on the user's device to speed up the access of the image
     const [header, setHeader] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         loadData();
     }, [])
@@ -47,10 +47,9 @@ const Main = ({ user }) => {
 
 // TODO: Try to get the currently authed user by checking a cache maybe?
 const mapStateToProps = (state) => {
-    console.log()
     if (state.firebase.auth.isEmpty) {
         return {
-            user: null
+            user: {}
         }
     } else {
         const profiles = state.firestore.data.profiles;

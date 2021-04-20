@@ -4,7 +4,7 @@ import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import DetailStyles from '../../Styles/DetailStyles'
 import DiscoverStyles from '../../Styles/DiscoverStyles'
 
-const DrinkCard = ({ drink, navigation, prev }) => {
+const DrinkCard = ({ drink, navigation }) => {
     const [cached, setCached] = useState(false);
     useEffect(() => {
         if (!cached) {

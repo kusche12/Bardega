@@ -6,6 +6,7 @@ import { Asset } from 'expo-asset';
 import { connect } from 'react-redux';
 import { forgotPassword } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
+import Images from '../../Images/Images';
 import AuthStyles from '../../Styles/AuthStyles';
 
 const DARKPINK = '#f06656';
@@ -15,7 +16,7 @@ const ForgotPasswordScreen = ({ navigation, forgotPassword, authError, authSucce
     const [email, setEmail] = useState('');
 
     useEffect(() => {
-        const imageURI = Asset.fromModule(require('./splash_background.png')).uri;
+        const imageURI = Asset.fromModule(Images.background).uri;
         cacheImages(imageURI, 0);
     }, []);
 
@@ -31,7 +32,7 @@ const ForgotPasswordScreen = ({ navigation, forgotPassword, authError, authSucce
                 contentContainerStyle={{ flexGrow: 1 }}
             >
 
-                <Image source={require('./bardega_logo_full.png')} style={AuthStyles.screenLogo} />
+                <Image source={Images.bardegaLogo} style={AuthStyles.screenLogo} />
 
                 <View style={AuthStyles.forgotForm}>
                     <Text style={{ fontWeight: '700', fontSize: 24, color: '#333', marginBottom: 14 }}>Forgot your password?</Text>

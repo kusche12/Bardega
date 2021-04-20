@@ -3,11 +3,10 @@ import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import { Asset } from 'expo-asset';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { logIn } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
+import Images from '../../Images/Images';
 import AuthStyles from '../../Styles/AuthStyles';
 
 const DARKPINK = '#f06656';
@@ -18,7 +17,7 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        const imageURI = Asset.fromModule(require('./splash_background.png')).uri;
+        const imageURI = Asset.fromModule(Images.background).uri;
         cacheImages(imageURI, 0);
     }, []);
 
@@ -34,7 +33,7 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
                 contentContainerStyle={{ flexGrow: 1 }}
             >
 
-                <Image source={require('./bardega_logo_full.png')} style={AuthStyles.screenLogo} />
+                <Image source={Images.bardegaLogo} style={AuthStyles.screenLogo} />
 
                 <View style={AuthStyles.loginForm}>
                     <AuthInput image={'user'} value={email} setValue={setEmail} type={'Email / Username'} />

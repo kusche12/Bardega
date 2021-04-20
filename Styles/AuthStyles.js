@@ -20,10 +20,10 @@ export default StyleSheet.create({
     },
     bardegaLogo: {
         position: 'absolute',
-        width: width,
-        height: width,
-        alignSelf: 'center',
-        top: height * .1
+        width: width * 1.1,
+        resizeMode: 'contain',
+        left: 20,
+        top: height * .1,
     },
     screenLogo: {
         width: width,

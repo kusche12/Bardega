@@ -11,7 +11,11 @@ const AuthNavigator = () => {
     return (
         <Stack.Navigator
             initialRouteName='Create'
-            screenOptions={{ headerShown: false }}>
+            screenOptions={{
+                headerStyle: { elevation: 0 },
+                cardStyle: { backgroundColor: '#FFFFFF' },
+                headerShown: false
+            }}>
             <Stack.Screen
                 name="Login"
                 component={LoginScreen}
