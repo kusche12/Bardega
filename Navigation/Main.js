@@ -7,6 +7,8 @@ import * as FileSystem from 'expo-file-system';
 
 // For authorization screen
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
 import SplashScreen from '../Screens/AuthScreens/SplashScreen';
 import AuthNavigator from './AuthNavigators/AuthNavigator';
 
@@ -19,7 +21,7 @@ const Main = ({ user }) => {
     // Cache the local header image file on the user's device to speed up the access of the image
     const [header, setHeader] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-
+    const [authedUser, setAuthedUser] = useState(user);
     useEffect(() => {
         if (header === null) {
             loadData();
@@ -40,24 +42,29 @@ const Main = ({ user }) => {
     } else {
         return (
             <NavigationContainer>
-                {user ? <MainNavigator header={header} /> : <AuthNavigator />}
+                {authedUser ? <MainNavigator header={header} /> : <AuthNavigator setAuthedUser={setAuthedUser} />}
             </NavigationContainer>
         )
     }
 }
 
-
+// TODO: Try to get the currently authed user by checking a cache maybe?
 const mapStateToProps = (state) => {
     if (state.firebase.auth.isEmpty) {
         return {
             user: null
         }
     } else {
+        const profiles = state.firestore.data.profiles;
+        const UID = state.firebase.auth.uid;
+        const profile = profiles ? profiles[UID] : null;
         return {
-            // Probably not the actual reference
-            user: state.firebase.auth.user
+            userID: profile
         }
     }
 }
 
-export default connect(mapStateToProps)(Main);
+export default compose(
+    firestoreConnect(() => ['profiles']),
+    connect(mapStateToProps)
+)(Main);

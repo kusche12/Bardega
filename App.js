@@ -4,9 +4,9 @@ import React from 'react';
 import firebaseConfig from './API/fbConfig';
 import firebase from './API/FirebaseSetup';
 import { ReactReduxFirebaseProvider, getFirebase } from 'react-redux-firebase';
-import { createStore, applyMiddleware } from 'redux'
-import { composeWithDevTools } from "redux-devtools-extension";
+import { createStore, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
+import { reduxFirestore } from 'redux-firestore';
 import thunk from 'redux-thunk';
 import { createFirestoreInstance } from 'redux-firestore';
 import rootReducer from './Store/Reducers/RootReducer';
@@ -14,9 +14,14 @@ import rootReducer from './Store/Reducers/RootReducer';
 import Main from './Navigation/Main.js';
 
 // Create store enhanced with redux reducers and firestore database
-const middlewares = [thunk.withExtraArgument(getFirebase)];
-const composeEnhancers = composeWithDevTools(applyMiddleware(...middlewares));
-const store = createStore(rootReducer, composeEnhancers);
+const middleware = [
+  thunk.withExtraArgument({ getFirebase })
+];
+const store = createStore(rootReducer,
+  compose(
+    applyMiddleware(...middleware), reduxFirestore(firebase)
+  )
+);
 
 const rrfProps = {
   firebase,

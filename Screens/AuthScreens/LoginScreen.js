@@ -3,6 +3,8 @@ import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import { Asset } from 'expo-asset';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { logIn } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
@@ -11,10 +13,10 @@ import AuthStyles from '../../Styles/AuthStyles';
 const DARKPINK = '#f06656';
 
 // TODO: Load and render a higher quality version of the logo
-const LoginScreen = ({ navigation, logIn, authError }) => {
-    console.log(authError);
+const LoginScreen = ({ navigation, logIn, authError, route, user }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { setAuthedUser } = route.params;
 
     useEffect(() => {
         const imageURI = Asset.fromModule(require('./splash_background.png')).uri;
@@ -22,8 +24,10 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
     }, []);
 
     const handleLogin = () => {
-        //console.log('hello world')
         logIn({ email, password });
+        if (user !== null) {
+            setAuthedUser(user)
+        }
     }
 
     return (
@@ -44,8 +48,8 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
                             <Text style={{ fontWeight: '500' }}>Sign In</Text>
                         </View>
                     </TouchableWithoutFeedback>
-                    {authError &&
-                        <Text>{authError}</Text>
+                    {authError !== null &&
+                        <Text style={{ color: 'red', textAlign: 'center' }}>{authError}</Text>
                     }
                 </View>
 
@@ -70,8 +74,12 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
 
 // Get any authentication errors that occur during sign in
 const mapStateToProps = (state) => {
+    const profiles = state.firestore.data.profiles;
+    const UID = state.firebase.auth.uid;
+    const profile = profiles ? profiles[UID] : null;
     return {
-        authError: state.auth.authError
+        authError: state.auth.authError,
+        user: profile
     }
 }
 
@@ -82,4 +90,7 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default compose(
+    firestoreConnect(() => ['profiles']),
+    connect(mapStateToProps, mapDispatchToProps)
+)(LoginScreen);
