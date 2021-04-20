@@ -16,8 +16,6 @@ const LIGHTPINK = '#F7D2CF';
 const Tab = createBottomTabNavigator();
 
 const MainNavigator = ({ header }) => {
-    console.log('Main Nav');
-    console.log(header);
     const getTabBarVisibility = (route) => {
         const routeName = getFocusedRouteNameFromRoute(route);
         if (routeName === 'CommentsScreen') {

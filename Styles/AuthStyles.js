@@ -26,18 +26,33 @@ export default StyleSheet.create({
         top: height * .1
     },
     screenLogo: {
-        width: width * .95,
+        width: width,
         height: height * .25,
         alignSelf: 'center',
+        resizeMode: 'center',
+        marginBottom: 8,
     },
     background: {
-        bottom: -100,
+        bottom: 0,
         left: -100,
         width: width * 1.6,
         height: height * 2,
         position: 'absolute',
         transform: [{ rotateX: '180deg' }],
         zIndex: -1,
+        opacity: .7,
+    },
+    form: {
+        alignSelf: 'center',
+    },
+    loginForm: {
+        alignSelf: 'center',
+        marginTop: 50,
+    },
+    forgotForm: {
+        alignSelf: 'center',
+        marginTop: 40,
+        width: width * .8
     },
     inputImg: {
         width: 22,
@@ -45,7 +60,7 @@ export default StyleSheet.create({
         marginRight: 15,
     },
     inputContainer: {
-        marginBottom: 20,
+        marginBottom: Platform.OS === 'ios' ? 15 : 10,
         borderBottomColor: PINK,
         borderBottomWidth: 1.2,
         flexDirection: 'row',
@@ -55,7 +70,7 @@ export default StyleSheet.create({
     },
     input: {
         height: 40,
-        color: 'black',
+        color: '#333',
         fontWeight: '500'
     },
     mainButton: {
@@ -75,6 +90,17 @@ export default StyleSheet.create({
             height: 2
         },
         elevation: 4
+    },
+    thirdPartyButtons: {
+        flexDirection: 'row',
+        width: width,
+        justifyContent: 'center'
+    },
+    thirdPartyAuth: {
+        width: width * .14,
+        height: width * .14,
+        marginLeft: 8,
+        marginRight: 8
     },
     footer: {
         position: 'absolute',

@@ -20,7 +20,7 @@ const AuthInput = ({ type, value, setValue, image }) => {
                 value={value}
                 placeholder={type}
                 multiline={false}
-                placeholderTextColor='#888'
+                placeholderTextColor='#333'
                 autoCapitalize={false}
                 autoCorrect={false}
                 secureTextEntry={type === 'Password'}

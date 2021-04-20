@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
+import { Asset } from 'expo-asset';
 import AuthInput from '../../Components/Auth/AuthInput';
 import AuthStyles from '../../Styles/AuthStyles';
-import GlobalStyles from '../../Styles/GlobalStyles';
 
-const PINK = '#F29288';
 const DARKPINK = '#f06656';
-
 
 // TODO: Allow for authentication via, facebook, twitter, or gmail
 // TODO: Load and render a higher quality version of the logo
-// TODO: Maybe put the image in a View and then call "contain" on it so that it fits better with the rest of the stuff?
 const CreateAccountScreen = ({ navigation }) => {
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        const imageURI = Asset.fromModule(require('./splash_background.png')).uri;
+        cacheImages(imageURI, 0);
+    }, []);
+
+    const handleFacebookAuth = () => {
+        console.log('hello facebook')
+    }
 
     return (
         <SafeAreaView style={AuthStyles.container}>
@@ -27,9 +33,9 @@ const CreateAccountScreen = ({ navigation }) => {
                 contentContainerStyle={{ flexGrow: 1 }}
             >
 
-                {/* <Image source={require('./bardega_logo_full.png')} style={AuthStyles.screenLogo} /> */}
+                <Image source={require('./bardega_logo_full.png')} style={AuthStyles.screenLogo} />
 
-                <View style={AuthStyles.contactForm}>
+                <View style={AuthStyles.form}>
                     <AuthInput image={'user'} value={name} setValue={setName} type={'Firstname Lastname'} />
                     <AuthInput image={'userName'} value={userName} setValue={setUserName} type={'Username'} />
                     <AuthInput image={'email'} value={email} setValue={setEmail} type={'Email'} />
@@ -38,6 +44,18 @@ const CreateAccountScreen = ({ navigation }) => {
                         <View style={AuthStyles.mainButton}>
                             <Text style={{ fontWeight: '500' }}>Create Account</Text>
                         </View>
+                    </TouchableWithoutFeedback>
+                </View>
+
+                <View style={AuthStyles.thirdPartyButtons}>
+                    <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
+                        <Image source={require('./facebook.png')} style={AuthStyles.thirdPartyAuth} />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
+                        <Image source={require('./twitter.png')} style={AuthStyles.thirdPartyAuth} />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
+                        <Image source={require('./google.png')} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
                 </View>
 
@@ -55,7 +73,7 @@ const CreateAccountScreen = ({ navigation }) => {
                 </View>
 
             </KeyboardAwareScrollView>
-            <Image source={require('./splash_background.png')} style={AuthStyles.background} />
+            <Image source={{ uri: getCachedImage(0) }} style={AuthStyles.background} />
         </SafeAreaView>
     );
 }

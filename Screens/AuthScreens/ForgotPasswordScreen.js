@@ -9,14 +9,17 @@ import AuthStyles from '../../Styles/AuthStyles';
 const DARKPINK = '#f06656';
 
 // TODO: Load and render a higher quality version of the logo
-const LoginScreen = ({ navigation }) => {
+const ForgotPasswordScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     useEffect(() => {
         const imageURI = Asset.fromModule(require('./splash_background.png')).uri;
         cacheImages(imageURI, 0);
     }, []);
+
+    const handleResetPassword = () => {
+
+    }
 
     return (
         <SafeAreaView style={AuthStyles.container}>
@@ -28,12 +31,13 @@ const LoginScreen = ({ navigation }) => {
 
                 <Image source={require('./bardega_logo_full.png')} style={AuthStyles.screenLogo} />
 
-                <View style={AuthStyles.loginForm}>
-                    <AuthInput image={'user'} value={email} setValue={setEmail} type={'Email / Username'} />
-                    <AuthInput image={'password'} value={password} setValue={setPassword} type={'Password'} />
-                    <TouchableWithoutFeedback onPress={() => handleLogin()}>
+                <View style={AuthStyles.forgotForm}>
+                    <Text style={{ fontWeight: '700', fontSize: 24, color: '#333', marginBottom: 14 }}>Forgot your password?</Text>
+                    <Text style={{ color: '#333', fontSize: 16, marginBottom: 14 }}>Confirm your email and we'll send the instructions.</Text>
+                    <AuthInput image={'user'} value={email} setValue={setEmail} type={'Email'} />
+                    <TouchableWithoutFeedback onPress={() => handleResetPassword()}>
                         <View style={AuthStyles.mainButton}>
-                            <Text style={{ fontWeight: '500' }}>Sign In</Text>
+                            <Text style={{ fontWeight: '500' }}>Reset Password</Text>
                         </View>
                     </TouchableWithoutFeedback>
                 </View>
@@ -46,9 +50,12 @@ const LoginScreen = ({ navigation }) => {
                         </TouchableWithoutFeedback>
                     </View>
 
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('ForgotPassword')}>
-                        <Text style={{ color: DARKPINK, fontWeight: '500' }}>Forgot Password</Text>
-                    </TouchableWithoutFeedback>
+                    <View style={{ flexDirection: 'row', marginBottom: 6 }}>
+                        <Text style={{ fontWeight: '500' }}>Already have an account? </Text>
+                        <TouchableWithoutFeedback onPress={() => navigation.navigate('Login')}>
+                            <Text style={{ color: DARKPINK, fontWeight: '500' }}>Log In</Text>
+                        </TouchableWithoutFeedback>
+                    </View>
                 </View>
 
             </KeyboardAwareScrollView>
@@ -57,4 +64,4 @@ const LoginScreen = ({ navigation }) => {
     );
 }
 
-export default LoginScreen;
+export default ForgotPasswordScreen;
