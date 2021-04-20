@@ -3,13 +3,16 @@ import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import { Asset } from 'expo-asset';
+import { connect } from 'react-redux';
+import { logIn } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
 import AuthStyles from '../../Styles/AuthStyles';
 
 const DARKPINK = '#f06656';
 
 // TODO: Load and render a higher quality version of the logo
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, logIn, authError }) => {
+    console.log(authError);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -17,6 +20,11 @@ const LoginScreen = ({ navigation }) => {
         const imageURI = Asset.fromModule(require('./splash_background.png')).uri;
         cacheImages(imageURI, 0);
     }, []);
+
+    const handleLogin = () => {
+        //console.log('hello world')
+        logIn({ email, password });
+    }
 
     return (
         <SafeAreaView style={AuthStyles.container}>
@@ -36,6 +44,9 @@ const LoginScreen = ({ navigation }) => {
                             <Text style={{ fontWeight: '500' }}>Sign In</Text>
                         </View>
                     </TouchableWithoutFeedback>
+                    {authError &&
+                        <Text>{authError}</Text>
+                    }
                 </View>
 
                 <View style={AuthStyles.footer}>
@@ -57,4 +68,18 @@ const LoginScreen = ({ navigation }) => {
     );
 }
 
-export default LoginScreen;
+// Get any authentication errors that occur during sign in
+const mapStateToProps = (state) => {
+    return {
+        authError: state.auth.authError
+    }
+}
+
+// Dispatch the login function to authenticate the user
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logIn: (credentials) => dispatch(logIn(credentials))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

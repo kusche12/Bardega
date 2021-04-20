@@ -3,8 +3,9 @@ import React from 'react';
 // Application-Wide State Management
 import firebaseConfig from './API/fbConfig';
 import firebase from './API/FirebaseSetup';
-import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { ReactReduxFirebaseProvider, getFirebase } from 'react-redux-firebase';
 import { createStore, applyMiddleware } from 'redux'
+import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk';
 import { createFirestoreInstance } from 'redux-firestore';
@@ -13,7 +14,9 @@ import rootReducer from './Store/Reducers/RootReducer';
 import Main from './Navigation/Main.js';
 
 // Create store enhanced with redux reducers and firestore database
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const middlewares = [thunk.withExtraArgument(getFirebase)];
+const composeEnhancers = composeWithDevTools(applyMiddleware(...middlewares));
+const store = createStore(rootReducer, composeEnhancers);
 
 const rrfProps = {
   firebase,

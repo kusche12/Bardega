@@ -33,6 +33,8 @@ const Main = ({ user }) => {
         setIsLoading(false);
     }
 
+    // While the app is still loading in data, show the splash screen.
+    // After it is loaded, either load the Authentication Flow for unauthenicated users or go directly to the Main Flow
     if (isLoading) {
         return <SplashScreen />;
     } else {
