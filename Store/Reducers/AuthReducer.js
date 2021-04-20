@@ -1,5 +1,6 @@
 const initState = {
-    authError: null
+    authError: null,
+    authSuccess: null
 };
 
 const authReducer = (state = initState, action) => {
@@ -7,16 +8,46 @@ const authReducer = (state = initState, action) => {
         case 'LOGIN_ERROR':
             return {
                 ...state,
-                authError: 'Login failed'
+                authError: action.err.message,
+                authSuccess: null
             };
         case 'LOGIN_SUCCESS':
             return {
                 ...state,
-                authError: null
+                authError: null,
+                authSuccess: null
             }
         case 'LOGOUT_SUCCESS':
-            console.log('reducer: logout success')
+            console.log('Logout Success');
             return state
+        case 'SIGNUP_SUCCESS':
+            console.log('Signup Success');
+            return {
+                ...state,
+                authError: null,
+                authSuccess: null
+            }
+        case 'SIGNUP_ERROR':
+            console.log(action.err.message);
+            return {
+                ...state,
+                authError: action.err.message,
+                authSuccess: null
+            }
+        case 'FORGOT_SUCCESS':
+            console.log('forgot password success');
+            return {
+                ...state,
+                authError: null,
+                authSuccess: 'Check your email for a link to reset your password.'
+            }
+        case 'FORGOT_ERROR':
+            console.log('forgot password failure');
+            return {
+                ...state,
+                authError: action.err.message,
+                authSuccess: null
+            }
         default:
             return state;
     }

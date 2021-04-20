@@ -40,14 +40,16 @@ export default StyleSheet.create({
         position: 'absolute',
         transform: [{ rotateX: '180deg' }],
         zIndex: -1,
-        opacity: .7,
+        opacity: 0.0, // TODO: Maybe add this back in... kinda ugly though
     },
     form: {
         alignSelf: 'center',
+        width: width * .8
     },
     loginForm: {
         alignSelf: 'center',
         marginTop: 50,
+        width: width * .8
     },
     forgotForm: {
         alignSelf: 'center',

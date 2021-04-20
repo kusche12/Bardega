@@ -5,6 +5,7 @@ import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
 import FavoritesScreen from '../../Screens/ProfileScreens/FavoritesScreen';
 import EditCollectionScreen from '../../Screens/ProfileScreens/EditCollectionScreen';
+import SettingsScreen from '../../Screens/ProfileScreens/SettingsScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import { Entypo } from '@expo/vector-icons';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -176,6 +177,18 @@ const ProfileNavigator = ({ route, navigation }) => {
             <Stack.Screen
                 name='CommentsScreen'
                 component={CommentsScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader header={header} />,
+                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: LIGHTPINK
+                })}
+            />
+            <Stack.Screen
+                name='SettingsScreen'
+                component={SettingsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader header={header} />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,

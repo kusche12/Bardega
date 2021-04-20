@@ -18,20 +18,17 @@ import MainNavigator from './MainNavigator';
 
 // Application Navigator
 const Main = ({ user }) => {
+    console.log(user);
     // Cache the local header image file on the user's device to speed up the access of the image
     const [header, setHeader] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [authedUser, setAuthedUser] = useState(user);
     useEffect(() => {
-        if (header === null) {
-            loadData();
-        }
+        loadData();
     }, [])
     const loadData = async () => {
         const imageURI = Asset.fromModule(require('./bardega_logo.png')).uri;
         await cacheImages(imageURI, 1);
         setHeader(FileSystem.documentDirectory + '1.jpg');
-        setCurrUser(user);
         setIsLoading(false);
     }
 
@@ -42,7 +39,7 @@ const Main = ({ user }) => {
     } else {
         return (
             <NavigationContainer>
-                {authedUser ? <MainNavigator header={header} /> : <AuthNavigator setAuthedUser={setAuthedUser} />}
+                {user ? <MainNavigator header={header} /> : <AuthNavigator />}
             </NavigationContainer>
         )
     }
@@ -50,6 +47,7 @@ const Main = ({ user }) => {
 
 // TODO: Try to get the currently authed user by checking a cache maybe?
 const mapStateToProps = (state) => {
+    console.log()
     if (state.firebase.auth.isEmpty) {
         return {
             user: null
@@ -59,7 +57,7 @@ const mapStateToProps = (state) => {
         const UID = state.firebase.auth.uid;
         const profile = profiles ? profiles[UID] : null;
         return {
-            userID: profile
+            user: profile
         }
     }
 }

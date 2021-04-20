@@ -37,12 +37,14 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
     }
 
     // TODO: Implement the rule below
+    //  TODO: Temporarily I made this button route to the settings screen for testing purposes. In reality, you should have a settings
+    // cog on the top right of the screen that goes to the settings screen. Implement this.
     // If currently authed user, then render edit profile and favorite routes
     // If any other user, then render follow/unfollow component
     const renderInfoButtons = () => {
         return (
             <View style={UserStyles.buttonRow}>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate('SettingsScreen')}>
                     <View style={[UserStyles.button, { marginRight: 4 }]}>
                         <Text style={UserStyles.subtitle}>Edit Profile</Text>
                     </View>

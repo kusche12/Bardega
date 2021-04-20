@@ -3,13 +3,15 @@ import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import { Asset } from 'expo-asset';
+import { connect } from 'react-redux';
+import { forgotPassword } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
 import AuthStyles from '../../Styles/AuthStyles';
 
 const DARKPINK = '#f06656';
 
 // TODO: Load and render a higher quality version of the logo
-const ForgotPasswordScreen = ({ navigation }) => {
+const ForgotPasswordScreen = ({ navigation, forgotPassword, authError, authSuccess }) => {
     const [email, setEmail] = useState('');
 
     useEffect(() => {
@@ -18,7 +20,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     }, []);
 
     const handleResetPassword = () => {
-
+        forgotPassword(email);
     }
 
     return (
@@ -40,6 +42,12 @@ const ForgotPasswordScreen = ({ navigation }) => {
                             <Text style={{ fontWeight: '500' }}>Reset Password</Text>
                         </View>
                     </TouchableWithoutFeedback>
+                    {authError !== null &&
+                        <Text style={{ color: 'red', textAlign: 'center' }}>{authError}</Text>
+                    }
+                    {authSuccess !== null &&
+                        <Text style={{ color: '#04d93d', textAlign: 'center' }}>{authSuccess}</Text>
+                    }
                 </View>
 
                 <View style={AuthStyles.footer}>
@@ -64,4 +72,17 @@ const ForgotPasswordScreen = ({ navigation }) => {
     );
 }
 
-export default ForgotPasswordScreen;
+const mapStateToProps = (state) => {
+    return {
+        authError: state.auth.authError,
+        authSuccess: state.auth.authSuccess,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        forgotPassword: (newUser) => dispatch(forgotPassword(newUser))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPasswordScreen);

@@ -3,6 +3,8 @@ import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import { Asset } from 'expo-asset';
+import { connect } from 'react-redux';
+import { signUp } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
 import AuthStyles from '../../Styles/AuthStyles';
 
@@ -10,7 +12,7 @@ const DARKPINK = '#f06656';
 
 // TODO: Allow for authentication via, facebook, twitter, or gmail
 // TODO: Load and render a higher quality version of the logo
-const CreateAccountScreen = ({ navigation }) => {
+const CreateAccountScreen = ({ navigation, signUp, authError }) => {
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
@@ -23,6 +25,10 @@ const CreateAccountScreen = ({ navigation }) => {
 
     const handleFacebookAuth = () => {
         console.log('hello facebook')
+    }
+
+    const handleCreateAccount = () => {
+        signUp({ name, userName, email, password })
     }
 
     return (
@@ -45,6 +51,9 @@ const CreateAccountScreen = ({ navigation }) => {
                             <Text style={{ fontWeight: '500' }}>Create Account</Text>
                         </View>
                     </TouchableWithoutFeedback>
+                    {authError !== null &&
+                        <Text style={{ color: 'red', textAlign: 'center', marginBottom: 8 }}>{authError}</Text>
+                    }
                 </View>
 
                 <View style={AuthStyles.thirdPartyButtons}>
@@ -78,4 +87,16 @@ const CreateAccountScreen = ({ navigation }) => {
     );
 }
 
-export default CreateAccountScreen;
+const mapStateToProps = (state) => {
+    return {
+        authError: state.auth.authError,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        signUp: (newUser) => dispatch(signUp(newUser))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateAccountScreen);

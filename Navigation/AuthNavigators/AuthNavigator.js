@@ -7,15 +7,14 @@ import ForgotPasswordScreen from '../../Screens/AuthScreens/ForgotPasswordScreen
 
 const Stack = createStackNavigator();
 
-const AuthNavigator = ({ setAuthedUser }) => {
+const AuthNavigator = () => {
     return (
         <Stack.Navigator
-            initialRouteName='Login'
+            initialRouteName='Create'
             screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name="Login"
                 component={LoginScreen}
-                initialParams={{ setAuthedUser: setAuthedUser }}
             />
             <Stack.Screen
                 name="Create"

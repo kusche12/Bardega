@@ -13,10 +13,9 @@ import AuthStyles from '../../Styles/AuthStyles';
 const DARKPINK = '#f06656';
 
 // TODO: Load and render a higher quality version of the logo
-const LoginScreen = ({ navigation, logIn, authError, route, user }) => {
+const LoginScreen = ({ navigation, logIn, authError }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { setAuthedUser } = route.params;
 
     useEffect(() => {
         const imageURI = Asset.fromModule(require('./splash_background.png')).uri;
@@ -25,9 +24,6 @@ const LoginScreen = ({ navigation, logIn, authError, route, user }) => {
 
     const handleLogin = () => {
         logIn({ email, password });
-        if (user !== null) {
-            setAuthedUser(user)
-        }
     }
 
     return (
@@ -74,12 +70,8 @@ const LoginScreen = ({ navigation, logIn, authError, route, user }) => {
 
 // Get any authentication errors that occur during sign in
 const mapStateToProps = (state) => {
-    const profiles = state.firestore.data.profiles;
-    const UID = state.firebase.auth.uid;
-    const profile = profiles ? profiles[UID] : null;
     return {
         authError: state.auth.authError,
-        user: profile
     }
 }
 
@@ -90,7 +82,6 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default compose(
-    firestoreConnect(() => ['profiles']),
+export default
     connect(mapStateToProps, mapDispatchToProps)
-)(LoginScreen);
+        (LoginScreen);

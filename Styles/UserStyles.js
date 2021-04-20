@@ -166,5 +166,10 @@ export default StyleSheet.create({
     collectionSubtitle: {
         fontSize: 12,
         color: GRAY
+    },
+    settingsButton: {
+        width: width,
+        height: 40,
+        backgroundColor: PINK
     }
 });
