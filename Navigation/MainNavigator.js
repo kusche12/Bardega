@@ -4,6 +4,7 @@ import { Image } from 'react-native';
 // For main navigation
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Images from '../Images/Images';
 import DiscoverNavigator from './StackNavigators/DiscoverNavigator';
 import SearchNavigator from './StackNavigators/SearchNavigator';
 import CreateNavigator from '../Navigation/StackNavigators/CreateNavigator';
@@ -44,9 +45,9 @@ const MainNavigator = ({ header }) => {
                     tabBarVisible: getTabBarVisibility(route),
                     tabBarIcon: ({ focused }) => {
                         if (focused) {
-                            return <Image source={require('./discover.png')} style={GlobalStyles.tabBarIcon} />
+                            return <Image source={Images.bottomTab.discover} style={GlobalStyles.tabBarIcon} />
                         } else {
-                            return <Image source={require('./discoverUnfocused.png')} style={GlobalStyles.tabBarIcon} />
+                            return <Image source={Images.bottomTab.discoverUnfocused} style={GlobalStyles.tabBarIcon} />
                         }
                     },
                 })}
@@ -59,9 +60,9 @@ const MainNavigator = ({ header }) => {
                     tabBarVisible: getTabBarVisibility(route),
                     tabBarIcon: ({ focused }) => {
                         if (focused) {
-                            return <Image source={require('./search.png')} style={GlobalStyles.tabBarIcon} />
+                            return <Image source={Images.bottomTab.search} style={GlobalStyles.tabBarIcon} />
                         } else {
-                            return <Image source={require('./searchUnfocused.png')} style={GlobalStyles.tabBarIcon} />
+                            return <Image source={Images.bottomTab.searchUnfocused} style={GlobalStyles.tabBarIcon} />
                         }
                     },
                 })}
@@ -73,9 +74,9 @@ const MainNavigator = ({ header }) => {
                 options={{
                     tabBarIcon: ({ focused }) => {
                         if (focused) {
-                            return <Image source={require('./create.png')} style={GlobalStyles.tabBarIconMD} />
+                            return <Image source={Images.bottomTab.create} style={GlobalStyles.tabBarIconMD} />
                         } else {
-                            return <Image source={require('./createUnfocused.png')} style={GlobalStyles.tabBarIconMD} />
+                            return <Image source={Images.bottomTab.createUnfocused} style={GlobalStyles.tabBarIconMD} />
                         }
                     },
                 }}
@@ -88,9 +89,9 @@ const MainNavigator = ({ header }) => {
                     tabBarVisible: getTabBarVisibility(route),
                     tabBarIcon: ({ focused }) => {
                         if (focused) {
-                            return <Image source={require('./spirit.png')} style={GlobalStyles.tabBarIconMD} />
+                            return <Image source={Images.bottomTab.spirit} style={GlobalStyles.tabBarIconMD} />
                         } else {
-                            return <Image source={require('./spiritUnfocused.png')} style={GlobalStyles.tabBarIconMD} />
+                            return <Image source={Images.bottomTab.spiritUnfocused} style={GlobalStyles.tabBarIconMD} />
                         }
                     },
                 })}
@@ -103,9 +104,9 @@ const MainNavigator = ({ header }) => {
                     tabBarVisible: getTabBarVisibility(route),
                     tabBarIcon: ({ focused }) => {
                         if (focused) {
-                            return <Image source={require('./profile.png')} style={GlobalStyles.tabBarIcon} />
+                            return <Image source={Images.bottomTab.profile} style={GlobalStyles.tabBarIcon} />
                         } else {
-                            return <Image source={require('./profileUnfocused.png')} style={GlobalStyles.tabBarIcon} />
+                            return <Image source={Images.bottomTab.profileUnfocused} style={GlobalStyles.tabBarIcon} />
                         }
                     },
                 })}

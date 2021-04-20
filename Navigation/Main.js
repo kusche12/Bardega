@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { cacheImages } from '../Functions/cacheFunctions';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
+import Images from '../Images/Images';
 
 // For authorization screen
 import { connect } from 'react-redux';
@@ -26,7 +27,7 @@ const Main = ({ user }) => {
         loadData();
     }, [])
     const loadData = async () => {
-        const imageURI = Asset.fromModule(require('./bardega_logo.png')).uri;
+        const imageURI = Asset.fromModule(Images.bardegaLogoOld).uri;
         await cacheImages(imageURI, 1);
         setHeader(FileSystem.documentDirectory + '1.jpg');
         setIsLoading(false);

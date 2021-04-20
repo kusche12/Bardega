@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, View, TouchableWithoutFeedback } from 'react-native';
+import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
 const GoBackHeader = ({ navigation }) => {
@@ -8,7 +9,7 @@ const GoBackHeader = ({ navigation }) => {
             <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                 <Image
                     style={{ height: 20, width: 20 }}
-                    source={require('./back_button.png')}
+                    source={Images.topNav.backButton}
                     resizeMode='contain'
                 />
             </TouchableWithoutFeedback>

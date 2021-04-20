@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Dimensions, Image, View, StyleSheet, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
+import { Dimensions, Image, View, StyleSheet, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import Autocomplete from 'react-native-autocomplete-input';
+import Images from '../../Images/Images';
 
 const width = Dimensions.get('screen').width;
 const LIGHTPINK = '#F7D2CF';
@@ -23,7 +24,6 @@ const findDrink = (query, drinks) => {
 }
 
 //TODO: UI Styling
-// TODO: Render suggestions on the screen below using the SearchResult component
 const SearchHeader = ({ drinks, navigation }) => {
     const [query, setQuery] = useState('');
     const [currentDrinks, setCurrentDrinks] = useState([]);
@@ -54,12 +54,7 @@ const SearchHeader = ({ drinks, navigation }) => {
                         autoCorrect={false}
                     />
                 </View>
-                {/* {query.length > 0 &&
-                    <TouchableWithoutFeedback style={{ width: 20, height: 20 }} onPress={() => handleCancel()}>
-                        <Image source={require('./cancel.png')} style={styles.cancelImg} />
-                    </TouchableWithoutFeedback>
-                } */}
-                <Image source={require('./search.png')} style={styles.image} />
+                <Image source={Images.topNav.search} style={styles.image} />
             </View>
 
         </View>
@@ -90,7 +85,8 @@ const styles = StyleSheet.create({
         top: 13,
         left: 12,
         position: 'absolute',
-        zIndex: 900
+        zIndex: 900,
+        resizeMode: 'contain'
     },
     cancelImg: {
         width: 18,

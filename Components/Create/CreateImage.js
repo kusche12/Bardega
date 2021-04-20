@@ -21,7 +21,6 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
 
     // Renders the image container with either an empty box or the picture of the drink
     const renderDrinkContainer = () => {
-        console.log(drinkImage);
         if (drinkImage === null) {
             return (
                 <View style={GlobalStyles.flexCenter}>

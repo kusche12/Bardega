@@ -1,4 +1,5 @@
 import React from 'react';
+import Images from '../../Images/Images';
 import { Image, Dimensions } from 'react-native';
 
 const width = Dimensions.get('screen').width;
@@ -16,7 +17,7 @@ const MainHeader = ({ header }) => {
         return (
             <Image
                 style={{ width: width, height: 150 }}
-                source={require('./bardega_logo.png')}
+                source={Images.bardegaLogo}
                 resizeMode='cover'
             />
         )

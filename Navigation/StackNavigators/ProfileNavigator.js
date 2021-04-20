@@ -8,6 +8,7 @@ import EditCollectionScreen from '../../Screens/ProfileScreens/EditCollectionScr
 import SettingsScreen from '../../Screens/ProfileScreens/SettingsScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import { Entypo } from '@expo/vector-icons';
+import Images from '../../Images/Images'
 import GlobalStyles from '../../Styles/GlobalStyles';
 import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
@@ -128,7 +129,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                                     <Image
                                         style={{ height: 20, width: 20 }}
-                                        source={require('./back_button.png')}
+                                        source={Images.topNav.backButton}
                                         resizeMode='contain'
                                     />
                                 </TouchableWithoutFeedback>

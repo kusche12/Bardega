@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
+import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 
@@ -51,7 +52,7 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => navigation.navigate('FavoritesScreen', { favorites: user.favorites })}>
                     <View style={[UserStyles.button, UserStyles.buttonFavorites]}>
-                        <Image source={require('./heart.png')}
+                        <Image source={Images.profile.heart}
                             style={[UserStyles.heartImg, Platform.OS === 'android' && { marginTop: 2, marginLeft: 2 }]}
 
                         />
