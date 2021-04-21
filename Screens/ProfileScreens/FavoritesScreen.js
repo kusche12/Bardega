@@ -89,6 +89,8 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
                         <Text style={DiscoverStyles.title}>FAVORITES</Text>
                     </View>
 
+
+
                     <View style={UserStyles.favoritesContainer}>
                         <FlatList
                             data={favorites}
@@ -99,6 +101,7 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
                             horizontal={false}
                         />
                     </View>
+
                 </SafeAreaView>
             </KeyboardAwareScrollView>
         )

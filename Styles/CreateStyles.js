@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
 const PINK = '#F29288';
+const LIGHTPINK = '#F7D2CF';
 const GRAY = '#a1a1a1'
 const RADIUS = 22;
 const SUBFONT = 15;
@@ -39,7 +40,12 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
+        overflow: 'hidden'
+    },
+    drinkImage: {
+        width: width * .8,
+        height: height * .45,
     },
     plusImage: {
         width: width * .16,
@@ -118,5 +124,24 @@ export default StyleSheet.create({
         width: width * .18,
         maxWidth: width * .23,
         opacity: .5
+    },
+    submitBtn: {
+        width: width * .8,
+        paddingVertical: 4,
+        borderRadius: RADIUS,
+        backgroundColor: PINK,
+        marginBottom: 30,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+        shadowColor: "#000",
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        elevation: 4
     }
 });

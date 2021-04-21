@@ -13,7 +13,9 @@ import UserStyles from '../../Styles/UserStyles';
 // TODO: Delete this after development, lol
 LogBox.ignoreAllLogs()
 
-// TODO: Get the data from the currently authed user
+//  TODO: Temporarily I made this button route to the settings screen for testing purposes. In reality, you should have a settings
+// cog on the top right of the screen that goes to the settings screen. Implement this.
+
 const ProfileScreen = ({ navigation, drinks, user }) => {
 
     const [isLoading, setIsLoading] = useState(true);
@@ -38,8 +40,6 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
     }
 
     // TODO: Implement the rule below
-    //  TODO: Temporarily I made this button route to the settings screen for testing purposes. In reality, you should have a settings
-    // cog on the top right of the screen that goes to the settings screen. Implement this.
     // If currently authed user, then render edit profile and favorite routes
     // If any other user, then render follow/unfollow component
     const renderInfoButtons = () => {
@@ -50,15 +50,17 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
                         <Text style={UserStyles.subtitle}>Edit Profile</Text>
                     </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('FavoritesScreen', { favorites: user.favorites })}>
-                    <View style={[UserStyles.button, UserStyles.buttonFavorites]}>
-                        <Image source={Images.profile.heart}
-                            style={[UserStyles.heartImg, Platform.OS === 'android' && { marginTop: 2, marginLeft: 2 }]}
+                {user.favorites.length > 1 &&
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('FavoritesScreen', { favorites: user.favorites })}>
+                        <View style={[UserStyles.button, UserStyles.buttonFavorites]}>
+                            <Image source={Images.profile.heart}
+                                style={[UserStyles.heartImg, Platform.OS === 'android' && { marginTop: 2, marginLeft: 2 }]}
 
-                        />
-                        <Text style={UserStyles.subtitle}>Favorites</Text>
-                    </View>
-                </TouchableWithoutFeedback>
+                            />
+                            <Text style={UserStyles.subtitle}>Favorites</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+                }
             </View>
         )
     }
@@ -145,7 +147,6 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    console.log(state.firebase);
     // If we entered this screen with a link from another user's profile
     if (ownProps.route.params.user !== undefined) {
         return {
@@ -154,7 +155,7 @@ const mapStateToProps = (state, ownProps) => {
         }
     } else {
         const profiles = state.firestore.data.profiles;
-        const profile = profiles ? profiles['culture-admin'] : null;
+        const profile = profiles ? profiles[state.firebase.auth.uid] : null;
         return {
             drinks: state.firestore.data.drinks,
             user: profile

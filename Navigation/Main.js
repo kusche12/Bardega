@@ -19,7 +19,6 @@ import MainNavigator from './MainNavigator';
 
 // Application Navigator
 const Main = ({ user }) => {
-    console.log(user);
     // Cache the local header image file on the user's device to speed up the access of the image
     const [header, setHeader] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -46,11 +45,14 @@ const Main = ({ user }) => {
     }
 }
 
-// TODO: Try to get the currently authed user by checking a cache maybe?
 const mapStateToProps = (state) => {
+    // TODO: For testing purposes only, put your user profile in this section to skip over auth
+    // Normally, this would set `user: null`
     if (state.firebase.auth.isEmpty) {
+        const profiles = state.firestore.data.profiles;
+        const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
         return {
-            user: {}
+            user: null
         }
     } else {
         const profiles = state.firestore.data.profiles;

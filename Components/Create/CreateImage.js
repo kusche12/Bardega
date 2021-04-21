@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Image, View, TouchableWithoutFeedback, Text, Alert } from 'react-native';
+import Images from '../../Images/Images';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 
@@ -24,13 +25,13 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
         if (drinkImage === null) {
             return (
                 <View style={GlobalStyles.flexCenter}>
-                    <Image source={require('./plus.png')} style={CreateStyles.plusImage} />
+                    <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
                     <Text style={CreateStyles.photoText}>Add photo from photo album</Text>
                 </View>
             );
         } else {
             return (
-                <Image source={{ uri: drinkImage }} style={GlobalStyles.flexCenter} />
+                <Image source={{ uri: drinkImage }} style={CreateStyles.drinkImage} />
             )
         }
     }
