@@ -52,7 +52,7 @@ const mapStateToProps = (state) => {
         const profiles = state.firestore.data.profiles;
         const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
         return {
-            user: null
+            user: profile
         }
     } else {
         const profiles = state.firestore.data.profiles;

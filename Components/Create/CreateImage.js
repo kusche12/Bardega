@@ -7,6 +7,7 @@ import Constants from 'expo-constants';
 import CreateStyles from '../../Styles/CreateStyles'
 import GlobalStyles from '../../Styles/GlobalStyles'
 
+// TODO: Make sure the .2 compression isn't too low when rendering the drink later
 const CreateImage = ({ drinkImage, setDrinkImage }) => {
     // Need permission
     useEffect(() => {
@@ -66,7 +67,7 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
                 let result = await ImagePicker.launchCameraAsync({
                     allowsEditing: true,
                     aspect: [4, 3],
-                    quality: 1,
+                    quality: .2,
                 });
                 if (!result.cancelled) {
                     setDrinkImage(result.uri);
@@ -81,14 +82,13 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: 1,
+            quality: .2,
         });
 
         if (!result.cancelled) {
             setDrinkImage(result.uri);
         }
     };
-
 
     return (
         <View>

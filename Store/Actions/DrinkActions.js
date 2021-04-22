@@ -1,47 +1,104 @@
+// // TODO: CommentID and Comment Collection
+// export const createDrink = (drink) => {
+//     console.log('createDrink')
+//     return (dispatch, getState, { getFirebase }) => {
+//         // Get the ID of drink before uploading
+//         const firebase = getFirebase();
+//         const firestore = firebase.firestore();
 
-// TODO: There is something wrong with the connection between the DrinkAction and the component
-// It does not even run the code inside of the return statement of createDrink. I know this bc the console 
-//  was not logging. Fix this ASAP.
+//         // Drink ID
+//         const ref = firestore.collection('drinks').doc();
+//         const id = ref.id;
 
+//         // Comment ID
+//         const commentRef = firestore.collection('comments').doc();
+//         const commentID = commentRef.id;
 
-// TODO: ImageURL and Image upload
+//         const date = new Date();
+
+//         // Connect to the storage and upload drink image
+//         const storage = firebase.storage();
+//         const storageRef = storage.ref();
+//         const fileRef = storageRef.child('images/drinks/' + drink.authorID + '_' + id);
+//         const fileURL = fileRef.getDownloadURL();
+//         fileRef
+//             .put(drink.image)
+//             .then(() => {
+//                 // Create empty comment document
+//                 firestore.collection('comments').doc(commentID).set([])
+//             }).then(() => {
+//                 // Create drink document
+//                 firestore.collection('drinks').add({
+//                     ...drink,
+//                     id: id,
+//                     dateCreated: date.toISOString(),
+//                     savedBy: [],
+//                     imageURL: fileURL,
+//                     commentID: commentID
+//                 }).then(() => {
+//                     dispatch({ type: 'CREATE_DRINK', drink })
+//                 }).catch((err) => {
+//                     dispatch({ type: 'CREATE_DRINK_ERROR', err });
+//                 })
+//             }).then(() => {
+//                 // Add this drink to the user profile's drinks list
+//                 firestore.collection('profiles').doc(drink.authorID).
+//             }).catch(() => {
+
+//             })
+//     }
+// };
+
 // TODO: CommentID and Comment Collection
-// SavedBy is an array that will hold all the UserID's that have saved this drink in a collection
 export const createDrink = (drink) => {
     console.log('createDrink')
-    return (dispatch, getState, { getFirebase }) => {
-        // Get the ID of drink before uploading
-        console.log('hello')
-        const firebase = getFirebase();
-        const firestore = firebase.firestore();
-        const ref = firestore.collection('drinks').doc();
+    const { authorID, description, instructions, name, prepTime, recipe, tags } = drink;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        // Drink ID
+        const ref = await firestore.collection('drinks').doc();
         const id = ref.id;
+        console.log('drinkID: ' + id);
+        console.log('-----------------------')
+
+        // Comment ID
+        const commentRef = await firestore.collection('comments').doc();
+        const commentID = commentRef.id;
+        console.log('commentID: ' + commentID);
 
         const date = new Date();
 
         // Connect to the storage and upload drink image
-        // const storage = firebase.storage();
-        // const storageRef = storage.ref();
-        // const fileRef = storageRef.child('images/drinks');
-        // fileRef
-        //     .put(drink.image)
-        //     .then(() => {
-        //         console.log("Uploaded file " + drink.image)
-        //         dispatch({ type: 'IMAGE_SUCCESS' })
-        //     }).catch((err) => {
-        //         console.log("Error uploading file " + err)
-        //         dispatch({ type: 'IMAGE_ERROR', err })
-        //     })
-        firestore.collection('drinks').add({
-            ...drink,
+        const storage = firebase.storage();
+        const storageRef = storage.ref();
+        const fileRef = storageRef.child('images/drinks/' + drink.authorID + '_' + id);
+        await fileRef.put(drink.image)
+        const fileURL = await fileRef.getDownloadURL();
+
+        // Add comment section to the comments bucket
+        await firestore.collection('comments').doc(commentID).set({ comments: [] });
+
+        // Add drink to the drinks bucket
+        await firestore.collection('drinks').doc(id).set({
+            authorID: authorID,
+            description: description,
+            instructions: instructions,
+            name: name,
+            prepTime: prepTime,
+            recipe: recipe,
+            tags: tags,
             id: id,
             dateCreated: date.toISOString(),
             savedBy: [],
-            imageURL: 'https://firebasestorage.googleapis.com/v0/b/culture-bardega.appspot.com/o/images%2Fdrinks%2Fdefault.jpeg?alt=media&token=f23f76dc-79cf-416d-9d14-644c7ea34466'
-        }).then(() => {
-            dispatch({ type: 'CREATE_DRINK', drink })
-        }).catch((err) => {
-            dispatch({ type: 'CREATE_DRINK_ERROR', err });
+            imageURL: fileURL,
+            commentID: commentID
+        })
+
+        // Add this drink to the user's saved drinks array
+        await firestore.collection('profiles').doc(drink.authorID).update({
+            drinks: firebase.firestore.FieldValue.arrayUnion({ dateCreated: date.toISOString(), id: id })
         })
     }
 };

@@ -18,8 +18,7 @@ import CreateStyles from '../../Styles/CreateStyles';
 // TODO: Submit Drink Button (to database)
 // TODO: Shrink the image on submission for faster load times and less load space
 // TODO: Also make sure to set the drink's 'id' attribute equal to the one given by firebase
-// TODO: Also make sure it has an AuthorID which is the ID of the currently authed user
-const CreateScreen = ({ tags, authID }) => {
+const CreateScreen = ({ tags, authID, createDrink }) => {
 
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
@@ -79,8 +78,7 @@ const CreateScreen = ({ tags, authID }) => {
     };
 
     // Handle the submission of the drink
-    const handleSubmit = () => {
-        console.log('handle submit')
+    const handleSubmit = async () => {
         // console.log(drinkDesc);
         // if (drinkName.length < 1) {
         //     return Alert.alert(
@@ -99,10 +97,13 @@ const CreateScreen = ({ tags, authID }) => {
         for (let i = 0; i < selectedTags.length; i++) {
             formatTags.push(selectedTags[i].name);
         }
+
+        let image = await convertImage();
+
         createDrink({
             authorID: authID,
             description: drinkDesc,
-            image: drinkImage,
+            image: image,
             instructions: direction,
             name: drinkName,
             prepTime: drinkPrep.value,
@@ -112,68 +113,76 @@ const CreateScreen = ({ tags, authID }) => {
         // }
     }
 
+    // Handler that prepares the drink image to be sent to firestorage
+    const convertImage = async () => {
+        const response = await fetch(drinkImage);
+        const blob = await response.blob();
+        return blob;
+    }
+
     // Give the tags some time to load from firestore
     if (tags === undefined) {
         return <Text>Loading...</Text>
-    }
+    } else {
 
-    return (
-        <KeyboardAwareScrollView
-            enableOnAndroid={true}
-            enableAutomaticScroll={(Platform.OS === 'ios')}
-            contentContainerStyle={{ flexGrow: 1 }}
-        >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]}>
+        return (
+            <KeyboardAwareScrollView
+                enableOnAndroid={true}
+                enableAutomaticScroll={(Platform.OS === 'ios')}
+                contentContainerStyle={{ flexGrow: 1 }}
+            >
+                <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]}>
 
-                <Text style={CreateStyles.title}>CREATE A COCKTAIL</Text>
+                    <Text style={CreateStyles.title}>CREATE A COCKTAIL</Text>
 
-                <View style={CreateStyles.inputBox}>
-                    <Text style={CreateStyles.title2}>Cocktail Name</Text>
-                    <TextInput
-                        style={CreateStyles.input}
-                        onChangeText={setDrinkName}
-                        value={drinkName}
-                        placeholder='Give your drink a name'
-                        multiline={false}
-                        placeholderTextColor='#b3b3b3'
-                    />
-                </View>
-
-                <View style={CreateStyles.inputBox}>
-                    <Text style={CreateStyles.title2}>Description</Text>
-                    <TextInput
-                        style={CreateStyles.input}
-                        onChangeText={setDrinkDesc}
-                        value={drinkDesc}
-                        placeholder='Give your drink a description'
-                        multiline={true}
-                        placeholderTextColor='#b3b3b3'
-                    />
-                </View>
-
-                <CreateImage {...{ drinkImage, setDrinkImage }} />
-
-                <CreateIngredients {...{
-                    ingredients,
-                    updateIngredient, deleteIngredient,
-                    updateIngredientType, addIngredient
-                }} />
-
-                <CreateDirections {...{ direction, setDirection }} />
-
-                <CreatePrepTime {...{ drinkPrep, setDrinkPrep }} />
-
-                <CreateTags {...{ tags, setSelectedTags, selectedTags }} />
-
-                <TouchableWithoutFeedback onPress={() => handleSubmit()}>
-                    <View style={CreateStyles.submitBtn}>
-                        <Text style={[CreateStyles.ingrTitle, { color: 'white' }]}>Submit Drink</Text>
+                    <View style={CreateStyles.inputBox}>
+                        <Text style={CreateStyles.title2}>Cocktail Name</Text>
+                        <TextInput
+                            style={CreateStyles.input}
+                            onChangeText={setDrinkName}
+                            value={drinkName}
+                            placeholder='Give your drink a name'
+                            multiline={false}
+                            placeholderTextColor='#b3b3b3'
+                        />
                     </View>
-                </TouchableWithoutFeedback>
 
-            </SafeAreaView>
-        </KeyboardAwareScrollView>
-    );
+                    <View style={CreateStyles.inputBox}>
+                        <Text style={CreateStyles.title2}>Description</Text>
+                        <TextInput
+                            style={CreateStyles.input}
+                            onChangeText={setDrinkDesc}
+                            value={drinkDesc}
+                            placeholder='Give your drink a description'
+                            multiline={true}
+                            placeholderTextColor='#b3b3b3'
+                        />
+                    </View>
+
+                    <CreateImage {...{ drinkImage, setDrinkImage }} />
+
+                    <CreateIngredients {...{
+                        ingredients,
+                        updateIngredient, deleteIngredient,
+                        updateIngredientType, addIngredient
+                    }} />
+
+                    <CreateDirections {...{ direction, setDirection }} />
+
+                    <CreatePrepTime {...{ drinkPrep, setDrinkPrep }} />
+
+                    <CreateTags {...{ tags, setSelectedTags, selectedTags }} />
+
+                    <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+                        <View style={CreateStyles.submitBtn}>
+                            <Text style={[CreateStyles.ingrTitle, { color: 'white' }]}>Submit Drink</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+
+                </SafeAreaView>
+            </KeyboardAwareScrollView>
+        );
+    }
 }
 
 const mapStateToProps = (state) => {
