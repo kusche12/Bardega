@@ -71,7 +71,6 @@ export default StyleSheet.create({
         justifyContent: 'space-evenly'
     },
     drinkContainer: {
-        flex: 1,
         borderRadius: 6,
         alignItems: 'center',
         justifyContent: 'center',
@@ -85,7 +84,7 @@ export default StyleSheet.create({
         height: width * .333,
     },
     allDrinksContainer: {
-        width: width
+        width: width,
     },
     followerHeader: {
         height: height * .05,
