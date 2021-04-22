@@ -15,7 +15,9 @@ import DetailStyles from '../../Styles/DetailStyles';
 
 
 // TODO: Add a "bookmark" button that allows the user to add this drink to one of their favorite's buckets
-// TODO: If the drink's .authorID and currently authed userID are equal. Then add an "edit drink" button / route
+// TODO: Add the description to this screen
+// TODO: Add the prep time to this screen
+// TODO: When moving between Create Screen and this screen, the image does not render. Fix this.
 const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID }) => {
     const drink = route.params.drink;
     const [isLoading, setIsLoading] = useState(true);

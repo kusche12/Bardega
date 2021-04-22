@@ -17,6 +17,8 @@ import CreateStyles from '../../Styles/CreateStyles';
 const width = Dimensions.get('screen').width;
 
 // TODO: Set the correct font given by Care
+// TODO: If the user is editing a drink already on the app, make sure to pass it to an "EDIT_DRINK" action, not 
+// a CREATE_DRINK action. This will help avoid making duplicates in DB
 const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError, drinkID, drinks }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [drinkName, setDrinkName] = useState('');
@@ -27,6 +29,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError
     const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
     const [selectedTags, setSelectedTags] = useState([]);
 
+    // Incase you need to test more create screen stuff
     // const [isLoading, setIsLoading] = useState(true);
     // const [drinkName, setDrinkName] = useState('Test');
     // const [drinkDesc, setDrinkDesc] = useState('Test');
@@ -47,13 +50,13 @@ const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError
             let tagObject = getTags(edit.tags, tags);
             let ingrObject = getIngredients(edit.recipe);
 
-            // setDrinkName(edit.name)
-            // setDrinkDesc(edit.desc)
-            // setDrinkImage(edit.imageURL)
-            // setIngredients(ingrObject)
-            // setDirection(edit.instructions)
-            // setDrinkPrep(prepObject)
-            // setSelectedTags(tagObject)
+            setDrinkName(edit.name)
+            setDrinkDesc(edit.description)
+            setDrinkImage(edit.imageURL)
+            setIngredients(ingrObject)
+            setDirection(edit.instructions)
+            setDrinkPrep(prepObject)
+            setSelectedTags(tagObject)
         }
         setIsLoading(false);
     }, [route])
@@ -211,12 +214,13 @@ const getTags = (drinkTags, allTags) => {
 const getIngredients = (ingredients) => {
     let result = [];
     for (let i = 0; i < ingredients.length; i++) {
-        result.push(ingredients[i]);
+        let curr = { ...ingredients[i] };
         if (ingredients[i].id === undefined) {
-            result[i].id = '' + i;
+            curr.id = '' + i;
         }
+        result.push(curr)
     }
-    return ingredients;
+    return result;
 }
 
 const mapStateToProps = (state) => {

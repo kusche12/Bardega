@@ -1,19 +1,24 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Image, TouchableWithoutFeedback, View, Alert, Text } from 'react-native';
+
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
 import FavoritesScreen from '../../Screens/ProfileScreens/FavoritesScreen';
 import EditCollectionScreen from '../../Screens/ProfileScreens/EditCollectionScreen';
 import SettingsScreen from '../../Screens/ProfileScreens/SettingsScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
+import CreateScreen from '../../Screens/Main/CreateScreen';
+
 import { Entypo } from '@expo/vector-icons';
 import Images from '../../Images/Images'
-import GlobalStyles from '../../Styles/GlobalStyles';
 import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
+
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
+
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const Stack = createStackNavigator();
 const LIGHTPINK = '#F7D2CF';
@@ -49,6 +54,28 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: LIGHTPINK
 
+                })}
+            />
+            <Stack.Screen
+                name='CommentsScreen'
+                component={CommentsScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader header={header} />,
+                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: LIGHTPINK
+                })}
+            />
+            <Stack.Screen
+                name='CreateScreen'
+                component={CreateScreen}
+                initialParams={route.params, navigation}
+                options={() => ({
+                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
                 })}
             />
             <Stack.Screen
@@ -169,18 +196,6 @@ const ProfileNavigator = ({ route, navigation }) => {
                             </View>
                         )
                     },
-                    headerTitleStyle: { flex: 1, textAlign: 'center' },
-                    headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
-                })}
-            />
-            <Stack.Screen
-                name='CommentsScreen'
-                component={CommentsScreen}
-                options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
