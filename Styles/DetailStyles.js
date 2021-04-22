@@ -8,6 +8,13 @@ const RADIUS = 22;
 const SUBFONT = 15;
 
 export default StyleSheet.create({
+    editImage: {
+        width: 20,
+        height: 20,
+        resizeMode: 'contain',
+        justifyContent: 'flex-end',
+        flex: 1
+    },
     photoContainer: {
         width: width * .8,
         height: height * .4,

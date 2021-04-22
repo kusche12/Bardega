@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Dimensions, TouchableWithoutFeedback, Platform } from 'react-native';
 import { Col, Grid } from 'react-native-easy-grid';
 import SegmentedPicker from 'react-native-segmented-picker';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import PickerOptions from '../../API/pickerOptions';
 
 const WIDTH = Dimensions.get('screen').width;
@@ -19,7 +19,7 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
 
         let newAmount = '' + (parseInt(newInt, 10) + fractionToDec(fraction));
 
-        updateIngredient(newAmount, newUnit, ingredient.type, index);
+        updateIngredient(newAmount, newUnit, ingredient.type, index, ingredient.id);
         setShowPicker(false);
     }
 
@@ -52,7 +52,6 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
                             {renderIngredientAmount()}
                             <Text style={styles.font2}> </Text>
                             <Text style={styles.font2}>{ingredient.unit}</Text>
-                            {/* <AntDesign name="down" size={18} color="#a1a1a1" style={styles.arrow} /> */}
                         </View>
                     </TouchableWithoutFeedback>
                 </Col>
@@ -63,7 +62,7 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
                         <TextInput
                             style={styles.ingredientText}
                             value={ingredient.type}
-                            onChangeText={(text) => updateIngredientType(text, index)}
+                            onChangeText={(text) => updateIngredientType(text, index, ingredient.id)}
                         />
                     </View>
                 </Col>

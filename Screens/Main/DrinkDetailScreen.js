@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Images from '../../Images/Images';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -15,7 +16,7 @@ import DetailStyles from '../../Styles/DetailStyles';
 
 // TODO: Add a "bookmark" button that allows the user to add this drink to one of their favorite's buckets
 // TODO: If the drink's .authorID and currently authed userID are equal. Then add an "edit drink" button / route
-const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => {
+const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID }) => {
     const drink = route.params.drink;
     const [isLoading, setIsLoading] = useState(true);
 
@@ -100,7 +101,16 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
                 contentContainerStyle={{ flexGrow: 1 }}
             >
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]} >
-                    <Text style={CreateStyles.title}>{drink.name}</Text>
+                    {/* Title (add the right edit button if the userID === authorID) */}
+                    <View style={{ flexDirection: 'row' }}>
+                        {userID === drink.authorID && <View style={{ flex: 1 }} ></View>}
+                        <Text style={CreateStyles.title}>{drink.name}</Text>
+                        {userID === drink.authorID &&
+                            <TouchableWithoutFeedback onPress={() => navigation.navigate('CreateScreen', { drink: drink })}>
+                                <Image source={Images.edit} style={DetailStyles.editImage} />
+                            </TouchableWithoutFeedback>
+                        }
+                    </View>
                     <View style={DetailStyles.shadowContainer}>
                         <View style={DetailStyles.photoContainer}>
                             <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DetailStyles.drinkImage} />
@@ -169,7 +179,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         author: profile,
         comments: comments ? comments : null,
-        authors: state.firestore.data.profiles
+        authors: state.firestore.data.profiles,
+        userID: state.firebase.auth.uid
     }
 }
 

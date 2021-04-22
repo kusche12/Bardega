@@ -14,6 +14,7 @@ export default {
         password: require('./password.png'),
     },
     comment: require('./comment.png'),
+    edit: require('./edit.png'),
     bottomTab: {
         create: require('./create.png'),
         createUnfocused: require('./createUnfocused.png'),

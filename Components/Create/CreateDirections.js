@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, Image, TouchableWithoutFeedback, TextInput } from 'react-native';
+import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 
@@ -11,7 +12,7 @@ const CreateDirections = ({ direction, setDirection }) => {
                     <Text style={CreateStyles.ingrTitle}>DIRECTIONS</Text>
                     <View style={CreateStyles.ingrLine}></View>
                     <View style={[GlobalStyles.flexCenter, { bottom: 20 }]}>
-                        <Image source={require('./plus.png')} style={CreateStyles.plusImage} />
+                        <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
                         <Text style={CreateStyles.photoText}>Add directions here</Text>
                     </View>
                 </View>

@@ -17,8 +17,8 @@ import CreateStyles from '../../Styles/CreateStyles';
 const width = Dimensions.get('screen').width;
 
 // TODO: Set the correct font given by Care
-const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drinkID, drinks }) => {
-
+const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError, drinkID, drinks }) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
     const [drinkImage, setDrinkImage] = useState(null);
@@ -27,6 +27,7 @@ const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drink
     const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
     const [selectedTags, setSelectedTags] = useState([]);
 
+    // const [isLoading, setIsLoading] = useState(true);
     // const [drinkName, setDrinkName] = useState('Test');
     // const [drinkDesc, setDrinkDesc] = useState('Test');
     // const [drinkImage, setDrinkImage] = useState(null);
@@ -34,6 +35,28 @@ const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drink
     // const [direction, setDirection] = useState('Test directions');
     // const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
     // const [selectedTags, setSelectedTags] = useState([{ name: 'Sweet', id: 'Lm6VhXQcHuDGaTHZc9kt' }]);
+
+    // If this screen is coming from an "edit drink" button, 
+    // then load the state with all of the drink's data
+    // Also make sure to clean the data so that this screen is prepared to edit it
+    useEffect(() => {
+        console.log('edit drink')
+        if (route.params.drink) {
+            const edit = route.params.drink;
+            let prepObject = getPrep(edit.prepTime);
+            let tagObject = getTags(edit.tags, tags);
+            let ingrObject = getIngredients(edit.recipe);
+
+            // setDrinkName(edit.name)
+            // setDrinkDesc(edit.desc)
+            // setDrinkImage(edit.imageURL)
+            // setIngredients(ingrObject)
+            // setDirection(edit.instructions)
+            // setDrinkPrep(prepObject)
+            // setSelectedTags(tagObject)
+        }
+        setIsLoading(false);
+    }, [route])
 
     // Update application state if there is a drink error message or
     // Navigate to drink detail as soon as there is a drinkID in the screen's state
@@ -45,55 +68,6 @@ const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drink
             console.log("THERE WAS AN ERROR IN THE CREATE SCREEN")
         }
     }, [drinkID, drinkError])
-
-    // Update ingredient amount due to picker and text input
-    const updateIngredient = (amount, unit, type, index) => {
-        let newIngredients = [...ingredients];
-        newIngredients[index] = {
-            amount: amount,
-            unit: unit,
-            type: type,
-        };
-        setIngredients(newIngredients);
-    };
-
-    // Update ingredient type/text input
-    const updateIngredientType = (type, index) => {
-        let newIngredients = [...ingredients];
-        newIngredients[index] = {
-            amount: ingredients[index].amount,
-            unit: ingredients[index].unit,
-            type: type,
-        };
-        setIngredients(newIngredients);
-    };
-
-    // Delete ingredient from list
-    const deleteIngredient = (id) => {
-        let newIngredients = ingredients.filter(ing => ing.id !== id);
-        setIngredients(newIngredients);
-    }
-
-    // Add new item to the ingredients list
-    const addIngredient = () => {
-        let newId = -1;
-        // Find the largest ID (as to not copy the others)
-        ingredients.forEach(ing => {
-            newId = Math.max(parseInt(ing.id, 10), newId);
-        });
-
-        newId++;
-        newId = '' + newId;
-
-        let newIngredients = ingredients.concat({
-            id: newId,
-            amount: '0',
-            unit: ' ',
-            ingredient: '',
-        });
-
-        setIngredients(newIngredients);
-    };
 
     // Handle the submission of the drink
     const handleSubmit = async () => {
@@ -118,7 +92,7 @@ const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drink
             let image = await convertImage();
 
             await createDrink({
-                authorID: authID,
+                authorID: userID,
                 description: drinkDesc,
                 image: image,
                 instructions: direction,
@@ -141,7 +115,7 @@ const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drink
     }
 
     // Give the tags some time to load from firestore
-    if (tags === undefined) {
+    if (tags === undefined || isLoading) {
         return <Text>Loading...</Text>
     } else {
 
@@ -181,11 +155,7 @@ const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drink
 
                     <CreateImage {...{ drinkImage, setDrinkImage }} />
 
-                    <CreateIngredients {...{
-                        ingredients,
-                        updateIngredient, deleteIngredient,
-                        updateIngredientType, addIngredient
-                    }} />
+                    <CreateIngredients {...{ ingredients, setIngredients }} />
 
                     <CreateDirections {...{ direction, setDirection }} />
 
@@ -208,15 +178,58 @@ const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drink
     }
 }
 
+const getPrep = (prepTime) => {
+    let prepObject;
+    switch (prepTime) {
+        case 'light':
+            prepObject = { value: 'light', label: 'Light' };
+            break;
+        case 'medium':
+            prepObject = { value: 'medium', label: 'Medium' };
+            break;
+        case 'heavy':
+            prepObject = { value: 'heavy', label: 'Heavy' };
+            break;
+        default:
+            prepObject = { value: 'light', label: 'Light' };
+    }
+    return prepObject;
+}
+
+const getTags = (drinkTags, allTags) => {
+    let selectedTags = [];
+    for (let i = 0; i < drinkTags.length; i++) {
+        for (let j = 0; j < allTags.length; j++) {
+            if (drinkTags[i] === allTags[j].name) {
+                selectedTags.push(allTags[j]);
+            }
+        }
+    }
+    return selectedTags;
+}
+
+const getIngredients = (ingredients) => {
+    let result = [];
+    for (let i = 0; i < ingredients.length; i++) {
+        result.push(ingredients[i]);
+        if (ingredients[i].id === undefined) {
+            result[i].id = '' + i;
+        }
+    }
+    return ingredients;
+}
+
 const mapStateToProps = (state) => {
     return {
-        authID: state.firebase.auth.uid,
+        userID: state.firebase.auth.uid,
         tags: state.firestore.ordered.tags,
         drinks: state.firestore.data.drinks,
         drinkError: state.drink.drinkError,
         drinkID: state.drink.drinkID,
     }
 }
+
+
 
 const mapDispatchToProps = (dispatch) => {
     return {
