@@ -50,7 +50,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors }) => 
 
     const renderComments = () => {
         let result = [];
-        if (comments === null) {
+        if (comments === null || comments.length === 0) {
             return (
                 <View>
                     <Text style={DetailStyles.commentText3}>There are no comments for this drink yet!</Text>

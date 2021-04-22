@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TouchableWithoutFeedback, Text, SafeAreaView, TextInput, View, Alert, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { TouchableWithoutFeedback, Text, SafeAreaView, TextInput, View, Alert, Platform, Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -14,11 +14,10 @@ import CreatePrepTime from '../../Components/Create/CreatePrepTime'
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 
+const width = Dimensions.get('screen').width;
+
 // TODO: Set the correct font given by Care
-// TODO: Submit Drink Button (to database)
-// TODO: Shrink the image on submission for faster load times and less load space
-// TODO: Also make sure to set the drink's 'id' attribute equal to the one given by firebase
-const CreateScreen = ({ tags, authID, createDrink }) => {
+const CreateScreen = ({ tags, authID, createDrink, navigation, drinkError, drinkID, drinks }) => {
 
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
@@ -27,6 +26,25 @@ const CreateScreen = ({ tags, authID, createDrink }) => {
     const [direction, setDirection] = useState(null);
     const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
     const [selectedTags, setSelectedTags] = useState([]);
+
+    // const [drinkName, setDrinkName] = useState('Test');
+    // const [drinkDesc, setDrinkDesc] = useState('Test');
+    // const [drinkImage, setDrinkImage] = useState(null);
+    // const [ingredients, setIngredients] = useState([{ amount: '1.5', type: 'gin', unit: 'oz' }]);
+    // const [direction, setDirection] = useState('Test directions');
+    // const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
+    // const [selectedTags, setSelectedTags] = useState([{ name: 'Sweet', id: 'Lm6VhXQcHuDGaTHZc9kt' }]);
+
+    // Update application state if there is a drink error message or
+    // Navigate to drink detail as soon as there is a drinkID in the screen's state
+    useEffect(() => {
+        if (drinkID) {
+            const drink = drinks[drinkID];
+            navigation.navigate('DrinkDetailScreen', { drink: drink });
+        } else if (drinkError) {
+            console.log("THERE WAS AN ERROR IN THE CREATE SCREEN")
+        }
+    }, [drinkID, drinkError])
 
     // Update ingredient amount due to picker and text input
     const updateIngredient = (amount, unit, type, index) => {
@@ -79,42 +97,44 @@ const CreateScreen = ({ tags, authID, createDrink }) => {
 
     // Handle the submission of the drink
     const handleSubmit = async () => {
-        // console.log(drinkDesc);
-        // if (drinkName.length < 1) {
-        //     return Alert.alert(
-        //         "Hang on!",
-        //         "You must give your drink a name before submitting.",
-        //         [
-        //             {
-        //                 text: "Okay",
-        //                 onPress: console.log("Okay pressed")
-        //             }
-        //         ],
-        //         { cancelable: true }
-        //     );
-        // } else {
-        let formatTags = [];
-        for (let i = 0; i < selectedTags.length; i++) {
-            formatTags.push(selectedTags[i].name);
+        if (drinkName.length < 1) {
+            return Alert.alert(
+                "Hang on!",
+                "You must give your drink a name before submitting.",
+                [
+                    {
+                        text: "Okay",
+                        onPress: console.log("Okay pressed")
+                    }
+                ],
+                { cancelable: true }
+            );
+        } else {
+            let formatTags = [];
+            for (let i = 0; i < selectedTags.length; i++) {
+                formatTags.push(selectedTags[i].name);
+            }
+
+            let image = await convertImage();
+
+            await createDrink({
+                authorID: authID,
+                description: drinkDesc,
+                image: image,
+                instructions: direction,
+                name: drinkName,
+                prepTime: drinkPrep.value,
+                recipe: ingredients,
+                tags: formatTags
+            });
         }
-
-        let image = await convertImage();
-
-        createDrink({
-            authorID: authID,
-            description: drinkDesc,
-            image: image,
-            instructions: direction,
-            name: drinkName,
-            prepTime: drinkPrep.value,
-            recipe: ingredients,
-            tags: formatTags
-        })
-        // }
     }
 
     // Handler that prepares the drink image to be sent to firestorage
     const convertImage = async () => {
+        if (drinkImage === null) {
+            return null;
+        }
         const response = await fetch(drinkImage);
         const blob = await response.blob();
         return blob;
@@ -178,6 +198,9 @@ const CreateScreen = ({ tags, authID, createDrink }) => {
                             <Text style={[CreateStyles.ingrTitle, { color: 'white' }]}>Submit Drink</Text>
                         </View>
                     </TouchableWithoutFeedback>
+                    {drinkError &&
+                        <Text style={{ color: 'red', textAlign: 'center', width: width * .8 }}>{drinkError}</Text>
+                    }
 
                 </SafeAreaView>
             </KeyboardAwareScrollView>
@@ -189,6 +212,9 @@ const mapStateToProps = (state) => {
     return {
         authID: state.firebase.auth.uid,
         tags: state.firestore.ordered.tags,
+        drinks: state.firestore.data.drinks,
+        drinkError: state.drink.drinkError,
+        drinkID: state.drink.drinkID,
     }
 }
 
@@ -199,6 +225,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default compose(
-    firestoreConnect(() => ['tags']),
+    firestoreConnect(() => ['tags', 'drinks']),
     connect(mapStateToProps, mapDispatchToProps)
 )(CreateScreen);
