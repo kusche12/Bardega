@@ -15,6 +15,7 @@ export default {
     },
     comment: require('./comment.png'),
     edit: require('./edit.png'),
+    threedots: require('./threedots.png'),
     bottomTab: {
         create: require('./create.png'),
         createUnfocused: require('./createUnfocused.png'),

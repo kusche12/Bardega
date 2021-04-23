@@ -15,9 +15,8 @@ LogBox.ignoreAllLogs()
 
 //  TODO: Temporarily I made this button route to the settings screen for testing purposes. In reality, you should have a settings
 // cog on the top right of the screen that goes to the settings screen. Implement this.
-
 const ProfileScreen = ({ navigation, drinks, user }) => {
-
+    console.log(user);
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
 
@@ -28,12 +27,15 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
         }
     }, []);
 
+    // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
         let res = [];
         for (let i = 0; i < user.drinks.length; i++) {
             const drink = await drinks[user.drinks[i].id];
-            cacheImages(drink.imageURL, drink.id);
-            res.push(drink)
+            if (drink) {
+                cacheImages(drink.imageURL, drink.id);
+                res.push(drink);
+            }
         }
         setUserDrinks(res);
         setIsLoading(false);
@@ -50,7 +52,7 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
                         <Text style={UserStyles.subtitle}>Edit Profile</Text>
                     </View>
                 </TouchableWithoutFeedback>
-                {user.favorites.length > 1 &&
+                {user.favorites.length > 0 &&
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('FavoritesScreen', { favorites: user.favorites })}>
                         <View style={[UserStyles.button, UserStyles.buttonFavorites]}>
                             <Image source={Images.profile.heart}

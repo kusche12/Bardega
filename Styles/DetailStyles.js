@@ -13,7 +13,7 @@ export default StyleSheet.create({
         height: 20,
         resizeMode: 'contain',
         justifyContent: 'flex-end',
-        flex: 1
+        flex: 1,
     },
     photoContainer: {
         width: width * .8,

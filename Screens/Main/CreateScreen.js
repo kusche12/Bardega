@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
-import { createDrink } from '../../Store/Actions/DrinkActions'
+import { createDrink, updateDrink } from '../../Store/Actions/DrinkActions'
 
 import CreateIngredients from '../../Components/Create/CreateIngredients';
 import CreateDirections from '../../Components/Create/CreateDirections';
@@ -17,9 +17,7 @@ import CreateStyles from '../../Styles/CreateStyles';
 const width = Dimensions.get('screen').width;
 
 // TODO: Set the correct font given by Care
-// TODO: If the user is editing a drink already on the app, make sure to pass it to an "EDIT_DRINK" action, not 
-// a CREATE_DRINK action. This will help avoid making duplicates in DB
-const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError, drinkID, drinks }) => {
+const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigation, drinkError, drinkID, drinks }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
@@ -44,7 +42,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError
     // Also make sure to clean the data so that this screen is prepared to edit it
     useEffect(() => {
         console.log('edit drink')
-        if (route.params.drink) {
+        if (route.params.drink && tags) {
             const edit = route.params.drink;
             let prepObject = getPrep(edit.prepTime);
             let tagObject = getTags(edit.tags, tags);
@@ -59,7 +57,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError
             setSelectedTags(tagObject)
         }
         setIsLoading(false);
-    }, [route])
+    }, [route, tags])
 
     // Update application state if there is a drink error message or
     // Navigate to drink detail as soon as there is a drinkID in the screen's state
@@ -94,16 +92,33 @@ const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError
 
             let image = await convertImage();
 
-            await createDrink({
-                authorID: userID,
-                description: drinkDesc,
-                image: image,
-                instructions: direction,
-                name: drinkName,
-                prepTime: drinkPrep.value,
-                recipe: ingredients,
-                tags: formatTags
-            });
+            // If drink was passed in, then update it
+            // Else, then create it
+            if (route.params.drink) {
+                const edit = route.params.drink;
+                await updateDrink({
+                    id: edit.id,
+                    authorID: userID,
+                    description: drinkDesc,
+                    image: image,
+                    instructions: direction,
+                    name: drinkName,
+                    prepTime: drinkPrep.value,
+                    recipe: ingredients,
+                    tags: formatTags
+                });
+            } else {
+                await createDrink({
+                    authorID: userID,
+                    description: drinkDesc,
+                    image: image,
+                    instructions: direction,
+                    name: drinkName,
+                    prepTime: drinkPrep.value,
+                    recipe: ingredients,
+                    tags: formatTags
+                });
+            }
         }
     }
 
@@ -151,7 +166,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError
                             onChangeText={setDrinkDesc}
                             value={drinkDesc}
                             placeholder='Give your drink a description'
-                            multiline={true}
+                            multiline={false}
                             placeholderTextColor='#b3b3b3'
                         />
                     </View>
@@ -172,7 +187,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, navigation, drinkError
                         </View>
                     </TouchableWithoutFeedback>
                     {drinkError &&
-                        <Text style={{ color: 'red', textAlign: 'center', width: width * .8 }}>{drinkError}</Text>
+                        <Text style={{ color: 'red', textAlign: 'center', width: width * .8, marginBottom: 20 }}>{drinkError}</Text>
                     }
 
                 </SafeAreaView>
@@ -233,11 +248,10 @@ const mapStateToProps = (state) => {
     }
 }
 
-
-
 const mapDispatchToProps = (dispatch) => {
     return {
-        createDrink: (drink) => dispatch(createDrink(drink))
+        createDrink: (drink) => dispatch(createDrink(drink)),
+        updateDrink: (drink) => dispatch(updateDrink(drink))
     }
 }
 

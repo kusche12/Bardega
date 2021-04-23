@@ -67,7 +67,7 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
                 let result = await ImagePicker.launchCameraAsync({
                     allowsEditing: true,
                     aspect: [4, 3],
-                    quality: .2,
+                    quality: .5,
                 });
                 if (!result.cancelled) {
                     setDrinkImage(result.uri);
@@ -82,7 +82,7 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
-            quality: .2,
+            quality: .5,
         });
 
         if (!result.cancelled) {

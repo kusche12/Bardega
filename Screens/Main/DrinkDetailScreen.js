@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Images from '../../Images/Images';
+
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { clearDrinkState, deleteDrink } from '../../Store/Actions/DrinkActions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Loading from '../../Components/Main/Loading';
 import InputComment from '../../Components/DrinkDetail/InputComment';
@@ -15,16 +17,16 @@ import DetailStyles from '../../Styles/DetailStyles';
 
 
 // TODO: Add a "bookmark" button that allows the user to add this drink to one of their favorite's buckets
-// TODO: Add the description to this screen
-// TODO: Add the prep time to this screen
+// TODO: Add the description to this screen. Just do a white floating box directly under the drink image.
+// TODO: Add the prep time to this screen. Do a white floating box under the ingredients list
 // TODO: When moving between Create Screen and this screen, the image does not render. Fix this.
-const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID }) => {
+const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const drink = route.params.drink;
     const [isLoading, setIsLoading] = useState(true);
 
     // Load the component after all props are set
     useEffect(() => {
-        if (author !== null && authors !== null) {
+        if (author !== null && authors !== null && comments !== null && drink && drink.imageURL) {
             cacheImages(drink.imageURL, drink.id)
             setIsLoading(false);
         }
@@ -93,6 +95,59 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
         }
     }
 
+    // If this is the creator of the drink, allow for editing or deletion
+    const handleEditDrink = () => {
+        return Alert.alert(
+            "Drink Options",
+            null,
+            [
+                {
+                    text: "Edit Drink",
+                    onPress: () => handleEditDrinkHelper()
+                },
+                {
+                    text: "Delete Drink",
+                    onPress: () => handleDeleteDrink(),
+                    style: "destructive"
+                },
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                },
+            ],
+            { cancelable: true }
+        );
+    }
+
+    const handleEditDrinkHelper = () => {
+        clearDrinkState();
+        navigation.navigate('CreateScreen', { drink: drink })
+    }
+
+    const handleDeleteDrink = () => {
+        return Alert.alert(
+            "Are you sure?",
+            "Once you delete this drink, you will no longer be able to recover it.",
+            [
+                {
+                    text: "Yes, delete this drink",
+                    onPress: () => handleDeleteDrinkHelper(),
+                    style: "destructive"
+                },
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                },
+            ],
+            { cancelable: true }
+        );
+    }
+
+    const handleDeleteDrinkHelper = async () => {
+        await navigation.navigate('ProfileScreen');
+        deleteDrink(drink);
+    }
+
     if (isLoading) {
         return <Loading />
     } else {
@@ -108,8 +163,8 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                         {userID === drink.authorID && <View style={{ flex: 1 }} ></View>}
                         <Text style={CreateStyles.title}>{drink.name}</Text>
                         {userID === drink.authorID &&
-                            <TouchableWithoutFeedback onPress={() => navigation.navigate('CreateScreen', { drink: drink })}>
-                                <Image source={Images.edit} style={DetailStyles.editImage} />
+                            <TouchableWithoutFeedback onPress={() => handleEditDrink()}>
+                                <Image source={Images.threedots} style={DetailStyles.editImage} />
                             </TouchableWithoutFeedback>
                         }
                     </View>
@@ -186,8 +241,15 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        clearDrinkState: () => dispatch(clearDrinkState()),
+        deleteDrink: (drink) => dispatch(deleteDrink(drink))
+    }
+}
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect(() => ['profiles', 'comments'])
 )(DrinkDetailScreen);
 
