@@ -1,11 +1,11 @@
 // CREATE: Drink Object
 // Take all of the state from the create drink page and combine it into the new drink object
 // Upload the drink image to firebase storage, and save the ImageURL to the drink object
-// Upload a new comments section in the comments bucket and save the ID to the drink object
+// Upload a new comments section in the comments collection and save the ID to the drink object
 // Save the ID and dateCreated to the user's drink's array
 export const createDrink = (drink) => {
     console.log('Create Drink Action')
-    const { authorID, description, instructions, name, prepTime, recipe, tags } = drink;
+    const { authorID, description, drinkStrength, instructions, name, prepTime, recipe, tags } = drink;
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = await getFirebase();
         const firestore = await firebase.firestore();
@@ -34,23 +34,24 @@ export const createDrink = (drink) => {
                 fileURL = await fileRef.getDownloadURL();
             }
 
-            // Add comment section to the comments bucket
-            await firestore.collection('comments').doc(commentID).set({ comments: [] });
+            // Add comment section to the comments collection
+            await firestore.collection('comments').doc(commentID).set({});
 
-            // Add drink to the drinks bucket
+            // Add drink to the drinks collection
             await firestore.collection('drinks').doc(id).set({
                 authorID: authorID,
                 description: description,
                 instructions: instructions,
                 name: name,
                 prepTime: prepTime,
+                strength: drinkStrength,
                 recipe: recipe,
                 tags: tags,
                 id: id,
                 dateCreated: date.toISOString(),
-                savedBy: [],
                 imageURL: fileURL,
-                commentID: commentID
+                commentID: commentID,
+                numLikes: 0
             })
 
             // Add this drink to the user's saved drinks array
@@ -70,7 +71,7 @@ export const createDrink = (drink) => {
 // Upload the drink image to firebase storage, and save the ImageURL to the drink object
 export const updateDrink = (drink) => {
     console.log('Update Drink Action')
-    const { id, authorID, description, instructions, name, prepTime, recipe, tags } = drink;
+    const { id, authorID, description, drinkStrength, instructions, name, prepTime, recipe, tags } = drink;
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = await getFirebase();
         const firestore = await firebase.firestore();
@@ -87,12 +88,13 @@ export const updateDrink = (drink) => {
                 fileURL = await fileRef.getDownloadURL();
             }
 
-            // Add drink to the drinks bucket
+            // Add drink to the drinks collection
             await firestore.collection('drinks').doc(id).update({
                 description: description,
                 instructions: instructions,
                 name: name,
                 prepTime: prepTime,
+                strength: drinkStrength,
                 recipe: recipe,
                 tags: tags,
                 imageURL: fileURL,
@@ -117,7 +119,7 @@ export const clearDrinkState = (drink) => {
 
 // DELETE: Drink Object
 // Remove the drink's image from firebase storage
-// Remove the comments bucket
+// Remove the comments collection
 // Remove the drink from the user's drink array
 export const deleteDrink = (drink) => {
     console.log('Delete Drink Action')
@@ -142,10 +144,10 @@ export const deleteDrink = (drink) => {
                 drinks: firebase.firestore.FieldValue.arrayRemove({ id: id })
             })
 
-            // Delete the comments bucket
+            // Delete the comments collection
             await firestore.collection('comments').doc(commentID).delete();
 
-            // Delete the drink from the drinks bucket
+            // Delete the drink from the drinks collection
             await firestore.collection('drinks').doc(id).delete();
 
             dispatch({ type: 'DELETE_DRINK' })

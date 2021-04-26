@@ -85,10 +85,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                 { cancelable: true }
             );
         } else {
-            let formatTags = [];
-            for (let i = 0; i < selectedTags.length; i++) {
-                formatTags.push(selectedTags[i].name);
-            }
 
             let image = await convertImage();
 
@@ -96,6 +92,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
             // Else, then create it
             if (route.params.drink) {
                 const edit = route.params.drink;
+                console.log(drinkStrength)
                 await updateDrink({
                     id: edit.id,
                     authorID: userID,
@@ -103,9 +100,10 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                     image: image,
                     instructions: direction,
                     name: drinkName,
-                    prepTime: drinkPrep.value,
+                    prepTime: drinkPrep,
+                    drinkStrength: drinkStrength,
                     recipe: ingredients,
-                    tags: formatTags
+                    tags: selectedTags
                 });
             } else {
                 await createDrink({
@@ -114,9 +112,10 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                     image: image,
                     instructions: direction,
                     name: drinkName,
-                    prepTime: drinkPrep.value,
+                    prepTime: drinkPrep,
+                    drinkStrength: drinkStrength,
                     recipe: ingredients,
-                    tags: formatTags
+                    tags: selectedTags
                 });
             }
         }
@@ -165,7 +164,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                             onChangeText={setDrinkDesc}
                             value={drinkDesc}
                             placeholder='Give your drink a description'
-                            multiline={false}
+                            multiline={true}
                             placeholderTextColor='#b3b3b3'
                         />
                     </View>

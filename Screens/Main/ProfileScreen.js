@@ -30,7 +30,7 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
         let res = [];
-        for (let i = 0; i < user.drinks.length; i++) {
+        for (let i = user.drinks.length - 1; i >= 0; i--) {
             const drink = await drinks[user.drinks[i].id];
             if (drink) {
                 cacheImages(drink.imageURL, drink.id);

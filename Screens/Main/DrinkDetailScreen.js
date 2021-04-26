@@ -16,17 +16,27 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 
 
-// TODO: Add a "bookmark" button that allows the user to add this drink to one of their favorite's buckets
+// TODO: Add a "bookmark", "like", and "share" button that allows the user to add this drink to one of their favorite's buckets
 // TODO: Add the description to this screen. Just do a white floating box directly under the drink image.
 // TODO: Add the prep time to this screen. Do a white floating box under the ingredients list
-// TODO: When moving between Create Screen and this screen, the image does not render. Fix this.
+// TODO: Add the strength to this screen.
+// TODO: Add the tags to this screen.
+// TODO: Drink image does not render when moving from CreateScreen to this screen
 const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const drink = route.params.drink;
     const [isLoading, setIsLoading] = useState(true);
+    const [currComments, setCurrComments] = useState([]);
 
     // Load the component after all props are set
+    // Turn the firestore comments object into a currComments array
     useEffect(() => {
         if (author !== null && authors !== null && comments !== null && drink && drink.imageURL) {
+            let result = [];
+            for (let comment in comments) {
+                console.log(comment);
+                result.push(comment);
+            }
+            setCurrComments(result);
             cacheImages(drink.imageURL, drink.id)
             setIsLoading(false);
         }
@@ -40,8 +50,8 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                 <View style={DetailStyles.row} key={i}>
                     <View style={DetailStyles.col1}>
                         {recipe.amount
-                            ? <Text style={DetailStyles.textGray}>{recipe.amount} {recipe.unit}</Text>
-                            : <Text style={DetailStyles.textGray}>{recipe.unit}</Text>
+                            ? <Text style={DetailStyles.textGray}>{recipe.amount} {recipe.unit.toLowerCase()}</Text>
+                            : <Text style={DetailStyles.textGray}>{recipe.unit.toLowerCase()}</Text>
                         }
                     </View>
                     <View style={DetailStyles.col2}>
@@ -55,7 +65,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
 
     const renderComments = () => {
         let result = [];
-        if (comments === null || comments.length === 0) {
+        if (currComments.length === 0) {
             return (
                 <View>
                     <Text style={DetailStyles.commentText3}>There are no comments for this drink yet!</Text>
@@ -66,8 +76,8 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
             )
         } else {
             let i = 0;
-            while (i < 2 || i < comments.length) {
-                const comment = comments[i];
+            while (i < 2 || i < currComments.length) {
+                const comment = currComments[i];
                 const author = authors[comment.authorID];
                 result.push(
                     <View key={i}>
@@ -88,7 +98,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
             return (
                 <>
                     {result}
-                    <Text style={DetailStyles.commentText3}>View +{comments.length} more comments</Text>
+                    <Text style={DetailStyles.commentText3}>View +{currComments.length} more comments</Text>
                 </>
 
             )
@@ -196,7 +206,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                         </View>
                     }
 
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { comments: comments, drink: drink })}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
                         <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
                             <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>COMMENTS</Text>
 
@@ -232,12 +242,12 @@ const mapStateToProps = (state, ownProps) => {
 
     const commentID = ownProps.route.params.drink.commentID;
     const allComments = state.firestore.data.comments;
-    const comments = allComments ? allComments[commentID].comments : null;
+    const comments = allComments ? allComments[commentID] : null;
     return {
         author: profile,
-        comments: comments ? comments : null,
+        comments: comments,
         authors: state.firestore.data.profiles,
-        userID: state.firebase.auth.uid
+        userID: state.firebase.auth.uid,
     }
 }
 
