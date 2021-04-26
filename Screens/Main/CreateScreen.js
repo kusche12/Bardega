@@ -10,7 +10,7 @@ import CreateIngredients from '../../Components/Create/CreateIngredients';
 import CreateDirections from '../../Components/Create/CreateDirections';
 import CreateTags from '../../Components/Create/CreateTags';
 import CreateImage from '../../Components/Create/CreateImage';
-import CreatePrepTime from '../../Components/Create/CreatePrepTime'
+import CreateOptionPicker from '../../Components/Create/CreateOptionPicker'
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 
@@ -25,6 +25,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     const [ingredients, setIngredients] = useState([]);
     const [direction, setDirection] = useState(null);
     const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
+    const [drinkStrength, setDrinkStrength] = useState({ value: 'virgin', label: 'Virgin' });
     const [selectedTags, setSelectedTags] = useState([]);
 
     // Incase you need to test more create screen stuff
@@ -44,8 +45,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
         console.log('edit drink')
         if (route.params.drink && tags) {
             const edit = route.params.drink;
-            let prepObject = getPrep(edit.prepTime);
-            let tagObject = getTags(edit.tags, tags);
             let ingrObject = getIngredients(edit.recipe);
 
             setDrinkName(edit.name)
@@ -53,8 +52,9 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
             setDrinkImage(edit.imageURL)
             setIngredients(ingrObject)
             setDirection(edit.instructions)
-            setDrinkPrep(prepObject)
-            setSelectedTags(tagObject)
+            setDrinkPrep(edit.prepTime)
+            setDrinkStrength(edit.strength)
+            setSelectedTags(edit.tags)
         }
         setIsLoading(false);
     }, [route, tags])
@@ -136,7 +136,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     if (tags === undefined || isLoading) {
         return <Text>Loading...</Text>
     } else {
-
         return (
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
@@ -177,7 +176,9 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
 
                     <CreateDirections {...{ direction, setDirection }} />
 
-                    <CreatePrepTime {...{ drinkPrep, setDrinkPrep }} />
+                    <CreateOptionPicker item={drinkPrep} setItem={setDrinkPrep} itemType='PREP TIME' />
+
+                    <CreateOptionPicker item={drinkStrength} setItem={setDrinkStrength} itemType='STRENGTH LEVEL' />
 
                     <CreateTags {...{ tags, setSelectedTags, selectedTags }} />
 
@@ -194,36 +195,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
             </KeyboardAwareScrollView>
         );
     }
-}
-
-const getPrep = (prepTime) => {
-    let prepObject;
-    switch (prepTime) {
-        case 'light':
-            prepObject = { value: 'light', label: 'Light' };
-            break;
-        case 'medium':
-            prepObject = { value: 'medium', label: 'Medium' };
-            break;
-        case 'heavy':
-            prepObject = { value: 'heavy', label: 'Heavy' };
-            break;
-        default:
-            prepObject = { value: 'light', label: 'Light' };
-    }
-    return prepObject;
-}
-
-const getTags = (drinkTags, allTags) => {
-    let selectedTags = [];
-    for (let i = 0; i < drinkTags.length; i++) {
-        for (let j = 0; j < allTags.length; j++) {
-            if (drinkTags[i] === allTags[j].name) {
-                selectedTags.push(allTags[j]);
-            }
-        }
-    }
-    return selectedTags;
 }
 
 const getIngredients = (ingredients) => {

@@ -25,7 +25,7 @@ export const getDrinksWithQuery = (drinks, query, max) => {
             if (result.length === max) {
                 return result;
             }
-            const prepTime = drinks[nums[i]].prepTime;
+            const prepTime = drinks[nums[i]].prepTime.value;
             if (prepTime.toLowerCase() === query.filterName.toLowerCase()) {
                 result.push(drinks[nums[i]]);
             }

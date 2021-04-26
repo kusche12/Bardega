@@ -8,20 +8,27 @@ const drinkPrepOptions = [
     { value: 'heavy', label: 'Heavy' }
 ];
 
-const CreatePrepTime = ({ drinkPrep, setDrinkPrep }) => {
+const strengthOptions = [
+    { value: 'virgin', label: 'Virgin' },
+    { value: 'light', label: 'Light' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'strong', label: 'Strong' },
+    { value: 'very_strong', label: 'Very Strong' }
+];
 
+const CreateOptionPicker = ({ item, setItem, itemType }) => {
     const renderOption = (option, index) => {
         // Selected
-        if (option.value === drinkPrep.value) {
+        if (option.value === item.value) {
             return (
                 <View key={index} style={[CreateStyles.tag, { opacity: 1 }]}>
-                    <Text style={{ color: 'white' }}>{drinkPrep.label}</Text>
+                    <Text style={{ color: 'white' }}>{item.label}</Text>
                 </View>
             )
         } else {
             // Not selected
             return (
-                <TouchableWithoutFeedback key={index} onPress={() => handleSelect(option)}>
+                <TouchableWithoutFeedback key={index} onPress={() => setItem(option)}>
                     <View style={CreateStyles.tag}>
                         <Text style={{ color: 'white' }}>{option.label}</Text>
                     </View>
@@ -31,24 +38,26 @@ const CreatePrepTime = ({ drinkPrep, setDrinkPrep }) => {
 
     }
 
-    // If not selected, deselect the other option and replace it with this one
-    const handleSelect = (option) => {
-        setDrinkPrep(option)
-    }
-
     return (
         <View style={[CreateStyles.ingrContainer, { paddingBottom: 20 }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={CreateStyles.ingrTitle}>PREP TIME</Text>
+                <Text style={CreateStyles.ingrTitle}>{itemType}</Text>
             </View>
             <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
             <View style={CreateStyles.tagContainer}>
-                {drinkPrepOptions.map((option, index) => {
-                    return renderOption(option, index);
-                })}
+                {itemType === 'PREP TIME'
+                    ?
+                    drinkPrepOptions.map((option, index) => {
+                        return renderOption(option, index);
+
+                    })
+                    : strengthOptions.map((option, index) => {
+                        return renderOption(option, index);
+                    })
+                }
             </View>
         </View>
     )
 }
 
-export default CreatePrepTime;
+export default CreateOptionPicker;

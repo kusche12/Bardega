@@ -156,6 +156,7 @@ export const deleteDrink = (drink) => {
 }
 
 // TODO: Test this on the favorites screen
+// TODO: Test this on the list screen thta appears after clicking on a FavoritesScreen bucket
 // DELETE: Drink Object from Drinks Array
 // When the user enters the profile screen or favorites screen and the drink no longer 
 // exists in the database, this function is called to remove it from their profile

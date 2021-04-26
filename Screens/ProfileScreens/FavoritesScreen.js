@@ -6,11 +6,12 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
+import { removeDrinkFromArray } from '../../Store/Actions/DrinkActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
-const FavoritesScreen = ({ route, navigation, drinks }) => {
+const FavoritesScreen = ({ route, navigation, drinks, removeDrinkFromArray }) => {
     const { favorites } = route.params;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -23,27 +24,40 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
     }, [drinks]);
 
     const renderBox = ({ item }) => {
-        return (
-            <View style={UserStyles.favoritesBox}>
-                <TouchableWithoutFeedback onPress={() => getDrinkDataAndNavigate(item)}>
-                    <View>
-                        {renderBoxImages(item.drinks)}
-                        <Text style={UserStyles.favoritesTitle}>{item.name}</Text>
-                    </View>
-                </TouchableWithoutFeedback>
-            </View>
-        )
+        if (item.length > 1) {
+            return (
+                <View style={UserStyles.favoritesBox}>
+                    <TouchableWithoutFeedback onPress={() => getDrinkDataAndNavigate(item)}>
+                        <View>
+                            {renderBoxImages(item.drinks)}
+                            <Text style={UserStyles.favoritesTitle}>{item.name}</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+            )
+        }
     }
 
+    // Render 1 image if there are less than 3 drinks in favorites bucket
+    // Otherwise, render 3 images
     const renderBoxImages = (items) => {
         if (items.length < 3) {
-            const image1 = drinks[items[0].id];
-            cacheImages(image1.imageURL, image1.id);
-            return (
-                <View style={UserStyles.favoriteImagesContainer}>
-                    <Image source={{ uri: getCachedImage(image1.id) }} style={UserStyles.faveImage1} />
-                </View>
-            );
+            let drinkImageID;
+            for (let i = 0; i < items.length; i++) {
+                if (getDrinkImageOrDeleteDrink(items[i].id)) {
+                    drinkImageID = items[i].id;
+                    break;
+                }
+            }
+
+            // If there are no drinks in this collection, do not render any images
+            if (drinkImageID) {
+                return (
+                    <View style={UserStyles.favoriteImagesContainer}>
+                        <Image source={{ uri: getCachedImage(drinkImageID) }} style={UserStyles.faveImage1} />
+                    </View>
+                );
+            }
         } else {
             const image1 = drinks[items[0].id];
             const image2 = drinks[items[1].id];
@@ -62,6 +76,19 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
                     </View>
                 </View>
             );
+        }
+    }
+
+    // This function returns the drink's image for the favorites bucket OR
+    // If the drink has no corresponding drink ID in the database
+    // Deletes the drink from the user's favorites array
+    const getDrinkImageOrDeleteDrink = async (id) => {
+        const drink = drinks[id];
+        if (!drink) {
+            await removeDrinkFromArray({ authorID: userID, drinkID: drink.id });
+        } else {
+            cacheImages(drink.imageURL, drink.id);
+            return drink.id;
         }
     }
 
@@ -91,7 +118,7 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
 
 
 
-                    <View style={UserStyles.favoritesContainer}>
+                    <View style={UserStyles.allDrinksContainer}>
                         <FlatList
                             data={favorites}
                             renderItem={renderBox}
@@ -110,11 +137,18 @@ const FavoritesScreen = ({ route, navigation, drinks }) => {
 
 const mapStateToProps = (state) => {
     return {
+        userID: state.firebase.auth.uid,
         drinks: state.firestore.data.drinks,
     }
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        removeDrinkFromArray: (data) => dispatch(removeDrinkFromArray(data)),
+    }
+}
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect(() => ['drinks'])
 )(FavoritesScreen);

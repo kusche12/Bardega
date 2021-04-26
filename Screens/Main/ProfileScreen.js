@@ -16,7 +16,7 @@ LogBox.ignoreAllLogs()
 //  TODO: Temporarily I made this button route to the settings screen for testing purposes. In reality, you should have a settings
 // cog on the top right of the screen that goes to the settings screen. Implement this.
 const ProfileScreen = ({ navigation, drinks, user }) => {
-    console.log(user);
+    console.log(drinks);
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
 
