@@ -10,7 +10,7 @@ import { clearDrinkState, deleteDrink } from '../../Store/Actions/DrinkActions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Loading from '../../Components/Main/Loading';
 import InputComment from '../../Components/DrinkDetail/InputComment';
-import moment from 'moment';
+import { renderTime } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
@@ -79,7 +79,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                             <View style={DetailStyles.commentDetail}>
                                 <Text style={{ marginBottom: 6 }}>{comment.text}</Text>
                                 <Text
-                                    style={DetailStyles.commentText2}>- {author.fName} {author.lName} | {moment(comment.dateCreated, "YYYYMMDD").fromNow()}
+                                    style={DetailStyles.commentText2}>- {author.fName} {author.lName} | {renderTime(comment.dateCreated)}
                                 </Text>
                             </View>
                         </View>

@@ -1,5 +1,4 @@
 // CREATE: Comment Object
-// TODO: Add a commentLikesID field that links to an object of all the users that liked this comment
 export const createComment = (comment) => {
     console.log('Create Comment Action');
     console.log(comment);
@@ -7,6 +6,17 @@ export const createComment = (comment) => {
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = await getFirebase();
         const firestore = await firebase.firestore();
+
+        // Comment Likes ID
+        const commentRef = await firestore.collection('commentLikes').doc();
+        const commentLikesID = commentRef.id;
+        console.log('commentLikesID: ' + commentLikesID);
+
+        // Add comment likes section to the comments likes collection
+        // Must load in 1 default object to initialize the likedByUsers subcollection
+        await firestore.collection('commentLikes').doc(commentLikesID).collection('likedByUsers').doc().set({
+            default: 'default'
+        })
 
         const date = new Date();
 
@@ -21,7 +31,7 @@ export const createComment = (comment) => {
                 authorID: authorID,
                 text: text,
                 dateCreated: date.toISOString(),
-                numLikes: 0,
+                commentLikesID: commentLikesID,
                 id: id
             })
 

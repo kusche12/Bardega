@@ -1,30 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableWithoutFeedback, Text, StyleSheet } from 'react-native';
+import { renderTime } from '../../Functions/miscFunctions';
 import Images from '../../Images/Images';
+import Loading from '../../Components/Main/Loading';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 
 const Comment = ({ comment, author, navigation, likedByUsers, numLikes, userID }) => {
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Renders time in hours, days, months, years according to how many minutes ago it was posted
-    const renderTime = () => {
-        const now = new Date();
-        const dateCreated = new Date(comment.dateCreated);
-        const minutes = (now - dateCreated) / (1000 * 60);
-
-        if (minutes < 60) {
-            return `${minutes}m`;
-        } else if (minutes >= 60 && minutes <= 1440) {
-            return `${Math.round(minutes / 60)}h`;
-        } else if (minutes > 1440 && minutes <= 10080) {
-            return `${Math.round(minutes / 60 / 24)}d`;
-        } else if (minutes > 10080 && minutes <= 43800) {
-            return `${Math.round(minutes / 60 / 24 / 7)}m`;
-        } else {
-            return `${Math.round(minutes / 60 / 24 / 7 / 12)}y`;
+    useEffect(() => {
+        if (likedByUsers) {
+            setIsLoading(false);
         }
-    }
+    }, [])
 
     const renderLikes = () => {
         if (numLikes < 10000) {
@@ -37,40 +27,43 @@ const Comment = ({ comment, author, navigation, likedByUsers, numLikes, userID }
     }
 
     const renderHeart = () => {
-        if (likedByUsers[userID]) {
+        if (likedByUsers && likedByUsers[userID]) {
             return <Image source={Images.comment.fullHeart} style={styles.heartImg} />
         } else {
             return <Image source={Images.comment.emptyHeart} style={styles.heartImg} />
         }
     }
 
-    return (
-
-        <View style={styles.container}>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
-                <View style={styles.user}>
-                    <Image source={{ uri: author.imageURL }} style={styles.img} />
-                    <View>
-                        <Text style={{ marginBottom: 2 }}>
-                            <Text style={styles.username}>{author.userName} </Text>
-                            <Text>{comment.text}</Text>
-                        </Text>
-                        <Text>
-                            <Text style={styles.date}>{renderTime()}  </Text>
-                            {likedByUsers.length === 1
-                                ? <Text style={styles.date}>1 Like</Text>
-                                : <Text style={styles.date}>{renderLikes()} Likes</Text>
-                            }
-                        </Text>
+    if (isLoading) {
+        return <Loading />
+    } else {
+        return (
+            <View style={styles.container}>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
+                    <View style={styles.user}>
+                        <Image source={{ uri: author.imageURL }} style={styles.img} />
+                        <View>
+                            <Text style={{ marginBottom: 2 }}>
+                                <Text style={styles.username}>{author.userName} </Text>
+                                <Text>{comment.text}</Text>
+                            </Text>
+                            <Text>
+                                <Text style={styles.date}>{renderTime(comment.dateCreated)}  </Text>
+                                {likedByUsers && likedByUsers.length === 1
+                                    ? <Text style={styles.date}>1 Like</Text>
+                                    : <Text style={styles.date}>{renderLikes()} Likes</Text>
+                                }
+                            </Text>
+                        </View>
                     </View>
-                </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => console.log('like')}>
-                {renderHeart()}
-            </TouchableWithoutFeedback>
-        </View>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => console.log('like')}>
+                    {renderHeart()}
+                </TouchableWithoutFeedback>
+            </View>
 
-    )
+        )
+    }
 }
 
 const styles = StyleSheet.create({
@@ -106,11 +99,14 @@ const styles = StyleSheet.create({
 
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+    let numLikes = state.firestore.ordered['likedByUsers'].length - 1;
+    //console.log(numLikes);
+
     return {
         userID: state.firebase.auth.uid,
-        numLikes: state.firestore.ordered['likedByUsers'].length,
-        likedByUsers: state.firestore.data['likedByUsers']
+        numLikes: numLikes,
+        likedByUsers: state.firestore.ordered['likedByUsers']
     }
 }
 
@@ -125,7 +121,8 @@ export default compose(
             doc: props.comment.commentLikesID,
             storeAs: 'likedByUsers',
             subcollections: [{
-                collection: "likedByUsers",
-            }]
+                collection: "likedByUsers"
+            }
+            ]
         }])
 )(Comment);
