@@ -25,18 +25,11 @@ import DetailStyles from '../../Styles/DetailStyles';
 const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const drink = route.params.drink;
     const [isLoading, setIsLoading] = useState(true);
-    const [currComments, setCurrComments] = useState([]);
 
     // Load the component after all props are set
-    // Turn the firestore comments object into a currComments array
+    // Turn the firestore comments object into a comments array
     useEffect(() => {
         if (author !== null && authors !== null && comments !== null && drink && drink.imageURL) {
-            let result = [];
-            for (let comment in comments) {
-                console.log(comment);
-                result.push(comment);
-            }
-            setCurrComments(result);
             cacheImages(drink.imageURL, drink.id)
             setIsLoading(false);
         }
@@ -65,7 +58,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
 
     const renderComments = () => {
         let result = [];
-        if (currComments.length === 0) {
+        if (comments.length === 0) {
             return (
                 <View>
                     <Text style={DetailStyles.commentText3}>There are no comments for this drink yet!</Text>
@@ -76,8 +69,8 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
             )
         } else {
             let i = 0;
-            while (i < 2 || i < currComments.length) {
-                const comment = currComments[i];
+            while (i < 2 && i < comments.length) {
+                const comment = comments[i];
                 const author = authors[comment.authorID];
                 result.push(
                     <View key={i}>
@@ -98,7 +91,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
             return (
                 <>
                     {result}
-                    <Text style={DetailStyles.commentText3}>View +{currComments.length} more comments</Text>
+                    <Text style={DetailStyles.commentText3}>View +{comments.length} more comments</Text>
                 </>
 
             )
@@ -240,12 +233,9 @@ const mapStateToProps = (state, ownProps) => {
     const profiles = state.firestore.data.profiles;
     const profile = profiles ? profiles[authorID] : null;
 
-    const commentID = ownProps.route.params.drink.commentID;
-    const allComments = state.firestore.data.comments;
-    const comments = allComments ? allComments[commentID] : null;
     return {
         author: profile,
-        comments: comments,
+        comments: state.firestore.ordered['allComments'],
         authors: state.firestore.data.profiles,
         userID: state.firebase.auth.uid,
     }
@@ -260,6 +250,16 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
-    firestoreConnect(() => ['profiles', 'comments'])
+    firestoreConnect((props) => [
+        { collection: 'profiles' },
+        {
+            collection: "comments",
+            doc: props.route.params.drink.commentID,
+            storeAs: 'allComments',
+            subcollections: [{
+                collection: "allComments"
+            }
+            ]
+        }])
 )(DrinkDetailScreen);
 

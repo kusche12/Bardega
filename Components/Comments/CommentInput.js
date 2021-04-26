@@ -8,9 +8,7 @@ import {
 } from 'react-native';
 
 
-const CommentInput = () => {
-
-    const [text, setText] = useState();
+const CommentInput = ({ text, setText, handleCreateComment }) => {
     const [isFocused, setIsFocused] = useState(false);
 
     return (
@@ -30,10 +28,10 @@ const CommentInput = () => {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     onChangeText={setText} // handle input changes
-                //onSubmitEditing={onSubmitEditing} // handle submit event
+                //onSubmitEditing={handleCreateComment} // handle submit event
                 />
                 {/* Post button */}
-                <TouchableOpacity style={styles.button} onPress={() => console.log('submit')}>
+                <TouchableOpacity style={styles.button} onPress={() => handleCreateComment()}>
                     <Text style={[styles.text, !text ? styles.inactive : []]}>Post</Text>
                 </TouchableOpacity>
             </View>

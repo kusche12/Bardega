@@ -4,6 +4,7 @@ import moment from 'moment';
 import DetailStyles from '../../Styles/DetailStyles';
 
 const Comment = ({ comment, author, navigation }) => {
+    console.log(author);
     return (
         <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
             <View style={styles.container}>
