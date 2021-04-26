@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { createComment } from '../../Store/Actions/CommentActions';
-import Loading from '../../Components/Main/Loading';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 
@@ -15,7 +14,6 @@ import DetailStyles from '../../Styles/DetailStyles';
 // TODO: Implement pagination on the currComments component so that it does not have to load all at once
 const CommentsScreen = ({ route, profiles, navigation, comments, createComment, userID }) => {
     const { drink } = route.params;
-    const [isLoading, setIsLoading] = useState(true);
     const [text, setText] = useState('');
 
     const renderTags = () => {
@@ -85,7 +83,6 @@ export default compose(
             storeAs: 'allComments',
             subcollections: [{
                 collection: "allComments"
-            }
-            ]
+            }]
         }])
 )(CommentsScreen);

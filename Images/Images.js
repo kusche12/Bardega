@@ -35,5 +35,9 @@ export default {
     profile: {
         heart: require('./heart.png'),
         plus: require('./plus.png'),
+    },
+    comment: {
+        emptyHeart: require('./empty_heart.png'),
+        fullHeart: require('./full_heart.png'),
     }
 }

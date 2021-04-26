@@ -29,7 +29,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
     // Load the component after all props are set
     // Turn the firestore comments object into a comments array
     useEffect(() => {
-        if (author !== null && authors !== null && comments !== null && drink && drink.imageURL) {
+        if (author && authors && comments && drink && drink.imageURL) {
             cacheImages(drink.imageURL, drink.id)
             setIsLoading(false);
         }

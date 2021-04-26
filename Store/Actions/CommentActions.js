@@ -1,4 +1,5 @@
 // CREATE: Comment Object
+// TODO: Add a commentLikesID field that links to an object of all the users that liked this comment
 export const createComment = (comment) => {
     console.log('Create Comment Action');
     console.log(comment);
