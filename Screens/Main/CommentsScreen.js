@@ -48,7 +48,7 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
                 {comments && comments.length > 0
                     ?
                     comments.map((comment, index) =>
-                        <Comment comment={comment} key={index} author={profiles[comment.authorID]} navigation={navigation} />
+                        <Comment comment={comment} key={index} commentID={drink.commentID} author={profiles[comment.authorID]} navigation={navigation} />
                     )
                     : null
 

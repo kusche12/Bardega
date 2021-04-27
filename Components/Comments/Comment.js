@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableWithoutFeedback, Text, StyleSheet } from 'react-native';
 import { renderTime } from '../../Functions/miscFunctions';
+import { likeComment, unLikeComment } from '../../Store/Actions/CommentActions';
 import Images from '../../Images/Images';
 import Loading from '../../Components/Main/Loading';
+import DoubleTapButton from '../Main/DoubleTapButton';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 
-const Comment = ({ comment, author, navigation, likedByUsers, numLikes, userID }) => {
+const Comment = ({ comment, author, navigation, commentID, likedByUsers, numLikes, userID, likeComment, unLikeComment }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (likedByUsers) {
             setIsLoading(false);
         }
-    }, [])
+    }, [likedByUsers])
 
     const renderLikes = () => {
         if (numLikes < 10000) {
@@ -34,33 +36,44 @@ const Comment = ({ comment, author, navigation, likedByUsers, numLikes, userID }
         }
     }
 
+    const handleLike = () => {
+        if (likedByUsers && likedByUsers[userID]) {
+            unLikeComment({ userID: userID, comment: comment, commentID: commentID });
+        } else {
+            likeComment({ userID: userID, comment: comment, commentID: commentID });
+        }
+    }
+
     if (isLoading) {
         return <Loading />
     } else {
         return (
-            <View style={styles.container}>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
-                    <View style={styles.user}>
-                        <Image source={{ uri: author.imageURL }} style={styles.img} />
-                        <View>
-                            <Text style={{ marginBottom: 2 }}>
-                                <Text style={styles.username}>{author.userName} </Text>
-                                <Text>{comment.text}</Text>
-                            </Text>
-                            <Text>
-                                <Text style={styles.date}>{renderTime(comment.dateCreated)}  </Text>
-                                {likedByUsers && likedByUsers.length === 1
-                                    ? <Text style={styles.date}>1 Like</Text>
-                                    : <Text style={styles.date}>{renderLikes()} Likes</Text>
-                                }
-                            </Text>
+            <DoubleTapButton onDoubleTap={() => handleLike()}>
+                <View style={styles.container}>
+
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
+                        <View style={styles.user}>
+                            <Image source={{ uri: author.imageURL }} style={styles.img} />
+                            <View>
+                                <Text style={{ marginBottom: 2 }}>
+                                    <Text style={styles.username}>{author.userName} </Text>
+                                    <Text>{comment.text}</Text>
+                                </Text>
+                                <Text>
+                                    <Text style={styles.date}>{renderTime(comment.dateCreated)}  </Text>
+                                    {likedByUsers && likedByUsers.length === 1
+                                        ? <Text style={styles.date}>1 Like</Text>
+                                        : <Text style={styles.date}>{renderLikes()} Likes</Text>
+                                    }
+                                </Text>
+                            </View>
                         </View>
-                    </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => console.log('like')}>
-                    {renderHeart()}
-                </TouchableWithoutFeedback>
-            </View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => handleLike()}>
+                        {renderHeart()}
+                    </TouchableWithoutFeedback>
+                </View>
+            </DoubleTapButton>
 
         )
     }
@@ -100,20 +113,27 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state, ownProps) => {
-    let numLikes = state.firestore.ordered['likedByUsers'].length - 1;
-    //console.log(numLikes);
-
+    //console.log("THIS RUNS: " + ownProps.comment.text)
+    let likedByUsers = state.firestore.data['likedByUsers']
+    console.log(likedByUsers)
     return {
         userID: state.firebase.auth.uid,
-        numLikes: numLikes,
-        likedByUsers: state.firestore.ordered['likedByUsers']
+        numLikes: ownProps.comment.numLikes,
+        likedByUsers: likedByUsers
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        likeComment: (data) => dispatch(likeComment(data)),
+        unLikeComment: (data) => dispatch(unLikeComment(data)),
     }
 }
 
 // Subcollection of a subcollection: 
 // https://stackoverflow.com/questions/53968379/how-to-point-firestoreconnect-to-a-nested-collection-in-react-redux-firebase
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect((props) => [
         { collection: 'profiles' },
         {
