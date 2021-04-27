@@ -31,6 +31,7 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             text: text,
             commentID: drink.commentID
         })
+        setText('');
     }
 
     return (
@@ -47,7 +48,7 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             <ScrollView>
                 {comments && comments.length > 0
                     ?
-                    comments.map((comment, index) =>
+                    comments.slice(0).reverse().map((comment, index) =>
                         <Comment comment={comment} key={index} commentID={drink.commentID} author={profiles[comment.authorID]} navigation={navigation} />
                     )
                     : null

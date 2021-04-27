@@ -13,10 +13,22 @@ export const createComment = (comment) => {
         console.log('commentLikesID: ' + commentLikesID);
 
         // Add comment likes section to the comments likes collection
+        await firestore
+            .collection('commentLikes')
+            .doc(commentLikesID)
+            .set({
+                1: 'default'
+            })
+
         // Must load in 1 default object to initialize the likedByUsers subcollection
-        await firestore.collection('commentLikes').doc(commentLikesID).collection('likedByUsers').doc().set({
-            default: 'default'
-        })
+        await firestore
+            .collection('commentLikes')
+            .doc(commentLikesID)
+            .collection('likedByUsers')
+            .doc('default')
+            .set({
+                1: 'default'
+            })
 
         const date = new Date();
 
@@ -32,7 +44,8 @@ export const createComment = (comment) => {
                 text: text,
                 dateCreated: date.toISOString(),
                 commentLikesID: commentLikesID,
-                id: id
+                id: id,
+                numLikes: 0
             })
 
             dispatch({ type: 'CREATE_COMMENT', id })
@@ -76,9 +89,6 @@ export const likeComment = (data) => {
         }
     }
 };
-// TODO: For the create a comment, do not make a commentLikesID. 
-// Do this on the first comment like action instead
-
 
 // UPDATE: Unlike Comment Object
 // Updates the numLikes field by -1 and removes the user from the likeByUsers
@@ -111,6 +121,39 @@ export const unLikeComment = (data) => {
             dispatch({ type: 'LIKE_COMMENT' })
         } catch (err) {
             dispatch({ type: 'LIKE_COMMENT_ERROR', err });
+        }
+    }
+};
+
+// DELETE: Comment Object
+// Remove the commentLikes collection using the commentLikesID
+// Remove the individual comment from the allComments collection using its id
+export const deleteComment = (data) => {
+    console.log('Delete Comment Action');
+    console.log(data);
+    const { commentID, comment } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // Remove the commentLikes collectionåß
+            await firestore
+                .collection('commentLikes')
+                .doc(comment.commentLikesID)
+                .delete();
+
+            // Remove the comment from the allComments collection
+            await firestore
+                .collection('comments')
+                .doc(commentID)
+                .collection('allComments')
+                .doc(comment.id)
+                .delete();
+
+            dispatch({ type: 'DELETE_COMMENT' })
+        } catch (err) {
+            dispatch({ type: 'DELETE_COMMENT_ERROR', err });
         }
     }
 };

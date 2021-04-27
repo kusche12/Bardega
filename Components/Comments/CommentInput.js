@@ -28,7 +28,7 @@ const CommentInput = ({ text, setText, handleCreateComment }) => {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     onChangeText={setText} // handle input changes
-                //onSubmitEditing={handleCreateComment} // handle submit event
+                    onSubmitEditing={handleCreateComment} // handle submit event
                 />
                 {/* Post button */}
                 <TouchableOpacity style={styles.button} onPress={() => handleCreateComment()}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, TouchableWithoutFeedback, Text, StyleSheet } from 'react-native';
+import { Image, View, TouchableWithoutFeedback, TouchableHighlight, Text, StyleSheet, Vibration, Alert } from 'react-native';
 import { renderTime } from '../../Functions/miscFunctions';
-import { likeComment, unLikeComment } from '../../Store/Actions/CommentActions';
+import { likeComment, unLikeComment, deleteComment } from '../../Store/Actions/CommentActions';
 import Images from '../../Images/Images';
 import Loading from '../../Components/Main/Loading';
 import DoubleTapButton from '../Main/DoubleTapButton';
@@ -9,11 +9,14 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 
-const Comment = ({ comment, author, navigation, commentID, likedByUsers, numLikes, userID, likeComment, unLikeComment }) => {
+const Comment = ({ comment, author, navigation, commentID,
+    likedByUsers, numLikes, userID, likeComment,
+    unLikeComment, deleteComment }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isDisabled, setIsDisabled] = useState(false);
 
     useEffect(() => {
-        if (likedByUsers) {
+        if (likedByUsers !== null && comment !== null && userID !== null) {
             setIsLoading(false);
         }
     }, [likedByUsers])
@@ -29,18 +32,50 @@ const Comment = ({ comment, author, navigation, commentID, likedByUsers, numLike
     }
 
     const renderHeart = () => {
+        let img;
         if (likedByUsers && likedByUsers[userID]) {
-            return <Image source={Images.comment.fullHeart} style={styles.heartImg} />
+            img = <Image source={Images.comment.fullHeart} style={styles.heartImg} />
         } else {
-            return <Image source={Images.comment.emptyHeart} style={styles.heartImg} />
+            img = <Image source={Images.comment.emptyHeart} style={styles.heartImg} />
         }
+        return <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}>
+            {img}
+        </View>
     }
 
-    const handleLike = () => {
+    const handleLike = async () => {
+        if (isDisabled) {
+            return;
+        }
+        setIsDisabled(true);
         if (likedByUsers && likedByUsers[userID]) {
-            unLikeComment({ userID: userID, comment: comment, commentID: commentID });
+            await unLikeComment({ userID: userID, comment: comment, commentID: commentID });
         } else {
-            likeComment({ userID: userID, comment: comment, commentID: commentID });
+            await likeComment({ userID: userID, comment: comment, commentID: commentID });
+        }
+        setIsDisabled(false);
+    }
+
+    const handleRemove = () => {
+        if (userID === comment.authorID) {
+            Vibration.vibrate([0, 500]);
+            return Alert.alert(
+                "Delete comment?",
+                null,
+                [
+                    {
+                        text: "Yes delete this comment",
+                        onPress: () => deleteComment({ commentID: commentID, comment: comment }),
+                        style: "destructive"
+                    },
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                    },
+                ],
+                { cancelable: true }
+            );
+
         }
     }
 
@@ -48,32 +83,37 @@ const Comment = ({ comment, author, navigation, commentID, likedByUsers, numLike
         return <Loading />
     } else {
         return (
-            <DoubleTapButton onDoubleTap={() => handleLike()}>
-                <View style={styles.container}>
+            <TouchableHighlight
+                onLongPress={() => handleRemove()}
+                underlayColor={'white'}
+            >
+                <DoubleTapButton onDoubleTap={() => handleLike()}>
+                    <View style={styles.container}>
 
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
-                        <View style={styles.user}>
-                            <Image source={{ uri: author.imageURL }} style={styles.img} />
-                            <View>
-                                <Text style={{ marginBottom: 2 }}>
-                                    <Text style={styles.username}>{author.userName} </Text>
-                                    <Text>{comment.text}</Text>
-                                </Text>
-                                <Text>
-                                    <Text style={styles.date}>{renderTime(comment.dateCreated)}  </Text>
-                                    {likedByUsers && likedByUsers.length === 1
-                                        ? <Text style={styles.date}>1 Like</Text>
-                                        : <Text style={styles.date}>{renderLikes()} Likes</Text>
-                                    }
-                                </Text>
+                        <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
+                            <View style={styles.user}>
+                                <Image source={{ uri: author.imageURL }} style={styles.img} />
+                                <View>
+                                    <Text style={{ marginBottom: 2 }}>
+                                        <Text style={styles.username}>{author.userName} </Text>
+                                        <Text>{comment.text}</Text>
+                                    </Text>
+                                    <Text>
+                                        <Text style={styles.date}>{renderTime(comment.dateCreated)}  </Text>
+                                        {likedByUsers && likedByUsers.length === 1
+                                            ? <Text style={styles.date}>1 Like</Text>
+                                            : <Text style={styles.date}>{renderLikes()} Likes</Text>
+                                        }
+                                    </Text>
+                                </View>
                             </View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => handleLike()}>
-                        {renderHeart()}
-                    </TouchableWithoutFeedback>
-                </View>
-            </DoubleTapButton>
+                        </TouchableWithoutFeedback>
+                        <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleLike()}>
+                            {renderHeart()}
+                        </TouchableWithoutFeedback>
+                    </View>
+                </DoubleTapButton>
+            </TouchableHighlight>
 
         )
     }
@@ -82,9 +122,10 @@ const Comment = ({ comment, author, navigation, commentID, likedByUsers, numLike
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginBottom: 24,
+        marginBottom: 12,
         paddingLeft: 12,
         paddingRight: 24,
+        paddingTop: 12,
         justifyContent: 'space-between',
         alignItems: 'center'
     },
@@ -92,10 +133,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     img: {
-        borderRadius: 100,
-        width: 40,
-        height: 40,
-        marginRight: 12
+        borderRadius: 50,
+        width: 38,
+        height: 38,
+        marginRight: 12,
+        resizeMode: 'contain'
     },
     username: {
         fontWeight: '500',
@@ -113,13 +155,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state, ownProps) => {
-    //console.log("THIS RUNS: " + ownProps.comment.text)
-    let likedByUsers = state.firestore.data['likedByUsers']
-    console.log(likedByUsers)
+    let likedByUsers = state.firestore.data['likedByUsers' + ownProps.comment.commentLikesID]
+
     return {
         userID: state.firebase.auth.uid,
         numLikes: ownProps.comment.numLikes,
-        likedByUsers: likedByUsers
+        likedByUsers: likedByUsers ? likedByUsers : null
     }
 }
 
@@ -127,6 +168,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         likeComment: (data) => dispatch(likeComment(data)),
         unLikeComment: (data) => dispatch(unLikeComment(data)),
+        deleteComment: (data) => dispatch(deleteComment(data)),
     }
 }
 
@@ -139,7 +181,7 @@ export default compose(
         {
             collection: "commentLikes",
             doc: props.comment.commentLikesID,
-            storeAs: 'likedByUsers',
+            storeAs: 'likedByUsers' + props.comment.commentLikesID,
             subcollections: [{
                 collection: "likedByUsers"
             }

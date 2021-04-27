@@ -17,6 +17,12 @@ const commentReducer = (state = initState, action) => {
     case 'LIKE_COMMENT_ERROR':
       console.log('like comment error reducer: ', action.err.message);
       return { ...state, commentError: action.err.message };
+    case 'DELETE_COMMENT':
+      console.log('delete comment reducer');
+      return { ...state, commentError: null };
+    case 'DELETE_COMMENT_ERROR':
+      console.log('delete comment error reducer: ', action.err.message);
+      return { ...state, commentError: action.err.message };
     default:
       return state;
   }
