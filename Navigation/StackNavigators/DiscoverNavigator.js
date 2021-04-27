@@ -8,11 +8,12 @@ import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
 import DiscoverScreen from '../../Screens/Main/DiscoverScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 
+import Styles from '../../Styles/StyleConstants';
+
 const Stack = createStackNavigator();
 const LIGHTPINK = '#F7D2CF';
 
 const DiscoverNavigator = ({ route, navigation }) => {
-    const { header } = route.params;
 
     return (
         <Stack.Navigator
@@ -26,7 +27,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 component={DiscoverScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                 })}
@@ -35,19 +36,19 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 name='DrinkDetailScreen'
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK
                 })}
             />
             <Stack.Screen
                 name='DrinkListScreen'
                 component={DrinkListScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -59,7 +60,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 name='CommentsScreen'
                 component={CommentsScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -72,7 +73,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 component={ProfileScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                 })}

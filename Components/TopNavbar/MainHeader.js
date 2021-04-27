@@ -1,28 +1,16 @@
 import React from 'react';
-import Images from '../../Images/Images';
-import { Image, Dimensions } from 'react-native';
+import { Dimensions, View } from 'react-native';
+import BardegaTextSVG from '../Main/BardegaLogoSVGc';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const width = Dimensions.get('screen').width;
 
-const MainHeader = ({ header }) => {
-    if (header) {
-        return (
-            <Image
-                style={{ width: width, height: 150 }}
-                source={{ uri: header }}
-                resizeMode='cover'
-            />
-        )
-    } else {
-        return (
-            <Image
-                style={{ width: width, height: 150 }}
-                source={Images.bardegaLogo}
-                resizeMode='cover'
-            />
-        )
-    }
-
+const MainHeader = () => {
+    return (
+        <View style={GlobalStyles.headerContainer}>
+            <BardegaTextSVG width={width} height={80} />
+        </View>
+    )
 }
 
 export default MainHeader;

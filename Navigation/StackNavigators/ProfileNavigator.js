@@ -24,7 +24,6 @@ const Stack = createStackNavigator();
 const LIGHTPINK = '#F7D2CF';
 
 const ProfileNavigator = ({ route, navigation }) => {
-    const { header } = route.params;
 
     return (
         <Stack.Navigator
@@ -38,7 +37,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={ProfileScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                 })}
@@ -47,7 +46,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='DrinkDetailScreen'
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -60,7 +59,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='CommentsScreen'
                 component={CommentsScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -73,7 +72,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={CreateScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                 })}
@@ -82,7 +81,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='FollowScreen'
                 component={FollowScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -94,7 +93,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='FavoritesScreen'
                 component={FavoritesScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -106,7 +105,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='DrinkListScreen'
                 component={DrinkListScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => {
                         const handleEditCollection = () => {
                             return Alert.alert(
@@ -176,7 +175,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='EditCollectionScreen'
                 component={EditCollectionScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => {
 
                         // TODO: Save edits to DB
@@ -206,7 +205,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 name='SettingsScreen'
                 component={SettingsScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',

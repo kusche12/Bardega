@@ -13,7 +13,6 @@ const Stack = createStackNavigator();
 const LIGHTPINK = '#F7D2CF';
 
 const SearchNavigator = ({ route, navigation }) => {
-    const { header } = route.params;
     return (
         <Stack.Navigator
             headerMode='screen'
@@ -38,7 +37,7 @@ const SearchNavigator = ({ route, navigation }) => {
                 name='DrinkDetailScreen'
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -50,7 +49,7 @@ const SearchNavigator = ({ route, navigation }) => {
                 name='DrinkListScreen'
                 component={DrinkListScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -62,7 +61,7 @@ const SearchNavigator = ({ route, navigation }) => {
                 name='CommentsScreen'
                 component={CommentsScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -75,7 +74,7 @@ const SearchNavigator = ({ route, navigation }) => {
                 component={ProfileScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                 })}

@@ -1,4 +1,5 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
+import Styles from './StyleConstants';
 const width = Dimensions.get('screen').width;
 const PINK = '#F29288';
 
@@ -25,6 +26,13 @@ export default StyleSheet.create({
         height: 43,
         resizeMode: 'contain'
     },
+    headerContainer: {
+        width: width,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        backgroundColor: Styles.PINK,
+        overflow: 'hidden'
+    },
     headerWithButtons: {
         top: 6,
         alignSelf: 'stretch',
@@ -48,6 +56,6 @@ export default StyleSheet.create({
     line: {
         alignSelf: 'stretch',
         height: 1.5,
-        backgroundColor: PINK,
+        backgroundColor: Styles.PINK,
     },
 });

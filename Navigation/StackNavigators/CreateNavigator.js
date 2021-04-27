@@ -9,7 +9,6 @@ const Stack = createStackNavigator();
 const LIGHTPINK = '#F7D2CF';
 
 const CreateNavigator = ({ route, navigation }) => {
-    const { header } = route.params;
 
     return (
         <Stack.Navigator
@@ -23,7 +22,7 @@ const CreateNavigator = ({ route, navigation }) => {
                 component={CreateScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                 })}
@@ -32,7 +31,7 @@ const CreateNavigator = ({ route, navigation }) => {
                 name='DrinkDetailScreen'
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader header={header} />,
+                    headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',

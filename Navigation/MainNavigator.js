@@ -16,7 +16,7 @@ const LIGHTPINK = '#F7D2CF';
 
 const Tab = createBottomTabNavigator();
 
-const MainNavigator = ({ header }) => {
+const MainNavigator = () => {
     const getTabBarVisibility = (route) => {
         const routeName = getFocusedRouteNameFromRoute(route);
         if (routeName === 'CommentsScreen') {
@@ -40,7 +40,6 @@ const MainNavigator = ({ header }) => {
             <Tab.Screen
                 name="Discover"
                 component={DiscoverNavigator}
-                initialParams={{ header: header }}
                 options={({ route }) => ({
                     tabBarVisible: getTabBarVisibility(route),
                     tabBarIcon: ({ focused }) => {
@@ -55,7 +54,6 @@ const MainNavigator = ({ header }) => {
             <Tab.Screen
                 name="Search"
                 component={SearchNavigator}
-                initialParams={{ header: header }}
                 options={({ route }) => ({
                     tabBarVisible: getTabBarVisibility(route),
                     tabBarIcon: ({ focused }) => {
@@ -70,7 +68,6 @@ const MainNavigator = ({ header }) => {
             <Tab.Screen
                 name="Create"
                 component={CreateNavigator}
-                initialParams={{ header: header }}
                 options={{
                     tabBarIcon: ({ focused }) => {
                         if (focused) {
@@ -84,7 +81,6 @@ const MainNavigator = ({ header }) => {
             <Tab.Screen
                 name="Spirit"
                 component={SpiritNavigator}
-                initialParams={{ header: header }}
                 options={({ route }) => ({
                     tabBarVisible: getTabBarVisibility(route),
                     tabBarIcon: ({ focused }) => {
@@ -99,7 +95,6 @@ const MainNavigator = ({ header }) => {
             <Tab.Screen
                 name="Profile"
                 component={ProfileNavigator}
-                initialParams={{ header: header }}
                 options={({ route }) => ({
                     tabBarVisible: getTabBarVisibility(route),
                     tabBarIcon: ({ focused }) => {
