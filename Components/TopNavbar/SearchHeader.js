@@ -12,9 +12,10 @@ const comp = (a, b) => {
     return a.toLowerCase().trim() === b.toLowerCase().trim();
 }
 
-const findDrink = (query, drinks) => {
-    if (query === '') {
-        return drinks;
+const findDrink = (query, drinks, original) => {
+    console.log(query);
+    if (query == '') {
+        return original;
     }
     const regex = new RegExp(`${query.trim()}`, 'i');
     return drinks.filter((drink) => drink.name.search(regex) >= 0);
@@ -23,12 +24,12 @@ const findDrink = (query, drinks) => {
 LogBox.ignoreAllLogs()
 
 //TODO: UI Styling
-const SearchHeader = ({ drinks, navigation }) => {
+const SearchHeader = ({ drinks, navigation, preloadedDrinks }) => {
     const [query, setQuery] = useState('');
     const [currentDrinks, setCurrentDrinks] = useState([]);
 
     useEffect(() => {
-        const res = findDrink(query, drinks);
+        const res = findDrink(query, drinks, preloadedDrinks);
         setCurrentDrinks(res);
         navigation.setParams({ results: currentDrinks });
     }, [query, drinks])

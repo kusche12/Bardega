@@ -47,6 +47,23 @@ export const getRandomQueries = (queries, amount) => {
     return result;
 }
 
+export const getRandomDrinksNoQuery = (drinks, max) => {
+    let nums = randomUniqueNum(drinks.length, drinks.length);
+    let result = [];
+
+    for (let i in nums) {
+        if (result.length === max) {
+            return result;
+        }
+
+        if (drinks[nums[i]]) {
+            result.push(drinks[nums[i]]);
+        }
+    }
+
+    return result;
+}
+
 // Generate OUTPUTCOUNT unique numbers from 0 to RANGE-1
 function randomUniqueNum(range, outputCount) {
     let arr = []
