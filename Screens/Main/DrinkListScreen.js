@@ -18,11 +18,11 @@ const DrinkListScreen = ({ route, navigation }) => {
     }
 
     return (
-        <SafeAreaView style={[GlobalStyles.headerSafeArea]} >
+        <SafeAreaView style={GlobalStyles.headerSafeArea}>
             <View style={DiscoverStyles.searchHeader}>
-                <Text style={DiscoverStyles.title}>{collection.name}</Text>
+                <Text style={GlobalStyles.titlebold1}>{collection.name}</Text>
             </View>
-            <View style={[GlobalStyles.line, { color: '#a1a1a1' }]}></View>
+            <View style={GlobalStyles.line}></View>
             <FlatList
                 data={drinks}
                 renderItem={renderItem}

@@ -8,13 +8,14 @@ const FAVEIMAGEWIDTH = Styles.width * .45;
 
 export default StyleSheet.create({
     infoContainer: {
-        width: Styles.width * .9,
-        marginBottom: 30
+        width: Styles.width * .95,
+        marginBottom: 30,
+        paddingLeft: 8
     },
     profileImage: {
         borderRadius: 100,
-        width: Styles.width * .2,
-        height: Styles.width * .2
+        width: Styles.width * .22,
+        height: Styles.width * .22
     },
     infoRow: {
         flexDirection: 'row',

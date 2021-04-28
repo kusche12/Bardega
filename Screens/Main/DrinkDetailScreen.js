@@ -14,11 +14,11 @@ import { renderTime } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
+import Styles from '../../Styles/StyleConstants';
 
 
 // TODO: Add a "bookmark", "like", and "share" button that allows the user to add this drink to one of their favorite's buckets
-// TODO: Add the description to this screen. Just do a white floating box directly under the drink image.
-// TODO: Add the prep time to this screen. Do a white floating box under the ingredients list
+// TODO: Add the prep time to this screen.
 // TODO: Add the strength to this screen.
 // TODO: Add the tags to this screen.
 // TODO: Drink image does not render when moving from CreateScreen to this screen
@@ -43,12 +43,12 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                 <View style={DetailStyles.row} key={i}>
                     <View style={DetailStyles.col1}>
                         {recipe.amount
-                            ? <Text style={DetailStyles.textGray}>{recipe.amount} {recipe.unit.toLowerCase()}</Text>
-                            : <Text style={DetailStyles.textGray}>{recipe.unit.toLowerCase()}</Text>
+                            ? <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>{recipe.amount} {recipe.unit.toLowerCase()}</Text>
+                            : <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>{recipe.unit.toLowerCase()}</Text>
                         }
                     </View>
                     <View style={DetailStyles.col2}>
-                        <Text style={[DetailStyles.textBlack, DetailStyles.wrapRecipeText]}>{recipe.type}</Text>
+                        <Text style={[GlobalStyles.paragraph2, DetailStyles.wrapRecipeText]}>{recipe.type}</Text>
                     </View>
                 </View>
             );
@@ -61,29 +61,25 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
         if (comments.length === 0) {
             return (
                 <View>
-                    <Text style={DetailStyles.commentText3}>There are no comments for this drink yet!</Text>
-                    <Text style={DetailStyles.commentText3}>Share your thoughts with us here</Text>
-                    <View style={[CreateStyles.ingrLine, { marginBottom: 8, marginTop: 16 }]}></View>
+                    <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>There are no comments for this drink yet!</Text>
+                    <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY, marginBottom: 16 }]}>Share your thoughts with us here</Text>
                     <InputComment />
                 </View>
             )
         } else {
             let i = 0;
-            while (i < 2 && i < comments.length) {
+            while (i < 3 && i < comments.length) {
                 const comment = comments[i];
                 const author = authors[comment.authorID];
                 result.push(
-                    <View key={i}>
-                        <View style={DetailStyles.commentRow}>
-                            <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage} />
-                            <View style={DetailStyles.commentDetail}>
-                                <Text style={{ marginBottom: 6 }}>{comment.text}</Text>
-                                <Text
-                                    style={DetailStyles.commentText2}>- {author.fName} {author.lName} | {renderTime(comment.dateCreated)}
-                                </Text>
-                            </View>
+                    <View style={DetailStyles.commentRow} key={i}>
+                        <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage} />
+                        <View style={{ paddingLeft: 8 }}>
+                            <Text style={GlobalStyles.paragraph2}>{comment.text}</Text>
+                            <Text
+                                style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>- {author.fName} {author.lName} | {renderTime(comment.dateCreated)}
+                            </Text>
                         </View>
-                        <View style={[CreateStyles.ingrLine, { marginBottom: 8 }]}></View>
                     </View>
                 )
                 i++;
@@ -91,7 +87,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
             return (
                 <>
                     {result}
-                    <Text style={DetailStyles.commentText3}>View +{comments.length} more comments</Text>
+                    <Text style={[GlobalStyles.paragraph3, { marginTop: 16 }]}>View +{comments.length} more comments</Text>
                 </>
 
             )
@@ -160,11 +156,11 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flexGrow: 1 }}
             >
-                <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]} >
+                <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center' }]} >
                     {/* Title (add the right edit button if the userID === authorID) */}
                     <View style={{ flexDirection: 'row' }}>
                         {userID === drink.authorID && <View style={{ flex: 1 }} ></View>}
-                        <Text style={CreateStyles.title}>{drink.name}</Text>
+                        <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
                         {userID === drink.authorID &&
                             <TouchableWithoutFeedback onPress={() => handleEditDrink()}>
                                 <Image source={Images.threedots} style={DetailStyles.editImage} />
@@ -178,46 +174,52 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                     </View>
 
                     {drink.recipe &&
-                        <View style={CreateStyles.ingrContainer}>
-                            <Text style={CreateStyles.ingrTitle}>INGREDIENTS</Text>
+                        <View style={CreateStyles.ingrContainerWide}>
+                            <Text style={[GlobalStyles.titlebold2]}>INGREDIENTS</Text>
+                            <View style={GlobalStyles.line}></View>
 
-                            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
-
-                            <View style={DetailStyles.recipeContainer}>
+                            <View style={{ alignSelf: 'stretch' }}>
                                 {renderRecipe()}
                             </View>
                         </View>
                     }
 
-                    {drink.directions &&
-                        <View style={CreateStyles.ingrContainer}>
-                            <Text style={CreateStyles.ingrTitle}>DIRECTIONS</Text>
+                    {drink.description &&
+                        <View style={CreateStyles.ingrContainerWide}>
+                            <Text style={[GlobalStyles.titlebold2]}>DESCRIPTION</Text>
+                            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
+                            <Text style={[GlobalStyles.paragraph2, { lineHeight: 22 }]}>{drink.description}</Text>
 
-                            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
-                            <Text style={DetailStyles.textBlack}>{drink.directions}</Text>
+                        </View>
+                    }
+
+                    {drink.instructions &&
+                        <View style={CreateStyles.ingrContainerWide}>
+                            <Text style={[GlobalStyles.titlebold2]}>DIRECTIONS</Text>
+                            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
+                            <Text style={[GlobalStyles.paragraph2, { lineHeight: 22 }]}>{drink.instructions}</Text>
 
                         </View>
                     }
 
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
-                        <View style={[CreateStyles.ingrContainer, DetailStyles.commentContainer]}>
-                            <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>COMMENTS</Text>
-
-                            <View style={[CreateStyles.ingrLine, { marginBottom: 16 }]}></View>
+                        <View style={CreateStyles.ingrContainerWide}>
+                            <Text style={[GlobalStyles.titlebold2]}>COMMENTS</Text>
+                            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
                             {renderComments()}
 
                         </View>
                     </TouchableWithoutFeedback>
 
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: authors[drink.authorID] })}>
-                        <View style={[CreateStyles.ingrContainer, DetailStyles.submitContainer]}>
-                            <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>SUBMITTED BY</Text>
+                        <View style={[CreateStyles.ingrContainerWide, DetailStyles.submitContainer]}>
+                            <Text style={[GlobalStyles.titlebold2, { alignSelf: 'center' }]}>SUBMITTED BY</Text>
 
-                            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+                            <View style={GlobalStyles.line}></View>
 
                             <View style={DetailStyles.submitRow}>
-                                <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { marginRight: 4 }]}></Image>
-                                <Text style={DetailStyles.textBlack}>{author.userName}</Text>
+                                <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { marginRight: 16 }]}></Image>
+                                <Text style={GlobalStyles.titlebold2}>{author.userName}</Text>
                             </View>
                         </View>
                     </TouchableWithoutFeedback>

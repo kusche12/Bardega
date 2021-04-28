@@ -8,6 +8,7 @@ import DoubleTapButton from '../Main/DoubleTapButton';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const Comment = ({ comment, author, navigation, commentID,
     likedByUsers, numLikes, userID, likeComment,
@@ -28,7 +29,7 @@ const Comment = ({ comment, author, navigation, commentID,
         } else {
             img = <Image source={Images.comment.emptyHeart} style={styles.heartImg} />
         }
-        return <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center' }}>
+        return <View style={{ width: 30, height: 30, alignItems: 'center', justifyContent: 'center' }}>
             {img}
         </View>
     }
@@ -85,14 +86,14 @@ const Comment = ({ comment, author, navigation, commentID,
                                 <Image source={{ uri: author.imageURL }} style={styles.img} />
                                 <View>
                                     <Text style={{ marginBottom: 2 }}>
-                                        <Text style={styles.username}>{author.userName} </Text>
-                                        <Text>{comment.text}</Text>
+                                        <Text style={GlobalStyles.paragraphbold3}>{author.userName} </Text>
+                                        <Text style={GlobalStyles.paragraph3}>{comment.text}</Text>
                                     </Text>
                                     <Text>
-                                        <Text style={styles.date}>{renderTime(comment.dateCreated)}  </Text>
+                                        <Text style={GlobalStyles.paragraph3}>{renderTime(comment.dateCreated)}  </Text>
                                         {numLikes && numLikes === 1
-                                            ? <Text style={styles.date}>1 Like</Text>
-                                            : <Text style={styles.date}>{renderNum(numLikes)} Likes</Text>
+                                            ? <Text style={GlobalStyles.paragraph3}>1 Like</Text>
+                                            : <Text style={GlobalStyles.paragraph3}>{renderNum(numLikes)} Likes</Text>
                                         }
                                     </Text>
                                 </View>
@@ -117,7 +118,8 @@ const styles = StyleSheet.create({
         paddingRight: 24,
         paddingTop: 12,
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        overflow: 'hidden'
     },
     user: {
         flexDirection: 'row',
@@ -128,13 +130,6 @@ const styles = StyleSheet.create({
         height: 38,
         marginRight: 12,
         resizeMode: 'contain'
-    },
-    username: {
-        fontWeight: '500',
-    },
-    date: {
-        color: "#a1a1a1",
-        fontSize: 12,
     },
     heartImg: {
         width: 15,

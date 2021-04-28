@@ -46,9 +46,9 @@ const CreateTags = ({ tags, setSelectedTags, selectedTags }) => {
     return (
         <View style={CreateStyles.ingrContainer}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={GlobalStyles.title2}>ADD TAGS (</Text>
-                <Text style={[GlobalStyles.title3, { color: Styles.GRAY }]}>choose up to 3</Text>
-                <Text style={GlobalStyles.title2}>)</Text>
+                <Text style={GlobalStyles.titlebold2}>ADD TAGS (</Text>
+                <Text style={[GlobalStyles.titlebold3, { color: Styles.GRAY }]}>choose up to 3</Text>
+                <Text style={GlobalStyles.titlebold2}>)</Text>
             </View>
             <View style={[CreateStyles.ingrLine, { marginBottom: 9 }]}></View>
             <View style={CreateStyles.tagContainer}>

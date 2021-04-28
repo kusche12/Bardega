@@ -46,8 +46,27 @@ export default StyleSheet.create({
         paddingBottom: 12,
         backgroundColor: 'white',
         alignItems: 'center',
-        borderRadius: RADIUS,
+        borderRadius: 22,
         marginBottom: 40,
+
+        shadowColor: "#000",
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        elevation: 4
+    },
+    ingrContainerWide: {
+        width: Styles.width * .95,
+        paddingHorizontal: 24,
+        paddingTop: 14,
+        paddingBottom: 24,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        borderRadius: 22,
+        marginBottom: 20,
 
         shadowColor: "#000",
         shadowOpacity: 0.23,

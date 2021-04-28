@@ -18,7 +18,8 @@ const Main = ({ user }) => {
     // Cache the local header image file on the user's device to speed up the access of the image
     const [isLoading, setIsLoading] = useState(true);
     let [fontLoaded] = useFonts({
-        Raisonne: require('../assets/fonts/Raisonne_DemiBold.ttf'),
+        Raisonne: require('../assets/fonts/DMSans-Regular.ttf'),
+        RaisonneMedium: require('../assets/fonts/DMSans-Medium.ttf'),
         SourceSerifRegular: require('../assets/fonts/SourceSerifPro-Regular.ttf'),
         SourceSerifItalic: require('../assets/fonts/SourceSerifPro-Italic.ttf'),
         SourceSerifSemiBold: require('../assets/fonts/SourceSerifPro-SemiBold.ttf'),

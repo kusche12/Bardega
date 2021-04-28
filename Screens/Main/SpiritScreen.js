@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { TouchableOpacity, Text, SafeAreaView } from 'react-native';
+import { Text, SafeAreaView } from 'react-native';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const SpiritScreen = ({ route }) => {
     return (
-        <SafeAreaView>
-            <Text>This is the SpiritScreen</Text>
+        <SafeAreaView style={GlobalStyles.headerSafeArea}>
         </SafeAreaView>
     );
 }

@@ -3,7 +3,6 @@ export const renderTime = (dateCreated) => {
     const now = new Date();
     const date = new Date(dateCreated);
     const minutes = (now - date) / (1000 * 60);
-
     if (minutes < 60) {
         return `${Math.round(minutes)}m`;
     } else if (minutes >= 60 && minutes <= 1440) {

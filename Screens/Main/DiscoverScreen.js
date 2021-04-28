@@ -24,11 +24,17 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
         if (drinks && queries) {
             loadData();
         }
-    }, [drinks, queries])
+    }, [drinks, queries]);
 
+    // TODO: Test function only. Replcace this with the function below for production
     const loadData = async () => {
-        let ranQueries = await getRandomQueries(queries, 10);
-        setSelectedQueries(ranQueries);
+        const ranQueries = [{
+            filterName: "medium",
+            filterType: "prepTime",
+            id: "gsgstD8P9sXDJ1gVJtWO",
+            name: "Medium Prep",
+        }]
+        setSelectedQueries(ranQueries)
 
         let drinkMatrix = [];
         for (let i = 0; i < ranQueries.length; i++) {
@@ -39,6 +45,21 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
         await setSelectedDrinks(drinkMatrix);
         setIsLoaded(true);
     }
+
+    // // TODO: Uncomment for production, leave commented for development
+    // const loadData = async () => {
+    //     let ranQueries = await getRandomQueries(queries, 10);
+    //     setSelectedQueries(ranQueries);
+
+    //     let drinkMatrix = [];
+    //     for (let i = 0; i < ranQueries.length; i++) {
+    //         let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
+    //         drinkMatrix.push(drinkRow);
+    //     }
+
+    //     await setSelectedDrinks(drinkMatrix);
+    //     setIsLoaded(true);
+    // }
 
     if (!isLoaded) {
         return (
@@ -53,9 +74,9 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
             enableAutomaticScroll={(Platform.OS === 'ios')}
             contentContainerStyle={{ flexGrow: 1 }}
         >
-            <SafeAreaView style={GlobalStyles.headerSafeArea}>
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8 }]}>
                 <View style={DiscoverStyles.titleContainer}>
-                    <Text style={GlobalStyles.title1}>DISCOVER</Text>
+                    <Text style={GlobalStyles.titlebold1}>DISCOVER</Text>
                 </View>
                 {selectedDrinks.map((drinks, index) => {
                     return <HorizontalList

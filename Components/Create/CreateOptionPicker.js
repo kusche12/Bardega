@@ -42,7 +42,7 @@ const CreateOptionPicker = ({ item, setItem, itemType }) => {
     return (
         <View style={[CreateStyles.ingrContainer, { paddingBottom: 20 }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={GlobalStyles.title2}>{itemType}</Text>
+                <Text style={GlobalStyles.titlebold2}>{itemType}</Text>
             </View>
             <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
             <View style={CreateStyles.tagContainer}>

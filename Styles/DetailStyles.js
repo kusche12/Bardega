@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
+import Styles from './StyleConstants';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -40,34 +41,21 @@ export default StyleSheet.create({
         alignSelf: 'stretch',
         height: height * .4,
     },
-    recipeContainer: {
-        alignSelf: 'stretch',
-    },
-    textGray: {
-        color: GRAY,
-        fontSize: 16,
-    },
-    textBlack: {
-        fontSize: 16,
-    },
     row: {
         flexDirection: 'row',
         marginBottom: 6,
     },
     col1: {
         justifyContent: 'flex-start',
-        width: width * .3,
+        width: width * .4,
         alignItems: 'flex-end',
-        paddingRight: 12
+        paddingRight: 20
     },
     col2: {
-        width: width * .4,
+        width: width * .5,
     },
     wrapRecipeText: {
         flexWrap: 'wrap'
-    },
-    commentContainer: {
-        alignItems: 'flex-start',
     },
     commentImage: {
         width: 40,
@@ -75,31 +63,19 @@ export default StyleSheet.create({
         borderRadius: 100,
     },
     commentRow: {
+        alignItems: 'flex-start',
         flexDirection: 'row',
-        width: width * .75,
+        width: width * .85,
         paddingRight: 36,
-    },
-    commentDetail: {
-        paddingLeft: 8,
-    },
-    commentText2: {
-        color: '#F7D48B'
-    },
-    commentText3: {
-        color: GRAY,
-        alignSelf: 'center'
+        marginBottom: 16
     },
     submitRow: {
         flexDirection: 'row',
         alignItems: 'center'
     },
     submitContainer: {
-        width: width * .8,
-        marginBottom: 40,
+        marginBottom: 80,
         alignItems: 'flex-start'
-    },
-    submitText: {
-        fontSize: 22,
     },
     commentInputRow: {
         alignSelf: 'stretch',
@@ -122,7 +98,7 @@ export default StyleSheet.create({
         alignItems: 'center'
     },
     commentInput: {
-        borderColor: '#979797',
+        borderColor: Styles.GRAY,
         borderRadius: 10,
         borderWidth: 1,
         paddingLeft: 36,
@@ -139,7 +115,6 @@ export default StyleSheet.create({
     commentHeaderRow: {
         flexDirection: 'row',
         paddingLeft: 12,
-        marginBottom: 24,
         borderBottomColor: '#EEE',
         borderBottomWidth: 1,
         paddingBottom: 12

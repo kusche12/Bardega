@@ -2,6 +2,18 @@ import { StyleSheet, Platform } from 'react-native';
 import Styles from './StyleConstants';
 
 export default StyleSheet.create({
+    titlebold1: {
+        fontFamily: "RaisonneMedium",
+        fontSize: 24,
+    },
+    titlebold2: {
+        fontFamily: "RaisonneMedium",
+        fontSize: 20,
+    },
+    titlebold3: {
+        fontFamily: "RaisonneMedium",
+        fontSize: 14,
+    },
     title1: {
         fontFamily: "Raisonne",
         fontSize: 24,
@@ -17,6 +29,14 @@ export default StyleSheet.create({
     paragraphbold1: {
         fontFamily: "SourceSerifSemiBold",
         fontSize: 18,
+    },
+    paragraphbold2: {
+        fontFamily: "SourceSerifSemiBold",
+        fontSize: 16,
+    },
+    paragraphbold3: {
+        fontFamily: "SourceSerifSemiBold",
+        fontSize: 14,
     },
     paragraph1: {
         fontFamily: "SourceSerifRegular",
@@ -36,8 +56,7 @@ export default StyleSheet.create({
     },
     headerSafeArea: {
         flex: 1,
-        top: Platform.OS === 'ios' ? 50 : 40,
-        marginLeft: 8,
+        top: Platform.OS === 'ios' ? 30 : 20,
     },
     footerSafeArea: {
         paddingBottom: Platform.OS === 'ios' ? 80 : 60,

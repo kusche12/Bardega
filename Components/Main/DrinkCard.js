@@ -19,7 +19,7 @@ const DrinkCard = ({ drink, navigation }) => {
             <View style={DetailStyles.shadowContainer}>
                 <View style={DiscoverStyles.cardContainer}>
                     <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.drinkImg} />
-                    <Text style={[GlobalStyles.paragraph3, { paddingBottom: 4, paddingTop: 4, textAlign: 'center' }]}>{drink.name}</Text>
+                    <Text style={[GlobalStyles.paragraphbold3, { paddingBottom: 8, paddingTop: 8, paddingHorizontal: 8, textAlign: 'center' }]}>{drink.name}</Text>
                 </View>
             </View>
         </TouchableWithoutFeedback>

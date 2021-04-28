@@ -7,6 +7,7 @@ import { compose } from 'redux';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import CreateStyles from '../../Styles/CreateStyles';
+import Styles from '../../Styles/StyleConstants';
 
 const width = Dimensions.get('screen').width;
 
@@ -50,8 +51,8 @@ const FollowScreen = ({ route, navigation, userData }) => {
                 <View style={UserStyles.followRow}>
                     <Image source={{ uri: item.imageURL }} style={UserStyles.followImage} />
                     <View style={{ marginLeft: 8 }}>
-                        <Text style={{ fontWeight: '500', fontSize: 16 }}>{item.userName}</Text>
-                        <Text style={{ fontSize: 14, color: '#a1a1a1' }}>{item.fName} {item.lName}</Text>
+                        <Text style={GlobalStyles.titlebold2}>{item.userName}</Text>
+                        <Text style={[GlobalStyles.title3, { color: Styles.GRAY }]}>{item.fName} {item.lName}</Text>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -62,10 +63,10 @@ const FollowScreen = ({ route, navigation, userData }) => {
         return <Loading />
     } else {
         return (
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, UserStyles.container]} >
+            <SafeAreaView style={GlobalStyles.headerSafeArea}>
                 <View style={UserStyles.followerHeader}>
-                    <Text style={[UserStyles.title2]}>{users.length} {getText()}</Text>
-                    <View style={[CreateStyles.ingrLine, { width: width * .9, alignSelf: 'center' }]}></View>
+                    <Text style={GlobalStyles.titlebold2}>{users.length} {getText()}</Text>
+                    <View style={[GlobalStyles.line, { width: width * .9, alignSelf: 'center' }]}></View>
                 </View>
                 <FlatList
                     data={userProfiles}

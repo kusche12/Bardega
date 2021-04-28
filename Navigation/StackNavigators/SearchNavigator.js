@@ -1,4 +1,9 @@
 import * as React from 'react';
+
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
+
 import { createStackNavigator } from '@react-navigation/stack';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
@@ -12,7 +17,7 @@ import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
 
-const SearchNavigator = ({ route, navigation }) => {
+const SearchNavigator = ({ route, navigation, drinks }) => {
     return (
         <Stack.Navigator
             headerMode='screen'
@@ -23,7 +28,7 @@ const SearchNavigator = ({ route, navigation }) => {
             <Stack.Screen
                 name='SearchScreen'
                 component={SearchScreen}
-                initialParams={{ results: [] }}
+                initialParams={{ results: drinks.slice(0, 1) }}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <SearchHeader navigation={navigation} />,
                     headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },
@@ -95,4 +100,14 @@ const SearchNavigator = ({ route, navigation }) => {
     );
 }
 
-export default SearchNavigator;
+const mapStateToProps = (state) => {
+    return {
+        drinks: state.firestore.ordered.drinks,
+    }
+}
+
+// Connect the drink detail page to our redux store and firestore DB
+export default compose(
+    firestoreConnect(() => ['drinks']),
+    connect(mapStateToProps)
+)(SearchNavigator);

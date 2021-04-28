@@ -10,7 +10,7 @@ const CreateDirections = ({ direction, setDirection }) => {
         return (
             <TouchableWithoutFeedback onPress={() => setDirection('')}>
                 <View style={[CreateStyles.ingrContainer, { height: 250 }]}>
-                    <Text style={GlobalStyles.title2}>DIRECTIONS</Text>
+                    <Text style={GlobalStyles.titlebold2}>DIRECTIONS</Text>
                     <View style={GlobalStyles.line}></View>
                     <View style={[GlobalStyles.flexCenter, { bottom: 20 }]}>
                         <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
@@ -22,7 +22,7 @@ const CreateDirections = ({ direction, setDirection }) => {
     } else {
         return (
             <View style={[CreateStyles.ingrContainer, { alignItems: 'flex-start', paddingBottom: 50 }]}>
-                <Text style={[GlobalStyles.title2, { alignSelf: 'center' }]}>DIRECTIONS</Text>
+                <Text style={[GlobalStyles.titlebold2, { alignSelf: 'center' }]}>DIRECTIONS</Text>
 
                 <View style={GlobalStyles.line}></View>
 

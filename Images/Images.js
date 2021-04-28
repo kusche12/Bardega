@@ -13,7 +13,7 @@ export default {
         email: require('./email.png'),
         password: require('./password.png'),
     },
-    comment: require('./comment.png'),
+    commentImg: require('./comment.png'),
     edit: require('./edit.png'),
     threedots: require('./threedots.png'),
     bottomTab: {

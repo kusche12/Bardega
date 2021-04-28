@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, StyleSheet, Keyboard, Platform } from 'react-native';
+import { Image, View, StyleSheet, Keyboard, Platform, LogBox } from 'react-native';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -14,11 +14,13 @@ const comp = (a, b) => {
 
 const findDrink = (query, drinks) => {
     if (query === '') {
-        return [];
+        return drinks;
     }
     const regex = new RegExp(`${query.trim()}`, 'i');
     return drinks.filter((drink) => drink.name.search(regex) >= 0);
 }
+
+LogBox.ignoreAllLogs()
 
 //TODO: UI Styling
 const SearchHeader = ({ drinks, navigation }) => {
@@ -29,13 +31,7 @@ const SearchHeader = ({ drinks, navigation }) => {
         const res = findDrink(query, drinks);
         setCurrentDrinks(res);
         navigation.setParams({ results: currentDrinks });
-    }, [query])
-
-    const handleCancel = () => {
-        setQuery('');
-        Keyboard.dismiss();
-        setCurrentDrinks([]);
-    }
+    }, [query, drinks])
 
     return (
         <View style={styles.container}>

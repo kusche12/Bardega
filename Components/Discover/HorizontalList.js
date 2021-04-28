@@ -25,9 +25,9 @@ const HorizontalList = ({ data, query, navigation, drinks }) => {
     return (
         <View style={DiscoverStyles.horizontalContainer}>
             <View style={DiscoverStyles.horizRow}>
-                <Text style={GlobalStyles.title2}>{query.name}</Text>
+                <Text style={GlobalStyles.titlebold2}>{query.name}</Text>
                 <TouchableWithoutFeedback onPress={() => getDrinksAndNavigate()}>
-                    <Text style={GlobalStyles.title3}>See more</Text>
+                    <Text style={GlobalStyles.titlebold3}>See more</Text>
                 </TouchableWithoutFeedback>
 
             </View>

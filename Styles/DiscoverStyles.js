@@ -19,7 +19,6 @@ export default StyleSheet.create({
         alignItems: "center",
         marginRight: 8,
         backgroundColor: "white",
-        overflow: 'hidden'
     },
     drinkImg: {
         width: 140,

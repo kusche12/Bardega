@@ -65,7 +65,7 @@ const CreateIngredients = ({ ingredients, setIngredients }) => {
         return (
             <TouchableWithoutFeedback onPress={() => addIngredient()}>
                 <View style={[CreateStyles.ingrContainer, { height: 250 }]}>
-                    <Text style={GlobalStyles.title2}>INGREDIENTS</Text>
+                    <Text style={GlobalStyles.titlebold2}>INGREDIENTS</Text>
                     <View style={GlobalStyles.line}></View>
                     <View style={[GlobalStyles.flexCenter, { bottom: 20 }]}>
                         <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
@@ -77,7 +77,7 @@ const CreateIngredients = ({ ingredients, setIngredients }) => {
     } else {
         return (
             <View style={CreateStyles.ingrContainer}>
-                <Text style={GlobalStyles.title2}>INGREDIENTS</Text>
+                <Text style={GlobalStyles.titlebold2}>INGREDIENTS</Text>
 
                 <View style={[GlobalStyles.line, { marginBottom: 16 }]}></View>
 

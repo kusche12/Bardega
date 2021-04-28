@@ -9,6 +9,7 @@ import { compose } from 'redux';
 import { createComment } from '../../Store/Actions/CommentActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import DetailStyles from '../../Styles/DetailStyles';
+import Styles from '../../Styles/StyleConstants';
 
 // TODO: Maybe mess with the UI of the header. Make it prettier but keep same information
 // TODO: Implement pagination on the currComments component so that it does not have to load all at once
@@ -22,7 +23,7 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             res += drink.tags[i].name + ', '
         };
         res = res.substr(0, res.length - 2);
-        return <Text style={{ fontWeight: '300', fontSize: 16 }}>{res}</Text>
+        return <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{res}</Text>
     }
 
     const handleCreateComment = () => {
@@ -39,8 +40,8 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             <View style={DetailStyles.commentHeaderRow}>
                 <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DetailStyles.commentHeaderImage} />
                 <View>
-                    <Text style={{ fontWeight: '500', fontSize: 20 }}>{drink.name}</Text>
-                    <Text style={{ fontWeight: '300', fontSize: 16 }}>{drink.strength.label}</Text>
+                    <Text style={[GlobalStyles.paragraph1, { fontSize: 20 }]}>{drink.name}</Text>
+                    <Text style={GlobalStyles.paragraph2}>{drink.strength.label}</Text>
                     {renderTags()}
                 </View>
 

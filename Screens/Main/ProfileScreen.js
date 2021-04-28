@@ -114,16 +114,16 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
                     <View style={UserStyles.infoContainer}>
                         <View style={UserStyles.infoRow}>
                             <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
-                            <View style={{ marginLeft: 8 }}>
-                                <Text style={[GlobalStyles.title1, { marginBottom: 8 }]}>{user.userName}</Text>
-                                <Text style={[GlobalStyles.paragraph2, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                            <View style={{ marginLeft: 16 }}>
+                                <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>
+                                <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
                                 {renderInfoButtons()}
                             </View>
                         </View>
                     </View>
 
                     <View style={UserStyles.infoContainer}>
-                        <Text style={GlobalStyles.paragraph3}>{user.bio}</Text>
+                        <Text style={GlobalStyles.paragraph2}>{user.bio}</Text>
                     </View>
 
                     <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>

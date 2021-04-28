@@ -40,6 +40,7 @@ export const getRandomQueries = (queries, amount) => {
     let result = [];
     let nums = randomUniqueNum(queries.length, amount);
     for (let i in nums) {
+        console.log(queries[nums[i]]);
         result.push(queries[nums[i]]);
     }
 
