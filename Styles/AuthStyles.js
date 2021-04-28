@@ -1,60 +1,28 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+import Styles from './StyleConstants';
 
-const width = Dimensions.get('screen').width;
-const height = Dimensions.get('screen').height;
 const PINK = '#F29288';
-const GRAY = '#a1a1a1'
-const RADIUS = 22;
-const SUBFONT = 15;
 
 export default StyleSheet.create({
     container: {
-        width: width,
-        height: height,
+        width: Styles.width,
+        height: Styles.height,
         top: Platform.OS === 'ios' ? 50 : 30,
         alignItems: 'center',
     },
-    splashBackground: {
-        width: width,
-        height: height,
-    },
-    bardegaLogo: {
-        position: 'absolute',
-        width: width * 1.1,
-        resizeMode: 'contain',
-        left: 20,
-        top: height * .1,
-    },
-    screenLogo: {
-        width: width,
-        height: height * .25,
-        alignSelf: 'center',
-        resizeMode: 'center',
-        marginBottom: 8,
-    },
-    background: {
-        bottom: 0,
-        left: -100,
-        width: width * 1.6,
-        height: height * 2,
-        position: 'absolute',
-        transform: [{ rotateX: '180deg' }],
-        zIndex: -1,
-        opacity: 0.0, // TODO: Maybe add this back in... kinda ugly though
-    },
     form: {
         alignSelf: 'center',
-        width: width * .8
+        width: Styles.width * .8
     },
     loginForm: {
         alignSelf: 'center',
         marginTop: 50,
-        width: width * .8
+        width: Styles.width * .8
     },
     forgotForm: {
         alignSelf: 'center',
         marginTop: 40,
-        width: width * .8
+        width: Styles.width * .8
     },
     inputImg: {
         width: 22,
@@ -68,7 +36,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: 50,
-        width: width * .8,
+        width: Styles.width * .8,
     },
     input: {
         height: 40,
@@ -76,7 +44,7 @@ export default StyleSheet.create({
         fontWeight: '500'
     },
     mainButton: {
-        width: width * .8,
+        width: Styles.width * .8,
         marginBottom: 20,
         height: 50,
         backgroundColor: PINK,
@@ -95,12 +63,12 @@ export default StyleSheet.create({
     },
     thirdPartyButtons: {
         flexDirection: 'row',
-        width: width,
+        width: Styles.width,
         justifyContent: 'center'
     },
     thirdPartyAuth: {
-        width: width * .14,
-        height: width * .14,
+        width: Styles.width * .14,
+        height: Styles.width * .14,
         marginLeft: 8,
         marginRight: 8
     },

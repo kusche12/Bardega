@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
-import { Asset } from 'expo-asset';
 import { connect } from 'react-redux';
 import { forgotPassword } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
-import Images from '../../Images/Images';
+import BardegaLogoSVG from '../../Components/Main/BardegaLogoSVG';
+import Styles from '../../Styles/StyleConstants';
 import AuthStyles from '../../Styles/AuthStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
-const DARKPINK = '#f06656';
 
 // TODO: Load and render a higher quality version of the logo
 const ForgotPasswordScreen = ({ navigation, forgotPassword, authError, authSuccess }) => {
     const [email, setEmail] = useState('');
-
-    useEffect(() => {
-        const imageURI = Asset.fromModule(Images.background).uri;
-        cacheImages(imageURI, 0);
-    }, []);
 
     const handleResetPassword = () => {
         forgotPassword(email);
@@ -32,11 +26,11 @@ const ForgotPasswordScreen = ({ navigation, forgotPassword, authError, authSucce
                 contentContainerStyle={{ flexGrow: 1 }}
             >
 
-                <Image source={Images.bardegaLogo} style={AuthStyles.screenLogo} />
+                <BardegaLogoSVG width={Styles.width} height={Styles.height / 5} style={{ top: 20, marginBottom: 40 }} />
 
                 <View style={AuthStyles.forgotForm}>
-                    <Text style={{ fontWeight: '700', fontSize: 24, color: '#333', marginBottom: 14 }}>Forgot your password?</Text>
-                    <Text style={{ color: '#333', fontSize: 16, marginBottom: 14 }}>Confirm your email and we'll send the instructions.</Text>
+                    <Text style={[GlobalStyles.titlebold1, { marginBottom: 14 }]}>Forgot your password?</Text>
+                    <Text style={[GlobalStyles.title3, { fontSize: 16, marginBottom: 14 }]}>Confirm your email and we'll send the instructions.</Text>
                     <AuthInput image={'user'} value={email} setValue={setEmail} type={'Email'} />
                     <TouchableWithoutFeedback onPress={() => handleResetPassword()}>
                         <View style={AuthStyles.mainButton}>
@@ -53,22 +47,21 @@ const ForgotPasswordScreen = ({ navigation, forgotPassword, authError, authSucce
 
                 <View style={AuthStyles.footer}>
                     <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-                        <Text style={{ fontWeight: '500' }}>Don't have an account? </Text>
+                        <Text style={GlobalStyles.titlebold3}>Don't have an account? </Text>
                         <TouchableWithoutFeedback onPress={() => navigation.navigate('Create')}>
-                            <Text style={{ color: DARKPINK, fontWeight: '500' }}>Create one</Text>
+                            <Text style={[GlobalStyles.titlebold3, { color: Styles.DARK_PINK }]}>Create one</Text>
                         </TouchableWithoutFeedback>
                     </View>
 
                     <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-                        <Text style={{ fontWeight: '500' }}>Already have an account? </Text>
+                        <Text style={GlobalStyles.titlebold3}>Already have an account? </Text>
                         <TouchableWithoutFeedback onPress={() => navigation.navigate('Login')}>
-                            <Text style={{ color: DARKPINK, fontWeight: '500' }}>Log In</Text>
+                            <Text style={[GlobalStyles.titlebold3, { color: Styles.DARK_PINK }]}>Log In</Text>
                         </TouchableWithoutFeedback>
                     </View>
                 </View>
 
             </KeyboardAwareScrollView>
-            <Image source={{ uri: getCachedImage(0) }} style={AuthStyles.background} />
         </SafeAreaView>
     );
 }

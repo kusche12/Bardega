@@ -1,25 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
+import BardegaLogoSVG from '../../Components/Main/BardegaLogoSVG';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
-import { Asset } from 'expo-asset';
 import { connect } from 'react-redux';
 import { logIn } from '../../Store/Actions/AuthActions';
+import Styles from '../../Styles/StyleConstants';
 import AuthInput from '../../Components/Auth/AuthInput';
-import Images from '../../Images/Images';
 import AuthStyles from '../../Styles/AuthStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
-const DARKPINK = '#f06656';
-
-// TODO: Load and render a higher quality version of the logo
 const LoginScreen = ({ navigation, logIn, authError }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    useEffect(() => {
-        const imageURI = Asset.fromModule(Images.background).uri;
-        cacheImages(imageURI, 0);
-    }, []);
 
     const handleLogin = () => {
         logIn({ email, password });
@@ -33,14 +25,14 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
                 contentContainerStyle={{ flexGrow: 1 }}
             >
 
-                <Image source={Images.bardegaLogo} style={AuthStyles.screenLogo} />
+                <BardegaLogoSVG width={Styles.width} height={Styles.height / 5} style={{ top: 20, marginBottom: 40 }} />
 
                 <View style={AuthStyles.loginForm}>
                     <AuthInput image={'user'} value={email} setValue={setEmail} type={'Email / Username'} />
                     <AuthInput image={'password'} value={password} setValue={setPassword} type={'Password'} />
                     <TouchableWithoutFeedback onPress={() => handleLogin()}>
                         <View style={AuthStyles.mainButton}>
-                            <Text style={{ fontWeight: '500' }}>Sign In</Text>
+                            <Text style={[GlobalStyles.titlebold2, { fontSize: 16 }]}>Sign In</Text>
                         </View>
                     </TouchableWithoutFeedback>
                     {authError !== null &&
@@ -50,19 +42,18 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
 
                 <View style={AuthStyles.footer}>
                     <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-                        <Text style={{ fontWeight: '500' }}>Don't have an account? </Text>
+                        <Text style={GlobalStyles.titlebold3}>Don't have an account? </Text>
                         <TouchableWithoutFeedback onPress={() => navigation.navigate('Create')}>
-                            <Text style={{ color: DARKPINK, fontWeight: '500' }}>Create one</Text>
+                            <Text style={[GlobalStyles.titlebold3, { color: Styles.DARK_PINK }]}>Create one</Text>
                         </TouchableWithoutFeedback>
                     </View>
 
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('ForgotPassword')}>
-                        <Text style={{ color: DARKPINK, fontWeight: '500' }}>Forgot Password</Text>
+                        <Text style={[GlobalStyles.titlebold3, { color: Styles.DARK_PINK }]}>Forgot Password</Text>
                     </TouchableWithoutFeedback>
                 </View>
 
             </KeyboardAwareScrollView>
-            <Image source={{ uri: getCachedImage(0) }} style={AuthStyles.background} />
         </SafeAreaView>
     );
 }

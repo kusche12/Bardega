@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import Styles from '../../Styles/StyleConstants';
 
 import LoginScreen from '../../Screens/AuthScreens/LoginScreen';
 import CreateAccountScreen from '../../Screens/AuthScreens/CreateAccountScreen';

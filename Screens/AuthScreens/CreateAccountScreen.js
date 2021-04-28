@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
-import { Asset } from 'expo-asset';
+import BardegaLogoSVG from '../../Components/Main/BardegaLogoSVG';
 import { connect } from 'react-redux';
 import { signUp } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
 import Images from '../../Images/Images';
 import AuthStyles from '../../Styles/AuthStyles';
-
-const DARKPINK = '#f06656';
+import Styles from '../../Styles/StyleConstants';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 // TODO: Allow for authentication via, facebook, twitter, or gmail
-// TODO: Load and render a higher quality version of the logo
 const CreateAccountScreen = ({ navigation, signUp, authError }) => {
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    useEffect(() => {
-        const imageURI = Asset.fromModule(Images.background).uri;
-        cacheImages(imageURI, 0);
-    }, []);
 
     const handleFacebookAuth = () => {
         console.log('hello facebook')
@@ -40,7 +33,7 @@ const CreateAccountScreen = ({ navigation, signUp, authError }) => {
                 contentContainerStyle={{ flexGrow: 1 }}
             >
 
-                <Image source={Images.bardegaLogo} style={AuthStyles.screenLogo} />
+                <BardegaLogoSVG width={Styles.width} height={Styles.height / 5} style={{ top: 20, marginBottom: 40 }} />
 
                 <View style={AuthStyles.form}>
                     <AuthInput image={'user'} value={name} setValue={setName} type={'Firstname Lastname'} />
@@ -49,7 +42,7 @@ const CreateAccountScreen = ({ navigation, signUp, authError }) => {
                     <AuthInput image={'password'} value={password} setValue={setPassword} type={'Password'} />
                     <TouchableWithoutFeedback onPress={() => handleCreateAccount()}>
                         <View style={AuthStyles.mainButton}>
-                            <Text style={{ fontWeight: '500' }}>Create Account</Text>
+                            <Text style={[GlobalStyles.titlebold2, { fontSize: 16 }]}>Create Account</Text>
                         </View>
                     </TouchableWithoutFeedback>
                     {authError !== null &&
@@ -71,20 +64,19 @@ const CreateAccountScreen = ({ navigation, signUp, authError }) => {
 
                 <View style={AuthStyles.footer}>
                     <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-                        <Text style={{ fontWeight: '500' }}>Already have an account? </Text>
+                        <Text style={GlobalStyles.titlebold3}>Already have an account? </Text>
                         <TouchableWithoutFeedback onPress={() => navigation.navigate('Login')}>
-                            <Text style={{ color: DARKPINK, fontWeight: '500' }}>Log in</Text>
+                            <Text style={[GlobalStyles.titlebold3, { color: Styles.DARK_PINK }]}>Log in</Text>
                         </TouchableWithoutFeedback>
                     </View>
 
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('ForgotPassword')}>
-                        <Text style={{ color: DARKPINK, fontWeight: '500' }}>Forgot Password</Text>
+                        <Text style={[GlobalStyles.titlebold3, { color: Styles.DARK_PINK }]}>Forgot Password</Text>
                     </TouchableWithoutFeedback>
                 </View>
 
             </KeyboardAwareScrollView>
-            <Image source={{ uri: getCachedImage(0) }} style={AuthStyles.background} />
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 
