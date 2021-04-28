@@ -16,3 +16,14 @@ export const renderTime = (dateCreated) => {
         return `${Math.round(minutes / 60 / 24 / 7 / 12)}y`;
     }
 }
+
+// Renders numbers. If larger than 10 thousand, start substituting k for 1000
+export const renderNum = (num) => {
+    if (num < 10000) {
+        return num;
+    } else if (num >= 10001 && num < 1000000) {
+        return `${Math.round(num / 3)}k`;
+    } else {
+        return `${Math.round(num / 4)}m`;
+    }
+}

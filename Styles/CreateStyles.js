@@ -1,9 +1,7 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
+import Styles from './StyleConstants';
 
-const width = Dimensions.get('screen').width;
-const height = Dimensions.get('screen').height;
 const PINK = '#F29288';
-const LIGHTPINK = '#F7D2CF';
 const GRAY = '#a1a1a1'
 const RADIUS = 22;
 const SUBFONT = 15;
@@ -13,27 +11,16 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         marginBottom: 40,
-    },
-    title: {
-        fontSize: 22
+        paddingRight: 8,
     },
     inputBox: {
         alignItems: 'center',
         marginTop: 10,
-        marginBottom: 4
-    },
-    title2: {
-        fontSize: SUBFONT,
-        fontWeight: '700'
-    },
-    input: {
-        fontSize: 20,
-        color: GRAY,
-        textAlign: 'center'
+        marginBottom: 4,
     },
     photoContainer: {
-        width: width * .8,
-        height: height * .45,
+        width: Styles.width * .8,
+        height: Styles.height * .45,
         borderColor: '#707070',
         borderWidth: 1,
         borderRadius: RADIUS,
@@ -44,21 +31,16 @@ export default StyleSheet.create({
         overflow: 'hidden'
     },
     drinkImage: {
-        width: width * .8,
-        height: height * .45,
+        width: Styles.width * .8,
+        height: Styles.height * .45,
     },
     plusImage: {
-        width: width * .16,
-        height: width * .16
-    },
-    photoText: {
-        color: '#707070',
-        fontSize: SUBFONT,
-        width: width * .3,
-        textAlign: 'center'
+        width: Styles.width * .16,
+        height: Styles.width * .16,
+        marginBottom: 8
     },
     ingrContainer: {
-        width: width * .8,
+        width: Styles.width * .8,
         paddingHorizontal: 12,
         paddingTop: 14,
         paddingBottom: 12,
@@ -76,30 +58,11 @@ export default StyleSheet.create({
         },
         elevation: 4
     },
-    ingrTitle: {
-        fontSize: 18,
-        fontWeight: '700'
-    },
-    ingrTitle2: {
-        fontSize: 12,
-        color: GRAY
-    },
-    ingrLine: {
-        alignSelf: 'stretch',
-        height: 1.5,
-        backgroundColor: PINK,
-        marginBottom: 30,
-        marginTop: 6,
-    },
     ingrsubTitle: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignSelf: 'stretch',
         marginBottom: 4
-    },
-    ingrsubText: {
-        fontSize: 10,
-        color: GRAY
     },
     dirInput: {
         fontSize: SUBFONT,
@@ -113,7 +76,7 @@ export default StyleSheet.create({
         flex: 1
     },
     tag: {
-        backgroundColor: PINK,
+        backgroundColor: Styles.DARK_PINK,
         borderRadius: 10,
         marginHorizontal: 2,
         marginVertical: 2,
@@ -121,16 +84,16 @@ export default StyleSheet.create({
         paddingVertical: 3,
         flexGrow: 1,
         alignItems: 'center',
-        width: width * .18,
-        maxWidth: width * .23,
+        width: Styles.width * .18,
+        maxWidth: Styles.width * .23,
         opacity: .5
     },
     submitBtn: {
-        width: width * .8,
+        width: Styles.width * .8,
         paddingVertical: 4,
         borderRadius: RADIUS,
         backgroundColor: PINK,
-        marginBottom: 30,
+        marginBottom: 40,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',

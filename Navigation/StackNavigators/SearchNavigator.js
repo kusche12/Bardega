@@ -8,9 +8,9 @@ import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import SearchHeader from '../../Components/TopNavbar/SearchHeader'
 import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
+import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
-const LIGHTPINK = '#F7D2CF';
 
 const SearchNavigator = ({ route, navigation }) => {
     return (
@@ -26,10 +26,10 @@ const SearchNavigator = ({ route, navigation }) => {
                 initialParams={{ results: [] }}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <SearchHeader navigation={navigation} />,
-                    headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: LIGHTPINK },
+                    headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },
                     headerTitleAlign: 'center',
                     headerStyle: {
-                        backgroundColor: LIGHTPINK,
+                        backgroundColor: Styles.PINK,
                     },
                 })}
             />
@@ -42,7 +42,10 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -54,7 +57,10 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -66,7 +72,10 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -77,6 +86,9 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
         </Stack.Navigator>

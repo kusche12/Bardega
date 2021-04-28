@@ -6,6 +6,7 @@ import Constants from 'expo-constants';
 
 import CreateStyles from '../../Styles/CreateStyles'
 import GlobalStyles from '../../Styles/GlobalStyles'
+import Styles from '../../Styles/StyleConstants';
 
 // TODO: Make sure the .2 compression isn't too low when rendering the drink later
 const CreateImage = ({ drinkImage, setDrinkImage }) => {
@@ -27,7 +28,9 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
             return (
                 <View style={GlobalStyles.flexCenter}>
                     <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
-                    <Text style={CreateStyles.photoText}>Add photo from photo album</Text>
+                    <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY, width: Styles.width * .3, textAlign: 'center' }]}>
+                        Add photo from photo album
+                        </Text>
                 </View>
             );
         } else {

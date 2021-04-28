@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Image, Text, Vibration, Alert, TouchableHighlight } from 'react-native';
-import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
+import { getCachedImage } from '../../Functions/cacheFunctions';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
-
+import GlobalStyles from '../../Styles/GlobalStyles';
+import Styles from '../../Styles/StyleConstants';
 
 // TODO: Implement the delete item from collection in react-redux-firebase 
 const SearchResult = ({ drink, navigation, removable }) => {
@@ -10,10 +11,10 @@ const SearchResult = ({ drink, navigation, removable }) => {
         let res = '';
         if (drink.tags) {
             for (let i = 0; i < drink.tags.length; i++) {
-                res += drink.tags[i] + ', '
+                res += drink.tags[i].name + ', '
             };
             res = res.substr(0, res.length - 2);
-            return <Text style={{ fontWeight: '300' }}>{res}</Text>
+            return <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{res}</Text>
         }
         return null;
     }
@@ -47,7 +48,8 @@ const SearchResult = ({ drink, navigation, removable }) => {
             <View style={DiscoverStyles.searchContainer}>
                 <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.searchImage} />
                 <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-                    <Text style={{ fontWeight: '700' }}>{drink.name}</Text>
+                    <Text style={GlobalStyles.paragraphbold1}>{drink.name}</Text>
+                    <Text style={GlobalStyles.paragraph3}>{drink.strength.label}</Text>
                     {renderTags()}
                 </View>
             </View>

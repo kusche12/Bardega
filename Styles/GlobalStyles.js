@@ -1,12 +1,43 @@
-import { StyleSheet, Platform, Dimensions } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import Styles from './StyleConstants';
-const width = Dimensions.get('screen').width;
-const PINK = '#F29288';
 
 export default StyleSheet.create({
+    title1: {
+        fontFamily: "Raisonne",
+        fontSize: 24,
+    },
+    title2: {
+        fontFamily: "Raisonne",
+        fontSize: 20,
+    },
+    title3: {
+        fontFamily: "Raisonne",
+        fontSize: 14,
+    },
+    paragraphbold1: {
+        fontFamily: "SourceSerifSemiBold",
+        fontSize: 18,
+    },
+    paragraph1: {
+        fontFamily: "SourceSerifRegular",
+        fontSize: 18,
+    },
+    paragraph2: {
+        fontFamily: "SourceSerifRegular",
+        fontSize: 16,
+    },
+    paragraph3: {
+        fontFamily: "SourceSerifRegular",
+        fontSize: 14,
+    },
+    paragraph4: {
+        fontFamily: "SourceSerifRegular",
+        fontSize: 12,
+    },
     headerSafeArea: {
         flex: 1,
         top: Platform.OS === 'ios' ? 50 : 40,
+        marginLeft: 8,
     },
     footerSafeArea: {
         paddingBottom: Platform.OS === 'ios' ? 80 : 60,
@@ -27,16 +58,18 @@ export default StyleSheet.create({
         resizeMode: 'contain'
     },
     headerContainer: {
-        width: width,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
+        width: Styles.width,
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
         backgroundColor: Styles.PINK,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        paddingLeft: 48,
+        paddingBottom: 6
     },
     headerWithButtons: {
         top: 6,
         alignSelf: 'stretch',
-        width: width,
+        width: Styles.width,
         height: 50,
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -56,6 +89,8 @@ export default StyleSheet.create({
     line: {
         alignSelf: 'stretch',
         height: 1.5,
-        backgroundColor: Styles.PINK,
+        backgroundColor: Styles.DARK_PINK,
+        marginTop: 4,
+        marginBottom: 4
     },
 });

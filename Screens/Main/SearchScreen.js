@@ -1,10 +1,9 @@
 import React from 'react';
-import { Text, Dimensions, View, FlatList, Platform } from 'react-native';
+import { Dimensions, View, FlatList, Platform } from 'react-native';
 import SearchResult from '../../Components/Main/SearchResult';
-import GlobalStyles from '../../Styles/GlobalStyles';
+import Styles from '../../Styles/StyleConstants';
 
 const width = Dimensions.get('screen').width;
-const LIGHTPINK = '#F7D2CF';
 
 const SearchScreen = ({ route, navigation }) => {
     const drinks = route.params.results;
@@ -16,7 +15,7 @@ const SearchScreen = ({ route, navigation }) => {
     return (
         <View>
             {Platform.OS === 'ios' &&
-                <View style={{ width: width, height: 10, backgroundColor: LIGHTPINK }}></View>
+                <View style={{ width: width, height: 10, backgroundColor: Styles.PINK }}></View>
             }
             <FlatList
                 data={drinks}

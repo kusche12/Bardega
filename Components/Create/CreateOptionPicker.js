@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableWithoutFeedback, Text } from 'react-native';
+import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 
 const drinkPrepOptions = [
@@ -22,7 +23,7 @@ const CreateOptionPicker = ({ item, setItem, itemType }) => {
         if (option.value === item.value) {
             return (
                 <View key={index} style={[CreateStyles.tag, { opacity: 1 }]}>
-                    <Text style={{ color: 'white' }}>{item.label}</Text>
+                    <Text style={[GlobalStyles.paragraph3, { color: 'white' }]}>{item.label}</Text>
                 </View>
             )
         } else {
@@ -30,7 +31,7 @@ const CreateOptionPicker = ({ item, setItem, itemType }) => {
             return (
                 <TouchableWithoutFeedback key={index} onPress={() => setItem(option)}>
                     <View style={CreateStyles.tag}>
-                        <Text style={{ color: 'white' }}>{option.label}</Text>
+                        <Text style={[GlobalStyles.paragraph3, { color: 'white' }]}>{option.label}</Text>
                     </View>
                 </TouchableWithoutFeedback>
             )
@@ -41,9 +42,9 @@ const CreateOptionPicker = ({ item, setItem, itemType }) => {
     return (
         <View style={[CreateStyles.ingrContainer, { paddingBottom: 20 }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={CreateStyles.ingrTitle}>{itemType}</Text>
+                <Text style={GlobalStyles.title2}>{itemType}</Text>
             </View>
-            <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
             <View style={CreateStyles.tagContainer}>
                 {itemType === 'PREP TIME'
                     ?

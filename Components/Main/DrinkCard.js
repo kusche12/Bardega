@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback, View, Image, Text } from 'react-native';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
-import DetailStyles from '../../Styles/DetailStyles'
-import DiscoverStyles from '../../Styles/DiscoverStyles'
+import DetailStyles from '../../Styles/DetailStyles';
+import DiscoverStyles from '../../Styles/DiscoverStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const DrinkCard = ({ drink, navigation }) => {
     const [cached, setCached] = useState(false);
@@ -18,7 +19,7 @@ const DrinkCard = ({ drink, navigation }) => {
             <View style={DetailStyles.shadowContainer}>
                 <View style={DiscoverStyles.cardContainer}>
                     <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.drinkImg} />
-                    <Text style={DiscoverStyles.cardTitle}>{drink.name}</Text>
+                    <Text style={[GlobalStyles.paragraph3, { paddingBottom: 4, paddingTop: 4, textAlign: 'center' }]}>{drink.name}</Text>
                 </View>
             </View>
         </TouchableWithoutFeedback>

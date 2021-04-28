@@ -5,8 +5,6 @@ function BardegaTextSVG(props) {
     return (
         <Svg
             xmlns="http://www.w3.org/2000/svg"
-            width={610.439}
-            height={175.793}
             viewBox="0 0 610.439 175.793"
             {...props}
         >

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { createDrink, updateDrink } from '../../Store/Actions/DrinkActions'
+import Loading from '../../Components/Main/Loading';
 
 import CreateIngredients from '../../Components/Create/CreateIngredients';
 import CreateDirections from '../../Components/Create/CreateDirections';
@@ -13,6 +14,7 @@ import CreateImage from '../../Components/Create/CreateImage';
 import CreateOptionPicker from '../../Components/Create/CreateOptionPicker'
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
+import Styles from '../../Styles/StyleConstants';
 
 const width = Dimensions.get('screen').width;
 
@@ -133,7 +135,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
 
     // Give the tags some time to load from firestore
     if (tags === undefined || isLoading) {
-        return <Text>Loading...</Text>
+        return <Loading />
     } else {
         return (
             <KeyboardAwareScrollView
@@ -143,29 +145,30 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
             >
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]}>
 
-                    <Text style={CreateStyles.title}>CREATE A COCKTAIL</Text>
+                    <Text style={GlobalStyles.title1}>CREATE A COCKTAIL</Text>
 
                     <View style={CreateStyles.inputBox}>
-                        <Text style={CreateStyles.title2}>Cocktail Name</Text>
+                        <Text style={GlobalStyles.title2}>Cocktail Name</Text>
                         <TextInput
-                            style={CreateStyles.input}
+                            style={[GlobalStyles.paragraph1, { color: Styles.GRAY, width: Styles.width * .9, textAlign: 'center' }]}
                             onChangeText={setDrinkName}
                             value={drinkName}
                             placeholder='Give your drink a name'
                             multiline={false}
-                            placeholderTextColor='#b3b3b3'
+                            placeholderTextColor={Styles.GRAY}
                         />
                     </View>
 
                     <View style={CreateStyles.inputBox}>
-                        <Text style={CreateStyles.title2}>Description</Text>
+                        <Text style={GlobalStyles.title2}>Description</Text>
                         <TextInput
-                            style={CreateStyles.input}
+                            style={[GlobalStyles.paragraph1, { color: Styles.GRAY, width: Styles.width * .9, textAlign: 'center' }]}
                             onChangeText={setDrinkDesc}
                             value={drinkDesc}
                             placeholder='Give your drink a description'
                             multiline={true}
-                            placeholderTextColor='#b3b3b3'
+                            blurOnSubmit={true}
+                            placeholderTextColor={Styles.GRAY}
                         />
                     </View>
 
@@ -183,7 +186,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
 
                     <TouchableWithoutFeedback onPress={() => handleSubmit()}>
                         <View style={CreateStyles.submitBtn}>
-                            <Text style={[CreateStyles.ingrTitle, { color: 'white' }]}>Submit Drink</Text>
+                            <Text style={[GlobalStyles.title2, { color: 'white' }]}>Submit Drink</Text>
                         </View>
                     </TouchableWithoutFeedback>
                     {drinkError &&

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import DrinkCard from '../Main/DrinkCard';
+import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
 const HorizontalList = ({ data, query, navigation, drinks }) => {
@@ -24,9 +25,9 @@ const HorizontalList = ({ data, query, navigation, drinks }) => {
     return (
         <View style={DiscoverStyles.horizontalContainer}>
             <View style={DiscoverStyles.horizRow}>
-                <Text style={DiscoverStyles.queryTitle}>{query.name}</Text>
+                <Text style={GlobalStyles.title2}>{query.name}</Text>
                 <TouchableWithoutFeedback onPress={() => getDrinksAndNavigate()}>
-                    <Text style={DiscoverStyles.querySubtitle}>See more</Text>
+                    <Text style={GlobalStyles.title3}>See more</Text>
                 </TouchableWithoutFeedback>
 
             </View>

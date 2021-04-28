@@ -3,17 +3,18 @@ import { Text, View, Image, TouchableWithoutFeedback, TextInput } from 'react-na
 import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
+import Styles from '../../Styles/StyleConstants';
 
 const CreateDirections = ({ direction, setDirection }) => {
     if (direction === null) {
         return (
             <TouchableWithoutFeedback onPress={() => setDirection('')}>
                 <View style={[CreateStyles.ingrContainer, { height: 250 }]}>
-                    <Text style={CreateStyles.ingrTitle}>DIRECTIONS</Text>
-                    <View style={CreateStyles.ingrLine}></View>
+                    <Text style={GlobalStyles.title2}>DIRECTIONS</Text>
+                    <View style={GlobalStyles.line}></View>
                     <View style={[GlobalStyles.flexCenter, { bottom: 20 }]}>
                         <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
-                        <Text style={CreateStyles.photoText}>Add directions here</Text>
+                        <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>Add directions here</Text>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -21,17 +22,17 @@ const CreateDirections = ({ direction, setDirection }) => {
     } else {
         return (
             <View style={[CreateStyles.ingrContainer, { alignItems: 'flex-start', paddingBottom: 50 }]}>
-                <Text style={[CreateStyles.ingrTitle, { alignSelf: 'center' }]}>DIRECTIONS</Text>
+                <Text style={[GlobalStyles.title2, { alignSelf: 'center' }]}>DIRECTIONS</Text>
 
-                <View style={[CreateStyles.ingrLine, { marginBottom: 5 }]}></View>
+                <View style={GlobalStyles.line}></View>
 
                 <TextInput
-                    style={CreateStyles.dirInput}
+                    style={[GlobalStyles.paragraph2, { color: Styles.GRAY, paddingBottom: 0, includeFontPadding: false, }]}
                     onChangeText={(text) => setDirection(text)}
                     value={direction}
                     placeholder='How do you make this drink?'
                     multiline={true}
-                    placeholderTextColor='#b3b3b3'
+                    placeholderTextColor={Styles.GRAY}
                 />
             </View>
         )

@@ -7,8 +7,10 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Images from '../../Images/Images';
+import { renderNum } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
+import Styles from '../../Styles/StyleConstants';
 
 // TODO: Delete this after development, lol
 LogBox.ignoreAllLogs()
@@ -16,7 +18,6 @@ LogBox.ignoreAllLogs()
 //  TODO: Temporarily I made this button route to the settings screen for testing purposes. In reality, you should have a settings
 // cog on the top right of the screen that goes to the settings screen. Implement this.
 const ProfileScreen = ({ navigation, drinks, user }) => {
-    console.log(drinks);
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
 
@@ -46,10 +47,10 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
     // If any other user, then render follow/unfollow component
     const renderInfoButtons = () => {
         return (
-            <View style={UserStyles.buttonRow}>
+            <View style={{ flexDirection: 'row' }}>
                 <TouchableWithoutFeedback onPress={() => navigation.navigate('SettingsScreen')}>
                     <View style={[UserStyles.button, { marginRight: 4 }]}>
-                        <Text style={UserStyles.subtitle}>Edit Profile</Text>
+                        <Text style={GlobalStyles.paragraph3}>Edit Profile</Text>
                     </View>
                 </TouchableWithoutFeedback>
                 {user.favorites.length > 0 &&
@@ -59,7 +60,7 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
                                 style={[UserStyles.heartImg, Platform.OS === 'android' && { marginTop: 2, marginLeft: 2 }]}
 
                             />
-                            <Text style={UserStyles.subtitle}>Favorites</Text>
+                            <Text style={GlobalStyles.paragraph3}>Favorites</Text>
                         </View>
                     </TouchableWithoutFeedback>
                 }
@@ -72,8 +73,8 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
         return (
             <TouchableWithoutFeedback onPress={() => routeStatBox(type)}>
                 <View style={[UserStyles.statBox, GlobalStyles.boxShadow]}>
-                    <Text style={[UserStyles.title, { marginBottom: 8 }]}>{num}</Text>
-                    <Text style={UserStyles.subtitle}>{type}</Text>
+                    <Text style={[GlobalStyles.title1, { marginBottom: 8 }]}>{renderNum(num)}</Text>
+                    <Text style={GlobalStyles.paragraph3}>{type}</Text>
                 </View>
             </TouchableWithoutFeedback>
         )
@@ -108,21 +109,21 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flexGrow: 1 }}
             >
-                <SafeAreaView style={[GlobalStyles.headerSafeArea, UserStyles.container]} >
+                <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center' }]} >
 
                     <View style={UserStyles.infoContainer}>
                         <View style={UserStyles.infoRow}>
                             <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
-                            <View style={UserStyles.infoTextContainer}>
-                                <Text style={UserStyles.title}>{user.userName}</Text>
-                                <Text style={[UserStyles.subtitle, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                            <View style={{ marginLeft: 8 }}>
+                                <Text style={[GlobalStyles.title1, { marginBottom: 8 }]}>{user.userName}</Text>
+                                <Text style={[GlobalStyles.paragraph2, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
                                 {renderInfoButtons()}
                             </View>
                         </View>
                     </View>
 
                     <View style={UserStyles.infoContainer}>
-                        <Text style={UserStyles.subtitle}>{user.bio}</Text>
+                        <Text style={GlobalStyles.paragraph3}>{user.bio}</Text>
                     </View>
 
                     <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>
@@ -157,7 +158,11 @@ const mapStateToProps = (state, ownProps) => {
         }
     } else {
         const profiles = state.firestore.data.profiles;
-        const profile = profiles ? profiles[state.firebase.auth.uid] : null;
+        // For testing purposes only
+        const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
+        // For production, uncomment below
+        // const profile = profiles ? profiles[state.firebase.auth.uid] : null;
+        console.log(state.firebase.auth.uid);
         return {
             drinks: state.firestore.data.drinks,
             user: profile

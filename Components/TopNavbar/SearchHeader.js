@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Dimensions, Image, View, StyleSheet, Keyboard } from 'react-native';
+import { Image, View, StyleSheet, Keyboard, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import Autocomplete from 'react-native-autocomplete-input';
 import Images from '../../Images/Images';
-
-const width = Dimensions.get('screen').width;
-const LIGHTPINK = '#F7D2CF';
-const GRAY = '#a1a1a1'
-
+import Styles from '../../Styles/StyleConstants';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 const comp = (a, b) => {
     return a.toLowerCase().trim() === b.toLowerCase().trim();
@@ -43,17 +40,16 @@ const SearchHeader = ({ drinks, navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.inputImageRow}>
-                <View style={{ backgroundColor: 'white', width: width * .9, height: 42 }}>
-                    <Autocomplete
-                        clearButtonMode={'always'}
-                        data={currentDrinks && currentDrinks.length === 1 && comp(query, currentDrinks[0].name) ? [] : currentDrinks}
-                        query={query}
-                        inputContainerStyle={styles.inputContainerStyle}
-                        onChangeText={setQuery}
-                        hideResults={true}
-                        autoCorrect={false}
-                    />
-                </View>
+                <Autocomplete
+                    clearButtonMode={'always'}
+                    data={currentDrinks && currentDrinks.length === 1 && comp(query, currentDrinks[0].name) ? [] : currentDrinks}
+                    query={query}
+                    inputContainerStyle={{ visibility: 'hidden', borderColor: 'transparent' }}
+                    onChangeText={setQuery}
+                    hideResults={true}
+                    autoCorrect={false}
+                    style={[GlobalStyles.paragraph2, styles.inputContainerStyle]}
+                />
                 <Image source={Images.topNav.search} style={styles.image} />
             </View>
 
@@ -63,17 +59,22 @@ const SearchHeader = ({ drinks, navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: width,
+        width: Styles.width,
         alignItems: 'center',
-        backgroundColor: LIGHTPINK,
+        backgroundColor: Styles.PINK,
         flex: 1,
     },
     inputContainerStyle: {
-        width: width * .9,
-        borderWidth: 2,
+        width: Styles.width * .9,
+        height: 42,
+        borderWidth: 1.5,
+        borderColor: 'black',
         paddingLeft: 35,
-        borderColor: GRAY,
-        alignSelf: 'center'
+        borderRadius: Styles.BORDER_RADIUS,
+        borderColor: Styles.OFF_BLACK,
+        alignSelf: 'center',
+        overflow: 'hidden',
+        backgroundColor: 'white'
     },
     inputImageRow: {
         flexDirection: 'row',
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
         width: 18,
         height: 18,
         top: 13,
-        left: 12,
+        left: Platform.OS === 'ios' ? 12 : 30,
         position: 'absolute',
         zIndex: 900,
         resizeMode: 'contain'

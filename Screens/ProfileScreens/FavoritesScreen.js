@@ -111,12 +111,10 @@ const FavoritesScreen = ({ route, navigation, drinks, removeDrinkFromArray }) =>
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flexGrow: 1 }}
             >
-                <SafeAreaView style={[GlobalStyles.headerSafeArea, UserStyles.container]} >
+                <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center' }]} >
                     <View style={DiscoverStyles.titleContainer}>
-                        <Text style={DiscoverStyles.title}>FAVORITES</Text>
+                        <Text style={GlobalStyles.title1}>FAVORITES</Text>
                     </View>
-
-
 
                     <View style={UserStyles.allDrinksContainer}>
                         <FlatList

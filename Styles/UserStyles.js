@@ -1,35 +1,24 @@
-import { StyleSheet, Platform, Dimensions } from 'react-native';
-const width = Dimensions.get('screen').width;
-const height = Dimensions.get('screen').height;
+import { StyleSheet } from 'react-native';
+import Styles from './StyleConstants';
 const PINK = '#F29288';
 const GRAY = '#a1a1a1'
 const RADIUS = 22;
-const SUBFONT = 15;
 
-const FAVEIMAGEWIDTH = width * .45;
+const FAVEIMAGEWIDTH = Styles.width * .45;
 
 export default StyleSheet.create({
-    container: {
-        alignItems: 'center'
-    },
     infoContainer: {
-        width: width * .9,
+        width: Styles.width * .9,
         marginBottom: 30
     },
     profileImage: {
         borderRadius: 100,
-        width: width * .25,
-        height: width * .25
-    },
-    buttonRow: {
-        flexDirection: 'row'
+        width: Styles.width * .2,
+        height: Styles.width * .2
     },
     infoRow: {
         flexDirection: 'row',
         alignItems: 'center'
-    },
-    infoTextContainer: {
-        marginLeft: 8
     },
     title: {
         fontSize: 24,
@@ -39,16 +28,16 @@ export default StyleSheet.create({
         fontSize: 14
     },
     button: {
-        borderRadius: 8,
+        borderRadius: 10,
         borderWidth: 1,
         paddingHorizontal: 8,
         paddingVertical: 4,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     buttonFavorites: {
         flexDirection: 'row',
-        backgroundColor: PINK,
-        borderColor: PINK
+        backgroundColor: Styles.DARK_PINK,
+        borderColor: Styles.DARK_PINK
     },
     heartImg: {
         width: 18,
@@ -59,8 +48,8 @@ export default StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: height * .11,
-        width: width * .27,
+        height: Styles.height * .11,
+        width: Styles.width * .27,
         borderWidth: 1,
         borderColor: 'transparent',
         borderRadius: 4,
@@ -80,15 +69,15 @@ export default StyleSheet.create({
         resizeMode: 'contain'
     },
     drinkImage: {
-        width: width * .333,
-        height: width * .333,
+        width: Styles.width * .333,
+        height: Styles.width * .333,
     },
     allDrinksContainer: {
-        width: width,
+        width: Styles.width,
     },
     followerHeader: {
-        height: height * .05,
-        width: width,
+        height: Styles.height * .05,
+        width: Styles.width,
         alignItems: 'center',
         justifyContent: 'space-between'
     },
@@ -97,7 +86,7 @@ export default StyleSheet.create({
         fontSize: 20,
     },
     followRow: {
-        width: width,
+        width: Styles.width,
         height: 60,
         flexDirection: 'row',
         paddingLeft: 20,
@@ -167,7 +156,7 @@ export default StyleSheet.create({
         color: GRAY
     },
     settingsButton: {
-        width: width,
+        width: Styles.width,
         height: 40,
         backgroundColor: PINK
     }

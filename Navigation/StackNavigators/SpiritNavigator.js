@@ -4,9 +4,9 @@ import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import SpiritScreen from '../../Screens/Main/SpiritScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
+import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
-const LIGHTPINK = '#F7D2CF';
 
 const SpiritNavigator = ({ route, navigation }) => {
 
@@ -25,6 +25,9 @@ const SpiritNavigator = ({ route, navigation }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -36,7 +39,10 @@ const SpiritNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                    headerTintColor: Styles.PINK
                 })}
             />
         </Stack.Navigator>

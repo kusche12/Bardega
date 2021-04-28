@@ -29,7 +29,7 @@ export default {
         profileUnfocused: require('./profileUnfocused.png'),
     },
     topNav: {
-        search: require('./search.png'),
+        search: require('./searchTopnav.png'),
         backButton: require('./back_button.png'),
     },
     profile: {

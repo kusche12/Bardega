@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableWithoutFeedback, TouchableHighlight, Text, StyleSheet, Vibration, Alert } from 'react-native';
-import { renderTime } from '../../Functions/miscFunctions';
+import { renderTime, renderNum } from '../../Functions/miscFunctions';
 import { likeComment, unLikeComment, deleteComment } from '../../Store/Actions/CommentActions';
 import Images from '../../Images/Images';
 import Loading from '../../Components/Main/Loading';
@@ -20,16 +20,6 @@ const Comment = ({ comment, author, navigation, commentID,
             setIsLoading(false);
         }
     }, [likedByUsers])
-
-    const renderLikes = () => {
-        if (numLikes < 10000) {
-            return numLikes;
-        } else if (numLikes >= 10001 && numLikes < 1000000) {
-            return `${Math.round(numLikes / 3)}k`;
-        } else {
-            return `${Math.round(numLikes / 4)}m`;
-        }
-    }
 
     const renderHeart = () => {
         let img;
@@ -100,9 +90,9 @@ const Comment = ({ comment, author, navigation, commentID,
                                     </Text>
                                     <Text>
                                         <Text style={styles.date}>{renderTime(comment.dateCreated)}  </Text>
-                                        {likedByUsers && likedByUsers.length === 1
+                                        {numLikes && numLikes === 1
                                             ? <Text style={styles.date}>1 Like</Text>
-                                            : <Text style={styles.date}>{renderLikes()} Likes</Text>
+                                            : <Text style={styles.date}>{renderNum(numLikes)} Likes</Text>
                                         }
                                     </Text>
                                 </View>

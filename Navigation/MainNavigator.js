@@ -11,8 +11,7 @@ import CreateNavigator from '../Navigation/StackNavigators/CreateNavigator';
 import SpiritNavigator from '../Navigation/StackNavigators/SpiritNavigator';
 import ProfileNavigator from '../Navigation/StackNavigators/ProfileNavigator';
 import GlobalStyles from '../Styles/GlobalStyles';
-
-const LIGHTPINK = '#F7D2CF';
+import Styles from '../Styles/StyleConstants';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,10 +28,10 @@ const MainNavigator = () => {
         <Tab.Navigator
             initialRouteName='Discover'
             tabBarOptions={{
-                activeBackgroundColor: LIGHTPINK,
-                inactiveBackgroundColor: LIGHTPINK,
+                activeBackgroundColor: Styles.PINK,
+                inactiveBackgroundColor: Styles.PINK,
                 style: {
-                    backgroundColor: LIGHTPINK,
+                    backgroundColor: Styles.PINK,
                 },
                 showLabel: false,
             }}

@@ -1,25 +1,12 @@
-import { StyleSheet, Dimensions } from 'react-native';
-
-const width = Dimensions.get('screen').width;
-const height = Dimensions.get('screen').height;
-const PINK = '#F29288';
-const GRAY = '#a1a1a1'
-const RADIUS = 22;
-const SUBFONT = 15;
+import { StyleSheet } from 'react-native';
+import Styles from './StyleConstants';
 
 export default StyleSheet.create({
-    container: {
-        marginLeft: 8,
-    },
     titleContainer: {
         alignSelf: "stretch",
         alignItems: "center",
         justifyContent: "center",
         marginBottom: 20,
-    },
-    title: {
-        fontSize: 22,
-        fontWeight: "700",
     },
     horizontalContainer: {
         height: 240,
@@ -27,8 +14,8 @@ export default StyleSheet.create({
     },
     cardContainer: {
         width: 140,
-        height: 200,
-        borderRadius: 5,
+        height: 'auto',
+        borderRadius: Styles.BORDER_RADIUS,
         alignItems: "center",
         marginRight: 8,
         backgroundColor: "white",
@@ -37,7 +24,7 @@ export default StyleSheet.create({
     drinkImg: {
         width: 140,
         height: 150,
-        borderRadius: 5,
+        borderRadius: Styles.BORDER_RADIUS,
     },
     horizRow: {
         marginBottom: 10,
@@ -46,39 +33,21 @@ export default StyleSheet.create({
         paddingRight: 12,
         alignItems: 'flex-end'
     },
-    queryTitle: {
-        fontSize: 20,
-        fontWeight: "700",
-    },
-    querySubtitle: {
-        fontSize: 13,
-        fontWeight: '700',
-    },
-    cardTitle: {
-        fontSize: 14,
-        fontWeight: "700",
-        marginTop: 8,
-        marginBottom: 10,
-        textAlign: "center",
-        paddingHorizontal: 4,
-        paddingTop: 4,
-    },
     searchHeader: {
         marginBottom: 8,
         paddingLeft: 16
     },
     searchContainer: {
-        width: width,
         flexDirection: 'row',
-        paddingLeft: 16,
         paddingVertical: 8,
-        borderBottomColor: GRAY,
+        marginHorizontal: 8,
+        borderBottomColor: Styles.GRAY,
         borderBottomWidth: 1,
     },
     searchImage: {
-        width: 60,
-        height: 60,
-        borderRadius: 5,
-        marginRight: 4
+        width: 80,
+        height: 80,
+        borderRadius: Styles.BORDER_RADIUS,
+        marginRight: 8
     },
 });

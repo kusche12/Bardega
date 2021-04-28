@@ -8,7 +8,7 @@ const GoBackHeader = ({ navigation }) => {
         <View style={GlobalStyles.headerWithButtons} >
             <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                 <Image
-                    style={{ height: 20, width: 20 }}
+                    style={{ height: 20, width: 20, bottom: 6 }}
                     source={Images.topNav.backButton}
                     resizeMode='contain'
                 />

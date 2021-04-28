@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
-import GlobalStyles from '../../Styles/GlobalStyles';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
 import HorizontalList from '../../Components/Discover/HorizontalList';
-import DiscoverStyles from '../../Styles/DiscoverStyles';
 import Loading from '../../Components/Main/Loading';
+import DiscoverStyles from '../../Styles/DiscoverStyles';
+import GlobalStyles from '../../Styles/GlobalStyles';
 
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
@@ -53,9 +53,9 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
             enableAutomaticScroll={(Platform.OS === 'ios')}
             contentContainerStyle={{ flexGrow: 1 }}
         >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, DiscoverStyles.container]}>
+            <SafeAreaView style={GlobalStyles.headerSafeArea}>
                 <View style={DiscoverStyles.titleContainer}>
-                    <Text style={DiscoverStyles.title}>DISCOVER</Text>
+                    <Text style={GlobalStyles.title1}>DISCOVER</Text>
                 </View>
                 {selectedDrinks.map((drinks, index) => {
                     return <HorizontalList

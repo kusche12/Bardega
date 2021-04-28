@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Dimensions, TouchableWithoutFeedback, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback, Platform } from 'react-native';
 import { Col, Grid } from 'react-native-easy-grid';
 import SegmentedPicker from 'react-native-segmented-picker';
 import { Feather } from '@expo/vector-icons';
 import PickerOptions from '../../API/pickerOptions';
-
-const WIDTH = Dimensions.get('screen').width;
+import GlobalStyles from '../../Styles/GlobalStyles';
+import Styles from '../../Styles/StyleConstants';
 
 const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIngredientType, deleteIngredient }) => {
 
@@ -28,16 +28,16 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
             const amount = parseFloat(ingredient.amount, 10);
             if (amount < 1) {
                 // Render normal sized fraction
-                return <Text style={styles.font1}>{decToFraction(amount)}</Text>
+                return <Text style={[GlobalStyles.paragraph1, { color: Styles.GRAY }]}>{decToFraction(amount)}</Text>
             } else if (amount > 1) {
                 // Render normal sized int and small fraction
                 return <View style={styles.fractionWrapper}>
-                    <Text style={styles.font1}>{Math.trunc(amount)}</Text>
-                    <Text style={styles.font2}>{decToFraction(amount % 1)}</Text>
+                    <Text style={[GlobalStyles.paragraph1, { color: Styles.GRAY }]}>{Math.trunc(amount)}</Text>
+                    <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{decToFraction(amount % 1)}</Text>
                 </View>
             } else {
                 // Render normal sized 1
-                return <Text style={styles.font1}>{amount}</Text>
+                return <Text style={[GlobalStyles.paragraph1, { color: Styles.GRAY }]}>{amount}</Text>
             }
         }
     }
@@ -50,8 +50,8 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
                     <TouchableWithoutFeedback onPress={() => setShowPicker(!showPicker)}>
                         <View style={styles.amount}>
                             {renderIngredientAmount()}
-                            <Text style={styles.font2}> </Text>
-                            <Text style={styles.font2}>{ingredient.unit}</Text>
+                            <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}> </Text>
+                            <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{ingredient.unit}</Text>
                         </View>
                     </TouchableWithoutFeedback>
                 </Col>
@@ -60,7 +60,7 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
                 <Col size={4}>
                     <View style={styles.ingredient}>
                         <TextInput
-                            style={styles.ingredientText}
+                            style={[GlobalStyles.paragraph1, { color: Styles.GRAY }]}
                             value={ingredient.type}
                             onChangeText={(text) => updateIngredientType(text, index, ingredient.id)}
                         />
@@ -81,8 +81,8 @@ const CreateSingleIngredient = ({ ingredient, updateIngredient, index, updateIng
                 visible={showPicker}
                 options={PickerOptions}
                 defaultSelections={{ column1: ingredient.amount, column2: ingredient.amount, column3: ingredient.unit }}
-                toolbarBackground={PINK}
-                toolbarBorderColor={PINK}
+                toolbarBackground={Styles.DARK_PINK}
+                toolbarBorderColor={Styles.DARK_PINK}
                 confirmTextColor="white"
             />
         </View>
@@ -138,40 +138,23 @@ const decToFraction = (dec) => {
 
 
 const PINK = '#F29288';
-const GRAY = '#a1a1a1';
 
 const styles = StyleSheet.create({
     container: {
-        width: WIDTH * .75,
+        width: Styles.width * .75,
         borderTopWidth: 1.5,
-        borderTopColor: PINK,
+        borderTopColor: Styles.DARK_PINK,
     },
     amount: {
         flexDirection: 'row',
         alignItems: 'baseline',
         paddingVertical: 5,
     },
-    ingredientText: {
-        fontSize: 16,
-        fontStyle: 'italic',
-        color: GRAY
-    },
     ingredient: {
-        paddingLeft: 10,
-        borderLeftColor: PINK,
+        paddingLeft: 4,
+        borderLeftColor: Styles.DARK_PINK,
         borderLeftWidth: 1.5,
         paddingVertical: 8
-    },
-    font1: {
-        color: GRAY,
-        fontSize: 18,
-        fontStyle: 'italic',
-        marginTop: Platform.OS === 'android' ? 4 : 0
-    },
-    font2: {
-        color: GRAY,
-        fontSize: 12,
-        fontStyle: 'italic',
     },
     fractionWrapper: {
         flexDirection: 'row',

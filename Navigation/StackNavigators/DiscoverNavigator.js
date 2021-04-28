@@ -7,11 +7,9 @@ import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
 import DiscoverScreen from '../../Screens/Main/DiscoverScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
-
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
-const LIGHTPINK = '#F7D2CF';
 
 const DiscoverNavigator = ({ route, navigation }) => {
 
@@ -30,6 +28,9 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -41,7 +42,10 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -53,7 +57,10 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -65,7 +72,10 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -76,6 +86,9 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
         </Stack.Navigator>

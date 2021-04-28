@@ -17,11 +17,10 @@ import CommentsScreen from '../../Screens/Main/CommentsScreen';
 
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
-
+import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
 const Stack = createStackNavigator();
-const LIGHTPINK = '#F7D2CF';
 
 const ProfileNavigator = ({ route, navigation }) => {
 
@@ -40,6 +39,9 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -51,7 +53,10 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
 
                 })}
             />
@@ -64,7 +69,10 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -75,6 +83,9 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -86,7 +97,10 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
@@ -98,13 +112,19 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
             <Stack.Screen
                 name='DrinkListScreen'
                 component={DrinkListScreen}
                 options={({ route, navigation }) => ({
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                     headerTitle: () => <MainHeader />,
                     headerRight: () => {
                         const handleEditCollection = () => {
@@ -168,13 +188,16 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK
                 })}
             />
             <Stack.Screen
                 name='EditCollectionScreen'
                 component={EditCollectionScreen}
                 options={({ route, navigation }) => ({
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                     headerTitle: () => <MainHeader />,
                     headerRight: () => {
 
@@ -198,7 +221,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK
                 })}
             />
             <Stack.Screen
@@ -210,7 +233,10 @@ const ProfileNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
-                    headerTintColor: LIGHTPINK
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
                 })}
             />
         </Stack.Navigator>
