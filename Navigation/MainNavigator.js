@@ -26,7 +26,7 @@ const MainNavigator = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName='Discover'
+            initialRouteName='Discover' // TODO: Change back to Discover
             tabBarOptions={{
                 activeBackgroundColor: Styles.PINK,
                 inactiveBackgroundColor: Styles.PINK,

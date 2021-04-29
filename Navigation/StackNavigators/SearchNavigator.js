@@ -15,7 +15,7 @@ import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import SearchHeader from '../../Components/TopNavbar/SearchHeader'
-import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
+import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
@@ -62,7 +62,7 @@ const SearchNavigator = ({ route, navigation, drinks }) => {
                     component={DrinkDetailScreen}
                     options={({ route, navigation }) => ({
                         headerTitle: () => <MainHeader />,
-                        headerRight: () => <GoBackHeader navigation={navigation} />,
+                        headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                         headerTitleStyle: { flex: 1, textAlign: 'center' },
                         headerTitleAlign: 'center',
                         headerBackTitleVisible: false,
@@ -77,7 +77,7 @@ const SearchNavigator = ({ route, navigation, drinks }) => {
                     component={DrinkListScreen}
                     options={({ route, navigation }) => ({
                         headerTitle: () => <MainHeader />,
-                        headerRight: () => <GoBackHeader navigation={navigation} />,
+                        headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                         headerTitleStyle: { flex: 1, textAlign: 'center' },
                         headerTitleAlign: 'center',
                         headerBackTitleVisible: false,
@@ -92,7 +92,7 @@ const SearchNavigator = ({ route, navigation, drinks }) => {
                     component={CommentsScreen}
                     options={({ route, navigation }) => ({
                         headerTitle: () => <MainHeader />,
-                        headerRight: () => <GoBackHeader navigation={navigation} />,
+                        headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                         headerTitleStyle: { flex: 1, textAlign: 'center' },
                         headerTitleAlign: 'center',
                         headerBackTitleVisible: false,

@@ -160,5 +160,27 @@ export default StyleSheet.create({
         width: Styles.width,
         height: 40,
         backgroundColor: PINK
+    },
+    cogContainer: {
+        position: 'absolute',
+        right: 16,
+        top: -24
+    },
+    settingsCog: {
+        width: 30,
+        height: 30
+    },
+    profileInputContainer: {
+        flexDirection: 'row',
+        width: Styles.width,
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        borderTopWidth: 1,
+        borderTopColor: Styles.LIGHT_GRAY
+    },
+    profileInputBio: {
+        marginTop: 4,
+        paddingHorizontal: 8,
+        paddingBottom: 20,
     }
 });

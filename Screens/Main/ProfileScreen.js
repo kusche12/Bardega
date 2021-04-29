@@ -17,7 +17,7 @@ LogBox.ignoreAllLogs()
 
 //  TODO: Temporarily I made this button route to the settings screen for testing purposes. In reality, you should have a settings
 // cog on the top right of the screen that goes to the settings screen. Implement this.
-const ProfileScreen = ({ navigation, drinks, user }) => {
+const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
 
@@ -48,7 +48,7 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
     const renderInfoButtons = () => {
         return (
             <View style={{ flexDirection: 'row' }}>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('SettingsScreen')}>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate('EditProfileScreen')}>
                     <View style={[UserStyles.button, { marginRight: 4 }]}>
                         <Text style={GlobalStyles.paragraph3}>Edit Profile</Text>
                     </View>
@@ -109,7 +109,15 @@ const ProfileScreen = ({ navigation, drinks, user }) => {
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flexGrow: 1 }}
             >
-                <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center' }]} >
+                <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginTop: 20 }]} >
+
+                    {userID === user.id &&
+                        <View style={UserStyles.cogContainer}>
+                            <TouchableWithoutFeedback onPress={() => navigation.navigate('SettingsScreen')}>
+                                <Image source={Images.profile.settings} style={UserStyles.settingsCog} />
+                            </TouchableWithoutFeedback>
+                        </View>
+                    }
 
                     <View style={UserStyles.infoContainer}>
                         <View style={UserStyles.infoRow}>
@@ -154,7 +162,8 @@ const mapStateToProps = (state, ownProps) => {
     if (ownProps.route.params.user !== undefined) {
         return {
             drinks: state.firestore.data.drinks,
-            user: ownProps.route.params.user
+            user: ownProps.route.params.user,
+            userID: state.firebase.auth.uid
         }
     } else {
         const profiles = state.firestore.data.profiles;
@@ -162,10 +171,10 @@ const mapStateToProps = (state, ownProps) => {
         const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
         // For production, uncomment below
         // const profile = profiles ? profiles[state.firebase.auth.uid] : null;
-        console.log(state.firebase.auth.uid);
         return {
             drinks: state.firestore.data.drinks,
-            user: profile
+            user: profile,
+            userID: state.firebase.auth.uid
         }
     }
 }

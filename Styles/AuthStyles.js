@@ -38,11 +38,6 @@ export default StyleSheet.create({
         height: 50,
         width: Styles.width * .8,
     },
-    input: {
-        height: 40,
-        color: '#333',
-        fontWeight: '500'
-    },
     mainButton: {
         width: Styles.width * .8,
         marginBottom: 20,

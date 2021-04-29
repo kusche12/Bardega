@@ -6,6 +6,7 @@ const Styles = {
     PINK: '#FFF5F4',
     DARK_PINK: '#F29288',
     GRAY: '#a1a1a1',
+    LIGHT_GRAY: '#cfcfcf',
     DARK_GRAY: '#333',
     width: width,
     height: height,

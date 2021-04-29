@@ -4,7 +4,7 @@ import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
-import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
+import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import DiscoverScreen from '../../Screens/Main/DiscoverScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import Styles from '../../Styles/StyleConstants';
@@ -38,7 +38,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -53,7 +53,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 component={DrinkListScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -68,7 +68,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 component={CommentsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,

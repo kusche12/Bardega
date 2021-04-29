@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import SpiritScreen from '../../Screens/Main/SpiritScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
-import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
+import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
@@ -35,7 +35,7 @@ const SpiritNavigator = ({ route, navigation }) => {
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,

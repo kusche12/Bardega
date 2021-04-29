@@ -7,8 +7,10 @@ import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
 import FavoritesScreen from '../../Screens/ProfileScreens/FavoritesScreen';
 import EditCollectionScreen from '../../Screens/ProfileScreens/EditCollectionScreen';
 import SettingsScreen from '../../Screens/ProfileScreens/SettingsScreen';
+import EditProfileScreen from '../../Screens/ProfileScreens/EditProfileScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import CreateScreen from '../../Screens/Main/CreateScreen';
+import ProfileInputScreen from '../../Screens/ProfileScreens/ProfileInputScreen';
 
 import { Entypo } from '@expo/vector-icons';
 import Images from '../../Images/Images'
@@ -16,7 +18,7 @@ import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 
 import MainHeader from '../../Components/TopNavbar/MainHeader';
-import GoBackHeader from '../../Components/TopNavbar/GoBackHeader';
+import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
@@ -49,7 +51,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -65,7 +67,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={CommentsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -93,7 +95,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={FollowScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -108,7 +110,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={FavoritesScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -229,7 +231,37 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={SettingsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='EditProfileScreen'
+                component={EditProfileScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='ProfileInputScreen'
+                component={ProfileInputScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
