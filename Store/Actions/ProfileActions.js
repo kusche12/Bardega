@@ -8,6 +8,10 @@ export const updateBio = (data) => {
         const firestore = await firebase.firestore();
 
         try {
+            if (bio.length > 150) {
+                dispatch({ type: 'UPDATE_BIO_ERROR', err: { message: 'Bio must be shorter than 150 characters.' } });
+                return;
+            }
             // Update bio in the user's profile
             await firestore.collection('profiles').doc(id).update({ bio: bio })
 

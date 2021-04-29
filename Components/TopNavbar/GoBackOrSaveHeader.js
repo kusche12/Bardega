@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Image, View, TouchableWithoutFeedback, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { updateBio } from '../../Store/Actions/ProfileActions';
@@ -6,23 +6,27 @@ import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const GoBackOrSaveHeader = ({ route, navigation, error, updateBio, userID }) => {
+// TODO: Figure out how to error catch with this component so that it does not navigate
+// on errors
+
+// This component features a back button and a save button on the header. 
+// The save button takes a Redux action from route.params which is passed by a 
+// screen component.
+const GoBackOrSaveHeader = ({ route, navigation, error, success }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [runOnce, setRunOnce] = useState(true);
 
     const handleSave = async () => {
         setIsLoading(true);
-        console.log(route.params.action);
-        switch (route.params.action) {
-            case 'updateBio':
-                await updateBio({ bio: route.params.bio, id: userID });
-            default:
-                break;
-        }
-        setIsLoading(false);
-        if (!error) {
+        await route.params.action(route.params.data)
+        if (error) {
+            console.log(error);
+        } else {
             navigation.goBack();
         }
+        setIsLoading(false);
     }
+
     return (
         <View style={GlobalStyles.headerWithButtons} >
             <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
@@ -44,11 +48,12 @@ const GoBackOrSaveHeader = ({ route, navigation, error, updateBio, userID }) => 
 
 // Use this error in the state to make sure everything works before navigating away
 // You can add multiple reducer errors to the error object at one time by using &&
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     let error = state.profile.profileError;
+    let success = state.profile.profileSuccess;
     return {
-        userID: state.firebase.auth.uid,
-        error: error
+        error: error,
+        success: success
     }
 }
 
