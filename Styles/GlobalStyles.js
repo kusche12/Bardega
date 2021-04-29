@@ -54,6 +54,16 @@ export default StyleSheet.create({
         fontFamily: "SourceSerifRegular",
         fontSize: 12,
     },
+    paragraphError1: {
+        fontFamily: "SourceSerifSemiBold",
+        fontSize: 18,
+        color: 'red'
+    },
+    paragraphError2: {
+        fontFamily: "SourceSerifSemiBold",
+        fontSize: 16,
+        color: 'red'
+    },
     headerSafeArea: {
         flex: 1,
         top: Platform.OS === 'ios' ? 30 : 20,
