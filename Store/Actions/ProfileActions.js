@@ -1,10 +1,9 @@
 // UPDATE: Profile Bio
 // Called while editing the Biography of the user's profile
-export const updateBio = async (data) => {
+export const updateBio = (data) => {
     console.log('Update Bio Action');
     const { bio, id } = data;
     return async (dispatch, getState, { getFirebase }) => {
-        console.log('inside')
         const firebase = await getFirebase();
         const firestore = await firebase.firestore();
 
