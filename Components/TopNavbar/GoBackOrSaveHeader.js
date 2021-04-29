@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, Image, View, TouchableWithoutFeedback, Text } from 'react-native';
 import { connect } from 'react-redux';
+import { updateBio } from '../../Store/Actions/ProfileActions';
 import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const GoBackOrSaveHeader = ({ route, navigation, error }) => {
+const GoBackOrSaveHeader = ({ route, navigation, error, updateBio, userID }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSave = async () => {
         setIsLoading(true);
-        await route.params.action(route.params.data);
+        console.log(route.params.action);
+        switch (route.params.action) {
+            case 'updateBio':
+                await updateBio({ bio: route.params.bio, id: userID });
+            default:
+                break;
+        }
         setIsLoading(false);
         if (!error) {
             navigation.goBack();
@@ -40,8 +47,15 @@ const GoBackOrSaveHeader = ({ route, navigation, error }) => {
 const mapStateToProps = (state, ownProps) => {
     let error = state.profile.profileError;
     return {
+        userID: state.firebase.auth.uid,
         error: error
     }
 }
 
-export default connect(mapStateToProps)(GoBackOrSaveHeader);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateBio: (data) => dispatch(updateBio(data))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoBackOrSaveHeader);

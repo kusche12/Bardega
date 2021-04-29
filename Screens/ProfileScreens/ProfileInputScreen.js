@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { updateBio } from '../../Store/Actions/ProfileActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 import UserStyles from '../../Styles/UserStyles';
 
-const ProfileInputScreen = ({ route, navigation, userID, updateBio }) => {
+const ProfileInputScreen = ({ route, navigation }) => {
     const [bio, setBio] = useState(route.params.value);
     useEffect(() => {
-        navigation.setParams({ action: updateBio, data: { id: userID, bio: route.params.value } });
+        navigation.setParams({ action: 'updateBio', data: { bio: route.params.value } });
     }, [])
 
     // Update the bio state in real time for the UI
     // Also set the navigation state with the new updated bio and the Redux Action to update the bio
     // if the user clicks "save"
     const handleChange = (e) => {
-        navigation.setParams({ action: updateBio, data: { id: userID, bio: e } });
+        navigation.setParams({ action: 'updateBio', data: { bio: e } });
         setBio(e)
     }
 
@@ -39,19 +36,4 @@ const ProfileInputScreen = ({ route, navigation, userID, updateBio }) => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        userID: state.firebase.auth.uid
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        updateBio: (data) => dispatch(updateBio(data)),
-    }
-}
-
-
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps)
-)(ProfileInputScreen);
+export default ProfileInputScreen
