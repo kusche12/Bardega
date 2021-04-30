@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, Image, View, TouchableWithoutFeedback, Text } from 'react-native';
 import { connect } from 'react-redux';
+import { updateBio } from '../../Store/Actions/ProfileActions';
 import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -50,4 +51,10 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(GoBackOrSaveHeader);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateBio: (data) => dispatch(updateBio(data))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoBackOrSaveHeader);
