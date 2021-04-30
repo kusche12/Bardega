@@ -7,9 +7,6 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 import UserStyles from '../../Styles/UserStyles';
 
-// TODO: Check if the user's bio is > 150 characters. In that case, throw the reducer error into the
-// navigation params and display the error on this screen.
-//  Yes, this will require lots of data movement.
 const ProfileInputScreen = ({ route, navigation, userID, updateBio, error }) => {
     const [bio, setBio] = useState(route.params.value);
 

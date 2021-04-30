@@ -5,22 +5,16 @@ import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Figure out how to error catch with this component so that it does not navigate
-// on errors
-
 // This component features a back button and a save button on the header. 
 // The save button takes a Redux action from route.params which is passed by a 
 // screen component.
 const GoBackOrSaveHeader = ({ route, navigation, error, success }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [runOnce, setRunOnce] = useState(true);
 
     const handleSave = async () => {
         setIsLoading(true);
-        await route.params.action(route.params.data)
-        if (error) {
-            console.log(error);
-        } else {
+        const res = await route.params.action(route.params.data);
+        if (res) {
             navigation.goBack();
         }
         setIsLoading(false);

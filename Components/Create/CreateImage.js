@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Image, View, TouchableWithoutFeedback, Text, Alert } from 'react-native';
 import Images from '../../Images/Images';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
 
 import CreateStyles from '../../Styles/CreateStyles'
 import GlobalStyles from '../../Styles/GlobalStyles'
@@ -60,23 +59,22 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
 
     // Handle taking picture
     const takeImage = async () => {
-        if (Constants.platform.ios) {
-            const rollPermission = await ImagePicker.requestCameraPermissionsAsync();
-            if (rollPermission.status !== 'granted') {
-                alert(
-                    'You will not be able to take a picture of your drink without camera access. Please allow Camera access in your iOS Application Settings.'
-                );
-            } else {
-                let result = await ImagePicker.launchCameraAsync({
-                    allowsEditing: true,
-                    aspect: [4, 3],
-                    quality: .5,
-                });
-                if (!result.cancelled) {
-                    setDrinkImage(result.uri);
-                }
+        const rollPermission = await ImagePicker.requestCameraPermissionsAsync();
+        if (rollPermission.status !== 'granted') {
+            alert(
+                'You will not be able to take a picture of your drink without camera access. Please allow Camera access in your iOS Application Settings.'
+            );
+        } else {
+            let result = await ImagePicker.launchCameraAsync({
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: .5,
+            });
+            if (!result.cancelled) {
+                setDrinkImage(result.uri);
             }
         }
+
     };
 
     // Handle choose from camera roll

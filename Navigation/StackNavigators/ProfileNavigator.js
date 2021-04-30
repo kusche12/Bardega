@@ -246,7 +246,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={EditProfileScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,

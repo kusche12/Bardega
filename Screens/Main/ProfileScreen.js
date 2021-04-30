@@ -10,7 +10,6 @@ import Images from '../../Images/Images';
 import { renderNum } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
-import Styles from '../../Styles/StyleConstants';
 
 // TODO: Delete this after development, lol
 LogBox.ignoreAllLogs()
@@ -25,6 +24,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     useEffect(() => {
         if (user && drinks) {
             loadUserDrinks();
+            cacheImages(user.imageURL, userID);
         }
     }, []);
 
