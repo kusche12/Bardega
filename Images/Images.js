@@ -40,5 +40,15 @@ export default {
     comment: {
         emptyHeart: require('./empty_heart.png'),
         fullHeart: require('./full_heart.png'),
+    },
+    settings: {
+        switch: require('./switch.png'),
+        signout: require('./exit.png'),
+        trash: require('./trash.png'),
+        lock: require('./lock.png'),
+        notifications: require('./notifications.png'),
+        contact: require('./contact.png'),
+        about: require('./about.png'),
+
     }
 }
