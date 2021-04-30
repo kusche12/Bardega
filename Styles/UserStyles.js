@@ -156,11 +156,6 @@ export default StyleSheet.create({
         fontSize: 12,
         color: GRAY
     },
-    settingsButton: {
-        width: Styles.width,
-        height: 40,
-        backgroundColor: PINK
-    },
     cogContainer: {
         position: 'absolute',
         right: 16,
@@ -182,5 +177,25 @@ export default StyleSheet.create({
         marginTop: 4,
         paddingHorizontal: 8,
         paddingBottom: 20,
+    },
+    settingsButton: {
+        width: Styles.width,
+        height: 45,
+        backgroundColor: Styles.PINK,
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        marginBottom: 10,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.23,
+        shadowRadius: 2.62,
+
+        elevation: 4,
     }
 });

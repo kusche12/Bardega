@@ -6,7 +6,6 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
-import CreateStyles from '../../Styles/CreateStyles';
 import Styles from '../../Styles/StyleConstants';
 
 const width = Dimensions.get('screen').width;

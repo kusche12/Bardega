@@ -106,7 +106,6 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
         if (!result.cancelled) {
             updateImage({ id: userID, image: result.uri })
             setImage(result.uri);
-
         }
     };
 
