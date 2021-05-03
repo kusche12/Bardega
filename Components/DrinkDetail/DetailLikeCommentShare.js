@@ -4,19 +4,26 @@ import Loading from '../Main/Loading';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { renderNum } from '../../Functions/miscFunctions';
+import { likeDrink, unLikeDrink } from '../../Store/Actions/DrinkActions';
 import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const DetailLikeCommentShare = ({ navigation, drink, authors, profile, likedByUsers, author, userID, numLikes, numComments }) => {
+// TODO: Get the share component to share to other social medias / messenger
+const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
+    likedByUsers, author, userID, numComments, likeDrink, unLikeDrink }) => {
+
     const [isLoading, setIsLoading] = useState(true);
+    const [isDisabled, setIsDisabled] = useState(false);
+
     useEffect(() => {
-        if (authors, profile, likedByUsers) {
+        if (likedByUsers !== null && numLikes !== null) {
             setIsLoading(false);
         }
-    }, [authors, profile, likedByUsers]);
+    }, [likedByUsers]);
 
     const renderHeart = () => {
         let img;
@@ -27,8 +34,22 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, profile, likedByUs
         }
         return <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             {img}
-            <Text style={GlobalStyles.titlebold3}>{numLikes}</Text>
+            <Text style={GlobalStyles.titlebold3}>{renderNum(numLikes - 1)}</Text>
         </View>
+    }
+
+    const handleDrinkLike = async () => {
+        if (isDisabled) {
+            return;
+        }
+        const likes = numLikes - 1;
+        setIsDisabled(true);
+        if (likedByUsers && likedByUsers[userID]) {
+            await unLikeDrink({ numLikes: likes, drink, userID });
+        } else {
+            await likeDrink({ numLikes: likes, drink, userID });
+        }
+        setIsDisabled(false);
     }
 
     if (isLoading) {
@@ -44,12 +65,14 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, profile, likedByUs
                 </TouchableWithoutFeedback>
 
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: Styles.width * .38, justifyContent: 'space-between' }}>
-                    {renderHeart()}
+                    <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleDrinkLike()}>
+                        {renderHeart()}
+                    </TouchableWithoutFeedback>
 
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Image source={Images.detail.emptyComment} style={[DetailStyles.heartImg, { width: 35 }]}></Image>
-                            <Text style={GlobalStyles.titlebold3}>{numComments}</Text>
+                            <Text style={GlobalStyles.titlebold3}>{renderNum(numComments)}</Text>
                         </View>
                     </TouchableWithoutFeedback>
 
@@ -68,22 +91,24 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, profile, likedByUs
 
 const mapStateToProps = (state, ownProps) => {
     let likedByUsers = state.firestore.data['likedByUsers' + ownProps.drink.drinkLikesID];
+    let numLikes = state.firestore.ordered['likedByUsers' + ownProps.drink.drinkLikesID].length;
     const authorID = ownProps.drink.authorID;
     const profiles = state.firestore.data.profiles;
     const profile = profiles ? profiles[authorID] : null;
 
     return {
         userID: state.firebase.auth.uid,
-        numLikes: ownProps.drink.numLikes,
         likedByUsers: likedByUsers ? likedByUsers : null,
         authors: profiles,
         author: profile,
+        numLikes: numLikes,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        likeDrink: (data) => dispatch(likeDrink(data)),
+        unLikeDrink: (data) => dispatch(unLikeDrink(data))
     }
 }
 

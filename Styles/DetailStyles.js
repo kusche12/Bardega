@@ -132,15 +132,17 @@ export default StyleSheet.create({
         width: Styles.width * .052,
     },
     heartImg: {
-        width: 30,
-        height: 30,
+        width: 28,
+        height: 28,
         resizeMode: 'contain'
     },
     buttonContainer: {
         backgroundColor: Styles.PINK,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 80,
-        paddingVertical: 20
+        marginBottom: 60,
+        paddingTop: 20,
+        alignItems: 'center',
+        paddingBottom: 15
     }
 });

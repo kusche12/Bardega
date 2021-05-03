@@ -18,9 +18,6 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-
-// TODO: Add a "like", and "share" button that allows the user to add this drink to one of their favorite's buckets
-// TODO: Add the tags to this screen.
 // TODO: Drink image does not render when moving from CreateScreen to this screen
 const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const drink = route.params.drink;

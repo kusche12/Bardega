@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, Image, View, TouchableWithoutFeedback, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { updateBio } from '../../Store/Actions/ProfileActions';

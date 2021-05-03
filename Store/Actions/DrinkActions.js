@@ -3,6 +3,7 @@
 // Upload the drink image to firebase storage, and save the ImageURL to the drink object
 // Upload a new comments section in the comments collection and save the ID to the drink object
 // Save the ID and dateCreated to the user's drink's array
+// Create a Drink Likes collection and corresponding ID
 export const createDrink = (drink) => {
     console.log('Create Drink Action')
     const { authorID, description, drinkStrength, instructions, name, prepTime, recipe, tags } = drink;
@@ -19,6 +20,11 @@ export const createDrink = (drink) => {
         const commentRef = await firestore.collection('comments').doc();
         const commentID = commentRef.id;
         console.log('commentID: ' + commentID);
+
+        // Drink Likes ID
+        const likesRef = await firestore.collection('drinkLikes').doc();
+        const drinkLikesID = likesRef.id;
+        console.log('drinkLIkesID: ' + drinkLikesID);
 
         const date = new Date();
 
@@ -51,7 +57,8 @@ export const createDrink = (drink) => {
                 dateCreated: date.toISOString(),
                 imageURL: fileURL,
                 commentID: commentID,
-                numLikes: 0
+                numLikes: 0,
+                drinkLikesID: drinkLikesID
             })
 
             // Add this drink to the user's saved drinks array
@@ -123,7 +130,7 @@ export const clearDrinkState = (drink) => {
 // Remove the drink from the user's drink array
 export const deleteDrink = (drink) => {
     console.log('Delete Drink Action')
-    const { id, authorID, commentID } = drink;
+    const { id, authorID, commentID, drinkLikesID } = drink;
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = await getFirebase();
         const firestore = await firebase.firestore();
@@ -147,6 +154,9 @@ export const deleteDrink = (drink) => {
             // Delete the comments collection
             await firestore.collection('comments').doc(commentID).delete();
 
+            // Delete the drink likes collection
+            await firestore.collection('drinkLikes').doc(drinkLikesID).delete();
+
             // Delete the drink from the drinks collection
             await firestore.collection('drinks').doc(id).delete();
 
@@ -158,7 +168,7 @@ export const deleteDrink = (drink) => {
 }
 
 // TODO: Test this on the favorites screen
-// TODO: Test this on the list screen thta appears after clicking on a FavoritesScreen bucket
+// TODO: Test this on the list screen that appears after clicking on a FavoritesScreen bucket
 // DELETE: Drink Object from Drinks Array
 // When the user enters the profile screen or favorites screen and the drink no longer 
 // exists in the database, this function is called to remove it from their profile
@@ -180,3 +190,96 @@ export const removeDrinkFromArray = (data) => {
         }
     }
 }
+
+// UPDATE: Like Drink Object
+// Updates the numLikes field by +1 and adds the user into the likedByUsers
+// within the drinkLikes collection
+// Adds the drink to the user's liked drinks array
+export const likeDrink = (data) => {
+    console.log('Like Drink Action');
+    const { drink, userID, numLikes } = data;
+    console.log(numLikes);
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // Add user to the drinkLikes object
+            await firestore
+                .collection('drinkLikes')
+                .doc(drink.drinkLikesID)
+                .collection('likedByUsers')
+                .doc(userID)
+                .set({ 1: userID })
+
+            // Update comment's numLikes field by 1
+            await firestore
+                .collection('drinks')
+                .doc(drink.id)
+                .update({ numLikes: numLikes + 1 })
+
+            // Add the drink to the user profile's likedDrinks array
+            await firestore
+                .collection('profiles')
+                .doc(userID)
+                .update({
+                    drinks: firebase.firestore.FieldValue.arrayUnion({ id: id })
+                })
+
+            // Add this drink to the user's liked drinks array
+            await firestore
+                .collection('profiles')
+                .doc(userID)
+                .update({
+                    likedDrinks: firebase.firestore.FieldValue.arrayUnion(drink.id)
+                })
+
+
+            dispatch({ type: 'LIKE_DRINK' })
+        } catch (err) {
+            dispatch({ type: 'LIKE_DRINK_ERROR', err });
+        }
+    }
+};
+
+// UPDATE: Unlike Drink Object
+// Updates the numLikes field by -1 and removes the user from the likeByUsers
+// within the drinkLikes collection
+// Removes the drink from the user's liked drinks array
+export const unLikeDrink = (data) => {
+    console.log('Unlike Drink Action');
+    const { drink, userID, numLikes } = data;
+    console.log(drink.numLikes);
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // Remove user from the drinkLikes object
+            await firestore
+                .collection('drinkLikes')
+                .doc(drink.drinkLikesID)
+                .collection('likedByUsers')
+                .doc(userID)
+                .delete()
+
+            // Update comment's numLikes field by -1
+            await firestore
+                .collection('drinks')
+                .doc(drink.id)
+                .update({ numLikes: numLikes - 1 })
+
+            // Remove this drink from the user's liked drinks array
+            await firestore
+                .collection('profiles')
+                .doc(userID)
+                .update({
+                    likedDrinks: firebase.firestore.FieldValue.arrayUnion(drink.id)
+                })
+
+            dispatch({ type: 'LIKE_DRINK' })
+        } catch (err) {
+            dispatch({ type: 'LIKE_DRINK_ERROR', err });
+        }
+    }
+};

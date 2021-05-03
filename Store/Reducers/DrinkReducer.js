@@ -26,6 +26,12 @@ const drinkReducer = (state = initState, action) => {
     case 'DELETE_DRINK_ERROR':
       console.log('delete drink error reducer: ', action.err.message);
       return { ...state, drinkError: action.err.message, drinkID: null };
+    case 'LIKE_DRINK':
+      console.log('like drink reducer');
+      return { ...state, drinkError: null };
+    case 'LIKE_DRINK_ERROR':
+      console.log('like drink error reducer: ', action.err.message);
+      return { ...state, drinkError: action.err.message };
     default:
       return state;
   }

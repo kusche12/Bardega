@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableWithoutFeedback, Text, SafeAreaView, TextInput, View, Alert, Platform, Dimensions } from 'react-native';
+import { TouchableWithoutFeedback, Text, SafeAreaView, TextInput, View, Alert, Platform, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -16,11 +16,9 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const width = Dimensions.get('screen').width;
-
-// TODO: Set the correct font given by Care
 const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigation, drinkError, drinkID, drinks }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isUploading, setIsUploading] = useState(false);
     const [drinkName, setDrinkName] = useState('');
     const [drinkDesc, setDrinkDesc] = useState('');
     const [drinkImage, setDrinkImage] = useState(null);
@@ -29,16 +27,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
     const [drinkStrength, setDrinkStrength] = useState({ value: 'virgin', label: 'Virgin' });
     const [selectedTags, setSelectedTags] = useState([]);
-
-    // Incase you need to test more create screen stuff
-    // const [isLoading, setIsLoading] = useState(true);
-    // const [drinkName, setDrinkName] = useState('Test');
-    // const [drinkDesc, setDrinkDesc] = useState('Test');
-    // const [drinkImage, setDrinkImage] = useState(null);
-    // const [ingredients, setIngredients] = useState([{ amount: '1.5', type: 'gin', unit: 'oz' }]);
-    // const [direction, setDirection] = useState('Test directions');
-    // const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
-    // const [selectedTags, setSelectedTags] = useState([{ name: 'Sweet', id: 'Lm6VhXQcHuDGaTHZc9kt' }]);
 
     // If this screen is coming from an "edit drink" button, 
     // then load the state with all of the drink's data
@@ -87,7 +75,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                 { cancelable: true }
             );
         } else {
-
+            setIsUploading(true);
             let image = await convertImage();
 
             // If drink was passed in, then update it
@@ -121,6 +109,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                 });
             }
         }
+        setIsUploading(false);
     }
 
     // Handler that prepares the drink image to be sent to firestorage
@@ -184,13 +173,16 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
 
                     <CreateTags {...{ tags, setSelectedTags, selectedTags }} />
 
-                    <TouchableWithoutFeedback onPress={() => handleSubmit()}>
+                    <TouchableWithoutFeedback disabled={isUploading} onPress={() => handleSubmit()}>
                         <View style={CreateStyles.submitBtn}>
-                            <Text style={[GlobalStyles.titlebold2, { color: 'white' }]}>Submit Drink</Text>
+                            {isUploading
+                                ? <ActivityIndicator size="small" color='white' />
+                                : <Text style={[GlobalStyles.titlebold2, { color: 'white' }]}>Submit Drink</Text>
+                            }
                         </View>
                     </TouchableWithoutFeedback>
                     {drinkError &&
-                        <Text style={{ color: 'red', textAlign: 'center', width: width * .8, marginBottom: 20 }}>{drinkError}</Text>
+                        <Text style={{ color: 'red', textAlign: 'center', width: Styles.width * .8, marginBottom: 20 }}>{drinkError}</Text>
                     }
 
                 </SafeAreaView>
