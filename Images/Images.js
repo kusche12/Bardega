@@ -49,6 +49,10 @@ export default {
         notifications: require('./notifications.png'),
         contact: require('./contact.png'),
         about: require('./about.png'),
-
+    },
+    detail: {
+        emptyHeartBold: require('./empty_heart_bold.png'),
+        emptyComment: require('./empty_comment.png'),
+        share: require('./share.png'),
     }
 }

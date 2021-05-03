@@ -11,6 +11,7 @@ import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Loading from '../../Components/Main/Loading';
 import InputComment from '../../Components/DrinkDetail/InputComment';
 import StrengthAndPrep from '../../Components/DrinkDetail/StrengthAndPrep';
+import DetailLikeCommentShare from '../../Components/DrinkDetail/DetailLikeCommentShare';
 import { renderTime } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
@@ -18,9 +19,7 @@ import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
 
-// TODO: Add a "bookmark", "like", and "share" button that allows the user to add this drink to one of their favorite's buckets
-// TODO: Add the prep time to this screen.
-// TODO: Add the strength to this screen.
+// TODO: Add a "like", and "share" button that allows the user to add this drink to one of their favorite's buckets
 // TODO: Add the tags to this screen.
 // TODO: Drink image does not render when moving from CreateScreen to this screen
 const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
@@ -214,18 +213,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                         </View>
                     </TouchableWithoutFeedback>
 
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: authors[drink.authorID] })}>
-                        <View style={[CreateStyles.ingrContainerWide, DetailStyles.submitContainer]}>
-                            <Text style={[GlobalStyles.titlebold2, { alignSelf: 'center' }]}>SUBMITTED BY</Text>
-
-                            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
-
-                            <View style={DetailStyles.submitRow}>
-                                <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { marginRight: 16 }]}></Image>
-                                <Text style={GlobalStyles.titlebold2}>{author.userName}</Text>
-                            </View>
-                        </View>
-                    </TouchableWithoutFeedback>
+                    <DetailLikeCommentShare navigation={navigation} drink={drink} numComments={comments.length} />
 
                 </SafeAreaView>
             </KeyboardAwareScrollView>

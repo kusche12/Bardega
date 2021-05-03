@@ -3,15 +3,13 @@ import Styles from './StyleConstants';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
-const PINK = '#F29288';
-const GRAY = '#a1a1a1'
 const RADIUS = 22;
-const SUBFONT = 15;
 
 export default StyleSheet.create({
     editImage: {
         width: 20,
         height: 20,
+        top: 6,
         resizeMode: 'contain',
         justifyContent: 'flex-end',
         flex: 1,
@@ -132,5 +130,17 @@ export default StyleSheet.create({
         borderColor: '#D3676C',
         backgroundColor: '#F67E85',
         width: Styles.width * .052,
+    },
+    heartImg: {
+        width: 30,
+        height: 30,
+        resizeMode: 'contain'
+    },
+    buttonContainer: {
+        backgroundColor: Styles.PINK,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 80,
+        paddingVertical: 20
     }
 });
