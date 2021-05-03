@@ -140,9 +140,8 @@ export default StyleSheet.create({
         backgroundColor: Styles.PINK,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 60,
         paddingTop: 20,
-        alignItems: 'center',
-        paddingBottom: 15
+        alignItems: 'flex-end',
+        paddingVertical: 10,
     }
 });

@@ -49,8 +49,11 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             <ScrollView>
                 {comments && comments.length > 0
                     ?
-                    comments.slice(0).reverse().map((comment, index) =>
-                        <Comment comment={comment} key={index} commentID={drink.commentID} author={profiles[comment.authorID]} navigation={navigation} />
+                    comments.slice(0).reverse().map((comment, index) => {
+                        if (comment.id !== 'default') {
+                            return <Comment comment={comment} key={index} commentID={drink.commentID} author={profiles[comment.authorID]} navigation={navigation} />
+                        }
+                    }
                     )
                     : null
 

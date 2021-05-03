@@ -22,7 +22,6 @@ import Styles from '../../Styles/StyleConstants';
 const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const drink = route.params.drink;
     const [isLoading, setIsLoading] = useState(true);
-    console.log(drink);
     // Load the component after all props are set
     // Turn the firestore comments object into a comments array
     useEffect(() => {
@@ -55,7 +54,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
 
     const renderComments = () => {
         let result = [];
-        if (comments.length === 0) {
+        if (comments.length === 1) {
             return (
                 <View>
                     <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>There are no comments for this drink yet!</Text>
@@ -65,26 +64,31 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
             )
         } else {
             let i = 0;
-            while (i < 3 && i < comments.length) {
+            let totalComments = 3;
+            while (i < totalComments && i < comments.length) {
                 const comment = comments[i];
                 const author = authors[comment.authorID];
-                result.push(
-                    <View style={DetailStyles.commentRow} key={i}>
-                        <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage} />
-                        <View style={{ paddingLeft: 8 }}>
-                            <Text style={GlobalStyles.paragraph2}>{comment.text}</Text>
-                            <Text
-                                style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>- {author.fName} {author.lName} | {renderTime(comment.dateCreated)}
-                            </Text>
+                if (comments[i].id !== 'default') {
+                    result.push(
+                        <View style={DetailStyles.commentRow} key={i}>
+                            <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage} />
+                            <View style={{ paddingLeft: 8 }}>
+                                <Text style={GlobalStyles.paragraph2}>{comment.text}</Text>
+                                <Text
+                                    style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>- {author.fName} {author.lName} | {renderTime(comment.dateCreated)}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
-                )
+                    )
+                } else {
+                    totalComments++;
+                }
                 i++;
             }
             return (
                 <>
                     {result}
-                    <Text style={[GlobalStyles.paragraph3, { marginTop: 16 }]}>View +{comments.length} more comments</Text>
+                    <Text style={[GlobalStyles.paragraph3, { marginTop: 16 }]}>View +{comments.length - 1} more comments</Text>
                 </>
 
             )
@@ -153,7 +157,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flexGrow: 1 }}
             >
-                <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center' }]} >
+                <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 40 }]} >
                     {/* Title (add the right edit button if the userID === authorID) */}
                     <View style={{ flexDirection: 'row' }}>
                         {userID === drink.authorID && <View style={{ flex: 1 }} ></View>}
@@ -170,7 +174,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                         </View>
                     </View>
 
-                    {drink.recipe &&
+                    {drink.recipe && drink.recipe.length > 0 &&
                         <View style={CreateStyles.ingrContainerWide}>
                             <Text style={[GlobalStyles.titlebold2]}>INGREDIENTS</Text>
                             <View style={GlobalStyles.line}></View>
@@ -181,16 +185,15 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                         </View>
                     }
 
-                    {drink.description &&
+                    {drink.description.length > 0 &&
                         <View style={CreateStyles.ingrContainerWide}>
                             <Text style={[GlobalStyles.titlebold2]}>DESCRIPTION</Text>
                             <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
                             <Text style={[GlobalStyles.paragraph2, { lineHeight: 22 }]}>{drink.description}</Text>
-
                         </View>
                     }
 
-                    {drink.instructions &&
+                    {drink.instructions.length > 0 &&
                         <View style={CreateStyles.ingrContainerWide}>
                             <Text style={[GlobalStyles.titlebold2]}>DIRECTIONS</Text>
                             <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>

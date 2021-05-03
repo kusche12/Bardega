@@ -15,17 +15,17 @@ const StrengthAndPrep = ({ strength, prepTime }) => {
         for (let i = 0; i < 13; i++) {
             if (i < filledInBoxes) {
                 res.push(
-                    <View style={[DetailStyles.levelBox, DetailStyles.levelBoxFull]}></View>
+                    <View key={i} style={[DetailStyles.levelBox, DetailStyles.levelBoxFull]}></View>
                 )
             } else if (i > filledInBoxes) {
                 res.push(
-                    <View style={DetailStyles.levelBox}></View>
+                    <View key={i} style={DetailStyles.levelBox}></View>
                 )
             } else {
                 res.push(
-                    <View style={{ flexDirection: 'column' }}>
+                    <View key={i} style={{ flexDirection: 'column' }}>
                         <View style={[DetailStyles.levelBox, DetailStyles.levelBoxFull]}></View>
-                        <Text style={[GlobalStyles.titlebold3, { position: 'absolute', width: Styles.width * .5, top: 33, left: i * -2.2 }]}>{amount.label}</Text>
+                        <Text style={[GlobalStyles.titlebold3, { position: 'absolute', width: Styles.width * .5, top: 33, left: i * -2.6 }]}>{amount.label}</Text>
                     </View>
                 )
             }

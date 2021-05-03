@@ -20,7 +20,8 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
     const [isDisabled, setIsDisabled] = useState(false);
 
     useEffect(() => {
-        if (likedByUsers !== null && numLikes !== null) {
+        if (likedByUsers !== null && numLikes !== null && drink !== null && author !== null && authors !== null) {
+            console.log('UPDATED');
             setIsLoading(false);
         }
     }, [likedByUsers]);
@@ -32,17 +33,14 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
         } else {
             img = <Image source={Images.detail.emptyHeartBold} style={DetailStyles.heartImg} />
         }
-        return <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            {img}
-            <Text style={GlobalStyles.titlebold3}>{renderNum(numLikes - 1)}</Text>
-        </View>
+        return img;
     }
 
     const handleDrinkLike = async () => {
         if (isDisabled) {
             return;
         }
-        const likes = numLikes - 1;
+        const likes = numLikes;
         setIsDisabled(true);
         if (likedByUsers && likedByUsers[userID]) {
             await unLikeDrink({ numLikes: likes, drink, userID });
@@ -57,6 +55,7 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
     } else {
         return (
             <View style={[CreateStyles.ingrContainerWide, DetailStyles.buttonContainer]}>
+
                 <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: authors[drink.authorID] })}>
                     <View style={{ flexDirection: 'column' }}>
                         <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage}></Image>
@@ -66,13 +65,16 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
 
                 <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: Styles.width * .38, justifyContent: 'space-between' }}>
                     <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleDrinkLike()}>
-                        {renderHeart()}
+                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                            {renderHeart()}
+                            <Text style={GlobalStyles.titlebold3}>{renderNum(numLikes)}</Text>
+                        </View>
                     </TouchableWithoutFeedback>
 
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Image source={Images.detail.emptyComment} style={[DetailStyles.heartImg, { width: 35 }]}></Image>
-                            <Text style={GlobalStyles.titlebold3}>{renderNum(numComments)}</Text>
+                            <Text style={GlobalStyles.titlebold3}>{renderNum(numComments - 1)}</Text>
                         </View>
                     </TouchableWithoutFeedback>
 
@@ -91,7 +93,8 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
 
 const mapStateToProps = (state, ownProps) => {
     let likedByUsers = state.firestore.data['likedByUsers' + ownProps.drink.drinkLikesID];
-    let numLikes = state.firestore.ordered['likedByUsers' + ownProps.drink.drinkLikesID].length;
+    let numLikes = state.firestore.data.drinks[ownProps.drink.id].numLikes
+
     const authorID = ownProps.drink.authorID;
     const profiles = state.firestore.data.profiles;
     const profile = profiles ? profiles[authorID] : null;
@@ -119,6 +122,7 @@ export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect((props) => [
         { collection: 'profiles' },
+        { collection: 'drinks' },
         {
             collection: 'drinkLikes',
             doc: props.drink.drinkLikesID,
