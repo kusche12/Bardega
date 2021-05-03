@@ -7,7 +7,6 @@ import CreateStyles from '../../Styles/CreateStyles'
 import GlobalStyles from '../../Styles/GlobalStyles'
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Make sure the .2 compression isn't too low when rendering the drink later
 const CreateImage = ({ drinkImage, setDrinkImage }) => {
     // Need permission
     useEffect(() => {

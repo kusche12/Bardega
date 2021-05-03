@@ -23,7 +23,6 @@ const findDrink = (query, drinks, original) => {
 
 LogBox.ignoreAllLogs()
 
-//TODO: UI Styling
 const SearchHeader = ({ drinks, navigation, preloadedDrinks }) => {
     const [query, setQuery] = useState('');
     const [currentDrinks, setCurrentDrinks] = useState([]);

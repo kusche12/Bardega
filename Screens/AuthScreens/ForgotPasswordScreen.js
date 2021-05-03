@@ -9,8 +9,6 @@ import Styles from '../../Styles/StyleConstants';
 import AuthStyles from '../../Styles/AuthStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
-
-// TODO: Load and render a higher quality version of the logo
 const ForgotPasswordScreen = ({ navigation, forgotPassword, authError, authSuccess }) => {
     const [email, setEmail] = useState('');
 
