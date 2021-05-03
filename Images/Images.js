@@ -35,7 +35,11 @@ export default {
     profile: {
         heart: require('./heart.png'),
         plus: require('./plus.png'),
-        settings: require('./settings.png')
+        settings: require('./settings.png'),
+        grid: require('./pixels.png'),
+        emptyHeart: require('./empty_heart_bold.png'),
+        emptyHeartOff: require('./empty_heart_off.png'),
+        gridOff: require('./pixels_off.png')
     },
     comment: {
         emptyHeart: require('./empty_heart.png'),

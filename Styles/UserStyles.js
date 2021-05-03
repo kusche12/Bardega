@@ -73,9 +73,6 @@ export default StyleSheet.create({
         width: Styles.width * .333,
         height: Styles.width * .333,
     },
-    allDrinksContainer: {
-        width: Styles.width,
-    },
     followerHeader: {
         height: Styles.height * .05,
         width: Styles.width,
@@ -197,5 +194,11 @@ export default StyleSheet.create({
         shadowRadius: 2.62,
 
         elevation: 4,
+    },
+    indexButtonContainer: {
+        width: Styles.width / 2,
+        alignItems: 'center',
+        height: 50,
+        justifyContent: 'center'
     }
 });

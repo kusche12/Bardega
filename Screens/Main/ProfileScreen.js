@@ -10,15 +10,17 @@ import Images from '../../Images/Images';
 import { renderNum } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
+import Styles from '../../Styles/StyleConstants';
 
 // TODO: Delete this after development, lol
 LogBox.ignoreAllLogs()
 
-//  TODO: Temporarily I made this button route to the settings screen for testing purposes. In reality, you should have a settings
-// cog on the top right of the screen that goes to the settings screen. Implement this.
+//  TODO: Animate a transition slider between created and liked drinks
 const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
+    const [likedDrinks, setLikedDrinks] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(0);
 
     // Only get all the drink images after the user and drinks are loaded to the DB
     useEffect(() => {
@@ -31,6 +33,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
         let res = [];
+        let liked = [];
         for (let i = user.drinks.length - 1; i >= 0; i--) {
             const drink = await drinks[user.drinks[i].id];
             if (drink) {
@@ -39,6 +42,14 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
             }
         }
         setUserDrinks(res);
+        for (let i = user.likedDrinks.length - 1; i >= 0; i--) {
+            const drink = await drinks[user.likedDrinks[i].id];
+            if (drink) {
+                cacheImages(drink.imageURL, drink.id);
+                liked.push(drink);
+            }
+        }
+        setLikedDrinks(liked);
         setIsLoading(false);
     }
 
@@ -53,17 +64,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
                         <Text style={GlobalStyles.paragraph3}>Edit Profile</Text>
                     </View>
                 </TouchableWithoutFeedback>
-                {user.favorites.length > 0 &&
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('FavoritesScreen', { favorites: user.favorites })}>
-                        <View style={[UserStyles.button, UserStyles.buttonFavorites]}>
-                            <Image source={Images.profile.heart}
-                                style={[UserStyles.heartImg, Platform.OS === 'android' && { marginTop: 2, marginLeft: 2 }]}
-
-                            />
-                            <Text style={GlobalStyles.paragraph3}>Favorites</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                }
             </View>
         )
     }
@@ -87,6 +87,72 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
         } else if (type === 'Following') {
             navigation.navigate('FollowScreen', { users: user.following, name: 'Following' });
         }
+    }
+
+    const renderIndexButton = (index, type) => {
+        let img;
+        if (type === 'grid' && index === activeIndex) {
+            img = Images.profile.grid;
+        } else if (type === 'grid' && index !== activeIndex) {
+            img = Images.profile.gridOff;
+        } else if (type === 'heart' && index === activeIndex) {
+            img = Images.profile.emptyHeart;
+        } else {
+            img = Images.profile.emptyHeartOff;
+        }
+        return (
+            <View style={[UserStyles.indexButtonContainer, index === activeIndex && { borderBottomColor: Styles.DARK_GRAY, borderBottomWidth: 1.5 }]}>
+                <TouchableWithoutFeedback onPress={() => setActiveIndex(index)}>
+                    <Image source={img} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                </TouchableWithoutFeedback>
+            </View>
+        )
+    }
+
+    const renderIndexSection = () => {
+        console.log(activeIndex)
+        if (activeIndex === 0) {
+            return (
+                <View style={{ width: Styles.width }}>
+                    <FlatList
+                        data={userDrinks}
+                        renderItem={renderDrink}
+                        keyExtractor={item => item.id}
+                        numColumns={3}
+                        scrollEnabled={false}
+                        horizontal={false}
+                    />
+                </View>
+            )
+        } else {
+            return (
+                <View style={{ width: Styles.width }}>
+                    <FlatList
+                        data={likedDrinks}
+                        renderItem={renderDrink}
+                        keyExtractor={item => item.id}
+                        numColumns={3}
+                        scrollEnabled={false}
+                        horizontal={false}
+                    />
+                </View>
+            )
+        }
+    }
+
+    const renderList = ({ item }) => {
+        return (
+            <View style={{ width: Styles.width }}>
+                <FlatList
+                    data={item}
+                    renderItem={renderDrink}
+                    keyExtractor={item => item.id}
+                    numColumns={3}
+                    scrollEnabled={false}
+                    horizontal={false}
+                />
+            </View>
+        )
     }
 
     // Renders a drink image that, when clicked, routes to the drink detail page
@@ -140,16 +206,12 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
                         {renderStatBox(user.following.length, 'Following')}
                     </View>
 
-                    <View style={UserStyles.allDrinksContainer}>
-                        <FlatList
-                            data={userDrinks}
-                            renderItem={renderDrink}
-                            keyExtractor={item => item.id}
-                            numColumns={3}
-                            scrollEnabled={false}
-                            horizontal={false}
-                        />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
+                        {renderIndexButton(0, 'grid')}
+                        {renderIndexButton(1, 'heart')}
                     </View>
+
+                    {renderIndexSection()}
 
                 </SafeAreaView>
             </KeyboardAwareScrollView>
