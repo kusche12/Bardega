@@ -118,5 +118,19 @@ export default StyleSheet.create({
         borderBottomColor: '#EEE',
         borderBottomWidth: 1,
         paddingBottom: 12
+    },
+    levelBox: {
+        height: 30,
+        width: Styles.width * .052,
+        marginRight: 2,
+        marginLeft: 2,
+        backgroundColor: '#FFEBE9',
+        borderRadius: 5
+    },
+    levelBoxFull: {
+        borderWidth: 3,
+        borderColor: '#D3676C',
+        backgroundColor: '#F67E85',
+        width: Styles.width * .052,
     }
 });

@@ -10,6 +10,7 @@ import { clearDrinkState, deleteDrink } from '../../Store/Actions/DrinkActions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Loading from '../../Components/Main/Loading';
 import InputComment from '../../Components/DrinkDetail/InputComment';
+import StrengthAndPrep from '../../Components/DrinkDetail/StrengthAndPrep';
 import { renderTime } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
@@ -25,7 +26,7 @@ import Styles from '../../Styles/StyleConstants';
 const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const drink = route.params.drink;
     const [isLoading, setIsLoading] = useState(true);
-
+    console.log(drink);
     // Load the component after all props are set
     // Turn the firestore comments object into a comments array
     useEffect(() => {
@@ -202,6 +203,8 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                         </View>
                     }
 
+                    <StrengthAndPrep strength={drink.strength} prepTime={drink.prepTime} />
+
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
                         <View style={CreateStyles.ingrContainerWide}>
                             <Text style={[GlobalStyles.titlebold2]}>COMMENTS</Text>
@@ -215,7 +218,7 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                         <View style={[CreateStyles.ingrContainerWide, DetailStyles.submitContainer]}>
                             <Text style={[GlobalStyles.titlebold2, { alignSelf: 'center' }]}>SUBMITTED BY</Text>
 
-                            <View style={GlobalStyles.line}></View>
+                            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
 
                             <View style={DetailStyles.submitRow}>
                                 <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { marginRight: 16 }]}></Image>

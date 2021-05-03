@@ -178,9 +178,9 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
 
                     <CreateDirections {...{ direction, setDirection }} />
 
-                    <CreateOptionPicker item={drinkPrep} setItem={setDrinkPrep} itemType='PREP TIME' />
-
                     <CreateOptionPicker item={drinkStrength} setItem={setDrinkStrength} itemType='STRENGTH LEVEL' />
+
+                    <CreateOptionPicker item={drinkPrep} setItem={setDrinkPrep} itemType='PREP TIME' />
 
                     <CreateTags {...{ tags, setSelectedTags, selectedTags }} />
 
