@@ -18,9 +18,12 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Make an async requrest to cache and update the drink image if this is either
+// TODO: Make an async request to cache and update the drink image if this is either
 // 1. This drinkDetailScreen is entered from the createScreen
 // 2. The drink's image has just been updated and was originally cached differently on the user's device
+
+// The problem is that the drink is using its old version even after it is updated by the user
+// This does not go away until after app reloads completely
 const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const [isLoading, setIsLoading] = useState(true);
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, Animated } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { RefreshControl, FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, Animated } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loading from '../../Components/Main/Loading';
 import AnimatedFlatList from '../../Components/Profile/AnimatedFlatList';
@@ -16,11 +16,25 @@ import Styles from '../../Styles/StyleConstants';
 // TODO: Delete this after development, lol
 LogBox.ignoreAllLogs()
 
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [userDrinks, setUserDrinks] = useState(null);
     const [likedDrinks, setLikedDrinks] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
+
+    // When the user pulls down on the profile screen,
+    // their drinks / liked drinks lists AND followers / following counts get updated
+    const onRefresh = React.useCallback(() => {
+        setIsRefreshing(true);
+        wait(1000)
+            .then(() => loadUserDrinks())
+            .then(() => setIsRefreshing(false));
+    }, []);
 
     // Only get all the drink images after the user and drinks are loaded to the DB
     // Load all the drinks AND liked drinks any time either of these arrays change
@@ -33,6 +47,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
+        console.log('load user drinks')
         let res = [];
         let liked = [];
         for (let i = user.drinks.length - 1; i >= 0; i--) {
@@ -144,6 +159,12 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
                 enableOnAndroid={true}
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flexGrow: 1 }}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isRefreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
             >
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginTop: 20 }]} >
 
