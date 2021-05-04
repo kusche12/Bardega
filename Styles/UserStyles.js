@@ -200,5 +200,12 @@ export default StyleSheet.create({
         alignItems: 'center',
         height: 50,
         justifyContent: 'center'
+    },
+    indexButtonLine: {
+        width: Styles.width / 2,
+        //left: 0,
+        backgroundColor: Styles.DARK_GRAY,
+        height: 1.75,
+        alignSelf: 'flex-start'
     }
 });

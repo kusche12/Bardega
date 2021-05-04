@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, Animated } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loading from '../../Components/Main/Loading';
 import { connect } from 'react-redux';
@@ -12,15 +12,22 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
 
+// <View style={{ width: Styles.width / 2, position: 'asbolute', backgroundColor: Styles.DARK_GRAY, height: 1.5 }}></View>
+
 // TODO: Delete this after development, lol
 LogBox.ignoreAllLogs()
 
 //  TODO: Animate a transition slider between created and liked drinks
+// TODO: Make sure it does not switch the page of horizontal slider when its not supposed to 
+// SOMETHING LIKE: https://github.com/facebook/react-native/issues/30171
 const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
     const [likedDrinks, setLikedDrinks] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [ranOnce, setRanOnce] = useState(true);
+
+    const animatedValue = useRef(new Animated.ValueXY()).current;
 
     // Only get all the drink images after the user and drinks are loaded to the DB
     useEffect(() => {
@@ -29,6 +36,19 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
             cacheImages(user.imageURL, userID);
         }
     }, []);
+
+    // useEffect(() => {
+    // if (ranOnce) {
+    //     setRanOnce(false);
+    //     return;
+    // }
+    //     console.log("RUN")
+    //     Animated.timing(animatedValue, {
+    //         toValue: { x: Styles.width / 2, y: 0 },
+    //         duration: 1000,
+    //         useNativeDriver: true,
+    //     }).start()
+    // }, [activeIndex])
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
@@ -101,7 +121,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
             img = Images.profile.emptyHeartOff;
         }
         return (
-            <View style={[UserStyles.indexButtonContainer, index === activeIndex && { borderBottomColor: Styles.DARK_GRAY, borderBottomWidth: 1.5 }]}>
+            <View style={UserStyles.indexButtonContainer}>
                 <TouchableWithoutFeedback onPress={() => setActiveIndex(index)}>
                     <Image source={img} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
                 </TouchableWithoutFeedback>
@@ -166,6 +186,22 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
         )
     }
 
+    const renderIndexLine = () => {
+        return (
+            <View style={[UserStyles.indexButtonLine, {
+                transform: [{ translateX: activeIndex === 0 ? 0 : Styles.width / 2 }]
+            }]}></View>
+        )
+    }
+
+    const handleScroll = () => {
+        if (activeIndex === 0) {
+            setActiveIndex(1);
+        } else {
+            setActiveIndex(0)
+        }
+    }
+
     if (isLoading) {
         return <Loading />
     } else {
@@ -211,7 +247,17 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
                         {renderIndexButton(1, 'heart')}
                     </View>
 
-                    {renderIndexSection()}
+                    {renderIndexLine()}
+
+                    <FlatList
+                        data={[userDrinks, likedDrinks]}
+                        renderItem={renderList}
+                        keyExtractor={(item, index) => '' + index}
+                        scrollEnabled={true}
+                        horizontal={true}
+                        pagingEnabled={true}
+                        onMomentumScrollEnd={handleScroll}
+                    />
 
                 </SafeAreaView>
             </KeyboardAwareScrollView>
