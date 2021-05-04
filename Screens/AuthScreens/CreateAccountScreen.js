@@ -76,7 +76,7 @@ const CreateAccountScreen = ({ navigation, signUp, authError }) => {
                 </View>
 
             </KeyboardAwareScrollView>
-        </SafeAreaView >
+        </SafeAreaView>
     );
 }
 

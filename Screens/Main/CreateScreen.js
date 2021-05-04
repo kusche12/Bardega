@@ -32,7 +32,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     // then load the state with all of the drink's data
     // Also make sure to clean the data so that this screen is prepared to edit it
     useEffect(() => {
-        console.log('edit drink')
         if (route.params.drink && tags) {
             const edit = route.params.drink;
             let ingrObject = getIngredients(edit.recipe);
@@ -82,7 +81,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
             // Else, then create it
             if (route.params.drink) {
                 const edit = route.params.drink;
-                console.log(drinkStrength)
                 await updateDrink({
                     id: edit.id,
                     authorID: userID,

@@ -137,6 +137,63 @@ export const deleteProfileImage = (data) => {
     }
 };
 
+// UPDATE: Profile Privacy Preferences
+export const updatePrivacy = (data) => {
+    console.log('Update Profile Privacy Action');
+    const { id, privacy } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            await firestore
+                .collection('profiles')
+                .doc(id)
+                .update({
+                    private: privacy,
+                })
+            dispatch({ type: 'UPDATE_PROFILE' });
+            return true;
+        } catch (err) {
+            console.log(err);
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: "There was an error updating your privacy" } });
+            return false;
+        }
+    }
+}
+
+// DELETE: Delete the profile from profiles collection
+// Remove the user's created drinks
+// Remove the user's account from every drink that he/she liked
+// Remove the user's account from anyone that was following him/her
+// Remove the user's profile image (if they had one)
+// Remove the user's account from the Firebase Auth
+export const deleteAccount = (data) => {
+    console.log('Delete Profile and Account Action');
+    const { id } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            await firestore
+                .collection('profiles')
+                .doc(id)
+                .update({
+                    private: privacy,
+                })
+            dispatch({ type: 'UPDATE_PROFILE' });
+            return true;
+        } catch (err) {
+            console.log(err);
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: "There was an error updating your privacy" } });
+            return false;
+        }
+    }
+}
+
+
+
 // Handler that prepares the drink image to be sent to firestorage
 const convertImage = async (image) => {
     if (image === null) {
@@ -146,3 +203,4 @@ const convertImage = async (image) => {
     const blob = await response.blob();
     return blob;
 }
+

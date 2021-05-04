@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Image, TouchableWithoutFeedback, View, Alert, Text } from 'react-native';
+import { Image, TouchableWithoutFeedback, View, Alert } from 'react-native';
 
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
 import FavoritesScreen from '../../Screens/ProfileScreens/FavoritesScreen';
-import EditCollectionScreen from '../../Screens/ProfileScreens/EditCollectionScreen';
+import MakePrivateScreen from '../../Screens/ProfileScreens/MakePrivateScreen';
+import DeleteAccountScreen from '../../Screens/ProfileScreens/DeleteAccountScreen';
+import ReAuthenticationScreen from '../../Screens/ProfileScreens/ReAuthenticationScreen';
 import SettingsScreen from '../../Screens/ProfileScreens/SettingsScreen';
 import EditProfileScreen from '../../Screens/ProfileScreens/EditProfileScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
@@ -194,39 +196,6 @@ const ProfileNavigator = ({ route, navigation }) => {
                 })}
             />
             <Stack.Screen
-                name='EditCollectionScreen'
-                component={EditCollectionScreen}
-                options={({ route, navigation }) => ({
-                    headerStyle: {
-                        backgroundColor: Styles.PINK,
-                    },
-                    headerTitle: () => <MainHeader />,
-                    headerRight: () => {
-
-                        // TODO: Save edits to DB
-                        const handleDoneEditing = () => {
-
-                            navigation.goBack();
-                        }
-
-                        return (
-                            <View style={GlobalStyles.headerWithButtons} >
-                                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-                                    <Text>Cancel</Text>
-                                </TouchableWithoutFeedback>
-                                <TouchableWithoutFeedback onPress={() => handleDoneEditing()}>
-                                    <Text>Done</Text>
-                                </TouchableWithoutFeedback>
-                            </View>
-                        )
-                    },
-                    headerTitleStyle: { flex: 1, textAlign: 'center' },
-                    headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK
-                })}
-            />
-            <Stack.Screen
                 name='SettingsScreen'
                 component={SettingsScreen}
                 options={({ route, navigation }) => ({
@@ -246,7 +215,7 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={EditProfileScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={true} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
@@ -261,7 +230,52 @@ const ProfileNavigator = ({ route, navigation }) => {
                 component={ProfileInputScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={true} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='MakePrivateScreen'
+                component={MakePrivateScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='DeleteAccountScreen'
+                component={DeleteAccountScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='ReAuthenticationScreen'
+                component={ReAuthenticationScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,

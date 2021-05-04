@@ -9,7 +9,7 @@ import Styles from '../../Styles/StyleConstants';
 // This component features a back button and a save button on the header. 
 // The save button takes a Redux action from route.params which is passed by a 
 // screen component.
-const GoBackOrSaveHeader = ({ route, navigation, error, success }) => {
+const GoBackOrSaveHeader = ({ route, navigation, error, success, save }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSave = async () => {
@@ -30,12 +30,14 @@ const GoBackOrSaveHeader = ({ route, navigation, error, success }) => {
                     resizeMode='contain'
                 />
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => handleSave()}>
-                {isLoading
-                    ? <ActivityIndicator size="small" />
-                    : <Text style={[GlobalStyles.paragraphbold1, { color: Styles.DARK_PINK }]}>Save</Text>
-                }
-            </TouchableWithoutFeedback>
+            {save &&
+                <TouchableWithoutFeedback onPress={() => handleSave()}>
+                    {isLoading
+                        ? <ActivityIndicator size="small" />
+                        : <Text style={[GlobalStyles.paragraphbold1, { color: Styles.DARK_PINK }]}>Save</Text>
+                    }
+                </TouchableWithoutFeedback>
+            }
         </View>
     )
 }

@@ -19,9 +19,16 @@ const SettingsScreen = ({ logOut, navigation }) => {
                     <Text style={GlobalStyles.titlebold2}>YOUR ACCOUNT</Text>
                 </View>
                 <SettingsButton name="Edit Profile" icon={Images.settings.switch} action={() => navigation.navigate('EditProfileScreen')} />
-                <SettingsButton name="Privacy" icon={Images.settings.lock} action={() => console.log('change privacy settings')} />
+                <SettingsButton
+                    name="Privacy"
+                    icon={Images.settings.lock}
+                    action={() => navigation.navigate('MakePrivateScreen')}
+                />
                 <SettingsButton name="Log out" icon={Images.settings.signout} action={() => logOut()} />
-                <SettingsButton name="Delete account" icon={Images.settings.trash} action={() => console.log('delete account')} />
+                <SettingsButton
+                    name="Delete account"
+                    icon={Images.settings.trash}
+                    action={() => navigation.navigate('DeleteAccountScreen', { navigation })} />
                 <View style={[UserStyles.settingsButton, { backgroundColor: Styles.BRIGHT_PINK, height: 50, marginBottom: 16 }]}>
                     <Text style={GlobalStyles.titlebold2}>DEVICE & ADDITIONAL SERVICES</Text>
                 </View>

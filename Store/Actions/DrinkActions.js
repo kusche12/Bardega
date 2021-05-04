@@ -84,7 +84,9 @@ export const createDrink = (drink) => {
                 imageURL: fileURL,
                 commentID: commentID,
                 numLikes: 0,
-                drinkLikesID: drinkLikesID
+                drinkLikesID: drinkLikesID,
+                private: false,
+                commentsAllowed: true
             })
 
             // Add this drink to the user's saved drinks array

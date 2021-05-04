@@ -5,10 +5,10 @@ import AuthStyles from '../../Styles/AuthStyles';
 import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
-const AuthInput = ({ type, value, setValue, image }) => {
+const AuthInput = ({ type, value, setValue, image, reauth }) => {
 
     return (
-        <View style={AuthStyles.inputContainer}>
+        <View style={[AuthStyles.inputContainer, reauth && { borderBottomColor: Styles.LIGHT_GRAY, width: Styles.width * .95 }]}>
             <Image source={Images.authInput[image]} style={AuthStyles.inputImg} />
             <TextInput
                 style={[GlobalStyles.titlebold3, { height: 40 }, Platform.OS === 'android' && { width: Styles.width * .7 }]}

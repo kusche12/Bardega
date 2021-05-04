@@ -49,6 +49,7 @@ export default {
         switch: require('./switch.png'),
         signout: require('./exit.png'),
         trash: require('./trash.png'),
+        redTrash: require('./redTrash.png'),
         lock: require('./lock.png'),
         notifications: require('./notifications.png'),
         contact: require('./contact.png'),

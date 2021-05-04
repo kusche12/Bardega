@@ -13,21 +13,14 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// <View style={{ width: Styles.width / 2, position: 'asbolute', backgroundColor: Styles.DARK_GRAY, height: 1.5 }}></View>
-
 // TODO: Delete this after development, lol
 LogBox.ignoreAllLogs()
 
-//  TODO: Animate a transition slider between created and liked drinks
-// TODO: Make sure it does not switch the page of horizontal slider when its not supposed to 
-// SOMETHING LIKE: https://github.com/facebook/react-native/issues/30171
 const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [userDrinks, setUserDrinks] = useState(null);
     const [likedDrinks, setLikedDrinks] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
-
-
 
     // Only get all the drink images after the user and drinks are loaded to the DB
     useEffect(() => {
@@ -142,8 +135,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
         )
     }
 
-
-
     if (isLoading) {
         return <Loading />
     } else {
@@ -189,8 +180,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
                         {renderIndexButton(1, 'heart')}
                     </View>
 
-
-
                     <AnimatedFlatList
                         data={[userDrinks, likedDrinks]}
                         renderItem={renderList}
@@ -217,9 +206,9 @@ const mapStateToProps = (state, ownProps) => {
     } else {
         const profiles = state.firestore.data.profiles;
         // For testing purposes only
-        const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
+        //const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
         // For production, uncomment below
-        // const profile = profiles ? profiles[state.firebase.auth.uid] : null;
+        const profile = profiles ? profiles[state.firebase.auth.uid] : null;
         return {
             drinks: state.firestore.data.drinks,
             user: profile,
