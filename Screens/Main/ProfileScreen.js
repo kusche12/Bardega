@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, Animated } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loading from '../../Components/Main/Loading';
+import AnimatedFlatList from '../../Components/Profile/AnimatedFlatList';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -25,9 +26,8 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     const [userDrinks, setUserDrinks] = useState(null);
     const [likedDrinks, setLikedDrinks] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [ranOnce, setRanOnce] = useState(true);
 
-    const animatedValue = useRef(new Animated.ValueXY()).current;
+
 
     // Only get all the drink images after the user and drinks are loaded to the DB
     useEffect(() => {
@@ -36,19 +36,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
             cacheImages(user.imageURL, userID);
         }
     }, []);
-
-    // useEffect(() => {
-    // if (ranOnce) {
-    //     setRanOnce(false);
-    //     return;
-    // }
-    //     console.log("RUN")
-    //     Animated.timing(animatedValue, {
-    //         toValue: { x: Styles.width / 2, y: 0 },
-    //         duration: 1000,
-    //         useNativeDriver: true,
-    //     }).start()
-    // }, [activeIndex])
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
@@ -129,37 +116,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
         )
     }
 
-    const renderIndexSection = () => {
-        console.log(activeIndex)
-        if (activeIndex === 0) {
-            return (
-                <View style={{ width: Styles.width }}>
-                    <FlatList
-                        data={userDrinks}
-                        renderItem={renderDrink}
-                        keyExtractor={item => item.id}
-                        numColumns={3}
-                        scrollEnabled={false}
-                        horizontal={false}
-                    />
-                </View>
-            )
-        } else {
-            return (
-                <View style={{ width: Styles.width }}>
-                    <FlatList
-                        data={likedDrinks}
-                        renderItem={renderDrink}
-                        keyExtractor={item => item.id}
-                        numColumns={3}
-                        scrollEnabled={false}
-                        horizontal={false}
-                    />
-                </View>
-            )
-        }
-    }
-
     const renderList = ({ item }) => {
         return (
             <View style={{ width: Styles.width }}>
@@ -186,21 +142,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
         )
     }
 
-    const renderIndexLine = () => {
-        return (
-            <View style={[UserStyles.indexButtonLine, {
-                transform: [{ translateX: activeIndex === 0 ? 0 : Styles.width / 2 }]
-            }]}></View>
-        )
-    }
 
-    const handleScroll = () => {
-        if (activeIndex === 0) {
-            setActiveIndex(1);
-        } else {
-            setActiveIndex(0)
-        }
-    }
 
     if (isLoading) {
         return <Loading />
@@ -247,16 +189,15 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
                         {renderIndexButton(1, 'heart')}
                     </View>
 
-                    {renderIndexLine()}
 
-                    <FlatList
+
+                    <AnimatedFlatList
                         data={[userDrinks, likedDrinks]}
                         renderItem={renderList}
                         keyExtractor={(item, index) => '' + index}
-                        scrollEnabled={true}
-                        horizontal={true}
-                        pagingEnabled={true}
-                        onMomentumScrollEnd={handleScroll}
+                        itemWidth={Styles.width}
+                        setActiveIndex={setActiveIndex}
+                        activeIndex={activeIndex}
                     />
 
                 </SafeAreaView>
