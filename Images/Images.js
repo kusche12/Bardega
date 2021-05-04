@@ -52,6 +52,7 @@ export default {
         redTrash: require('./redTrash.png'),
         lock: require('./lock.png'),
         notifications: require('./notifications.png'),
+        bell: require('./bell.png'),
         contact: require('./contact.png'),
         about: require('./about.png'),
     },

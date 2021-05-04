@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
-import { createDrink, updateDrink } from '../../Store/Actions/DrinkActions'
+import { createDrink, updateDrink } from '../../Store/Actions/DrinkActions';
 import Loading from '../../Components/Main/Loading';
 
 import CreateIngredients from '../../Components/Create/CreateIngredients';
@@ -35,7 +35,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
         if (route.params.drink && tags) {
             const edit = route.params.drink;
             let ingrObject = getIngredients(edit.recipe);
-
             setDrinkName(edit.name)
             setDrinkDesc(edit.description)
             setDrinkImage(edit.imageURL)
@@ -53,7 +52,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     useEffect(() => {
         if (drinkID) {
             const drink = drinks[drinkID];
-            navigation.navigate('DrinkDetailScreen', { drink: drink });
+            navigation.navigate('DrinkDetailScreen', { drink });
         } else if (drinkError) {
             console.log("THERE WAS AN ERROR IN THE CREATE SCREEN")
         }
@@ -202,6 +201,8 @@ const getIngredients = (ingredients) => {
 }
 
 const mapStateToProps = (state) => {
+    // const drinks = state.firestore.data.drinks;
+    // const drink = drinks ? drinks[state.drink.drinkID] : 
     return {
         userID: state.firebase.auth.uid,
         tags: state.firestore.ordered.tags,

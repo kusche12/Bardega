@@ -162,10 +162,35 @@ export const updatePrivacy = (data) => {
     }
 }
 
+// UPDATE: Profile Notifications Preferences
+export const updateNotifications = (data) => {
+    console.log('Update Notifications Privacy Action');
+    const { id, notifications } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            await firestore
+                .collection('profiles')
+                .doc(id)
+                .update({
+                    receiveNotifications: notifications,
+                })
+            dispatch({ type: 'UPDATE_PROFILE' });
+            return true;
+        } catch (err) {
+            console.log(err);
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: "There was an error updating your privacy" } });
+            return false;
+        }
+    }
+}
+
 // DELETE: Delete the profile from profiles collection
-// Remove the user's created drinks
-// Remove the user's account from every drink that he/she liked
-// Remove the user's account from anyone that was following him/her
+// Remove ALL of the user's created drinks
+// Remove the user's account from ALL of the drinks that he/she liked
+// Remove the user's account from All of his/her followers
 // Remove the user's profile image (if they had one)
 // Remove the user's account from the Firebase Auth
 export const deleteAccount = (data) => {

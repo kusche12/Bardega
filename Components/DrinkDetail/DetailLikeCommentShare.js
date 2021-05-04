@@ -21,7 +21,6 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
 
     useEffect(() => {
         if (likedByUsers !== null && numLikes !== null && drink !== null && author !== null && authors !== null) {
-            console.log('UPDATED');
             setIsLoading(false);
         }
     }, [likedByUsers]);
@@ -57,8 +56,8 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
             <View style={[CreateStyles.ingrContainerWide, DetailStyles.buttonContainer]}>
 
                 <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: authors[drink.authorID] })}>
-                    <View style={{ flexDirection: 'column' }}>
-                        <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage}></Image>
+                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                        <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { width: 35, height: 35 }]}></Image>
                         <Text style={GlobalStyles.titlebold3}>@{author.userName}</Text>
                     </View>
                 </TouchableWithoutFeedback>
@@ -93,7 +92,7 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
 
 const mapStateToProps = (state, ownProps) => {
     let likedByUsers = state.firestore.data['likedByUsers' + ownProps.drink.drinkLikesID];
-    let numLikes = state.firestore.data.drinks[ownProps.drink.id].numLikes
+    let numLikes = state.firestore.data.drinks[ownProps.drink.id].numLikes;
 
     const authorID = ownProps.drink.authorID;
     const profiles = state.firestore.data.profiles;

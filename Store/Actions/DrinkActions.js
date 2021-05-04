@@ -1,3 +1,4 @@
+import { cacheImages } from '../../Functions/cacheFunctions';
 // CREATE: Drink Object
 // Take all of the state from the create drink page and combine it into the new drink object
 // Upload the drink image to firebase storage, and save the ImageURL to the drink object

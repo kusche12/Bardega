@@ -32,9 +32,9 @@ const SettingsScreen = ({ logOut, navigation }) => {
                 <View style={[UserStyles.settingsButton, { backgroundColor: Styles.BRIGHT_PINK, height: 50, marginBottom: 16 }]}>
                     <Text style={GlobalStyles.titlebold2}>DEVICE & ADDITIONAL SERVICES</Text>
                 </View>
-                <SettingsButton name="Notifications" icon={Images.settings.notifications} action={() => console.log('change notification preferances')} />
+                <SettingsButton name="Notifications" icon={Images.settings.notifications} action={() => navigation.navigate('NotificationsSettingsScreen')} />
                 <SettingsButton name="About us" icon={Images.settings.about} action={() => console.log('about us')} />
-                <SettingsButton name="Contact us" icon={Images.settings.contact} action={() => console.log('delete account')} />
+                <SettingsButton name="Contact us" icon={Images.settings.contact} action={() => console.log('contact us')} />
             </SafeAreaView>
         </ScrollView>
     )

@@ -1,8 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Styles from './StyleConstants';
-
-const width = Dimensions.get('screen').width;
-const height = Dimensions.get('screen').height;
 const RADIUS = 22;
 
 export default StyleSheet.create({
@@ -15,8 +12,8 @@ export default StyleSheet.create({
         flex: 1,
     },
     photoContainer: {
-        width: width * .8,
-        height: height * .4,
+        width: Styles.width * .8,
+        height: Styles.height * .4,
         borderWidth: 0,
         borderRadius: RADIUS,
         alignItems: 'center',
@@ -37,7 +34,7 @@ export default StyleSheet.create({
     },
     drinkImage: {
         alignSelf: 'stretch',
-        height: height * .4,
+        height: Styles.height * .4,
     },
     row: {
         flexDirection: 'row',
@@ -45,12 +42,12 @@ export default StyleSheet.create({
     },
     col1: {
         justifyContent: 'flex-start',
-        width: width * .4,
+        width: Styles.width * .4,
         alignItems: 'flex-end',
         paddingRight: 20
     },
     col2: {
-        width: width * .5,
+        width: Styles.width * .5,
     },
     wrapRecipeText: {
         flexWrap: 'wrap'
@@ -63,7 +60,7 @@ export default StyleSheet.create({
     commentRow: {
         alignItems: 'flex-start',
         flexDirection: 'row',
-        width: width * .85,
+        width: Styles.width * .85,
         paddingRight: 36,
         marginBottom: 16
     },
@@ -100,7 +97,7 @@ export default StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         paddingLeft: 36,
-        width: width * .75,
+        width: Styles.width * .75,
         height: 30,
         justifyContent: 'center'
     },
@@ -141,7 +138,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingTop: 20,
-        alignItems: 'flex-end',
+        alignItems: 'center',
         paddingVertical: 10,
     }
 });

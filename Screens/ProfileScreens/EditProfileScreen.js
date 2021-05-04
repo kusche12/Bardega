@@ -154,10 +154,7 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
 
 const mapStateToProps = state => {
     const profiles = state.firestore.data.profiles;
-    // For testing purposes only
-    const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
-    // For production, uncomment below
-    // const profile = profiles ? profiles[state.firebase.auth.uid] : null;
+    const profile = profiles ? profiles[state.firebase.auth.uid] : null;
     return {
         user: profile,
         userID: state.firebase.auth.uid,

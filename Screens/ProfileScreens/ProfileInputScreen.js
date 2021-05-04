@@ -32,6 +32,7 @@ const ProfileInputScreen = ({ route, navigation, userID, updateBio, error }) => 
             <TextInput
                 value={bio}
                 onChangeText={handleChange}
+                placeholder="Enter your bio here"
                 style={[GlobalStyles.paragraph2, UserStyles.profileInputBio]}
                 multiline={true}
             />

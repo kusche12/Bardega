@@ -18,18 +18,19 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Drink image does not render when moving from CreateScreen to this screen
-const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
-    const drink = route.params.drink;
+// TODO: Make an async requrest to cache and update the drink image if this is either
+// 1. This drinkDetailScreen is entered from the createScreen
+// 2. The drink's image has just been updated and was originally cached differently on the user's device
+const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const [isLoading, setIsLoading] = useState(true);
+
     // Load the component after all props are set
-    // Turn the firestore comments object into a comments array
     useEffect(() => {
         if (author && authors && comments && drink && drink.imageURL) {
-            cacheImages(drink.imageURL, drink.id)
+            cacheImages(drink.imageURL, drink.id);
             setIsLoading(false);
         }
-    }, [author, comments, authors]);
+    }, [author, comments, drink]);
 
     const renderRecipe = () => {
         let result = [];
@@ -209,7 +210,6 @@ const DrinkDetailScreen = ({ navigation, route, author, comments, authors, userI
                             <Text style={[GlobalStyles.titlebold2]}>COMMENTS</Text>
                             <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
                             {renderComments()}
-
                         </View>
                     </TouchableWithoutFeedback>
 
@@ -226,11 +226,15 @@ const mapStateToProps = (state, ownProps) => {
     const profiles = state.firestore.data.profiles;
     const profile = profiles ? profiles[authorID] : null;
 
+    const drinks = state.firestore.data.drinks;
+    const drink = drinks ? drinks[ownProps.route.params.drink.id] : null
+
     return {
         author: profile,
         comments: state.firestore.ordered['allComments'],
         authors: state.firestore.data.profiles,
         userID: state.firebase.auth.uid,
+        drink: drink
     }
 }
 
@@ -245,6 +249,7 @@ export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect((props) => [
         { collection: 'profiles' },
+        { collection: 'drinks' },
         {
             collection: "comments",
             doc: props.route.params.drink.commentID,

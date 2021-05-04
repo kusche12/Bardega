@@ -23,12 +23,13 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     // Only get all the drink images after the user and drinks are loaded to the DB
+    // Load all the drinks AND liked drinks any time either of these arrays change
     useEffect(() => {
         if (user && drinks) {
             loadUserDrinks();
             cacheImages(user.imageURL, userID);
         }
-    }, []);
+    }, [user.likedDrinks, user.drinks]);
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
@@ -205,10 +206,8 @@ const mapStateToProps = (state, ownProps) => {
         }
     } else {
         const profiles = state.firestore.data.profiles;
-        // For testing purposes only
-        //const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
-        // For production, uncomment below
         const profile = profiles ? profiles[state.firebase.auth.uid] : null;
+        //console.log(profile.likedDrinks);
         return {
             drinks: state.firestore.data.drinks,
             user: profile,
