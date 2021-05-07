@@ -10,13 +10,9 @@ import AuthStyles from '../../Styles/AuthStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
 const LoginScreen = ({ navigation, logIn, authError }) => {
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleLogin = () => {
-        logIn({ email, password });
-    }
-
     return (
         <SafeAreaView style={AuthStyles.container}>
             <KeyboardAwareScrollView
@@ -30,7 +26,7 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
                 <View style={AuthStyles.loginForm}>
                     <AuthInput image={'user'} value={email} setValue={setEmail} type={'Email / Username'} />
                     <AuthInput image={'password'} value={password} setValue={setPassword} type={'Password'} />
-                    <TouchableWithoutFeedback onPress={() => handleLogin()}>
+                    <TouchableWithoutFeedback onPress={() => logIn({ email, password })}>
                         <View style={AuthStyles.mainButton}>
                             <Text style={[GlobalStyles.titlebold2, { fontSize: 16 }]}>Sign In</Text>
                         </View>

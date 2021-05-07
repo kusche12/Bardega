@@ -3,7 +3,7 @@ import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BardegaLogoSVG from '../../Components/Main/BardegaLogoSVG';
 import { connect } from 'react-redux';
-import { signUp } from '../../Store/Actions/AuthActions';
+import { signUp, loginFacebook, loginGoogle } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
 import Images from '../../Images/Images';
 import AuthStyles from '../../Styles/AuthStyles';
@@ -11,15 +11,11 @@ import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
 // TODO: Allow for authentication via, facebook, twitter, or gmail
-const CreateAccountScreen = ({ navigation, signUp, authError }) => {
+const CreateAccountScreen = ({ navigation, signUp, authError, loginFacebook, loginGoogle }) => {
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleFacebookAuth = () => {
-        console.log('hello facebook')
-    }
 
     const handleCreateAccount = () => {
         signUp({ name, userName, email, password })
@@ -51,13 +47,13 @@ const CreateAccountScreen = ({ navigation, signUp, authError }) => {
                 </View>
 
                 <View style={AuthStyles.thirdPartyButtons}>
-                    <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
+                    <TouchableWithoutFeedback onPress={() => loginFacebook()}>
                         <Image source={Images.thirdPartyApp.facebook} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
                         <Image source={Images.thirdPartyApp.twitter} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
+                    <TouchableWithoutFeedback onPress={() => loginGoogle()}>
                         <Image source={Images.thirdPartyApp.google} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
                 </View>
@@ -88,7 +84,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        signUp: (newUser) => dispatch(signUp(newUser))
+        signUp: (newUser) => dispatch(signUp(newUser)),
+        loginFacebook: () => dispatch(loginFacebook()),
+        loginGoogle: () => dispatch(loginGoogle())
     }
 }
 

@@ -48,6 +48,20 @@ const authReducer = (state = initState, action) => {
                 authError: action.err.message,
                 authSuccess: null
             }
+        case 'FACEBOOK_SUCCESS':
+            console.log('social media password success');
+            return {
+                ...state,
+                authError: null,
+                authSuccess: null
+            }
+        case 'FACEBOOK_ERROR':
+            console.log('social media password failure');
+            return {
+                ...state,
+                authError: action.err.message,
+                authSuccess: null
+            }
         default:
             return state;
     }

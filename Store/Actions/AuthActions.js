@@ -1,3 +1,8 @@
+import * as Facebook from 'expo-facebook';
+// import FirebaseAuth from 'firebaseauth';
+// import firebaseConfig from '../../API/fbConfig';
+// const firebaseSocial = new FirebaseAuth(firebaseConfig.apiKey);
+
 export const logIn = (credentials) => {
     return (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase();
@@ -91,5 +96,85 @@ export const forgotPassword = (email) => {
                 console.log('error')
                 dispatch({ type: 'FORGOT_ERROR', err })
             });
+    }
+}
+
+
+export const loginFacebook = () => {
+    return async (dispatch, getState, { getFirebase }) => {
+        console.log('init facebook login');
+        // Initialize facebook login SDK
+        await Facebook.initializeAsync({
+            appId: '1643873412449618',
+            appName: 'Bardega'
+        });
+
+        const firebase = await getFirebase();
+
+        const { type, token } = await
+            Facebook.logInWithReadPermissionsAsync({
+                permission: "public_profile"
+            });
+
+        if (type == "success") {
+            const credential =
+                firebase
+                    .auth
+                    .FacebookAuthProvider
+                    .credential(token)
+
+            firebase
+                .auth()
+                .signInWithCredential(credential)
+                .then(() => {
+                    console.log('success')
+                    dispatch({ type: 'FACEBOOK_SUCCESS' })
+                })
+                .catch(error => {
+                    console.log(error);
+                    dispatch({ type: 'FACEBOOK_ERROR', err: { message: 'There was an error authenticating with Facebook.' } })
+                });
+        }
+
+    }
+}
+
+export const loginGoogle = () => {
+    return (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        firebase.auth()
+            .signInWithRedirect(provider)
+            .then((result) => {
+                var credential = result.credential;
+
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = credential.accessToken;
+                // The signed-in user info.
+                var user = result.user;
+
+                console.log(user);
+                // ...
+            }).catch((error) => {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+                console.log(errorMessage);
+            });
+
+        // firebase.auth().signInWithRedirect(provider)
+        //     .then(() => {
+        //         console.log('success')
+        //         dispatch({ type: 'FACEBOOK_SUCCESS' })
+        //     }).catch((err) => {
+        //         console.log(err);
+        //         dispatch({ type: 'FACEBOOK_ERROR', err: { message: 'There was an error authenticating with Google.' } })
+        //     });
     }
 }

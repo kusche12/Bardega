@@ -190,7 +190,7 @@ export const updateNotifications = (data) => {
 // DELETE: Delete the profile from profiles collection
 // Remove ALL of the user's created drinks
 // Remove the user's account from ALL of the drinks that he/she liked
-// Remove the user's account from All of his/her followers
+// Remove the user's account from All of the user's that he/she followed
 // Remove the user's profile image (if they had one)
 // Remove the user's account from the Firebase Auth
 export const deleteAccount = (data) => {
