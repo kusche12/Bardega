@@ -20,6 +20,12 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
+// TODO: Make sure you don't return any drinks if the drink.privacy === true and the currently authed userID !== to
+// this screen's user ID. Like, if the user is looking at someone else's page.
+// TODO: Implement a new profile schema that's called likedDrinksPrivate. If this is true,
+// Make sure not to render any of the user's liked drinks (if not currently authed user);
+// TODO: Implement the scroll to the top to reload any data that could have changed on this screen 
+// Do this for the Discover Screen as well.
 const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);

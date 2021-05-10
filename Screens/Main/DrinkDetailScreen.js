@@ -110,6 +110,10 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                     onPress: () => handleEditDrinkHelper()
                 },
                 {
+                    text: "Edit Drink Options",
+                    onPress: () => navigation.navigate('DrinkOptionsScreen', { drinkID: drink.id })
+                },
+                {
                     text: "Delete Drink",
                     onPress: () => handleDeleteDrink(),
                     style: "destructive"
@@ -208,13 +212,15 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
 
                     <StrengthAndPrep strength={drink.strength} prepTime={drink.prepTime} />
 
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
-                        <View style={CreateStyles.ingrContainerWide}>
-                            <Text style={[GlobalStyles.titlebold2]}>COMMENTS</Text>
-                            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
-                            {renderComments()}
-                        </View>
-                    </TouchableWithoutFeedback>
+                    {drink.commentsAllowed &&
+                        <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
+                            <View style={CreateStyles.ingrContainerWide}>
+                                <Text style={[GlobalStyles.titlebold2]}>COMMENTS</Text>
+                                <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
+                                {renderComments()}
+                            </View>
+                        </TouchableWithoutFeedback>
+                    }
 
                     <DetailLikeCommentShare navigation={navigation} drink={drink} numComments={comments.length} />
 

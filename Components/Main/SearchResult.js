@@ -1,12 +1,16 @@
-import React from 'react';
-import { View, Image, Text, Vibration, Alert, TouchableHighlight } from 'react-native';
-import { getCachedImage } from '../../Functions/cacheFunctions';
+import React, { useEffect } from 'react';
+import { View, Image, Text, TouchableHighlight } from 'react-native';
+import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Implement the delete item from collection in react-redux-firebase 
+// TODO: Figure out what the yellow error is happening here
 const SearchResult = ({ drink, navigation, removable }) => {
+    useEffect(() => {
+        cacheImages(drink.id, drink.imageURL)
+    }, [drink]);
+
     const renderTags = () => {
         let res = '';
         if (drink.tags) {
@@ -17,26 +21,6 @@ const SearchResult = ({ drink, navigation, removable }) => {
             return <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{res}</Text>
         }
         return null;
-    }
-
-    const handleRemove = () => {
-        Vibration.vibrate([0, 500]);
-        return Alert.alert(
-            "Remove from collection?",
-            "If you delete this from your collection, the drink will still be saved in the app.",
-            [
-                {
-                    text: "Remove",
-                    onPress: () => console.log('DELETE FROM COLLECTION'),
-                    style: "destructive"
-                },
-                {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                },
-            ],
-            { cancelable: true }
-        );
     }
 
     return (

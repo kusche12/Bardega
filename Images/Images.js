@@ -55,6 +55,7 @@ export default {
         bell: require('./bell.png'),
         contact: require('./contact.png'),
         about: require('./about.png'),
+        fullComment: require('./full_comment.png')
     },
     detail: {
         emptyHeartBold: require('./empty_heart_bold.png'),

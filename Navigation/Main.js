@@ -48,8 +48,8 @@ const mapStateToProps = (state) => {
     // TODO: For testing purposes only, put your user profile in this section to skip over auth
     // Normally, this would set `user: null`
     if (state.firebase.auth.isEmpty) {
-        const profiles = state.firestore.data.profiles;
-        const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
+        // const profiles = state.firestore.data.profiles;
+        // const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
         return {
             user: null
         }

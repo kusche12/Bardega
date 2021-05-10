@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
+import DrinkOptionsScreen from '../../Screens/Main/DrinkOptionsScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import DiscoverScreen from '../../Screens/Main/DiscoverScreen';
@@ -39,6 +40,21 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='DrinkOptionsScreen'
+                component={DrinkOptionsScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,

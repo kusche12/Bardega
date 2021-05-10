@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Switch, Image, Alert, ActivityIndicator } from 'react-native';
+import { SafeAreaView, View, Text, Switch, Image, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import Images from '../../Images/Images';
 import { updatePrivacy } from '../../Store/Actions/ProfileActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
+// TODO: Allow the user to hide / show their liked drinks
 const MakePrivateScreen = ({ userID, error, user, updatePrivacy }) => {
 
     const [isPrivate, setIsPrivate] = useState(false);
@@ -20,7 +21,7 @@ const MakePrivateScreen = ({ userID, error, user, updatePrivacy }) => {
         if (isPrivate) {
             return Alert.alert(
                 "Are you sure?",
-                "Every user on this app will have access to your account profile and created/liked drinks.",
+                "Every user on this app will have access to your account profile and drinks.",
                 [
                     {
                         text: "Make Account Public",
@@ -37,7 +38,7 @@ const MakePrivateScreen = ({ userID, error, user, updatePrivacy }) => {
         } else {
             return Alert.alert(
                 "Are you sure?",
-                "Only your followers will be allowed to view your profile and created/liked drinks.",
+                "Only your followers will be allowed to view your profile and drinks.",
                 [
                     {
                         text: "Make Account Private",

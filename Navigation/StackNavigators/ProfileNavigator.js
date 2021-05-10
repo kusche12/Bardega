@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Image, TouchableWithoutFeedback, View, Alert } from 'react-native';
 
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
@@ -11,19 +10,15 @@ import NotificationsSettingsScreen from '../../Screens/ProfileScreens/Notificati
 import ReAuthenticationScreen from '../../Screens/ProfileScreens/ReAuthenticationScreen';
 import SettingsScreen from '../../Screens/ProfileScreens/SettingsScreen';
 import EditProfileScreen from '../../Screens/ProfileScreens/EditProfileScreen';
-import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import CreateScreen from '../../Screens/Main/CreateScreen';
 import ProfileInputScreen from '../../Screens/ProfileScreens/ProfileInputScreen';
-
-import { Entypo } from '@expo/vector-icons';
-import Images from '../../Images/Images'
+import DrinkOptionsScreen from '../../Screens/Main/DrinkOptionsScreen';
 import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
-import GlobalStyles from '../../Styles/GlobalStyles';
 
 const Stack = createStackNavigator();
 
@@ -124,79 +119,6 @@ const ProfileNavigator = ({ route, navigation }) => {
                 })}
             />
             <Stack.Screen
-                name='DrinkListScreen'
-                component={DrinkListScreen}
-                options={({ route, navigation }) => ({
-                    headerStyle: {
-                        backgroundColor: Styles.PINK,
-                    },
-                    headerTitle: () => <MainHeader />,
-                    headerRight: () => {
-                        const handleEditCollection = () => {
-                            return Alert.alert(
-                                "Collection Options",
-                                null,
-                                [
-                                    {
-                                        text: "Delete Collection",
-                                        onPress: () => handleDeleteCollection(),
-                                        style: "destructive"
-                                    },
-                                    {
-                                        text: "Edit Collection",
-                                        onPress: () => navigation.navigate('EditCollectionScreen', { collection: route.params.collection }),
-                                    },
-                                    {
-                                        text: "Cancel",
-                                        onPress: () => console.log("Cancel Pressed"),
-                                    },
-                                ],
-                                { cancelable: true }
-                            );
-                        }
-
-                        // TODO: Connect the Redux-firebase with a delete collection action
-                        const handleDeleteCollection = () => {
-                            return Alert.alert(
-                                "Delete Collection?",
-                                "When you delete this collection, the drinks will still be saved.",
-                                [
-                                    {
-                                        text: "Delete",
-                                        onPress: () => console.log('DELETE COLLECTION'),
-                                        style: "destructive"
-                                    },
-                                    {
-                                        text: "Cancel",
-                                        onPress: () => console.log("Cancel Pressed"),
-                                    },
-                                ],
-                                { cancelable: true }
-                            );
-                        }
-
-                        return (
-                            <View style={GlobalStyles.headerWithButtons} >
-                                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-                                    <Image
-                                        style={{ height: 20, width: 20 }}
-                                        source={Images.topNav.backButton}
-                                        resizeMode='contain'
-                                    />
-                                </TouchableWithoutFeedback>
-                                <TouchableWithoutFeedback onPress={() => handleEditCollection()}>
-                                    <Entypo name="dots-three-vertical" size={20} color="black" />
-                                </TouchableWithoutFeedback>
-                            </View>
-                        )
-                    },
-                    headerTitleStyle: { flex: 1, textAlign: 'center' },
-                    headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK
-                })}
-            />
-            <Stack.Screen
                 name='SettingsScreen'
                 component={SettingsScreen}
                 options={({ route, navigation }) => ({
@@ -289,6 +211,21 @@ const ProfileNavigator = ({ route, navigation }) => {
             <Stack.Screen
                 name='NotificationsSettingsScreen'
                 component={NotificationsSettingsScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='DrinkOptionsScreen'
+                component={DrinkOptionsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,

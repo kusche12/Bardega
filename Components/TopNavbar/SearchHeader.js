@@ -3,6 +3,7 @@ import { Image, View, StyleSheet, Keyboard, Platform, LogBox } from 'react-nativ
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { drinkIsPrivate } from '../../Functions/drinkFunctions';
 import Autocomplete from 'react-native-autocomplete-input';
 import Images from '../../Images/Images';
 import Styles from '../../Styles/StyleConstants';
@@ -12,26 +13,44 @@ const comp = (a, b) => {
     return a.toLowerCase().trim() === b.toLowerCase().trim();
 }
 
-const findDrink = (query, drinks, original) => {
-    console.log(query);
-    if (query == '') {
-        return original;
-    }
+const findDrink = async (query, drinks) => {
     const regex = new RegExp(`${query.trim()}`, 'i');
-    return drinks.filter((drink) => drink.name.search(regex) >= 0);
+    let res = [];
+    for (let i = 0; i < drinks.length; i++) {
+        const drink = drinks[i];
+        const isPrivate = await drinkIsPrivate(drink);
+        if (!isPrivate) {
+            if (drink.name.search(regex) >= 0) {
+                res.push(drink)
+            }
+        }
+    }
+    return res;
 }
-
-LogBox.ignoreAllLogs()
 
 const SearchHeader = ({ drinks, navigation, preloadedDrinks }) => {
     const [query, setQuery] = useState('');
     const [currentDrinks, setCurrentDrinks] = useState([]);
 
+    // If the query string is empty, just return a random list of publicly available drinks rendered on screen start up
+    // Otherwise, render drinks based on public availablity and user input
     useEffect(() => {
-        const res = findDrink(query, drinks, preloadedDrinks);
-        setCurrentDrinks(res);
-        navigation.setParams({ results: currentDrinks });
-    }, [query, drinks])
+        if (drinks && preloadedDrinks) {
+            if (query == '') {
+                const res = preloadedDrinks;
+                setCurrentDrinks(res);
+                navigation.setParams({ results: res });
+            } else {
+                async function async() {
+                    const res = await findDrink(query, drinks);
+                    setCurrentDrinks(res);
+                    navigation.setParams({ results: res });
+                }
+
+                async();
+            }
+        }
+    }, [query, drinks, preloadedDrinks])
 
     return (
         <View style={styles.container}>
@@ -40,7 +59,7 @@ const SearchHeader = ({ drinks, navigation, preloadedDrinks }) => {
                     clearButtonMode={'always'}
                     data={currentDrinks && currentDrinks.length === 1 && comp(query, currentDrinks[0].name) ? [] : currentDrinks}
                     query={query}
-                    inputContainerStyle={{ visibility: 'hidden', borderColor: 'transparent' }}
+                    inputContainerStyle={{ borderColor: 'transparent' }}
                     onChangeText={setQuery}
                     hideResults={true}
                     autoCorrect={false}

@@ -1,4 +1,3 @@
-import { cacheImages } from '../../Functions/cacheFunctions';
 // CREATE: Drink Object
 // Take all of the state from the create drink page and combine it into the new drink object
 // Upload the drink image to firebase storage, and save the ImageURL to the drink object
@@ -298,6 +297,46 @@ export const unLikeDrink = (data) => {
             dispatch({ type: 'LIKE_DRINK' })
         } catch (err) {
             dispatch({ type: 'LIKE_DRINK_ERROR', err });
+        }
+    }
+};
+
+// UPDATE: Drink Object's Privacy Setting
+export const updateDrinkPrivacy = (drink) => {
+    console.log('Update Drink Privacy Action')
+    const { id, privacy } = drink;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            await firestore.collection('drinks').doc(id).update({
+                private: privacy
+            })
+
+            dispatch({ type: 'UPDATE_DRINK', id })
+        } catch (err) {
+            dispatch({ type: 'UPDATE_DRINK_ERROR', err });
+        }
+    }
+};
+
+// UPDATE: Drink Object's Privacy Setting
+export const updateDrinkCommentAllowed = (drink) => {
+    console.log('Update Drink Comments Allowed Action')
+    const { id, commentsAllowed } = drink;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            await firestore.collection('drinks').doc(id).update({
+                commentsAllowed: commentsAllowed
+            })
+
+            dispatch({ type: 'UPDATE_DRINK', id })
+        } catch (err) {
+            dispatch({ type: 'UPDATE_DRINK_ERROR', err });
         }
     }
 };

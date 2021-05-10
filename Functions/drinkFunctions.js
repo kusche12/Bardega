@@ -1,5 +1,11 @@
-// Get an array of all drinks that fit a certain search filter. Can be either tag or prep time
-export const getDrinksWithQuery = (drinks, query, max) => {
+import firebase from '../API/FirebaseSetup'
+
+// Get an array of all drinks that fit a certain search filter.
+// Can be either tag or prep time.
+// TODO: Implement the rule below VV
+// MUST NOT Return any drinks that are either private or whose authorID
+// has a private account.
+export const getDrinksWithQuery = async (drinks, query, max) => {
     let nums = randomUniqueNum(drinks.length, drinks.length);
 
     let result = [];
@@ -13,7 +19,10 @@ export const getDrinksWithQuery = (drinks, query, max) => {
                 for (let j = 0; j < drinks[nums[i]].tags.length; j++) {
                     const tag = drinks[nums[i]].tags[j];
                     if (tag === query.filterName) {
-                        result.push(drinks[nums[i]]);
+                        const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
+                        if (!isPrivate) {
+                            result.push(drinks[nums[i]]);
+                        }
                     }
                 }
             }
@@ -27,7 +36,10 @@ export const getDrinksWithQuery = (drinks, query, max) => {
             }
             const prepTime = drinks[nums[i]].prepTime.value;
             if (prepTime.toLowerCase() === query.filterName.toLowerCase()) {
-                result.push(drinks[nums[i]]);
+                const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
+                if (!isPrivate) {
+                    result.push(drinks[nums[i]]);
+                }
             }
         }
         return result;
@@ -40,14 +52,13 @@ export const getRandomQueries = (queries, amount) => {
     let result = [];
     let nums = randomUniqueNum(queries.length, amount);
     for (let i in nums) {
-        console.log(queries[nums[i]]);
         result.push(queries[nums[i]]);
     }
 
     return result;
 }
 
-export const getRandomDrinksNoQuery = (drinks, max) => {
+export const getRandomDrinksNoQuery = async (drinks, max) => {
     let nums = randomUniqueNum(drinks.length, drinks.length);
     let result = [];
 
@@ -57,7 +68,10 @@ export const getRandomDrinksNoQuery = (drinks, max) => {
         }
 
         if (drinks[nums[i]]) {
-            result.push(drinks[nums[i]]);
+            const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
+            if (!isPrivate) {
+                result.push(drinks[nums[i]]);
+            }
         }
     }
 
@@ -70,14 +84,28 @@ function randomUniqueNum(range, outputCount) {
     for (let i = 0; i < range; i++) {
         arr.push(i)
     }
-
     let result = [];
-
     for (let i = 1; i <= outputCount; i++) {
         const random = Math.floor(Math.random() * (range - i));
         result.push(arr[random]);
         arr[random] = arr[range - i];
     }
-
     return result;
+}
+
+// Helper function to decide if the drink or the drink's creator is private
+// This is used to decide if the drink should be returned by a query function or not
+export const drinkIsPrivate = async (drink) => {
+    let authorPrivate;
+    await firebase
+        .firestore()
+        .collection('profiles')
+        .doc(drink.authorID)
+        .get()
+        .then((doc) => {
+            if (doc.exists) {
+                authorPrivate = doc.data().private;
+            }
+        })
+    return drink.private || authorPrivate;
 }

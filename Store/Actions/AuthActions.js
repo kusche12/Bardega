@@ -1,21 +1,51 @@
-import * as Facebook from 'expo-facebook';
-// import FirebaseAuth from 'firebaseauth';
-// import firebaseConfig from '../../API/fbConfig';
-// const firebaseSocial = new FirebaseAuth(firebaseConfig.apiKey);
-
+// Check whether the user typed in an email or a username
+// If it is a username, then query the database for a matching username and get their
+// email. Then, authenticate using their email and password.
 export const logIn = (credentials) => {
-    return (dispatch, getState, { getFirebase }) => {
+    return async (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase();
-        firebase.auth().signInWithEmailAndPassword(
-            credentials.email,
-            credentials.password
-        ).then(() => {
-            console.log('success')
-            dispatch({ type: 'LOGIN_SUCCESS' })
-        }).catch((err) => {
-            console.log('error')
-            dispatch({ type: 'LOGIN_ERROR', err })
-        });
+
+        if (validateEmail(credentials.email)) {
+            firebase.auth().signInWithEmailAndPassword(
+                credentials.email,
+                credentials.password
+            ).then(() => {
+                console.log('success')
+                dispatch({ type: 'LOGIN_SUCCESS' })
+            }).catch((err) => {
+                console.log('error')
+                dispatch({ type: 'LOGIN_ERROR', err })
+            });
+        } else {
+            const firestore = firebase.firestore();
+
+            // Get email from their username
+            const username = credentials.email.trim();
+            const ref = firestore.collection("profiles");
+            let userEmail;
+
+            await ref.where("userName", "==", username)
+                .get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        userEmail = doc.data().email;
+                    })
+                }).then(() => {
+                    firebase.auth().signInWithEmailAndPassword(
+                        userEmail,
+                        credentials.password
+                    ).then(() => {
+                        console.log('success')
+                        dispatch({ type: 'LOGIN_SUCCESS' })
+                    }).catch((err) => {
+                        console.log(err)
+                        dispatch({ type: 'LOGIN_ERROR', err });
+                    })
+                }).catch((err) => {
+                    console.log(err)
+                    dispatch({ type: 'LOGIN_ERROR', err: { message: 'Could not find account with this username' } });
+                });
+        }
     }
 }
 
@@ -99,82 +129,8 @@ export const forgotPassword = (email) => {
     }
 }
 
-
-export const loginFacebook = () => {
-    return async (dispatch, getState, { getFirebase }) => {
-        console.log('init facebook login');
-        // Initialize facebook login SDK
-        await Facebook.initializeAsync({
-            appId: '1643873412449618',
-            appName: 'Bardega'
-        });
-
-        const firebase = await getFirebase();
-
-        const { type, token } = await
-            Facebook.logInWithReadPermissionsAsync({
-                permission: "public_profile"
-            });
-
-        if (type == "success") {
-            const credential =
-                firebase
-                    .auth
-                    .FacebookAuthProvider
-                    .credential(token)
-
-            firebase
-                .auth()
-                .signInWithCredential(credential)
-                .then(() => {
-                    console.log('success')
-                    dispatch({ type: 'FACEBOOK_SUCCESS' })
-                })
-                .catch(error => {
-                    console.log(error);
-                    dispatch({ type: 'FACEBOOK_ERROR', err: { message: 'There was an error authenticating with Facebook.' } })
-                });
-        }
-
-    }
-}
-
-export const loginGoogle = () => {
-    return (dispatch, getState, { getFirebase }) => {
-        const firebase = getFirebase();
-        const provider = new firebase.auth.GoogleAuthProvider();
-
-        firebase.auth()
-            .signInWithRedirect(provider)
-            .then((result) => {
-                var credential = result.credential;
-
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                var token = credential.accessToken;
-                // The signed-in user info.
-                var user = result.user;
-
-                console.log(user);
-                // ...
-            }).catch((error) => {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                // The email of the user's account used.
-                var email = error.email;
-                // The firebase.auth.AuthCredential type that was used.
-                var credential = error.credential;
-                // ...
-                console.log(errorMessage);
-            });
-
-        // firebase.auth().signInWithRedirect(provider)
-        //     .then(() => {
-        //         console.log('success')
-        //         dispatch({ type: 'FACEBOOK_SUCCESS' })
-        //     }).catch((err) => {
-        //         console.log(err);
-        //         dispatch({ type: 'FACEBOOK_ERROR', err: { message: 'There was an error authenticating with Google.' } })
-        //     });
-    }
+// Helper function to check if string is an email
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }

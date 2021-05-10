@@ -10,7 +10,6 @@ import AuthStyles from '../../Styles/AuthStyles';
 import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
-// TODO: Allow for authentication via, facebook, twitter, or gmail
 const CreateAccountScreen = ({ navigation, signUp, authError, loginFacebook, loginGoogle }) => {
     const [name, setName] = useState('');
     const [userName, setUserName] = useState('');
@@ -46,7 +45,8 @@ const CreateAccountScreen = ({ navigation, signUp, authError, loginFacebook, log
                     }
                 </View>
 
-                <View style={AuthStyles.thirdPartyButtons}>
+                {/* TODO: Ask if this feature is really necessary. If so, transition app to react native bare workflow */}
+                {/* <View style={AuthStyles.thirdPartyButtons}>
                     <TouchableWithoutFeedback onPress={() => loginFacebook()}>
                         <Image source={Images.thirdPartyApp.facebook} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
@@ -56,7 +56,7 @@ const CreateAccountScreen = ({ navigation, signUp, authError, loginFacebook, log
                     <TouchableWithoutFeedback onPress={() => loginGoogle()}>
                         <Image source={Images.thirdPartyApp.google} style={AuthStyles.thirdPartyAuth} />
                     </TouchableWithoutFeedback>
-                </View>
+                </View> */}
 
                 <View style={AuthStyles.footer}>
                     <View style={{ flexDirection: 'row', marginBottom: 6 }}>
