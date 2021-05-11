@@ -21,10 +21,13 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
 
     // Wait for drinks and queries to be fully loaded into the app
     useEffect(() => {
-        if (drinks && queries) {
-            loadData();
+        async function fetchData() {
+            if (drinks && queries) {
+                loadData();
+            }
         }
-    }, [drinks, queries]);
+        fetchData();
+    }, [queries, drinks]);
 
     // TODO: Test function only. Replcace this with the function below for production
     const loadData = async () => {
@@ -42,7 +45,7 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
             drinkMatrix.push(drinkRow);
         }
 
-        await setSelectedDrinks(drinkMatrix);
+        setSelectedDrinks(drinkMatrix);
         setIsLoaded(true);
     }
 
