@@ -8,7 +8,6 @@ import Styles from '../../Styles/StyleConstants';
 // This is a horizontal list item that either includes a drink object or a user object based
 // on the passed in item
 const SearchResult = ({ item, navigation, removable }) => {
-
     // Only cache the drink images
     useEffect(() => {
         if (item) {

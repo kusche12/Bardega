@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
 import FavoritesScreen from '../../Screens/ProfileScreens/FavoritesScreen';
@@ -22,8 +26,7 @@ import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
 
-const ProfileNavigator = ({ route, navigation }) => {
-
+const ProfileNavigator = ({ route, navigation, user }) => {
     return (
         <Stack.Navigator
             headerMode='screen'
@@ -34,7 +37,7 @@ const ProfileNavigator = ({ route, navigation }) => {
             <Stack.Screen
                 name='ProfileScreen'
                 component={ProfileScreen}
-                initialParams={route.params, navigation}
+                initialParams={{ user: user, ownProfile: true }}
                 options={() => ({
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
@@ -242,4 +245,16 @@ const ProfileNavigator = ({ route, navigation }) => {
     );
 }
 
-export default ProfileNavigator;
+const mapStateToProps = (state) => {
+    const profiles = state.firestore.data.profiles;
+    const UID = state.firebase.auth.uid;
+    const profile = profiles ? profiles[UID] : null;
+    return {
+        user: profile
+    }
+}
+
+export default compose(
+    firestoreConnect(() => ['profiles']),
+    connect(mapStateToProps)
+)(ProfileNavigator);

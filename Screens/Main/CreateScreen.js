@@ -120,7 +120,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     }
 
     // Give the tags some time to load from firestore
-    if (isLoading) {
+    if (!tags || isLoading) {
         return null;
     } else {
         return (

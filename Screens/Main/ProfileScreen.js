@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, Animated } from 'react-native';
+import { RefreshControl, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Loading from '../../Components/Main/Loading';
+import RenderList from '../../Components/Profile/RenderList';
 import AnimatedFlatList from '../../Components/Profile/AnimatedFlatList';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
+import { cacheImages } from '../../Functions/cacheFunctions';
 import Images from '../../Images/Images';
 import { renderNum } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -20,13 +20,10 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-// TODO: Make sure you don't return any drinks if the drink.privacy === true and the currently authed userID !== to
-// this screen's user ID. Like, if the user is looking at someone else's page.
-// TODO: Implement a new profile schema that's called likedDrinksPrivate. If this is true,
-// Make sure not to render any of the user's liked drinks (if not currently authed user);
+// TODO: Make sure not to render any user information AT ALL if the user.private === true and ownProfile === false
 // TODO: Implement the scroll to the top to reload any data that could have changed on this screen 
 // Do this for the Discover Screen as well.
-const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
+const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile, allFollowers }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [userDrinks, setUserDrinks] = useState(null);
@@ -49,7 +46,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             loadUserDrinks();
             cacheImages(user.imageURL, userID);
         }
-    }, [user.likedDrinks, user.drinks]);
+    }, [user.likedDrinks, user.drinks, allFollowers]);
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
@@ -81,16 +78,43 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     // TODO: Implement the rule below
     // If currently authed user, then render edit profile and favorite routes
     // If any other user, then render follow/unfollow component
+    // TODO Make this its own component and import it in. Getting too fat.
     const renderInfoButtons = () => {
-        return (
-            <View style={{ flexDirection: 'row' }}>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('EditProfileScreen')}>
-                    <View style={[UserStyles.button, { marginRight: 4 }]}>
-                        <Text style={GlobalStyles.paragraph3}>Edit Profile</Text>
+        if (ownProfile) {
+            return (
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('EditProfileScreen')}>
+                        <View style={[UserStyles.button, { marginRight: 4 }]}>
+                            <Text style={GlobalStyles.paragraph3}>Edit Profile</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+            )
+        } else {
+            // TODO: Render follow button based on whether authed user follows this profile or not
+
+            if (allFollowers[user.id]) {
+                return (
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableWithoutFeedback onPress={() => console.log('follow')}>
+                            <View style={[UserStyles.button, { marginRight: 4 }]}>
+                                <Text style={GlobalStyles.paragraph3}>UNFOLLOW</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
-                </TouchableWithoutFeedback>
-            </View>
-        )
+                )
+            } else {
+                return (
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableWithoutFeedback onPress={() => console.log('follow')}>
+                            <View style={[UserStyles.button, { marginRight: 4 }]}>
+                                <Text style={GlobalStyles.paragraph3}>FOLLOW</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                )
+            }
+        }
     }
 
     // Renders either the recipes, followers, or following stat box given parameter type
@@ -131,56 +155,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                     <Image source={img} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
                 </TouchableWithoutFeedback>
             </View>
-        )
-    }
-
-    const renderList = ({ item, index }) => {
-        if (index === 0) {
-            return (
-                <View style={{ width: Styles.width }}>
-                    <FlatList
-                        data={item}
-                        renderItem={renderDrink}
-                        keyExtractor={item => item.id}
-                        numColumns={3}
-                        scrollEnabled={false}
-                        horizontal={false}
-                    />
-                </View>
-            )
-        } else {
-            if (ownProfile || !user.likedDrinksPrivate) {
-                return (
-                    <View style={{ width: Styles.width }}>
-                        <FlatList
-                            data={item}
-                            renderItem={renderDrink}
-                            keyExtractor={item => item.id}
-                            numColumns={3}
-                            scrollEnabled={false}
-                            horizontal={false}
-                        />
-                    </View>
-                )
-            } else {
-                return (
-                    <View style={{ width: Styles.width, flexDirection: 'column', alignItems: 'center' }}>
-                        <Text style={[GlobalStyles.paragraphbold2, { marginTop: 48, marginBottom: 8 }]}>The user's liked drinks are private</Text>
-                        <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>Drinks liked by {user.userName} are currently hidden</Text>
-                    </View>
-                )
-            }
-        }
-    }
-
-    // Renders a drink image that, when clicked, routes to the drink detail page
-    const renderDrink = ({ item }) => {
-        return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item, fromScreen: 'Profile' })}>
-                <View style={UserStyles.drinkContainer}>
-                    <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={UserStyles.drinkImage} />
-                </View>
-            </TouchableWithoutFeedback>
         )
     }
 
@@ -237,7 +211,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
                     <AnimatedFlatList
                         data={[userDrinks, likedDrinks]}
-                        renderItem={renderList}
+                        renderItem={({ item, index }) => <RenderList {...{ item, navigation, ownProfile, index, user }} />}
                         keyExtractor={(_, index) => '' + index}
                         itemWidth={Styles.width}
                         setActiveIndex={setActiveIndex}
@@ -249,30 +223,49 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
         );
     }
 }
-
+// User AND profile ID are both coming in fine
 const mapStateToProps = (state, ownProps) => {
     // If we entered this screen with a link from another user's profile
-    if (ownProps.route.params.user !== undefined) {
+    const followerID = ownProps.route.params.user.profileFollowersID;
+    if (!ownProps.route.params.ownProfile) {
+        console.log("ALL FOLLOWERS DATA");
+        console.log(state.firestore.data['allFollowers' + followerID]);
         return {
             drinks: state.firestore.data.drinks,
             user: ownProps.route.params.user,
             userID: state.firebase.auth.uid,
+            allFollowers: state.firestore.data['allFollowers' + followerID],
             ownProfile: false
         }
     } else {
         // If this is the user's own profile page
         const profiles = state.firestore.data.profiles;
         const profile = profiles ? profiles[state.firebase.auth.uid] : null;
+        console.log(state.firestore.data['allFollowers' + followerID]);
         return {
             drinks: state.firestore.data.drinks,
             user: profile,
             userID: state.firebase.auth.uid,
-            ownProfile: true
+            allFollowers: state.firestore.data['allFollowers' + followerID],
+            ownProfile: true,
         }
     }
 }
 
+// Either get the profile followers from the currently authed user or the user who's profile this is
+// Do the same for the profile following
 export default compose(
     connect(mapStateToProps),
-    firestoreConnect(() => ['drinks', 'profiles'])
+    firestoreConnect((props) => [
+        { collection: 'drinks' },
+        { collection: 'profiles' },
+        {
+            collection: "profileFollowers",
+            doc: props.route.params.user.profileFollowersID,
+            storeAs: 'allFollowers' + props.route.params.user.profileFollowersID,
+            subcollections: [{
+                collection: "followerUsers"
+            }
+            ]
+        }])
 )(ProfileScreen);
