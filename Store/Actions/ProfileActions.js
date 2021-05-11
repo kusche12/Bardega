@@ -217,7 +217,101 @@ export const deleteAccount = (data) => {
     }
 }
 
+// UPDATE: Follow Profile Object
+// Updates the authed user's numFollowing field by +1 and adds the other user into the followingUsers
+// within the profileFollowing collection
+// Updates the other user's numFollowers field by +1 and adds the authed user into the followerUsers
+// within the profileFollowers collection
+export const followUser = (data) => {
+    console.log('Follow User Action');
+    const { userA, userB } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
 
+        try {
+            // Add user A to userB's profileFollowers collection
+            await firestore
+                .collection('profileFollowers')
+                .doc(userB.profileFollowID)
+                .collection('followerUsers')
+                .doc(userA.id)
+                .set({ 1: userA.id })
+
+            // Update userB's numFollowers field by 1
+            await firestore
+                .collection('profiles')
+                .doc(userB.id)
+                .update({ numFollowers: firebase.firestore.FieldValue.increment(1) })
+
+            // Add user B to userA's profileFollowing collection
+            await firestore
+                .collection('profileFollowing')
+                .doc(userA.profileFollowID)
+                .collection('followingUsers')
+                .doc(userB.id)
+                .set({ 1: userB.id })
+
+            // Update userA's numFollowing field by 1
+            await firestore
+                .collection('profiles')
+                .doc(userA.id)
+                .update({ numFollowing: firebase.firestore.FieldValue.increment(1) })
+
+            dispatch({ type: 'FOLLOW_USER' })
+        } catch (err) {
+            dispatch({ type: 'FOLLOW_USER_ERROR', err });
+        }
+    }
+};
+
+// UPDATE: Follow Profile Object
+// Updates the UserA's numFollowing field by -1 and deletes UserB from the followingUsers
+// within the profileFollowing collection
+// Updates UserB's numFollowers field by -1 and deletes UserA from the followerUsers
+// within the profileFollowers collection
+export const unfollowUser = (data) => {
+    console.log('Unfollow User Action');
+    const { userA, userB } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // Remove userA from userB's profileFollowers collection
+            await firestore
+                .collection('profileFollowers')
+                .doc(userB.profileFollowID)
+                .collection('followerUsers')
+                .doc(userA.id)
+                .delete()
+
+            // Update userB's numFollowers field by -1
+            await firestore
+                .collection('profiles')
+                .doc(userB.id)
+                .update({ numFollowers: firebase.firestore.FieldValue.increment(-1) })
+
+            // Remove userB from userA's profileFollowing collection
+            await firestore
+                .collection('profileFollowing')
+                .doc(userA.profileFollowID)
+                .collection('followingUsers')
+                .doc(userB.id)
+                .delete()
+
+            // Update userA's numFollowing field by -1
+            await firestore
+                .collection('profiles')
+                .doc(userA.id)
+                .update({ numFollowing: firebase.firestore.FieldValue.increment(-1) })
+
+            dispatch({ type: 'FOLLOW_USER' })
+        } catch (err) {
+            dispatch({ type: 'FOLLOW_USER_ERROR', err });
+        }
+    }
+};
 
 // Handler that prepares the drink image to be sent to firestorage
 const convertImage = async (image) => {

@@ -3,6 +3,7 @@ import { RefreshControl, Text, SafeAreaView, View, TouchableWithoutFeedback, Ima
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RenderList from '../../Components/Profile/RenderList';
 import AnimatedFlatList from '../../Components/Profile/AnimatedFlatList';
+import FollowButton from '../../Components/Profile/FollowButton';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -21,9 +22,10 @@ const wait = (timeout) => {
 }
 
 // TODO: Make sure not to render any user information AT ALL if the user.private === true and ownProfile === false
+// Only exception is if UserA follows UserB
 // TODO: Implement the scroll to the top to reload any data that could have changed on this screen 
 // Do this for the Discover Screen as well.
-const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile, allFollowers }) => {
+const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [userDrinks, setUserDrinks] = useState(null);
@@ -46,7 +48,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile, allFollow
             loadUserDrinks();
             cacheImages(user.imageURL, userID);
         }
-    }, [user.likedDrinks, user.drinks, allFollowers]);
+    }, [user.likedDrinks, user.drinks]);
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
@@ -75,48 +77,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile, allFollow
         setIsLoading(false);
     }
 
-    // TODO: Implement the rule below
-    // If currently authed user, then render edit profile and favorite routes
-    // If any other user, then render follow/unfollow component
-    // TODO Make this its own component and import it in. Getting too fat.
-    const renderInfoButtons = () => {
-        if (ownProfile) {
-            return (
-                <View style={{ flexDirection: 'row' }}>
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('EditProfileScreen')}>
-                        <View style={[UserStyles.button, { marginRight: 4 }]}>
-                            <Text style={GlobalStyles.paragraph3}>Edit Profile</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-            )
-        } else {
-            // TODO: Render follow button based on whether authed user follows this profile or not
-
-            if (allFollowers[user.id]) {
-                return (
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableWithoutFeedback onPress={() => console.log('follow')}>
-                            <View style={[UserStyles.button, { marginRight: 4 }]}>
-                                <Text style={GlobalStyles.paragraph3}>UNFOLLOW</Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
-                )
-            } else {
-                return (
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableWithoutFeedback onPress={() => console.log('follow')}>
-                            <View style={[UserStyles.button, { marginRight: 4 }]}>
-                                <Text style={GlobalStyles.paragraph3}>FOLLOW</Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
-                )
-            }
-        }
-    }
-
     // Renders either the recipes, followers, or following stat box given parameter type
     const renderStatBox = (num, type) => {
         return (
@@ -132,9 +92,9 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile, allFollow
     // Decides which screen to route to on click of the Followers or Following button
     const routeStatBox = (type) => {
         if (type === 'Followers') {
-            navigation.navigate('FollowScreen', { users: user.followers, name: 'Followers' });
+            navigation.navigate('FollowScreen', { name: 'Followers', user: user });
         } else if (type === 'Following') {
-            navigation.navigate('FollowScreen', { users: user.following, name: 'Following' });
+            navigation.navigate('FollowScreen', { name: 'Following', user: user });
         }
     }
 
@@ -189,7 +149,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile, allFollow
                             <View style={{ marginLeft: 16 }}>
                                 <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>
                                 <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
-                                {renderInfoButtons()}
+                                <FollowButton {...{ navigation, user, ownProfile }} />
                             </View>
                         </View>
                     </View>
@@ -200,8 +160,8 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile, allFollow
 
                     <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>
                         {renderStatBox(userDrinks.length, 'Recipes')}
-                        {renderStatBox(user.followers.length, 'Followers')}
-                        {renderStatBox(user.following.length, 'Following')}
+                        {renderStatBox(user.numFollowers, 'Followers')}
+                        {renderStatBox(user.numFollowing, 'Following')}
                     </View>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
@@ -223,30 +183,24 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile, allFollow
         );
     }
 }
-// User AND profile ID are both coming in fine
+
 const mapStateToProps = (state, ownProps) => {
     // If we entered this screen with a link from another user's profile
-    const followerID = ownProps.route.params.user.profileFollowersID;
     if (!ownProps.route.params.ownProfile) {
-        console.log("ALL FOLLOWERS DATA");
-        console.log(state.firestore.data['allFollowers' + followerID]);
         return {
             drinks: state.firestore.data.drinks,
             user: ownProps.route.params.user,
             userID: state.firebase.auth.uid,
-            allFollowers: state.firestore.data['allFollowers' + followerID],
             ownProfile: false
         }
     } else {
         // If this is the user's own profile page
         const profiles = state.firestore.data.profiles;
         const profile = profiles ? profiles[state.firebase.auth.uid] : null;
-        console.log(state.firestore.data['allFollowers' + followerID]);
         return {
             drinks: state.firestore.data.drinks,
             user: profile,
             userID: state.firebase.auth.uid,
-            allFollowers: state.firestore.data['allFollowers' + followerID],
             ownProfile: true,
         }
     }
@@ -256,16 +210,5 @@ const mapStateToProps = (state, ownProps) => {
 // Do the same for the profile following
 export default compose(
     connect(mapStateToProps),
-    firestoreConnect((props) => [
-        { collection: 'drinks' },
-        { collection: 'profiles' },
-        {
-            collection: "profileFollowers",
-            doc: props.route.params.user.profileFollowersID,
-            storeAs: 'allFollowers' + props.route.params.user.profileFollowersID,
-            subcollections: [{
-                collection: "followerUsers"
-            }
-            ]
-        }])
+    firestoreConnect(() => ['drinks', 'profiles'])
 )(ProfileScreen);

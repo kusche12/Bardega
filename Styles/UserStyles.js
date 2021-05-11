@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
 import Styles from './StyleConstants';
-const PINK = '#F29288';
-const GRAY = '#a1a1a1'
 const RADIUS = 22;
 
 const FAVEIMAGEWIDTH = Styles.width * .45;
@@ -31,9 +29,14 @@ export default StyleSheet.create({
     button: {
         borderRadius: 10,
         borderWidth: 1,
-        paddingHorizontal: 8,
+        width: 100,
+        alignItems: 'center',
         paddingVertical: 4,
         backgroundColor: 'white',
+    },
+    buttonFilled: {
+        backgroundColor: Styles.DARK_PINK,
+        borderColor: Styles.DARK_PINK
     },
     buttonFavorites: {
         flexDirection: 'row',
@@ -151,7 +154,7 @@ export default StyleSheet.create({
     },
     collectionSubtitle: {
         fontSize: 12,
-        color: GRAY
+        color: Styles.GRAY
     },
     cogContainer: {
         position: 'absolute',

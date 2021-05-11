@@ -49,6 +49,21 @@ const profileReducer = (state = initState, action) => {
                 profileError: action.err.message,
                 profileSuccess: null
             }
+        case 'FOLLOW_USER':
+            console.log('Follow User Reducer')
+            return {
+                ...state,
+                profileError: null,
+                profileSuccess: 'successfully followed user'
+            };
+        case 'FOLLOW_USER_ERROR':
+            console.log('Follow User Error Reducer')
+            console.log(action.err.message);
+            return {
+                ...state,
+                profileError: action.err.message,
+                profileSuccess: null
+            }
         default:
             return state;
     }
