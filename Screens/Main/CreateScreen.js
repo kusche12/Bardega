@@ -120,8 +120,8 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     }
 
     // Give the tags some time to load from firestore
-    if (tags === undefined || isLoading) {
-        return <Loading />
+    if (isLoading) {
+        return null;
     } else {
         return (
             <KeyboardAwareScrollView

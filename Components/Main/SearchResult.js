@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Image, Text, TouchableHighlight, ActivityIndicator } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Image, Text, TouchableHighlight } from 'react-native';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -8,7 +8,6 @@ import Styles from '../../Styles/StyleConstants';
 // This is a horizontal list item that either includes a drink object or a user object based
 // on the passed in item
 const SearchResult = ({ item, navigation, removable }) => {
-
 
     // Only cache the drink images
     useEffect(() => {

@@ -26,7 +26,7 @@ const wait = (timeout) => {
 // Make sure not to render any of the user's liked drinks (if not currently authed user);
 // TODO: Implement the scroll to the top to reload any data that could have changed on this screen 
 // Do this for the Discover Screen as well.
-const ProfileScreen = ({ navigation, drinks, user, userID }) => {
+const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [userDrinks, setUserDrinks] = useState(null);
@@ -53,25 +53,28 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
-        console.log('load user drinks')
         let res = [];
         let liked = [];
         for (let i = user.drinks.length - 1; i >= 0; i--) {
             const drink = await drinks[user.drinks[i].id];
-            if (drink) {
+            if (ownProfile || !drink.private) {
                 cacheImages(drink.imageURL, drink.id);
                 res.push(drink);
             }
         }
         setUserDrinks(res);
-        for (let i = user.likedDrinks.length - 1; i >= 0; i--) {
-            const drink = await drinks[user.likedDrinks[i].id];
-            if (drink) {
-                cacheImages(drink.imageURL, drink.id);
-                liked.push(drink);
+        if (ownProfile || !user.likedDrinksPrivate) {
+            for (let i = user.likedDrinks.length - 1; i >= 0; i--) {
+                const drink = await drinks[user.likedDrinks[i].id];
+                if (drink) {
+                    cacheImages(drink.imageURL, drink.id);
+                    liked.push(drink);
+                }
             }
+            setLikedDrinks(liked);
+        } else {
+            setLikedDrinks([]);
         }
-        setLikedDrinks(liked);
         setIsLoading(false);
     }
 
@@ -131,19 +134,43 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
         )
     }
 
-    const renderList = ({ item }) => {
-        return (
-            <View style={{ width: Styles.width }}>
-                <FlatList
-                    data={item}
-                    renderItem={renderDrink}
-                    keyExtractor={item => item.id}
-                    numColumns={3}
-                    scrollEnabled={false}
-                    horizontal={false}
-                />
-            </View>
-        )
+    const renderList = ({ item, index }) => {
+        if (index === 0) {
+            return (
+                <View style={{ width: Styles.width }}>
+                    <FlatList
+                        data={item}
+                        renderItem={renderDrink}
+                        keyExtractor={item => item.id}
+                        numColumns={3}
+                        scrollEnabled={false}
+                        horizontal={false}
+                    />
+                </View>
+            )
+        } else {
+            if (ownProfile || !user.likedDrinksPrivate) {
+                return (
+                    <View style={{ width: Styles.width }}>
+                        <FlatList
+                            data={item}
+                            renderItem={renderDrink}
+                            keyExtractor={item => item.id}
+                            numColumns={3}
+                            scrollEnabled={false}
+                            horizontal={false}
+                        />
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={{ width: Styles.width, flexDirection: 'column', alignItems: 'center' }}>
+                        <Text style={[GlobalStyles.paragraphbold2, { marginTop: 48, marginBottom: 8 }]}>The user's liked drinks are private</Text>
+                        <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>Drinks liked by {user.userName} are currently hidden</Text>
+                    </View>
+                )
+            }
+        }
     }
 
     // Renders a drink image that, when clicked, routes to the drink detail page
@@ -158,7 +185,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
     }
 
     if (isLoading) {
-        return <Loading />
+        return null;
     } else {
         return (
             <KeyboardAwareScrollView
@@ -198,7 +225,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
                     </View>
 
                     <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>
-                        {renderStatBox(user.drinks.length, 'Recipes')}
+                        {renderStatBox(userDrinks.length, 'Recipes')}
                         {renderStatBox(user.followers.length, 'Followers')}
                         {renderStatBox(user.following.length, 'Following')}
                     </View>
@@ -211,7 +238,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID }) => {
                     <AnimatedFlatList
                         data={[userDrinks, likedDrinks]}
                         renderItem={renderList}
-                        keyExtractor={(item, index) => '' + index}
+                        keyExtractor={(_, index) => '' + index}
                         itemWidth={Styles.width}
                         setActiveIndex={setActiveIndex}
                         activeIndex={activeIndex}
@@ -229,16 +256,18 @@ const mapStateToProps = (state, ownProps) => {
         return {
             drinks: state.firestore.data.drinks,
             user: ownProps.route.params.user,
-            userID: state.firebase.auth.uid
+            userID: state.firebase.auth.uid,
+            ownProfile: false
         }
     } else {
+        // If this is the user's own profile page
         const profiles = state.firestore.data.profiles;
         const profile = profiles ? profiles[state.firebase.auth.uid] : null;
-        //console.log(profile.likedDrinks);
         return {
             drinks: state.firestore.data.drinks,
             user: profile,
-            userID: state.firebase.auth.uid
+            userID: state.firebase.auth.uid,
+            ownProfile: true
         }
     }
 }
