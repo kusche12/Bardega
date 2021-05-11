@@ -6,7 +6,9 @@ export const cacheImages = async (uri, docID) => {
         FileSystem.documentDirectory + docID.toString() + ".jpg"
     ).then(({ uri }) => {
         return uri
-    });
+    }).catch(() => {
+        return null;
+    })
 }
 
 export const cacheFirebaseAssets = (ref) => {

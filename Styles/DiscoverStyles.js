@@ -49,4 +49,13 @@ export default StyleSheet.create({
         borderRadius: Styles.BORDER_RADIUS,
         marginRight: 8
     },
+    searchImageProfile: {
+        borderRadius: 100,
+        width: 70,
+        height: 70,
+        marginTop: 5,
+        marginBottom: 5,
+        marginLeft: 5,
+        marginRight: 10
+    }
 });

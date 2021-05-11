@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, StyleSheet, Keyboard, Platform, LogBox } from 'react-native';
+import { Image, View, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -9,55 +9,70 @@ import Images from '../../Images/Images';
 import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
-const comp = (a, b) => {
-    return a.toLowerCase().trim() === b.toLowerCase().trim();
-}
-
-const findDrink = async (query, drinks) => {
-    const regex = new RegExp(`${query.trim()}`, 'i');
-    let res = [];
-    for (let i = 0; i < drinks.length; i++) {
-        const drink = drinks[i];
-        const isPrivate = await drinkIsPrivate(drink);
-        if (!isPrivate) {
-            if (drink.name.search(regex) >= 0) {
-                res.push(drink)
-            }
-        }
-    }
-    return res;
-}
-
-const SearchHeader = ({ drinks, navigation, preloadedDrinks }) => {
+const SearchHeader = ({ drinks, navigation, preloadedDrinks, profiles }) => {
     const [query, setQuery] = useState('');
-    const [currentDrinks, setCurrentDrinks] = useState([]);
+    const [data, setData] = useState([]);
 
     // If the query string is empty, just return a random list of publicly available drinks rendered on screen start up
-    // Otherwise, render drinks based on public availablity and user input
+    // Otherwise, render drinks AND profiles based on public availability and user input
     useEffect(() => {
-        if (drinks && preloadedDrinks) {
-            if (query == '') {
-                const res = preloadedDrinks;
-                setCurrentDrinks(res);
-                navigation.setParams({ results: res });
-            } else {
-                async function async() {
-                    const res = await findDrink(query, drinks);
-                    setCurrentDrinks(res);
+        async function fetchData() {
+            if (drinks && preloadedDrinks && profiles) {
+                if (query) {
+                    const drinkRes = await findDrink(drinks);
+                    const profileRes = findProfile(profiles);
+                    const res = drinkRes.concat(profileRes);
+                    setData(res);
                     navigation.setParams({ results: res });
                 }
-
-                async();
             }
         }
-    }, [query, drinks, preloadedDrinks])
+        fetchData();
+    }, [query, drinks, preloadedDrinks]);
+
+    // Hard reset the search page to the original random drinks when query is empty
+    useEffect(() => {
+        if (!query && data !== preloadedDrinks) {
+            const res = preloadedDrinks;
+            setData(res);
+            navigation.setParams({ results: res });
+        }
+    }, [data, query]);
+
+    const findDrink = async (drinks) => {
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        let res = [];
+        for (let i = 0; i < drinks.length; i++) {
+            const drink = drinks[i];
+            const isPrivate = await drinkIsPrivate(drink);
+            if (!isPrivate) {
+                if (drink.name.search(regex) >= 0) {
+                    res.push(drink)
+                }
+            }
+        }
+        return res;
+    }
+
+    const findProfile = (profiles) => {
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        let res = [];
+        for (let i = 0; i < profiles.length; i++) {
+            const profile = profiles[i];
+            if (profile.userName.search(regex) >= 0) {
+                res.push(profile)
+            }
+        }
+
+        return res;
+    }
 
     return (
         <View style={styles.container}>
             <View style={styles.inputImageRow}>
                 <Autocomplete
                     clearButtonMode={'always'}
-                    data={currentDrinks && currentDrinks.length === 1 && comp(query, currentDrinks[0].name) ? [] : currentDrinks}
+                    data={data}
                     query={query}
                     inputContainerStyle={{ borderColor: 'transparent' }}
                     onChangeText={setQuery}
@@ -116,11 +131,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        drinks: state.firestore.ordered.drinks
+        drinks: state.firestore.ordered.drinks,
+        profiles: state.firestore.ordered.profiles
     }
 }
 
 export default compose(
     connect(mapStateToProps),
-    firestoreConnect(() => ['drinks'])
+    firestoreConnect(() => ['drinks', 'profiles'])
 )(SearchHeader);

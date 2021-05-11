@@ -14,7 +14,7 @@ const DrinkListScreen = ({ route, navigation }) => {
     }, []);
 
     const renderItem = ({ item }) => {
-        return <SearchResult navigation={navigation} drink={item} removable={removable} />
+        return <SearchResult navigation={navigation} item={item} removable={removable} />
     }
 
     return (

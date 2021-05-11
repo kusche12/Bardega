@@ -101,7 +101,8 @@ export const signUp = (newUser) => {
                             id: resp.user.uid,
                             imageURL: 'https://firebasestorage.googleapis.com/v0/b/culture-bardega.appspot.com/o/images%2Fprofiles%2Fdefault.png?alt=media&token=41fda793-637d-4e89-aacf-194a14433948',
                             receiveNotifications: true,
-                            private: false
+                            private: false,
+                            likedDrinksPrivate: false
                         })
                     })
                         .then(() => {

@@ -5,8 +5,6 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 
 import { getRandomDrinksNoQuery } from '../../Functions/drinkFunctions';
-import Loading from '../../Components/Main/Loading'
-
 import { createStackNavigator } from '@react-navigation/stack';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
@@ -27,16 +25,40 @@ const SearchNavigator = ({ route, navigation, drinks }) => {
     // Random drinks preloaded into the search page before user searches anything
     const [isLoading, setIsLoading] = useState(true);
     const [preloadedDrinks, setPreloadedDrinks] = useState([]);
-    useEffect(async () => {
-        if (drinks) {
-            const res = await getRandomDrinksNoQuery(drinks, 10);
-            setPreloadedDrinks(res);
-            setIsLoading(false);
+    useEffect(() => {
+        async function fetchData() {
+            if (drinks) {
+                const res = await getRandomDrinksNoQuery(drinks, 10);
+                setPreloadedDrinks(res);
+                setIsLoading(false);
+            }
         }
-    }, [drinks])
+        fetchData();
+    }, [drinks]);
 
     if (isLoading) {
-        return <Loading />
+        return (
+            <Stack.Navigator
+                headerMode='screen'
+                screenOptions={{
+                    headerStyle: { elevation: 0 },
+                    cardStyle: { backgroundColor: '#FFFFFF' },
+                }}>
+                <Stack.Screen
+                    name='SearchScreen'
+                    component={SearchScreen}
+                    initialParams={{ results: preloadedDrinks }}
+                    options={({ route, navigation }) => ({
+                        headerTitle: () => <SearchHeader navigation={navigation} preloadedDrinks={preloadedDrinks} />,
+                        headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },
+                        headerTitleAlign: 'center',
+                        headerStyle: {
+                            backgroundColor: Styles.PINK,
+                        },
+                    })}
+                />
+            </Stack.Navigator>
+        )
     } else {
         return (
             <Stack.Navigator
@@ -121,7 +143,7 @@ const SearchNavigator = ({ route, navigation, drinks }) => {
                 <Stack.Screen
                     name='ProfileScreen'
                     component={ProfileScreen}
-                    initialParams={route.params, navigation}
+                    initialParams={route, navigation}
                     options={() => ({
                         headerTitle: () => <MainHeader />,
                         headerTitleStyle: { flex: 1, textAlign: 'center' },
