@@ -18,7 +18,7 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Make an async request to cache and update the drink image if this is either
+// BUG: Make an async request to cache and update the drink image if this is either
 // 1. This drinkDetailScreen is entered from the createScreen
 // 2. The drink's image has just been updated and was originally cached differently on the user's device
 

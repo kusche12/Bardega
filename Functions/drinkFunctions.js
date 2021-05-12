@@ -2,9 +2,6 @@ import firebase from '../API/FirebaseSetup'
 
 // Get an array of all drinks that fit a certain search filter.
 // Can be either tag or prep time.
-// TODO: Implement the rule below VV
-// MUST NOT Return any drinks that are either private or whose authorID
-// has a private account.
 export const getDrinksWithQuery = async (drinks, query, max) => {
     let nums = randomUniqueNum(drinks.length, drinks.length);
 

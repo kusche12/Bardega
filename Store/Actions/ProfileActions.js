@@ -162,6 +162,31 @@ export const updatePrivacy = (data) => {
     }
 }
 
+// UPDATE: Profile Privacy Preferences
+export const updateLikedDrinkPrivacy = (data) => {
+    console.log('Update Profile Privacy Action');
+    const { id, privacy } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            await firestore
+                .collection('profiles')
+                .doc(id)
+                .update({
+                    likedDrinksPrivate: privacy,
+                })
+            dispatch({ type: 'UPDATE_PROFILE' });
+            return true;
+        } catch (err) {
+            console.log(err);
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: "There was an error updating your privacy" } });
+            return false;
+        }
+    }
+}
+
 // UPDATE: Profile Notifications Preferences
 export const updateNotifications = (data) => {
     console.log('Update Notifications Privacy Action');

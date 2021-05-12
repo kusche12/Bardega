@@ -45,19 +45,6 @@ const CreateAccountScreen = ({ navigation, signUp, authError, loginFacebook, log
                     }
                 </View>
 
-                {/* TODO: Ask if this feature is really necessary. If so, transition app to react native bare workflow */}
-                {/* <View style={AuthStyles.thirdPartyButtons}>
-                    <TouchableWithoutFeedback onPress={() => loginFacebook()}>
-                        <Image source={Images.thirdPartyApp.facebook} style={AuthStyles.thirdPartyAuth} />
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => handleFacebookAuth()}>
-                        <Image source={Images.thirdPartyApp.twitter} style={AuthStyles.thirdPartyAuth} />
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => loginGoogle()}>
-                        <Image source={Images.thirdPartyApp.google} style={AuthStyles.thirdPartyAuth} />
-                    </TouchableWithoutFeedback>
-                </View> */}
-
                 <View style={AuthStyles.footer}>
                     <View style={{ flexDirection: 'row', marginBottom: 6 }}>
                         <Text style={GlobalStyles.titlebold3}>Already have an account? </Text>

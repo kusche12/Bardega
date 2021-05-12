@@ -195,30 +195,6 @@ export const deleteDrink = (drink) => {
     }
 }
 
-// TODO: Test this on the favorites screen
-// TODO: Test this on the list screen that appears after clicking on a FavoritesScreen bucket
-// DELETE: Drink Object from Drinks Array
-// When the user enters the profile screen or favorites screen and the drink no longer 
-// exists in the database, this function is called to remove it from their profile
-export const removeDrinkFromArray = (data) => {
-    console.log('Remove Drink From Array Action')
-    return async (dispatch, getState, { getFirebase }) => {
-        const firebase = await getFirebase();
-        const firestore = await firebase.firestore();
-
-        try {
-            // Delete drink from the drinks array
-            await firestore.collection('profiles').doc(data.authorID).update({
-                drinks: firebase.firestore.FieldValue.arrayRemove({ id: data.drinkID })
-            })
-
-            dispatch({ type: 'DELETE_DRINK' })
-        } catch (err) {
-            dispatch({ type: 'DELETE_DRINK_ERROR', err });
-        }
-    }
-}
-
 // UPDATE: Like Drink Object
 // Updates the numLikes field by +1 and adds the user into the likedByUsers
 // within the drinkLikes collection

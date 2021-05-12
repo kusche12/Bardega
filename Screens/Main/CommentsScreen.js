@@ -11,8 +11,6 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Maybe mess with the UI of the header. Make it prettier but keep same information
-// TODO: Implement pagination on the currComments component so that it does not have to load all at once
 const CommentsScreen = ({ route, profiles, navigation, comments, createComment, userID }) => {
     const { drink } = route.params;
     const [text, setText] = useState('');

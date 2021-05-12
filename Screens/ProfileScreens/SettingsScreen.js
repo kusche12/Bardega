@@ -8,7 +8,6 @@ import UserStyles from '../../Styles/UserStyles';
 import Images from '../../Images/Images';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Get these buttons to work
 const SettingsScreen = ({ logOut, navigation }) => {
 
     return (

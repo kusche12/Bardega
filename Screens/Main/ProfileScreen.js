@@ -14,7 +14,6 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Delete this after development, lol
 LogBox.ignoreAllLogs()
 
 const wait = (timeout) => {
@@ -26,6 +25,7 @@ const wait = (timeout) => {
 // TODO: Implement the scroll to the top to reload any data that could have changed on this screen 
 // Do this for the Discover Screen as well.
 const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
+    //const [isPrivate, setIsPrivate] = useState() // Use this to test if the profile screen should be rendered or not
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [userDrinks, setUserDrinks] = useState(null);

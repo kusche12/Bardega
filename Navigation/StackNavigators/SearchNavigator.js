@@ -19,8 +19,6 @@ import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
 
-// TODO: Test that the useEffect function actually returns 10 random drinks
-// When you have more drinks in the database
 const SearchNavigator = ({ route, navigation, drinks }) => {
     // Random drinks preloaded into the search page before user searches anything
     const [isLoading, setIsLoading] = useState(true);
