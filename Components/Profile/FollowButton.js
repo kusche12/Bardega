@@ -15,11 +15,17 @@ import Styles from '../../Styles/StyleConstants';
 const FollowButton = ({ navigation, allFollowers, userA, userB, ownProfile, followUser, unfollowUser }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+
+    // BUG: This renders too soon. It takes allFollowers before all keys are in it, therefore, not showing 
+    // if userA follows userB
     useEffect(() => {
-        if (allFollowers) {
+        if (allFollowers && allFollowers !== undefined && userA) {
+            console.log(allFollowers);
+            setIsFollowing(allFollowers[userA.id]);
             setIsLoading(false);
         }
-    }, [allFollowers]);
+    }, [allFollowers, userA]);
 
     const handleChange = async (type) => {
         if (isDisabled) {
@@ -49,7 +55,8 @@ const FollowButton = ({ navigation, allFollowers, userA, userB, ownProfile, foll
             </View>
         )
     } else {
-        if (allFollowers[userA.id]) {
+        console.log(isFollowing);
+        if (isFollowing) {
             return (
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleChange('unfollow')}>
@@ -80,10 +87,14 @@ const mapStateToProps = (state, ownProps) => {
     if (!ownProps.ownProfile) {
         userB = ownProps.user;
     }
+
+    const allFollowers = state.firestore.data['allFollowers']
+    //console.log(allFollowers);
+
     return {
         userA: profile,
         userB: userB,
-        allFollowers: state.firestore.data['allFollowers'],
+        allFollowers: allFollowers,
     }
 }
 

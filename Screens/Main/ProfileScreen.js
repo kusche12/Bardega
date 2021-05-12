@@ -83,7 +83,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             <TouchableWithoutFeedback onPress={() => routeStatBox(type)}>
                 <View style={[UserStyles.statBox, GlobalStyles.boxShadow]}>
                     <Text style={[GlobalStyles.title1, { marginBottom: 8 }]}>{renderNum(num)}</Text>
-                    <Text style={GlobalStyles.paragraph3}>{type}</Text>
+                    <Text style={GlobalStyles.paragraph3}>{type === 'Followers' && num === 1 ? 'Follower' : type}</Text>
                 </View>
             </TouchableWithoutFeedback>
         )

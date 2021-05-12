@@ -26,6 +26,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
 
     const loadData = async () => {
         let res = [];
+        // console.log(name);
         if (name === 'Following') {
             for (let i = 0; i < allFollowing.length; i++) {
                 if (allFollowing[i].id !== 'default') {
@@ -59,7 +60,6 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
         }
     }
 
-    // TODO: Navigate to another profilescreen in a different stack than what you do to navigate to User A's screen
     // TODO: Also when navigating to UserB's profile screen, it doensn't render the correct "Follow / Unfollow" button
     // Somehow, I believe you're passing in the wrong user profile item here.
     const renderUser = ({ item }) => {
