@@ -5,7 +5,10 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import Styles from '../../Styles/StyleConstants';
 
+// A bulleted list where each bullet is a string in an array
+// Every time the user presses enter, a new bullet is added
 const CreateDirections = ({ direction, setDirection }) => {
+
     if (direction === null) {
         return (
             <TouchableWithoutFeedback onPress={() => setDirection('')}>

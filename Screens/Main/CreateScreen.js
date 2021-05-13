@@ -5,10 +5,9 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { createDrink, updateDrink } from '../../Store/Actions/DrinkActions';
-import Loading from '../../Components/Main/Loading';
+import CreateDirectionsList from '../../Components/Create/CreateDirectionsList';
 
 import CreateIngredients from '../../Components/Create/CreateIngredients';
-import CreateDirections from '../../Components/Create/CreateDirections';
 import CreateTags from '../../Components/Create/CreateTags';
 import CreateImage from '../../Components/Create/CreateImage';
 import CreateOptionPicker from '../../Components/Create/CreateOptionPicker'
@@ -23,7 +22,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     const [drinkDesc, setDrinkDesc] = useState('');
     const [drinkImage, setDrinkImage] = useState(null);
     const [ingredients, setIngredients] = useState([]);
-    const [direction, setDirection] = useState('');
+    const [direction, setDirection] = useState(null);
     const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
     const [drinkStrength, setDrinkStrength] = useState({ value: 'virgin', label: 'Virgin' });
     const [selectedTags, setSelectedTags] = useState([]);
@@ -162,7 +161,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
 
                     <CreateIngredients {...{ ingredients, setIngredients }} />
 
-                    <CreateDirections {...{ direction, setDirection }} />
+                    <CreateDirectionsList {...{ direction, setDirection }} />
 
                     <CreateOptionPicker item={drinkStrength} setItem={setDrinkStrength} itemType='STRENGTH LEVEL' />
 
@@ -201,8 +200,6 @@ const getIngredients = (ingredients) => {
 }
 
 const mapStateToProps = (state) => {
-    // const drinks = state.firestore.data.drinks;
-    // const drink = drinks ? drinks[state.drink.drinkID] : 
     return {
         userID: state.firebase.auth.uid,
         tags: state.firestore.ordered.tags,

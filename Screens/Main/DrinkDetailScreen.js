@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert, FlatList } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Images from '../../Images/Images';
 
@@ -99,6 +99,12 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
         }
     }
 
+    // const renderInstruction = ({ item }) => {
+    //     return (
+    //         <Text>•  {item}</Text>
+    //     )
+    // }
+
     // If this is the creator of the drink, allow for editing or deletion
     const handleEditDrink = () => {
         return Alert.alert(
@@ -193,20 +199,24 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                         </View>
                     }
 
+                    {drink.instructions && drink.instructions.length > 0 &&
+                        <View style={[CreateStyles.ingrContainerWide, { alignItems: 'flex-start' }]}>
+                            <Text style={[GlobalStyles.titlebold2, { alignSelf: 'center' }]}>DIRECTIONS</Text>
+                            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
+                            <FlatList
+                                data={drink.instructions}
+                                keyExtractor={(_, x) => '' + x}
+                                renderItem={({ item }) => <Text style={[GlobalStyles.paragraph2, { marginBottom: 4 }]}>•  {item}</Text>}
+                            />
+
+                        </View>
+                    }
+
                     {drink.description.length > 0 &&
                         <View style={CreateStyles.ingrContainerWide}>
                             <Text style={[GlobalStyles.titlebold2]}>DESCRIPTION</Text>
                             <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
                             <Text style={[GlobalStyles.paragraph2, { lineHeight: 22 }]}>{drink.description}</Text>
-                        </View>
-                    }
-
-                    {drink.instructions.length > 0 &&
-                        <View style={CreateStyles.ingrContainerWide}>
-                            <Text style={[GlobalStyles.titlebold2]}>DIRECTIONS</Text>
-                            <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
-                            <Text style={[GlobalStyles.paragraph2, { lineHeight: 22 }]}>{drink.instructions}</Text>
-
                         </View>
                     }
 
