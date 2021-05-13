@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableWithoutFeedback, Text } from 'react-native';
 import { followUser, unfollowUser } from '../../Store/Actions/ProfileActions';
 import { connect } from 'react-redux';
-import { firestoreConnect } from 'react-redux-firebase';
-import { compose } from 'redux';
+import firebase from '../../API/FirebaseSetup'
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -12,20 +11,35 @@ import Styles from '../../Styles/StyleConstants';
 // USER B Represents the other user that user A is currently looking at
 // If this component is rendered on User A's page, then just return the edit profile button
 // Otherwise, return a follow / unfollow button connected to User B
-const FollowButton = ({ navigation, allFollowers, userA, userB, ownProfile, followUser, unfollowUser }) => {
+const FollowButton = ({ navigation, userA, userB, ownProfile, followUser, unfollowUser }) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [isDisabled, setIsDisabled] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
 
-    // BUG: This renders too soon. It takes allFollowers before all keys are in it, therefore, not showing 
-    // if userA follows userB
     useEffect(() => {
-        if (allFollowers && allFollowers !== undefined && userA) {
-            console.log(allFollowers);
-            setIsFollowing(allFollowers[userA.id]);
+        async function fetchData() {
+            if (userB && userA) {
+                let db = firebase.firestore();
+                db
+                    .collection('profileFollowers')
+                    .doc(userB.profileFollowID)
+                    .collection('followerUsers')
+                    .doc(userA.id)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            setIsFollowing(true);
+                        } else {
+                            setIsFollowing(false);
+                        }
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+            }
             setIsLoading(false);
         }
-    }, [allFollowers, userA]);
+        fetchData();
+    }, [userB, userA, isDisabled]);
 
     const handleChange = async (type) => {
         if (isDisabled) {
@@ -55,7 +69,6 @@ const FollowButton = ({ navigation, allFollowers, userA, userB, ownProfile, foll
             </View>
         )
     } else {
-        console.log(isFollowing);
         if (isFollowing) {
             return (
                 <View style={{ flexDirection: 'row' }}>
@@ -87,14 +100,9 @@ const mapStateToProps = (state, ownProps) => {
     if (!ownProps.ownProfile) {
         userB = ownProps.user;
     }
-
-    const allFollowers = state.firestore.data['allFollowers']
-    //console.log(allFollowers);
-
     return {
         userA: profile,
         userB: userB,
-        allFollowers: allFollowers,
     }
 }
 
@@ -105,16 +113,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
-    firestoreConnect((props) => [
-        {
-            collection: "profileFollowers",
-            doc: props.user.profileFollowID,
-            storeAs: 'allFollowers',
-            subcollections: [{
-                collection: "followerUsers"
-            }
-            ]
-        }])
-)(FollowButton);
+export default connect(mapStateToProps, mapDispatchToProps)(FollowButton);
