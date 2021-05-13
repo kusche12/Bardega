@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import firebase from '../../API/FirebaseSetup'
 import { RefreshControl, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RenderList from '../../Components/Profile/RenderList';
@@ -20,12 +21,10 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-// TODO: Make sure not to render any user information AT ALL if the user.private === true and ownProfile === false
-// Only exception is if UserA follows UserB
 // TODO: Implement the scroll to the top to reload any data that could have changed on this screen 
 // Do this for the Discover Screen as well.
 const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
-    //const [isPrivate, setIsPrivate] = useState() // Use this to test if the profile screen should be rendered or not
+    const [isPrivate, setIsPrivate] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [userDrinks, setUserDrinks] = useState(null);
@@ -45,6 +44,28 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     // Load all the drinks AND liked drinks any time either of these arrays change
     useEffect(() => {
         if (user && drinks) {
+
+            // Test if this profile should be rendered based on privacy settings
+            if (!ownProfile && user.private) {
+                let db = firebase.firestore();
+                db
+                    .collection('profileFollowers')
+                    .doc(user.profileFollowID)
+                    .collection('followerUsers')
+                    .doc(userID)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            setIsPrivate(false);
+                        } else {
+                            setIsPrivate(true);
+                        }
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+            } else {
+                setIsPrivate(false);
+            }
             loadUserDrinks();
             cacheImages(user.imageURL, userID);
         }
@@ -110,8 +131,8 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             img = Images.profile.emptyHeartOff;
         }
         return (
-            <View style={UserStyles.indexButtonContainer}>
-                <TouchableWithoutFeedback onPress={() => setActiveIndex(index)}>
+            <View style={[UserStyles.indexButtonContainer, isPrivate && index === 0 && { borderBottomColor: 'black', borderBottomWidth: 1.75 }]}>
+                <TouchableWithoutFeedback disabled={isPrivate} onPress={() => setActiveIndex(index)}>
                     <Image source={img} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
                 </TouchableWithoutFeedback>
             </View>
@@ -120,55 +141,65 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
     if (isLoading) {
         return null;
-    } else {
-        return (
-            <KeyboardAwareScrollView
-                enableOnAndroid={true}
-                enableAutomaticScroll={(Platform.OS === 'ios')}
-                contentContainerStyle={{ flexGrow: 1 }}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={isRefreshing}
-                        onRefresh={onRefresh}
-                    />
+    }
+
+    return (
+        <KeyboardAwareScrollView
+            enableOnAndroid={true}
+            enableAutomaticScroll={(Platform.OS === 'ios')}
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={
+                <RefreshControl
+                    refreshing={isRefreshing}
+                    onRefresh={onRefresh}
+                />
+            }
+        >
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginTop: 20 }]} >
+
+                {userID === user.id &&
+                    <View style={UserStyles.cogContainer}>
+                        <TouchableWithoutFeedback onPress={() => navigation.navigate('SettingsScreen')}>
+                            <Image source={Images.profile.settings} style={UserStyles.settingsCog} />
+                        </TouchableWithoutFeedback>
+                    </View>
                 }
-            >
-                <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginTop: 20 }]} >
 
-                    {userID === user.id &&
-                        <View style={UserStyles.cogContainer}>
-                            <TouchableWithoutFeedback onPress={() => navigation.navigate('SettingsScreen')}>
-                                <Image source={Images.profile.settings} style={UserStyles.settingsCog} />
-                            </TouchableWithoutFeedback>
-                        </View>
-                    }
-
-                    <View style={UserStyles.infoContainer}>
-                        <View style={UserStyles.infoRow}>
-                            <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
-                            <View style={{ marginLeft: 16 }}>
-                                <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>
-                                <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
-                                <FollowButton {...{ navigation, user, ownProfile }} />
-                            </View>
+                <View style={UserStyles.infoContainer}>
+                    <View style={UserStyles.infoRow}>
+                        <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
+                        <View style={{ marginLeft: 16 }}>
+                            <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>
+                            <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                            <FollowButton {...{ navigation, user, ownProfile }} />
                         </View>
                     </View>
+                </View>
 
-                    <View style={UserStyles.infoContainer}>
-                        <Text style={GlobalStyles.paragraph2}>{user.bio}</Text>
+                <View style={UserStyles.infoContainer}>
+                    <Text style={GlobalStyles.paragraph2}>{user.bio}</Text>
+                </View>
+
+                <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>
+                    {renderStatBox(userDrinks.length, 'Recipes')}
+                    {renderStatBox(user.numFollowers, 'Followers')}
+                    {renderStatBox(user.numFollowing, 'Following')}
+                </View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
+                    {renderIndexButton(0, 'grid')}
+                    {renderIndexButton(1, 'heart')}
+                </View>
+
+                {isPrivate
+                    ?
+                    <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 32 }}>
+                        <Image source={Images.profile.padlock} style={{ width: 50, height: 50, marginBottom: 8 }} />
+                        <Text style={GlobalStyles.paragraphbold2}>This account is private</Text>
+                        <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>Follow the account to see their drinks</Text>
                     </View>
 
-                    <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>
-                        {renderStatBox(userDrinks.length, 'Recipes')}
-                        {renderStatBox(user.numFollowers, 'Followers')}
-                        {renderStatBox(user.numFollowing, 'Following')}
-                    </View>
-
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
-                        {renderIndexButton(0, 'grid')}
-                        {renderIndexButton(1, 'heart')}
-                    </View>
-
+                    :
                     <AnimatedFlatList
                         data={[userDrinks, likedDrinks]}
                         renderItem={({ item, index }) => <RenderList {...{ item, navigation, ownProfile, index, user }} />}
@@ -178,10 +209,11 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                         activeIndex={activeIndex}
                     />
 
-                </SafeAreaView>
-            </KeyboardAwareScrollView>
-        );
-    }
+                }
+
+            </SafeAreaView>
+        </KeyboardAwareScrollView>
+    );
 }
 
 const mapStateToProps = (state, ownProps) => {

@@ -59,60 +59,99 @@ export const logOut = () => {
 }
 
 export const signUp = (newUser) => {
-    return (dispatch, getState, { getFirebase }) => {
+    return async (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase();
         const firestore = firebase.firestore();
 
-        // Check if username already exists
-        const username = newUser.userName.trim();
-        var ref = firestore.collection("profiles");
+        try {
+            // Check if username already exists
+            const username = newUser.userName.trim();
+            var ref = firestore.collection("profiles");
 
-        // Create a query against the collection.
-        // This returns all the users with the username provided by the input
-        let isUnique = true;
-        ref.where("userName", "==", username)
-            .get()
-            .then((snapshot) => {
-                snapshot.forEach((doc) => {
-                    isUnique = false;
-                })
-            }).then(() => {
-                if (isUnique === false) {
-                    dispatch({ type: 'SIGNUP_ERROR', err: { message: 'That username already exists Your username must be unique.' } });
-                } else {
-                    firebase.auth().createUserWithEmailAndPassword(
-                        newUser.email,
-                        newUser.password
-                    ).then((resp) => {
-                        // Create a new profile in the firestore using the auto-generated user id
-                        const nameArray = newUser.name.trim().split(" ");
-                        const date = new Date();
-                        return firestore.collection('profiles').doc(resp.user.uid).set({
-                            fName: nameArray[0],
-                            lName: nameArray[1],
-                            userName: newUser.userName.trim(),
-                            email: newUser.email.trim(),
-                            bio: '',
-                            dateCreated: date.toISOString(),
-                            drinks: [],
-                            followers: [],
-                            following: [],
-                            likedDrinks: [],
-                            id: resp.user.uid,
-                            imageURL: 'https://firebasestorage.googleapis.com/v0/b/culture-bardega.appspot.com/o/images%2Fprofiles%2Fdefault.png?alt=media&token=41fda793-637d-4e89-aacf-194a14433948',
-                            receiveNotifications: true,
-                            private: false,
-                            likedDrinksPrivate: false
-                        })
+            // Create a query against the collection.
+            // This returns all the users with the username provided by the input
+            let isUnique = true;
+            await ref
+                .where("userName", "==", username)
+                .get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        isUnique = false;
                     })
-                        .then(() => {
-                            dispatch({ type: 'SIGNUP_SUCCESS' })
-                        }).catch(err => {
-                            dispatch({ type: 'SIGNUP_ERROR', err })
-                        })
+                })
 
-                }
+            if (!isUnique) {
+                dispatch({ type: 'SIGNUP_ERROR', err: { message: 'That username already exists. Your username must be unique.' } });
+                return;
+            }
+
+            if (username.length < 1) {
+                dispatch({ type: 'SIGNUP_ERROR', err: { message: 'Your username must be at least 1 character long' } });
+                return;
+            }
+
+            // Create collection for the followers and following users of this profile and save ID
+            const followersRef = await firestore.collection('profileFollowers').doc();
+            const profileFollowID = followersRef.id;
+            console.log('profileFollowID: ' + profileFollowID);
+
+            await firestore
+                .collection('profileFollowers')
+                .doc(profileFollowID)
+                .set({ 1: 'default' });
+            await firestore
+                .collection('profileFollowers')
+                .doc(profileFollowID)
+                .collection('followerUsers')
+                .doc('default')
+                .set({ id: 'default' });
+
+            await firestore
+                .collection('profileFollowing')
+                .doc(profileFollowID)
+                .set({ 1: 'default' });
+            await firestore
+                .collection('profileFollowing')
+                .doc(profileFollowID)
+                .collection('followingUsers')
+                .doc('default')
+                .set({ id: 'default' });
+
+            await firebase.auth().createUserWithEmailAndPassword(
+                newUser.email,
+                newUser.password
+            ).then((resp) => {
+                // Create a new profile in the firestore using the auto-generated user id
+                const nameArray = newUser.name.trim().split(" ");
+                const date = new Date();
+                return firestore.collection('profiles').doc(resp.user.uid).set({
+                    fName: nameArray[0],
+                    lName: nameArray[1],
+                    userName: newUser.userName.trim(),
+                    email: newUser.email.trim(),
+                    bio: '',
+                    dateCreated: date.toISOString(),
+                    drinks: [],
+                    likedDrinks: [],
+                    id: resp.user.uid,
+                    imageURL: 'https://firebasestorage.googleapis.com/v0/b/culture-bardega.appspot.com/o/images%2Fprofiles%2Fdefault.png?alt=media&token=41fda793-637d-4e89-aacf-194a14433948',
+                    receiveNotifications: true,
+                    private: false,
+                    likedDrinksPrivate: false,
+                    profileFollowID: profileFollowID,
+                    numFollowers: 0,
+                    numFollowing: 0
+                })
             })
+                .then(() => {
+                    dispatch({ type: 'SIGNUP_SUCCESS' })
+                }).catch(err => {
+                    dispatch({ type: 'SIGNUP_ERROR', err })
+                })
+
+        } catch (err) {
+            dispatch({ type: 'SIGNUP_ERROR', err })
+        }
     }
 }
 

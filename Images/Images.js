@@ -40,7 +40,8 @@ export default {
         grid: require('./pixels.png'),
         emptyHeart: require('./empty_heart_bold.png'),
         emptyHeartOff: require('./empty_heart_off.png'),
-        gridOff: require('./pixels_off.png')
+        gridOff: require('./pixels_off.png'),
+        padlock: require('./padlock.png')
     },
     comment: {
         emptyHeart: require('./empty_heart.png'),
