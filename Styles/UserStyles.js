@@ -77,7 +77,7 @@ export default StyleSheet.create({
         height: Styles.width * .333,
     },
     followerHeader: {
-        height: Styles.height * .05,
+        height: Styles.height * .04,
         width: Styles.width,
         alignItems: 'center',
         justifyContent: 'space-between'
