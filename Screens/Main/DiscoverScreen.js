@@ -102,7 +102,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 
 // If this screen is navigated to with a drinkID, then redirect to the DrinkDetailScreen
 const mapStateToProps = (state, ownProps) => {
-    console.log(ownProps.route.params.drinkID);
 
     return {
         drinkID: ownProps.route.params.drinkID || null,

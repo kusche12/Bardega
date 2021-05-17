@@ -41,7 +41,8 @@ export default {
         emptyHeart: require('./empty_heart_bold.png'),
         emptyHeartOff: require('./empty_heart_off.png'),
         gridOff: require('./pixels_off.png'),
-        padlock: require('./padlock.png')
+        padlock: require('./padlock.png'),
+        inbox: require('./inbox.png')
     },
     comment: {
         emptyHeart: require('./empty_heart.png'),

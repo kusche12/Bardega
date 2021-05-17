@@ -58,6 +58,7 @@ export const logOut = () => {
     }
 }
 
+// TODO: Create the notifications collection and ID pair on creation of new user !!
 export const signUp = (newUser) => {
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase();

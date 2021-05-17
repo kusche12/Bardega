@@ -19,9 +19,11 @@ import ProfileInputScreen from '../../Screens/ProfileScreens/ProfileInputScreen'
 import DrinkOptionsScreen from '../../Screens/Main/DrinkOptionsScreen';
 import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
+import NotificationsScreen from '../../Screens/ProfileScreens/NotificationsScreen';
 
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
+import NotificationsHeader from '../../Components/TopNavbar/NotificationsHeader'
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
@@ -34,12 +36,14 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 headerStyle: { elevation: 0 },
                 cardStyle: { backgroundColor: '#FFFFFF' },
             }}>
+            {/* TODO: Only render the notifications box if it is the currently authed user's profile page */}
             <Stack.Screen
                 name='ProfileScreen'
                 component={ProfileScreen}
                 initialParams={{ user: user, ownProfile: true }}
                 options={() => ({
                     headerTitle: () => <MainHeader />,
+                    headerRight: () => <NotificationsHeader navigation={navigation} user={user} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {
@@ -229,6 +233,21 @@ const ProfileNavigator = ({ route, navigation, user }) => {
             <Stack.Screen
                 name='DrinkOptionsScreen'
                 component={DrinkOptionsScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='NotificationsScreen'
+                component={NotificationsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
