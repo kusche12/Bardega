@@ -75,6 +75,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const loadUserDrinks = async () => {
         let res = [];
         let liked = [];
+        console.log('loading user drinks');
         for (let i = user.drinks.length - 1; i >= 0; i--) {
             const drink = await drinks[user.drinks[i].id];
             if (ownProfile || !drink.private) {

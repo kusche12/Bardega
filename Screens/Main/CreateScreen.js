@@ -51,7 +51,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     useEffect(() => {
         if (drinkID) {
             const drink = drinks[drinkID];
-            navigation.navigate('DrinkDetailScreen', { drink });
+            navigation.navigate('ProfileScreen');
         } else if (drinkError) {
             console.log("THERE WAS AN ERROR IN THE CREATE SCREEN")
         }

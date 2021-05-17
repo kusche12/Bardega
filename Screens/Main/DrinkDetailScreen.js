@@ -18,22 +18,32 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// BUG: Make an async request to cache and update the drink image if this is either
-// 1. This drinkDetailScreen is entered from the createScreen
-// 2. The drink's image has just been updated and was originally cached differently on the user's device
-
-// The problem is that the drink is using its old version even after it is updated by the user
-// This does not go away until after app reloads completely
 const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [image, setImage] = useState(null);
 
     // Load the component after all props are set
     useEffect(() => {
-        if (author && authors && comments && drink && drink.imageURL) {
+        if (author && authors && comments && drink) {
+            console.log('loading')
             cacheImages(drink.imageURL, drink.id);
+            const imgTemp = getCachedImage(drink.id) || drink.imageURL;
+            setImage(imgTemp);
             setIsLoading(false);
         }
     }, [author, comments, drink]);
+
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         if (author && authors && comments && drink) {
+    //             await cacheImages(drink.imageURL, drink.id);
+    //             const imgTemp = getCachedImage(drink.id) || drink.imageURL;
+    //             setImage(imgTemp);
+    //             setIsLoading(false);
+    //         }
+    //     }
+    //     fetchData();
+    // }, [author, comments, drink]);
 
     const renderRecipe = () => {
         let result = [];
@@ -98,12 +108,6 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
             )
         }
     }
-
-    // const renderInstruction = ({ item }) => {
-    //     return (
-    //         <Text>•  {item}</Text>
-    //     )
-    // }
 
     // If this is the creator of the drink, allow for editing or deletion
     const handleEditDrink = () => {
@@ -184,7 +188,7 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                     </View>
                     <View style={DetailStyles.shadowContainer}>
                         <View style={DetailStyles.photoContainer}>
-                            <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DetailStyles.drinkImage} />
+                            <Image source={{ uri: image }} key={new Date()} style={DetailStyles.drinkImage} />
                         </View>
                     </View>
 

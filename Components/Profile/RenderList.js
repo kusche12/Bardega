@@ -1,29 +1,16 @@
 import React from 'react';
-import { View, FlatList, Text, TouchableWithoutFeedback, Image } from 'react-native';
-import { getCachedImage } from '../../Functions/cacheFunctions';
+import { View, FlatList, Text } from 'react-native';
+import RenderDrink from './RenderDrink';
 import GlobalStyles from '../../Styles/GlobalStyles';
-import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
 
 const renderList = ({ item, index, navigation, ownProfile, user }) => {
-
-    // Renders a drink image that, when clicked, routes to the drink detail page
-    const renderDrink = ({ item }) => {
-        return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item, fromScreen: 'Profile' })}>
-                <View style={UserStyles.drinkContainer}>
-                    <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={UserStyles.drinkImage} />
-                </View>
-            </TouchableWithoutFeedback>
-        )
-    }
-
     if (index === 0) {
         return (
             <View style={{ width: Styles.width }}>
                 <FlatList
                     data={item}
-                    renderItem={renderDrink}
+                    renderItem={(item) => <RenderDrink navigation={navigation} object={item} />}
                     keyExtractor={item => item.id}
                     numColumns={3}
                     scrollEnabled={false}
@@ -37,7 +24,7 @@ const renderList = ({ item, index, navigation, ownProfile, user }) => {
                 <View style={{ width: Styles.width }}>
                     <FlatList
                         data={item}
-                        renderItem={renderDrink}
+                        renderItem={(item) => <RenderDrink navigation={navigation} object={item} />}
                         keyExtractor={item => item.id}
                         numColumns={3}
                         scrollEnabled={false}

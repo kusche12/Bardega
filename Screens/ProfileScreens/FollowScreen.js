@@ -60,8 +60,6 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
         }
     }
 
-    // TODO: Also when navigating to UserB's profile screen, it doensn't render the correct "Follow / Unfollow" button
-    // Somehow, I believe you're passing in the wrong user profile item here.
     const renderUser = ({ item }) => {
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: item, ownProfile: false })}>
