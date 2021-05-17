@@ -13,7 +13,7 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of 10 drinks that fit each query
-const DiscoverScreen = ({ drinks, queries, navigation }) => {
+const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [selectedDrinks, setSelectedDrinks] = useState(null);
@@ -21,13 +21,18 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
 
     // Wait for drinks and queries to be fully loaded into the app
     useEffect(() => {
-        async function fetchData() {
-            if (drinks && queries) {
-                loadData();
-            }
+        if (drinkID && allDrinks) {
+            navigation.navigate('DrinkDetailScreen', { drink: allDrinks[drinkID] });
         }
-        fetchData();
-    }, [queries, drinks]);
+        if (allDrinks && drinks && queries) {
+            async function fetchData() {
+                if (drinks && queries) {
+                    loadData();
+                }
+            }
+            fetchData();
+        }
+    }, [queries, drinks, allDrinks, drinkID]);
 
     // TODO: Test function only. Replcace this with the function below for production
     const loadData = async () => {
@@ -95,8 +100,13 @@ const DiscoverScreen = ({ drinks, queries, navigation }) => {
     );
 }
 
-const mapStateToProps = (state) => {
+// If this screen is navigated to with a drinkID, then redirect to the DrinkDetailScreen
+const mapStateToProps = (state, ownProps) => {
+    console.log(ownProps.route.params.drinkID);
+
     return {
+        drinkID: ownProps.route.params.drinkID || null,
+        allDrinks: state.firestore.data.drinks,
         drinks: state.firestore.ordered.drinks,
         queries: state.firestore.ordered.queries
     }

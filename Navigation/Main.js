@@ -36,7 +36,7 @@ const Main = ({ user }) => {
             screens: {
                 Discover: {
                     screens: {
-                        DrinkDetailScreen: 'DrinkDetailScreen/:drink',
+                        DiscoverScreen: 'DiscoverScreen/:drinkID',
                     }
                 }
             },
@@ -63,26 +63,26 @@ const Main = ({ user }) => {
 }
 
 const mapStateToProps = (state) => {
-    // if (state.firebase.auth.isEmpty) {
-    //     return {
-    //         user: null
-    //     }
-    // } else {
-    //     const profiles = state.firestore.data.profiles;
-    //     const UID = state.firebase.auth.uid;
-    //     const profile = profiles ? profiles[UID] : null;
-    //     return {
-    //         user: profile
-    //     }
-    // }
-
-    // TODO: Just for testing
-    const profiles = state.firestore.data.profiles;
-    const UID = state.firebase.auth.uid;
-    const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
-    return {
-        user: profile
+    if (state.firebase.auth.isEmpty) {
+        return {
+            user: null
+        }
+    } else {
+        const profiles = state.firestore.data.profiles;
+        const UID = state.firebase.auth.uid;
+        const profile = profiles ? profiles[UID] : null;
+        return {
+            user: profile
+        }
     }
+
+    // JUST FOR TESTING
+    // const profiles = state.firestore.data.profiles;
+    // const UID = state.firebase.auth.uid;
+    // const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
+    // return {
+    //     user: profile
+    // }
 }
 
 export default compose(

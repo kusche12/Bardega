@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableWithoutFeedback, Image, Text, Share } from 'react-native';
+import { View, TouchableWithoutFeedback, Image, Text, Share, Alert } from 'react-native';
 import * as Linking from 'expo-linking';
 import Loading from '../Main/Loading';
 import { connect } from 'react-redux';
@@ -13,11 +13,7 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Build a link to the correct DrinkDetailScreen/:drink where drink
-// is a JSON object of the drink it is focused on.
-// https://docs.expo.io/versions/latest/sdk/linking/
-
-// Use the touchable opacity function to return a url with a json stringified drink object
+// TODO: DEV: Test if share link actually works
 const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
     likedByUsers, author, userID, numComments, likeDrink, unLikeDrink }) => {
 
@@ -31,32 +27,29 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
     }, [likedByUsers]);
 
     const onShare = async () => {
-        console.log('exp://192.168.68.115:19000/--/DrinkDetailScreen?drink=' + JSON.stringify(drink))
         try {
+            const link = Linking.createURL('/DiscoverScreen/' + drink.id);
             const result = await Share.share({
                 title: `Check out this drink from the Bardega Cocktail Club: ${drink.name}!`,
                 message: `Check out this drink from the Bardega Cocktail Club: ${drink.name}!`,
-                url: drink.imageURL
+                url: link
             });
+            console.log(result.action);
             if (result.action === Share.sharedAction) {
-                if (result.activityType) {
-                    // shared with activity type of result.activityType
-                } else {
-                    // shared
-                }
-            } else if (result.action === Share.dismissedAction) {
+                Alert.alert(
+                    'Drink Shared',
+                    'Note: Users must have Bardega downloaded to access the drink from the URL link',
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                )
+            }
+            if (result.action === Share.dismissedAction) {
                 console.log('share dismissed')
             }
         } catch (error) {
             alert(error.message);
         }
-        // try {
-        //     const isAvailable = await Sharing.isAvailableAsync();
-        //     if (isAvailable) {
-        //         const result = Sharing.shareAsync(drink.imageURL)
-        //     }
-        // }
-
     }
 
     const renderHeart = () => {
@@ -150,7 +143,6 @@ const mapDispatchToProps = (dispatch) => {
 
 
 // Subcollection of a subcollection: 
-// https://stackoverflow.com/questions/53968379/how-to-point-firestoreconnect-to-a-nested-collection-in-react-redux-firebase
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect((props) => [
