@@ -6,6 +6,9 @@ import { updateNotifications } from '../../Store/Actions/ProfileActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
+// TODO: Deep link from this screen to the app settings screen where the user can turn on / off their settings
+// Also, keep the current API call when this switch is hit so that their notif options are still in firestore
+// https://www.youtube.com/watch?v=ruaAUbekM9Q around 8:45
 const NotificationsSettingsScreen = ({ userID, error, user, updateNotifications }) => {
 
     const [allowNotifs, setAllowNotifs] = useState(true);

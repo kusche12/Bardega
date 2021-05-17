@@ -90,6 +90,11 @@ export const signUp = (newUser) => {
                 return;
             }
 
+            if (username.length > 30) {
+                dispatch({ type: 'SIGNUP_ERROR', err: { message: 'Your username must be 30 characters or less' } });
+                return;
+            }
+
             // Create collection for the followers and following users of this profile and save ID
             const followersRef = await firestore.collection('profileFollowers').doc();
             const profileFollowID = followersRef.id;

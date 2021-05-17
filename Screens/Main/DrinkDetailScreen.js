@@ -25,25 +25,12 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
     // Load the component after all props are set
     useEffect(() => {
         if (author && authors && comments && drink) {
-            console.log('loading')
             cacheImages(drink.imageURL, drink.id);
             const imgTemp = getCachedImage(drink.id) || drink.imageURL;
             setImage(imgTemp);
             setIsLoading(false);
         }
     }, [author, comments, drink]);
-
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         if (author && authors && comments && drink) {
-    //             await cacheImages(drink.imageURL, drink.id);
-    //             const imgTemp = getCachedImage(drink.id) || drink.imageURL;
-    //             setImage(imgTemp);
-    //             setIsLoading(false);
-    //         }
-    //     }
-    //     fetchData();
-    // }, [author, comments, drink]);
 
     const renderRecipe = () => {
         let result = [];
@@ -167,7 +154,7 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
     }
 
     if (isLoading) {
-        return <Loading />
+        return null;
     } else {
         return (
             <KeyboardAwareScrollView

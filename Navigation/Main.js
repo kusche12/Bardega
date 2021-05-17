@@ -10,6 +10,8 @@ import AuthNavigator from './AuthNavigators/AuthNavigator';
 // For navigation
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
+import * as Linking from 'expo-linking';
+
 
 import { useFonts } from 'expo-font';
 
@@ -25,6 +27,22 @@ const Main = ({ user }) => {
         SourceSerifSemiBold: require('../assets/fonts/SourceSerifPro-SemiBold.ttf'),
         SourceSerifBold: require('../assets/fonts/SourceSerifPro-Bold.ttf'),
     });
+
+    // Create a linking object that will allow a third party application to enter this app
+    const prefix = Linking.createURL('/');
+    const linking = {
+        prefixes: [prefix],
+        config: {
+            screens: {
+                Discover: {
+                    screens: {
+                        DrinkDetailScreen: 'DrinkDetailScreen/:drink',
+                    }
+                }
+            },
+        },
+    }
+
     useEffect(() => {
         if (fontLoaded) {
             setIsLoading(false);
@@ -37,7 +55,7 @@ const Main = ({ user }) => {
         return <SplashScreen />
     } else {
         return (
-            <NavigationContainer>
+            <NavigationContainer linking={linking}>
                 {user ? <MainNavigator /> : <AuthNavigator />}
             </NavigationContainer>
         )
@@ -45,17 +63,25 @@ const Main = ({ user }) => {
 }
 
 const mapStateToProps = (state) => {
-    if (state.firebase.auth.isEmpty) {
-        return {
-            user: null
-        }
-    } else {
-        const profiles = state.firestore.data.profiles;
-        const UID = state.firebase.auth.uid;
-        const profile = profiles ? profiles[UID] : null;
-        return {
-            user: profile
-        }
+    // if (state.firebase.auth.isEmpty) {
+    //     return {
+    //         user: null
+    //     }
+    // } else {
+    //     const profiles = state.firestore.data.profiles;
+    //     const UID = state.firebase.auth.uid;
+    //     const profile = profiles ? profiles[UID] : null;
+    //     return {
+    //         user: profile
+    //     }
+    // }
+
+    // TODO: Just for testing
+    const profiles = state.firestore.data.profiles;
+    const UID = state.firebase.auth.uid;
+    const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
+    return {
+        user: profile
     }
 }
 

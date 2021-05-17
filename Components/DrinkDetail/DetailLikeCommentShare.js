@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableWithoutFeedback, Image, Text } from 'react-native';
+import { View, TouchableWithoutFeedback, Image, Text, Share } from 'react-native';
+import * as Linking from 'expo-linking';
 import Loading from '../Main/Loading';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -12,7 +13,11 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Get the share component to share to other social medias / messenger
+// TODO: Build a link to the correct DrinkDetailScreen/:drink where drink
+// is a JSON object of the drink it is focused on.
+// https://docs.expo.io/versions/latest/sdk/linking/
+
+// Use the touchable opacity function to return a url with a json stringified drink object
 const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
     likedByUsers, author, userID, numComments, likeDrink, unLikeDrink }) => {
 
@@ -24,6 +29,35 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
             setIsLoading(false);
         }
     }, [likedByUsers]);
+
+    const onShare = async () => {
+        console.log('exp://192.168.68.115:19000/--/DrinkDetailScreen?drink=' + JSON.stringify(drink))
+        try {
+            const result = await Share.share({
+                title: `Check out this drink from the Bardega Cocktail Club: ${drink.name}!`,
+                message: `Check out this drink from the Bardega Cocktail Club: ${drink.name}!`,
+                url: drink.imageURL
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                console.log('share dismissed')
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+        // try {
+        //     const isAvailable = await Sharing.isAvailableAsync();
+        //     if (isAvailable) {
+        //         const result = Sharing.shareAsync(drink.imageURL)
+        //     }
+        // }
+
+    }
 
     const renderHeart = () => {
         let img;
@@ -77,7 +111,7 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
                         </View>
                     </TouchableWithoutFeedback>
 
-                    <TouchableWithoutFeedback onPress={() => console.log('share me')}>
+                    <TouchableWithoutFeedback onPress={() => onShare()}>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Image source={Images.detail.share} style={[DetailStyles.heartImg]}></Image>
                             <Text style={[GlobalStyles.titlebold3, { opacity: 0 }]}>Share</Text>
