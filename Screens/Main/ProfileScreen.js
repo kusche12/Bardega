@@ -21,8 +21,6 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-// TODO: Implement the scroll to the top to reload any data that could have changed on this screen 
-// Do this for the Discover Screen as well.
 const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [isPrivate, setIsPrivate] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +43,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     useEffect(() => {
         if (user && drinks) {
 
-            // Test if this profile should be rendered based on privacy settings
+            // Check if this profile should be rendered based on privacy settings
             if (!ownProfile && user.private) {
                 let db = firebase.firestore();
                 db
@@ -75,7 +73,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const loadUserDrinks = async () => {
         let res = [];
         let liked = [];
-        console.log('loading user drinks');
         for (let i = user.drinks.length - 1; i >= 0; i--) {
             const drink = await drinks[user.drinks[i].id];
             if (ownProfile || !drink.private) {

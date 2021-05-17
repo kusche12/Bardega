@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image } from 'react-native';
 import Loading from '../../Components/Main/Loading';
-import { followUser, unfollowUser } from '../../Store/Actions/ProfileActions';
+import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -9,8 +9,6 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: If the currently authed user does not follow one of the users on the list
-//      Render a "follow" button (like on Instagram)
 const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing }) => {
     const { name } = route.params;
 
@@ -26,11 +24,11 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
 
     const loadData = async () => {
         let res = [];
-        // console.log(name);
         if (name === 'Following') {
             for (let i = 0; i < allFollowing.length; i++) {
                 if (allFollowing[i].id !== 'default') {
                     const profile = await profiles[allFollowing[i].id];
+                    cacheImages(profile.imageURL, profile.id);
                     res.push(profile)
                 }
             }
@@ -38,6 +36,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
             for (let i = 0; i < allFollowers.length; i++) {
                 if (allFollowers[i].id !== 'default') {
                     const profile = await profiles[allFollowers[i].id];
+                    cacheImages(profile.imageURL, profile.id);
                     res.push(profile)
                 }
             }
@@ -64,7 +63,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: item, ownProfile: false })}>
                 <View style={UserStyles.followRow}>
-                    <Image source={{ uri: item.imageURL }} style={UserStyles.followImage} />
+                    <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={UserStyles.followImage} />
                     <View style={{ marginLeft: 8 }}>
                         <Text style={GlobalStyles.titlebold2}>{item.userName}</Text>
                         <Text style={[GlobalStyles.title3, { color: Styles.GRAY }]}>{item.fName} {item.lName}</Text>
@@ -102,15 +101,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        followUser: (data) => dispatch(followUser(data)),
-        unfollowUser: (data) => dispatch(unfollowUser(data))
-    }
-}
-
 export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(mapStateToProps),
     firestoreConnect((props) => [
         {
             collection: "profileFollowers",
