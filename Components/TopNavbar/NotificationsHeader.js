@@ -13,7 +13,7 @@ const NotificationsHeader = ({ navigation, user }) => {
                     resizeMode='contain'
                 />
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('NotificationsScreen', { notificationsID: user.notificationsID })}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('NotificationsScreen', { notificationsID: user.notificationsID, userA: user })}>
                 <Image source={Images.profile.inbox} style={{ width: 25, height: 25 }} />
             </TouchableWithoutFeedback>
         </View>

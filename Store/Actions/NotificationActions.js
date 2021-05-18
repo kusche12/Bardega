@@ -41,3 +41,28 @@ export const createNotification = (data) => {
         }
     }
 };
+
+// DELETE: Notification Object
+// Deletes a new notification
+export const deleteNotification = (data) => {
+    console.log('Delete Notif Action');
+    const { notifID, id } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // Delete notif from the notifs collection
+            await firestore
+                .collection('notifications')
+                .doc(notifID)
+                .collection('allNotifications')
+                .doc(id)
+                .delete();
+
+            dispatch({ type: 'DELETE_NOTIF', id })
+        } catch (err) {
+            dispatch({ type: 'DELETE_NOTIF_ERROR', err });
+        }
+    }
+};

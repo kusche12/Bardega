@@ -38,6 +38,15 @@ export default StyleSheet.create({
         backgroundColor: Styles.DARK_PINK,
         borderColor: Styles.DARK_PINK
     },
+    buttonNotification: {
+        borderRadius: 10,
+        borderWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        width: 70,
+        height: 40,
+    },
     buttonFavorites: {
         flexDirection: 'row',
         backgroundColor: Styles.DARK_PINK,
@@ -209,5 +218,6 @@ export default StyleSheet.create({
         backgroundColor: Styles.DARK_GRAY,
         height: 1.75,
         alignSelf: 'flex-start'
-    }
+    },
+
 });

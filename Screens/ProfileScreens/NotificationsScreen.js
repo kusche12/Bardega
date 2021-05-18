@@ -6,16 +6,23 @@ import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { rejectRequest, followUser } from '../../Store/Actions/ProfileActions';
+import { createNotification } from '../../Store/Actions/NotificationActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const NotificationsScreen = ({ route, navigation, notifications, profiles, drinks }) => {
+// TODO: Add a secondary page linked at the top that only has the notifications from the followRequest collection
+// TODO: Auto update the flatlist whenever the data from notifications changes. Think add / remove actions
+const NotificationsScreen = ({ route, navigation, notifications,
+    profiles, drinks, rejectRequest, createNotification, followUser }) => {
+    const { userA } = route.params;
     const [isLoading, setIsLoading] = useState(true);
+    const [isDisabled, setIsDisabled] = useState(false);
+
     useEffect(() => {
         if (notifications) {
-            console.log(notifications);
             setIsLoading(false)
         }
     }, [notifications]);
@@ -31,16 +38,22 @@ const NotificationsScreen = ({ route, navigation, notifications, profiles, drink
                 cacheImages(drink.imageURL, drink.id);
             }
 
+            let WIDTH = .6;
+            if (item.type === 'requestFollow') {
+                WIDTH = .4;
+            }
+
             return (
                 <TouchableWithoutFeedback onPress={() => handleCallback(item, user, drink)}>
-                    <View style={{ width: Styles.width, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, paddingHorizontal: 10 }}>
-                        <View style={{ flexDirection: 'row', width: Styles.width * .6 }}>
-                            <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={{ width: 40, height: 40, borderRadius: 100, marginRight: 10 }} />
+                    <View style={{ width: Styles.width, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, paddingHorizontal: 10 }}>
+                        <View style={{ flexDirection: 'row', width: Styles.width * WIDTH }}>
+                            <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={{ width: 45, height: 45, borderRadius: 100, marginRight: 10 }} />
                             {renderText(item, user, drink)}
                         </View>
                         {drink &&
                             <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={{ width: 50, height: 50, borderRadius: Styles.BORDER_RADIUS }} />
                         }
+                        {renderAcceptFollow(item, user)}
                     </View>
                 </TouchableWithoutFeedback>
 
@@ -48,26 +61,9 @@ const NotificationsScreen = ({ route, navigation, notifications, profiles, drink
         }
     }
 
-    // All notification types: likedDrink, follow, likedComment, comment
+    // All notification types: likedDrink, follow, likedComment, comment, requestFollow
     const renderText = (item, user, drink) => {
-        let body;
-        switch (item.type) {
-            case 'follow':
-                body = 'started following you.';
-                break;
-            case 'likedDrink':
-                body = 'liked your drink ' + drink.name + '.';
-                break;
-            case 'comment':
-                body = 'commented: ' + item.comment;
-                break;
-            case 'likedComment':
-                body = 'liked your comment: ' + item.comment;
-                break;
-            default:
-                body = '';
-        }
-
+        let body = getText(item, drink);
         return (
             <Text>
                 <Text style={GlobalStyles.paragraphbold2}>{user.userName} </Text>
@@ -78,12 +74,55 @@ const NotificationsScreen = ({ route, navigation, notifications, profiles, drink
         )
     }
 
+    const renderAcceptFollow = (item, user) => {
+        if (item.type === 'requestFollow') {
+            return (
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleAccepted(item, user)}>
+                        <View style={[UserStyles.buttonNotification, UserStyles.buttonFilled, { marginRight: 4 }]}>
+                            <Text style={GlobalStyles.paragraph3}>Accept</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleRejection(item, user)}>
+                        <View style={UserStyles.buttonNotification}>
+                            <Text style={GlobalStyles.paragraph3}>Decline</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+            )
+        }
+    }
+
     const handleCallback = (item, user, drink) => {
-        if (item.type === 'follow') {
+        if (item.type === 'follow' || item.type === 'requestFollow') {
             navigation.navigate('ProfileScreen', { user: user, ownProfile: false });
         } else {
             navigation.navigate('DrinkDetailScreen', { drink: drink });
         }
+    }
+
+    // Firstly gets rid of userB from userA's followRequests collection,
+    // Secondly, sends userB a notification that userA declined their request
+    const handleRejection = async (item, user) => {
+        setIsDisabled(true);
+        await rejectRequest({ userA: userA, userB: user });
+        await createNotification({ notifID: user.notificationsID, comment: null, drinkID: null, type: 'requestRejected', userID: userA.id });
+        await deleteNotification({ notifID: userA.notificationsID, id: item.id })
+        setIsDisabled(false);
+    }
+
+    // Firstly gets rid of userB from userA's followRequests collection,
+    // Secondly, adds the requested user (user) into the userA's profileFollowers collection
+    // Thirdly, sends userB a notification that userA declined their request
+    // Fourthly, sends userA a notification that says "user B now follows you"
+    const handleAccepted = async (item, user) => {
+        setIsDisabled(true);
+        await rejectRequest({ userA: userA, userB: user });
+        await followUser({ userA: user, userB: userA });
+        await createNotification({ notifID: user.notificationsID, comment: null, drinkID: null, type: 'requestAccepted', userID: userA.id });
+        await deleteNotification({ notifID: userA.notificationsID, id: item.id });
+        await createNotification({ notifID: userA.notificationsID, comment: null, drinkID: null, type: 'follow', userID: user.id });
+        setIsDisabled(false);
     }
 
     if (isLoading) {
@@ -108,6 +147,28 @@ const NotificationsScreen = ({ route, navigation, notifications, profiles, drink
 
 }
 
+const getText = (item, drink) => {
+    switch (item.type) {
+        case 'follow':
+            return 'started following you.';
+        case 'likedDrink':
+            return 'liked your drink ' + drink.name + '.';
+        case 'comment':
+            return 'commented: ' + item.comment;
+        case 'likedComment':
+            return 'liked your comment: ' + item.comment;
+        case 'requestFollow':
+            return 'requested to follow you.';
+        case 'requestRejected':
+            return 'declined your follow request.';
+        case 'requestAccepted':
+            return 'accepted your follow request.';
+        default:
+            return '';
+    }
+}
+
+
 const mapStateToProps = (state) => {
     const profiles = state.firestore.data.profiles;
     const drinks = state.firestore.data.drinks;
@@ -120,8 +181,17 @@ const mapStateToProps = (state) => {
     }
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        rejectRequest: (data) => dispatch(rejectRequest(data)),
+        createNotification: (data) => dispatch(createNotification(data)),
+        followUser: (data) => dispatch(followUser(data)),
+
+    }
+}
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect((props) => [
         { collection: 'profiles' },
         { collection: 'drinks' },

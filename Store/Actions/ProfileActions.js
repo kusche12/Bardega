@@ -348,3 +348,79 @@ const convertImage = async (image) => {
     return blob;
 }
 
+
+// UPDATE: Follow Profile Object
+// Adds userA into userB's profileRequests collection when userB is a privated account
+export const requestFollow = (data) => {
+    console.log('Request Follow User Action');
+    const { userA, userB } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // Add user A to userB's profileRequests collection
+            await firestore
+                .collection('profileRequests')
+                .doc(userB.profileFollowID)
+                .collection('allRequests')
+                .doc(userA.id)
+                .set({ 1: userA.id })
+
+            dispatch({ type: 'FOLLOW_USER' })
+        } catch (err) {
+            dispatch({ type: 'FOLLOW_USER_ERROR', err });
+        }
+    }
+};
+
+// UPDATE: Unrequest Follow Profile Object
+// Removes userA from userB's profileRequests collection
+export const unrequestFollow = (data) => {
+    console.log('Request Follow User Action');
+    const { userA, userB } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // Removes user A from userB's profileRequests collection
+            await firestore
+                .collection('profileRequests')
+                .doc(userB.profileFollowID)
+                .collection('allRequests')
+                .doc(userA.id)
+                .delete()
+
+            dispatch({ type: 'FOLLOW_USER' })
+        } catch (err) {
+            dispatch({ type: 'FOLLOW_USER_ERROR', err });
+        }
+    }
+};
+
+// UPDATE: Follow Profile Object
+// Called when userA declines the request sent to them from userB
+// Removes userB from userA's followRequests collection
+export const rejectRequest = (data) => {
+    console.log('Reject Request User Action');
+    const { userA, userB } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // Remove user B from userA's profileRequests collection
+            await firestore
+                .collection('profileRequests')
+                .doc(userA.profileFollowID)
+                .collection('allRequests')
+                .doc(userB.id)
+                .delete();
+
+            dispatch({ type: 'FOLLOW_USER' })
+        } catch (err) {
+            dispatch({ type: 'FOLLOW_USER_ERROR', err });
+        }
+    }
+};

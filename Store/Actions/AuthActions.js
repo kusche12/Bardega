@@ -96,6 +96,7 @@ export const signUp = (newUser) => {
             }
 
             // Create collection for the followers and following users of this profile and save ID
+            // As well as the users who are requesting to follow (when this account is privated)
             const followersRef = await firestore.collection('profileFollowers').doc();
             const profileFollowID = followersRef.id;
             console.log('profileFollowID: ' + profileFollowID);
@@ -119,6 +120,17 @@ export const signUp = (newUser) => {
                 .collection('profileFollowing')
                 .doc(profileFollowID)
                 .collection('followingUsers')
+                .doc('default')
+                .set({ id: 'default' });
+
+            await firestore
+                .collection('profileRequests')
+                .doc(profileFollowID)
+                .set({ 1: 'default' });
+            await firestore
+                .collection('profileRequests')
+                .doc(profileFollowID)
+                .collection('allRequests')
                 .doc('default')
                 .set({ id: 'default' });
 
