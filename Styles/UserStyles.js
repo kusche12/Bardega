@@ -219,5 +219,12 @@ export default StyleSheet.create({
         height: 1.75,
         alignSelf: 'flex-start'
     },
-
+    requestNumContainer: {
+        backgroundColor: Styles.DARK_PINK,
+        borderRadius: 10,
+        paddingVertical: 2,
+        paddingHorizontal: 8,
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 });

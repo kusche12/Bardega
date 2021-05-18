@@ -1,31 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image } from 'react-native';
-import Loading from '../../Components/Main/Loading';
 import { renderTime } from '../../Functions/miscFunctions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { rejectRequest, followUser } from '../../Store/Actions/ProfileActions';
-import { createNotification } from '../../Store/Actions/NotificationActions';
+import { createNotification, deleteNotification } from '../../Store/Actions/NotificationActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
-import DiscoverStyles from '../../Styles/DiscoverStyles';
 import Styles from '../../Styles/StyleConstants';
+import Images from '../../Images/Images';
 
-// TODO: Add a secondary page linked at the top that only has the notifications from the followRequest collection
-// TODO: Auto update the flatlist whenever the data from notifications changes. Think add / remove actions
-const NotificationsScreen = ({ route, navigation, notifications,
-    profiles, drinks, rejectRequest, createNotification, followUser }) => {
-    const { userA } = route.params;
+const NotificationsScreen = ({ userA, navigation, notifications, deleteNotification,
+    profiles, drinks, rejectRequest, createNotification, followUser, allRequests }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
 
     useEffect(() => {
-        if (notifications) {
+        if (notifications && allRequests && userA) {
             setIsLoading(false)
         }
-    }, [notifications]);
+    }, [notifications, allRequests, userA]);
 
     const renderNotification = ({ item }) => {
         if (item.id !== 'default') {
@@ -47,7 +43,7 @@ const NotificationsScreen = ({ route, navigation, notifications,
                 <TouchableWithoutFeedback onPress={() => handleCallback(item, user, drink)}>
                     <View style={{ width: Styles.width, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, paddingHorizontal: 10 }}>
                         <View style={{ flexDirection: 'row', width: Styles.width * WIDTH }}>
-                            <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={{ width: 45, height: 45, borderRadius: 100, marginRight: 10 }} />
+                            <Image source={{ uri: user.imageURL }} style={{ width: 45, height: 45, borderRadius: 100, marginRight: 10 }} />
                             {renderText(item, user, drink)}
                         </View>
                         {drink &&
@@ -117,12 +113,45 @@ const NotificationsScreen = ({ route, navigation, notifications,
     // Fourthly, sends userA a notification that says "user B now follows you"
     const handleAccepted = async (item, user) => {
         setIsDisabled(true);
+        setIsDisabled(true);
         await rejectRequest({ userA: userA, userB: user });
         await followUser({ userA: user, userB: userA });
         await createNotification({ notifID: user.notificationsID, comment: null, drinkID: null, type: 'requestAccepted', userID: userA.id });
         await deleteNotification({ notifID: userA.notificationsID, id: item.id });
         await createNotification({ notifID: userA.notificationsID, comment: null, drinkID: null, type: 'follow', userID: user.id });
         setIsDisabled(false);
+        setIsDisabled(false);
+    }
+
+    const renderFollowRequestPage = () => {
+        const userID = allRequests[0]['1']
+        const user = profiles[userID];
+        const userImg = user.imageURL;
+        let num = allRequests.length - 1;
+        if (num > 9) {
+            num = 9;
+        }
+
+        return (
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('FollowRequestsScreen', { notificationsID: user.notificationsID, userA: user })}>
+                <View>
+                    <View style={{ flexDirection: 'row', paddingHorizontal: 10, paddingBottom: 4, justifyContent: 'space-between' }}>
+                        <View>
+                            <Image source={{ uri: userImg }} style={{ width: 50, height: 50, borderRadius: 100 }} />
+                            <View style={[UserStyles.requestNumContainer, { position: 'absolute', left: 35, top: -10 }]}>
+                                <Text style={[GlobalStyles.paragraphbold3, { color: 'white' }]}>{num}+</Text>
+                            </View>
+                        </View>
+                        <View>
+                            <Text style={GlobalStyles.paragraphbold2} >Follow Requests</Text>
+                            <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>Accept or decline requests</Text>
+                        </View>
+                        <Image source={Images.settings.about} style={{ width: 12, height: 20, alignSelf: 'center', marginRight: 10 }} />
+                    </View>
+                    <View style={[GlobalStyles.line, { width: Styles.width, alignSelf: 'center', marginBottom: 30, backgroundColor: Styles.LIGHT_GRAY }]}></View>
+                </View>
+            </TouchableWithoutFeedback>
+        )
     }
 
     if (isLoading) {
@@ -133,8 +162,11 @@ const NotificationsScreen = ({ route, navigation, notifications,
                 <View style={[UserStyles.followerHeader]}>
                     <Text style={GlobalStyles.titlebold2}>NOTIFICATIONS</Text>
                 </View>
-                <View style={[GlobalStyles.line, { width: Styles.width * .9, alignSelf: 'center', marginBottom: 16 }]}></View>
+                <View style={[GlobalStyles.line, { width: Styles.width, alignSelf: 'center', marginBottom: 16 }]}></View>
 
+                { allRequests.length > 1 && renderFollowRequestPage()}
+
+                <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY, marginLeft: 10, marginBottom: 10 }]}>Activity</Text>
                 <FlatList
                     data={notifications}
                     keyExtractor={item => item.id}
@@ -172,12 +204,16 @@ const getText = (item, drink) => {
 const mapStateToProps = (state) => {
     const profiles = state.firestore.data.profiles;
     const drinks = state.firestore.data.drinks;
+    let userA = profiles[state.firebase.auth.uid];
+    let allRequests = state.firestore.ordered['allRequests'];
     let notifications = state.firestore.ordered['allNotifications'];
 
     return {
         profiles: profiles,
         notifications: notifications,
-        drinks: drinks
+        drinks: drinks,
+        allRequests: allRequests,
+        userA: userA
     }
 }
 
@@ -186,7 +222,7 @@ const mapDispatchToProps = (dispatch) => {
         rejectRequest: (data) => dispatch(rejectRequest(data)),
         createNotification: (data) => dispatch(createNotification(data)),
         followUser: (data) => dispatch(followUser(data)),
-
+        deleteNotification: (data) => dispatch(deleteNotification(data)),
     }
 }
 
@@ -201,7 +237,17 @@ export default compose(
             storeAs: 'allNotifications',
             subcollections: [{
                 collection: "allNotifications"
-            }
+            },
             ]
-        }])
+        },
+        {
+            collection: "profileRequests",
+            doc: props.route.params.userA.profileFollowID,
+            storeAs: 'allRequests',
+            subcollections: [{
+                collection: "allRequests"
+            }]
+        }
+
+    ])
 )(NotificationsScreen);
