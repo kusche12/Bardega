@@ -58,7 +58,6 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser,
                     });
             }
 
-            console.log(isFollowing)
             setIsLoading(false);
         }
         fetchData();
@@ -99,7 +98,6 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser,
     }
 
     if (ownProfile) {
-        console.log("OWN PROFILE")
         return (
             <View style={{ flexDirection: 'row' }}>
                 <TouchableWithoutFeedback disabled={isDisabled} onPress={() => navigation.navigate('EditProfileScreen')}>
@@ -111,7 +109,6 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser,
         )
     } else {
         if (isFollowing) {
-            console.log("HE IS FOLLOWING")
             return (
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleChange('unfollow')}>

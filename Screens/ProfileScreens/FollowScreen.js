@@ -9,7 +9,7 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing }) => {
+const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing, userID }) => {
     const { name } = route.params;
 
     const [userProfiles, setUserProfiles] = useState(null);
@@ -17,10 +17,10 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
 
     // Wait for userData to be fully loaded into the screen
     useEffect(() => {
-        if (allFollowers, allFollowing) {
+        if (allFollowers && allFollowing && userID) {
             loadData();
         }
-    }, [allFollowers, allFollowing])
+    }, [allFollowers, allFollowing, userID])
 
     const loadData = async () => {
         let res = [];
@@ -60,8 +60,9 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
     }
 
     const renderUser = ({ item }) => {
+        let ownProfile = item.id === userID;
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: item, ownProfile: false })}>
+            <TouchableWithoutFeedback onPress={() => navigation.push('ProfileScreen', { user: item, ownProfile: ownProfile })}>
                 <View style={UserStyles.followRow}>
                     <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={UserStyles.followImage} />
                     <View style={{ marginLeft: 8 }}>
@@ -92,12 +93,14 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing 
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     const profiles = state.firestore.data.profiles;
+    let userID = state.firebase.auth.uid;
     return {
         profiles: profiles,
-        allFollowers: state.firestore.ordered['allFollowers'],
-        allFollowing: state.firestore.ordered['allFollowing'],
+        allFollowers: state.firestore.ordered['allFollowers' + ownProps.route.params.user.profileFollowID],
+        allFollowing: state.firestore.ordered['allFollowing' + ownProps.route.params.user.profileFollowID],
+        userID: userID
     }
 }
 
@@ -107,7 +110,7 @@ export default compose(
         {
             collection: "profileFollowers",
             doc: props.route.params.user.profileFollowID,
-            storeAs: 'allFollowers',
+            storeAs: 'allFollowers' + props.route.params.user.profileFollowID,
             subcollections: [{
                 collection: "followerUsers"
             }
@@ -116,7 +119,7 @@ export default compose(
         {
             collection: "profileFollowing",
             doc: props.route.params.user.profileFollowID,
-            storeAs: 'allFollowing',
+            storeAs: 'allFollowing' + props.route.params.user.profileFollowID,
             subcollections: [{
                 collection: "followingUsers"
             }

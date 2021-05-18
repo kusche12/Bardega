@@ -8,7 +8,7 @@ import FollowButton from '../../Components/Profile/FollowButton';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { cacheImages } from '../../Functions/cacheFunctions';
+import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Images from '../../Images/Images';
 import { renderNum } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -42,7 +42,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     // Load all the drinks AND liked drinks any time either of these arrays change
     useEffect(() => {
         if (user && drinks) {
-
             // Check if this profile should be rendered based on privacy settings
             if (!ownProfile && user.private) {
                 let db = firebase.firestore();
@@ -111,9 +110,9 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     // Decides which screen to route to on click of the Followers or Following button
     const routeStatBox = (type) => {
         if (type === 'Followers') {
-            navigation.navigate('FollowScreen', { name: 'Followers', user: user });
+            navigation.push('FollowScreen', { name: 'Followers', user: user });
         } else if (type === 'Following') {
-            navigation.navigate('FollowScreen', { name: 'Following', user: user });
+            navigation.push('FollowScreen', { name: 'Following', user: user });
         }
     }
 
@@ -165,6 +164,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
                 <View style={UserStyles.infoContainer}>
                     <View style={UserStyles.infoRow}>
+                        {/* TODO: Have a render image animation before displaying img */}
                         <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
                         <View style={{ marginLeft: 16 }}>
                             <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>

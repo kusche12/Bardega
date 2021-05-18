@@ -37,14 +37,19 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 headerStyle: { elevation: 0 },
                 cardStyle: { backgroundColor: '#FFFFFF' },
             }}>
-            {/* TODO: Only render the notifications box if it is the currently authed user's profile page */}
             <Stack.Screen
                 name='ProfileScreen'
                 component={ProfileScreen}
                 initialParams={{ user: user, ownProfile: true }}
-                options={() => ({
+                options={(props) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <NotificationsHeader navigation={navigation} user={user} />,
+                    headerRight: () => {
+                        if (props.route.params.ownProfile) {
+                            return <NotificationsHeader navigation={navigation} user={user} />
+                        } else {
+                            return <GoBackOrSaveHeader navigation={navigation} save={false} />
+                        }
+                    },
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {

@@ -40,8 +40,6 @@ const NotificationsSettingsScreen = ({ userID, error, user, updateNotifications 
         } else {
             await confirm();
         }
-
-
     }
 
     const confirm = async () => {

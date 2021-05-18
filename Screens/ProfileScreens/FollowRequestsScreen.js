@@ -4,6 +4,7 @@ import { renderTime } from '../../Functions/miscFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { getCachedImage } from '../../Functions/cacheFunctions';
 import { rejectRequest, followUser } from '../../Store/Actions/ProfileActions';
 import { createNotification, deleteNotification } from '../../Store/Actions/NotificationActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -32,11 +33,12 @@ const FollowRequestsScreen = ({ userA, navigation, notifications, profiles, reje
     const renderNotification = ({ item }) => {
         if (item.id !== 'default') {
             const user = profiles[item.userID];
+
             return (
                 <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: user, ownProfile: false })}>
                     <View style={{ width: Styles.width, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, paddingHorizontal: 10 }}>
                         <View style={{ flexDirection: 'row', width: Styles.width * .4 }}>
-                            <Image source={{ uri: user.imageURL }} style={{ width: 45, height: 45, borderRadius: 100, marginRight: 10 }} />
+                            <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={{ width: 45, height: 45, borderRadius: 100, marginRight: 10 }} />
                             {renderText(item, user)}
                         </View>
                         {renderAcceptFollow(item, user)}

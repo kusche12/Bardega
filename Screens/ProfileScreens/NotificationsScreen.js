@@ -43,7 +43,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
                 <TouchableWithoutFeedback onPress={() => handleCallback(item, user, drink)}>
                     <View style={{ width: Styles.width, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, paddingHorizontal: 10 }}>
                         <View style={{ flexDirection: 'row', width: Styles.width * WIDTH }}>
-                            <Image source={{ uri: user.imageURL }} style={{ width: 45, height: 45, borderRadius: 100, marginRight: 10 }} />
+                            <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={{ width: 45, height: 45, borderRadius: 100, marginRight: 10 }} />
                             {renderText(item, user, drink)}
                         </View>
                         {drink &&
@@ -91,7 +91,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
 
     const handleCallback = (item, user, drink) => {
         if (item.type === 'follow' || item.type === 'requestFollow') {
-            navigation.navigate('ProfileScreen', { user: user, ownProfile: false });
+            navigation.push('ProfileScreen', { user: user, ownProfile: false });
         } else {
             navigation.navigate('DrinkDetailScreen', { drink: drink });
         }
