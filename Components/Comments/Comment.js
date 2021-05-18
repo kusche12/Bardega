@@ -8,11 +8,12 @@ import DoubleTapButton from '../Main/DoubleTapButton';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { createNotification } from '../../Store/Actions/NotificationActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
 const Comment = ({ comment, author, navigation, commentID,
     likedByUsers, numLikes, userID, likeComment,
-    unLikeComment, deleteComment }) => {
+    unLikeComment, deleteComment, createNotification, drinkID }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
 
@@ -43,6 +44,9 @@ const Comment = ({ comment, author, navigation, commentID,
             await unLikeComment({ userID: userID, comment: comment, commentID: commentID });
         } else {
             await likeComment({ userID: userID, comment: comment, commentID: commentID });
+            if (userID !== author.id) {
+                await createNotification({ notifID: author.notificationsID, userID: userID, comment: comment.text, type: 'likedComment', drinkID: drinkID })
+            }
         }
         setIsDisabled(false);
     }
@@ -154,6 +158,7 @@ const mapDispatchToProps = (dispatch) => {
         likeComment: (data) => dispatch(likeComment(data)),
         unLikeComment: (data) => dispatch(unLikeComment(data)),
         deleteComment: (data) => dispatch(deleteComment(data)),
+        createNotification: (data) => dispatch(createNotification(data)),
     }
 }
 

@@ -8,7 +8,6 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { clearDrinkState, deleteDrink } from '../../Store/Actions/DrinkActions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
-import Loading from '../../Components/Main/Loading';
 import InputComment from '../../Components/DrinkDetail/InputComment';
 import StrengthAndPrep from '../../Components/DrinkDetail/StrengthAndPrep';
 import DetailLikeCommentShare from '../../Components/DrinkDetail/DetailLikeCommentShare';

@@ -58,6 +58,12 @@ const NotificationsScreen = ({ route, navigation, notifications, profiles, drink
             case 'likedDrink':
                 body = 'liked your drink ' + drink.name + '.';
                 break;
+            case 'comment':
+                body = 'commented: ' + item.comment;
+                break;
+            case 'likedComment':
+                body = 'liked your comment: ' + item.comment;
+                break;
             default:
                 body = '';
         }

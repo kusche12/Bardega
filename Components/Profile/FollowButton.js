@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TouchableWithoutFeedback, Text } from 'react-native';
 import { followUser, unfollowUser } from '../../Store/Actions/ProfileActions';
+import { createNotification } from '../../Store/Actions/NotificationActions';
 import { connect } from 'react-redux';
 import firebase from '../../API/FirebaseSetup'
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -11,7 +12,7 @@ import Styles from '../../Styles/StyleConstants';
 // USER B Represents the other user that user A is currently looking at
 // If this component is rendered on User A's page, then just return the edit profile button
 // Otherwise, return a follow / unfollow button connected to User B
-const FollowButton = ({ navigation, userA, userB, ownProfile, followUser, unfollowUser }) => {
+const FollowButton = ({ navigation, userA, userB, ownProfile, followUser, unfollowUser, createNotification }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isFollowing, setIsFollowing] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -47,9 +48,10 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser, unfoll
         }
         setIsDisabled(true);
         if (type === 'unfollow') {
-            await unfollowUser({ userA, userB })
+            await unfollowUser({ userA, userB });
         } else {
-            await followUser({ userA, userB })
+            await followUser({ userA, userB });
+            await createNotification({ comment: null, drinkID: null, type: 'follow', userID: userA.id, notifID: userB.notificationsID })
         }
         setIsDisabled(false);
     }
@@ -109,7 +111,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         followUser: (data) => dispatch(followUser(data)),
-        unfollowUser: (data) => dispatch(unfollowUser(data))
+        unfollowUser: (data) => dispatch(unfollowUser(data)),
+        createNotification: (data) => dispatch(createNotification(data)),
     }
 }
 

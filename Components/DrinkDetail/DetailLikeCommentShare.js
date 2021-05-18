@@ -12,10 +12,11 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
+import { createNotification } from '../../Store/Actions/NotificationActions';
 
 // TODO: DEV: Test if share link actually works
 const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
-    likedByUsers, author, userID, numComments, likeDrink, unLikeDrink }) => {
+    likedByUsers, author, userID, numComments, likeDrink, unLikeDrink, createNotification }) => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -72,6 +73,7 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
             await unLikeDrink({ numLikes: likes, drink, userID });
         } else {
             await likeDrink({ numLikes: likes, drink, userID });
+            await createNotification({ drinkID: drink.id, type: 'likedDrink', userID: userID, notifID: author.notificationsID, comment: null });
         }
         setIsDisabled(false);
     }
@@ -137,7 +139,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         likeDrink: (data) => dispatch(likeDrink(data)),
-        unLikeDrink: (data) => dispatch(unLikeDrink(data))
+        unLikeDrink: (data) => dispatch(unLikeDrink(data)),
+        createNotification: (data) => dispatch(createNotification(data)),
+
     }
 }
 

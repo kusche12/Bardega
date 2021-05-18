@@ -58,7 +58,6 @@ export const logOut = () => {
     }
 }
 
-// TODO: Create the notifications collection and ID pair on creation of new user !!
 export const signUp = (newUser) => {
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase();
@@ -123,6 +122,22 @@ export const signUp = (newUser) => {
                 .doc('default')
                 .set({ id: 'default' });
 
+            // Create Notifications collection for this user and save ID
+            const notifRef = await firestore.collection('notifications').doc();
+            const notifID = notifRef.id;
+            console.log('notifID: ' + notifID);
+
+            await firestore
+                .collection('notifications')
+                .doc(notifID)
+                .set({ 1: 'default' });
+            await firestore
+                .collection('collections')
+                .doc(notifID)
+                .collection('allNotifications')
+                .doc('default')
+                .set({ id: 'default' });
+
             await firebase.auth().createUserWithEmailAndPassword(
                 newUser.email,
                 newUser.password
@@ -146,7 +161,8 @@ export const signUp = (newUser) => {
                     likedDrinksPrivate: false,
                     profileFollowID: profileFollowID,
                     numFollowers: 0,
-                    numFollowing: 0
+                    numFollowing: 0,
+                    notificationsID: notifID
                 })
             })
                 .then(() => {
