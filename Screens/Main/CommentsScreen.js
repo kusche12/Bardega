@@ -12,7 +12,7 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const CommentsScreen = ({ route, profiles, navigation, comments, createComment, userID, createNotification, notifID }) => {
+const CommentsScreen = ({ route, profiles, navigation, comments, createComment, userID, createNotification, notifID, token }) => {
     const { drink } = route.params;
     const [text, setText] = useState('');
 
@@ -31,7 +31,14 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             text: text,
             commentID: drink.commentID
         });
-        createNotification({ drinkID: drink.id, type: 'comment', userID: userID, comment: text, notifID: notifID });
+        createNotification({
+            drinkID: drink.id,
+            type: 'comment',
+            userID: userID,
+            comment: text,
+            notifID: notifID,
+            token: token
+        });
         setText('');
     }
 
@@ -82,11 +89,13 @@ const mapStateToProps = (state, ownProps) => {
     const profiles = state.firestore.data.profiles;
     const author = profiles[ownProps.route.params.drink.authorID];
     const notifID = author.notificationsID;
+    const token = author.expoToken
     return {
         profiles: state.firestore.data.profiles,
         userID: state.firebase.auth.uid,
         comments: state.firestore.ordered['allComments'],
-        notifID: notifID
+        notifID: notifID,
+        token: token
     }
 }
 

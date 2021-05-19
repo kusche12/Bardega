@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, SafeAreaView, View } from 'react-native';
+import { RefreshControl, Text, SafeAreaView, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -10,6 +10,10 @@ import Loading from '../../Components/Main/Loading';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of 10 drinks that fit each query
@@ -18,16 +22,22 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     const [isLoaded, setIsLoaded] = useState(false);
     const [selectedDrinks, setSelectedDrinks] = useState(null);
     const [selectedQueries, setSelectedQueries] = useState(null);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [drinksRendered, setDrinksRendered] = useState(false);
 
     // Wait for drinks and queries to be fully loaded into the app
     useEffect(() => {
+        // If the user enters the app from a deep link sent to them by another user,
+        // then move directly from the discover screen into the drink detail screen.
         if (drinkID && allDrinks) {
             navigation.navigate('DrinkDetailScreen', { drink: allDrinks[drinkID] });
         }
+        // Otherwise, just stay on this screen and get data whenever the user pulls to refresh the page
         if (allDrinks && drinks && queries) {
             async function fetchData() {
-                if (drinks && queries) {
+                if (drinks && queries && !drinksRendered) {
                     loadData();
+                    setDrinksRendered(true);
                 }
             }
             fetchData();
@@ -69,6 +79,13 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     //     setIsLoaded(true);
     // }
 
+    const onRefresh = React.useCallback(() => {
+        setIsRefreshing(true);
+        wait(1000)
+            .then(() => loadData())
+            .then(() => setIsRefreshing(false));
+    }, []);
+
     if (!isLoaded) {
         return (
             <SafeAreaView style={[GlobalStyles.headerSafeArea, { paddingLeft: 8 }]}>
@@ -81,6 +98,12 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
             enableOnAndroid={true}
             enableAutomaticScroll={(Platform.OS === 'ios')}
             contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={
+                <RefreshControl
+                    refreshing={isRefreshing}
+                    onRefresh={onRefresh}
+                />
+            }
         >
             <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8 }]}>
                 <View style={DiscoverStyles.titleContainer}>

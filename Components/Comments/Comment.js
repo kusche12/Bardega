@@ -45,7 +45,14 @@ const Comment = ({ comment, author, navigation, commentID,
         } else {
             await likeComment({ userID: userID, comment: comment, commentID: commentID });
             if (userID !== author.id) {
-                await createNotification({ notifID: author.notificationsID, userID: userID, comment: comment.text, type: 'likedComment', drinkID: drinkID })
+                await createNotification({
+                    notifID: author.notificationsID,
+                    userID: userID,
+                    comment: comment.text,
+                    type: 'likedComment',
+                    drinkID: drinkID,
+                    token: author.expoToken
+                })
             }
         }
         setIsDisabled(false);

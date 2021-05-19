@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image } from 'react-native';
-import { renderTime } from '../../Functions/miscFunctions';
+import { renderTime, renderNotificationText } from '../../Functions/miscFunctions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -59,7 +59,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
 
     // All notification types: likedDrink, follow, likedComment, comment, requestFollow
     const renderText = (item, user, drink) => {
-        let body = getText(item, drink);
+        let body = renderNotificationText(item, drink);
         return (
             <Text>
                 <Text style={GlobalStyles.paragraphbold2}>{user.userName} </Text>
@@ -113,13 +113,11 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
     // Fourthly, sends userA a notification that says "user B now follows you"
     const handleAccepted = async (item, user) => {
         setIsDisabled(true);
-        setIsDisabled(true);
         await rejectRequest({ userA: userA, userB: user });
         await followUser({ userA: user, userB: userA });
         await createNotification({ notifID: user.notificationsID, comment: null, drinkID: null, type: 'requestAccepted', userID: userA.id });
         await deleteNotification({ notifID: userA.notificationsID, id: item.id });
         await createNotification({ notifID: userA.notificationsID, comment: null, drinkID: null, type: 'follow', userID: user.id });
-        setIsDisabled(false);
         setIsDisabled(false);
     }
 
@@ -177,27 +175,6 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
     }
 
 
-}
-
-const getText = (item, drink) => {
-    switch (item.type) {
-        case 'follow':
-            return 'started following you.';
-        case 'likedDrink':
-            return 'liked your drink ' + drink.name + '.';
-        case 'comment':
-            return 'commented: ' + item.comment;
-        case 'likedComment':
-            return 'liked your comment: ' + item.comment;
-        case 'requestFollow':
-            return 'requested to follow you.';
-        case 'requestRejected':
-            return 'declined your follow request.';
-        case 'requestAccepted':
-            return 'accepted your follow request.';
-        default:
-            return '';
-    }
 }
 
 

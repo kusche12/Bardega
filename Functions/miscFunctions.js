@@ -29,3 +29,25 @@ export const renderNum = (num) => {
         return `${Math.round(num / 4)}m`;
     }
 }
+
+// Renders the message sent out to the notifications
+export const renderNotificationText = (item, drink) => {
+    switch (item.type) {
+        case 'follow':
+            return 'started following you.';
+        case 'likedDrink':
+            return 'liked your drink ' + drink.name + '.';
+        case 'comment':
+            return 'commented: ' + item.comment;
+        case 'likedComment':
+            return 'liked your comment: ' + item.comment;
+        case 'requestFollow':
+            return 'requested to follow you.';
+        case 'requestRejected':
+            return 'declined your follow request.';
+        case 'requestAccepted':
+            return 'accepted your follow request.';
+        default:
+            return '';
+    }
+}

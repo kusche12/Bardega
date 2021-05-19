@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Image } from 'react-native';
 
 // For main navigation
@@ -15,7 +15,6 @@ import Styles from '../Styles/StyleConstants';
 
 // For notifications permission
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import firebase from '../API/FirebaseSetup';
 
@@ -26,7 +25,6 @@ const MainNavigator = ({ userID }) => {
     useEffect(() => {
         (() => registerForPushNotificationsAsync())();
     }, [])
-
 
     // Decides whether or not the bottom tab bar should be visible
     const getTabBarVisibility = (route) => {
@@ -60,7 +58,7 @@ const MainNavigator = ({ userID }) => {
         // Place user's expo notification token in their profile document
         if (token) {
             let db = firebase.firestore();
-            const res = await db
+            await db
                 .collection('profiles')
                 .doc(userID)
                 .update({ expoToken: token })

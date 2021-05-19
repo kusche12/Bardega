@@ -83,11 +83,25 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser,
 
                 // Then, create a notification that says "requestFollow"
                 // UserB can then call the followUser() function from the notifications screen
-                await createNotification({ comment: null, drinkID: null, type: 'requestFollow', userID: userA.id, notifID: userB.notificationsID });
+                await createNotification({
+                    comment: null,
+                    drinkID: null,
+                    type: 'requestFollow',
+                    userID: userA.id,
+                    notifID: userB.notificationsID,
+                    token: userB.expoToken
+                });
 
             } else {
                 await followUser({ userA, userB });
-                await createNotification({ comment: null, drinkID: null, type: 'follow', userID: userA.id, notifID: userB.notificationsID });
+                await createNotification({
+                    comment: null,
+                    drinkID: null,
+                    type: 'follow',
+                    userID: userA.id,
+                    notifID: userB.notificationsID,
+                    token: userB.expoToken
+                });
             }
         }
         setIsDisabled(false);

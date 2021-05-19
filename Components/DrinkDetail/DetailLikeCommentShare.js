@@ -73,7 +73,14 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
             await unLikeDrink({ numLikes: likes, drink, userID });
         } else {
             await likeDrink({ numLikes: likes, drink, userID });
-            await createNotification({ drinkID: drink.id, type: 'likedDrink', userID: userID, notifID: author.notificationsID, comment: null });
+            await createNotification({
+                drinkID: drink.id,
+                type: 'likedDrink',
+                userID: userID,
+                notifID: author.notificationsID,
+                comment: null,
+                token: author.expoToken
+            });
         }
         setIsDisabled(false);
     }
