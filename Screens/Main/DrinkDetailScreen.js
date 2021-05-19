@@ -165,7 +165,9 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                     {/* Title (add the right edit button if the userID === authorID) */}
                     <View style={{ flexDirection: 'row' }}>
                         {userID === drink.authorID && <View style={{ flex: 1 }} ></View>}
-                        <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
+                        <View style={{ width: Styles.width * .8, alignItems: 'center', textAlign: 'center' }}>
+                            <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
+                        </View>
                         {userID === drink.authorID &&
                             <TouchableWithoutFeedback onPress={() => handleEditDrink()}>
                                 <Image source={Images.threedots} style={DetailStyles.editImage} />

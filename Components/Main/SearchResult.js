@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, Text, TouchableHighlight } from 'react-native';
+import { View, Image, Text, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -7,7 +7,7 @@ import Styles from '../../Styles/StyleConstants';
 
 // This is a horizontal list item that either includes a drink object or a user object based
 // on the passed in item
-const SearchResult = ({ item, navigation, removable }) => {
+const SearchResult = ({ item, navigation }) => {
     // Only cache the drink images
     useEffect(() => {
         if (item) {
@@ -30,9 +30,8 @@ const SearchResult = ({ item, navigation, removable }) => {
     if (item.authorID) {
         return (
             <TouchableHighlight
-                onLongPress={() => removable && handleRemove()}
+                underlayColor={Styles.UNDERLAY}
                 onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item })}
-                underlayColor={'#d6d6d6'}
             >
                 <View style={DiscoverStyles.searchContainer}>
                     <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={DiscoverStyles.searchImage} />

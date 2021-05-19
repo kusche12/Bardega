@@ -9,6 +9,7 @@ const Styles = {
     GRAY: '#a1a1a1',
     LIGHT_GRAY: '#cfcfcf',
     DARK_GRAY: '#333',
+    UNDERLAY: '#DDDDDD',
     width: width,
     height: height,
     OFF_BLACK: '#372D29',

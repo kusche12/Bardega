@@ -15,9 +15,9 @@ const HorizontalList = ({ data, query, navigation, drinks }) => {
         )
     }
 
-    const getDrinksAndNavigate = () => {
+    const getDrinksAndNavigate = async () => {
         const collection = { name: query.name };
-        const res = getDrinksWithQuery(drinks, query, 100);
+        const res = await getDrinksWithQuery(drinks, query, 100);
         console.log(res.length);
         navigation.navigate('DrinkListScreen', { collection: collection, drinks: res, removable: false });
     }

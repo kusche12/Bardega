@@ -64,9 +64,9 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 setIsPrivate(false);
             }
             loadUserDrinks();
-            cacheImages(user.imageURL, userID);
+            cacheImages(user.imageURL, user.id);
         }
-    }, [user.likedDrinks, user.drinks]);
+    }, [user]);
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
@@ -164,8 +164,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
                 <View style={UserStyles.infoContainer}>
                     <View style={UserStyles.infoRow}>
-                        {/* TODO: Have a render image animation before displaying img */}
-                        <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
+                        <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={UserStyles.profileImage} />
                         <View style={{ marginLeft: 16 }}>
                             <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>
                             <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>

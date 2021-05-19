@@ -3,12 +3,13 @@ import { SafeAreaView, View, Text, TouchableWithoutFeedback, Image, Alert } from
 import Spinner from 'react-native-loading-spinner-overlay';
 import * as ImagePicker from 'expo-image-picker';
 import { connect } from 'react-redux';
+import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import { updateProfile, updateImage, deleteProfileImage } from '../../Store/Actions/ProfileActions';
 import ProfileInput from '../../Components/Profile/ProfileInput';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 import UserStyles from '../../Styles/UserStyles';
-
+// getCachedImage(userID)
 const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, updateImage, deleteProfileImage }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [fName, setFName] = useState('');
@@ -17,6 +18,7 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
     const [image, setImage] = useState(null);
     const [bio, setBio] = useState('');
 
+    // Get all user data on screen startup
     useEffect(() => {
         if (user) {
             setFName(user.fName);
@@ -49,6 +51,11 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
             }
         });
     }, [fName, lName, userName]);
+
+    // Every time image changes, update cache
+    useEffect(() => {
+        setImage(getCachedImage(userID));
+    }, [userID]);
 
     // Asks user if they want to take a picture, choose from camera roll, or cancel
     const sendAlert = () => {
@@ -87,7 +94,8 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
                 quality: .5,
             });
             if (!result.cancelled) {
-                updateImage({ id: userID, image: result.uri })
+                cacheImages(result.uri, userID);
+                updateImage({ id: userID, image: result.uri });
                 setImage(result.uri);
             }
         }
@@ -104,7 +112,8 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
         });
 
         if (!result.cancelled) {
-            updateImage({ id: userID, image: result.uri })
+            cacheImages(result.uri, userID);
+            updateImage({ id: userID, image: result.uri });
             setImage(result.uri);
         }
     };
@@ -132,7 +141,7 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
                     <TouchableWithoutFeedback onPress={() => sendAlert()}>
                         <View style={{ alignItems: 'center' }}>
                             <View style={UserStyles.settingsProfileImage}>
-                                <Image source={{ uri: user.imageURL }} style={UserStyles.profileImage} />
+                                <Image source={{ uri: image }} style={UserStyles.profileImage} />
                             </View>
                             <Text style={[GlobalStyles.paragraphbold2, { color: Styles.DARK_PINK, marginTop: 12 }]}>Change Profile Photo</Text>
                         </View>
