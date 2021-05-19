@@ -81,7 +81,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 
     const onRefresh = React.useCallback(() => {
         setIsRefreshing(true);
-        wait(1000)
+        wait(10)
             .then(() => loadData())
             .then(() => setIsRefreshing(false));
     }, []);

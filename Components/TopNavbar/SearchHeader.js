@@ -9,7 +9,8 @@ import Images from '../../Images/Images';
 import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
-const SearchHeader = ({ drinks, navigation, preloadedDrinks, profiles }) => {
+// TODO: Connect spirits when you set up that collection
+const SearchHeader = ({ drinks, navigation, profiles }) => {
     const [query, setQuery] = useState('');
     const [data, setData] = useState([]);
 
@@ -17,7 +18,7 @@ const SearchHeader = ({ drinks, navigation, preloadedDrinks, profiles }) => {
     // Otherwise, render drinks AND profiles based on public availability and user input
     useEffect(() => {
         async function fetchData() {
-            if (drinks && preloadedDrinks && profiles) {
+            if (drinks && profiles) {
                 if (query) {
                     const drinkRes = await findDrink(drinks);
                     const profileRes = findProfile(profiles);
@@ -28,27 +29,62 @@ const SearchHeader = ({ drinks, navigation, preloadedDrinks, profiles }) => {
             }
         }
         fetchData();
-    }, [query, drinks, preloadedDrinks]);
+    }, [query, drinks]);
 
     // Hard reset the search page to the original random drinks when query is empty
     useEffect(() => {
-        if (!query && data !== preloadedDrinks) {
-            const res = preloadedDrinks;
+        if (!query) {
+            const res = [];
             setData(res);
             navigation.setParams({ results: res });
         }
-    }, [data, query]);
+    }, [query]);
+
 
     const findDrink = async (drinks) => {
         const regex = new RegExp(`${query.trim()}`, 'i');
+        const set = new Set();
         let res = [];
         for (let i = 0; i < drinks.length; i++) {
             const drink = drinks[i];
             const isPrivate = await drinkIsPrivate(drink);
             if (!isPrivate) {
-                if (drink.name.search(regex) >= 0) {
-                    res.push(drink)
+
+                // If the name matches query
+                if (drink.name.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
+                    res.push(drink);
+                    set.add(drink);
+                    break;
                 }
+
+                // If strength level matches query
+                if (drink.strength.value.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
+                    res.push(drink);
+                    set.add(drink);
+
+                    break;
+                }
+
+                // If one of the tags matches query
+                for (let k = 0; k < drink.recipe.length; k++) {
+                    if (drink.recipe[k].type.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
+                        res.push(drink);
+                        set.add(drink);
+
+                        break;
+                    }
+                }
+
+                // If one of the tags matches query
+                for (let j = 0; j < drink.tags.length; j++) {
+                    if (drink.tags[j].name.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
+                        res.push(drink);
+                        set.add(drink);
+
+                        break;
+                    }
+                }
+
             }
         }
         return res;
@@ -59,7 +95,7 @@ const SearchHeader = ({ drinks, navigation, preloadedDrinks, profiles }) => {
         let res = [];
         for (let i = 0; i < profiles.length; i++) {
             const profile = profiles[i];
-            if (profile.userName.search(regex) >= 0) {
+            if (profile.userName.toLowerCase().search(regex) >= 0) {
                 res.push(profile)
             }
         }

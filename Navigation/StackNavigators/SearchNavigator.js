@@ -21,139 +21,114 @@ const Stack = createStackNavigator();
 
 const SearchNavigator = ({ route, navigation, drinks }) => {
     // Random drinks preloaded into the search page before user searches anything
-    const [isLoading, setIsLoading] = useState(true);
-    const [preloadedDrinks, setPreloadedDrinks] = useState([]);
-    useEffect(() => {
-        async function fetchData() {
-            if (drinks) {
-                const res = await getRandomDrinksNoQuery(drinks, 10);
-                setPreloadedDrinks(res);
-                setIsLoading(false);
-            }
-        }
-        fetchData();
-    }, [drinks]);
+    // const [isLoading, setIsLoading] = useState(true);
+    // const [preloadedDrinks, setPreloadedDrinks] = useState([]);
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         if (drinks) {
+    //             const res = await getRandomDrinksNoQuery(drinks, 10);
+    //             setPreloadedDrinks(res);
+    //             setIsLoading(false);
+    //         }
+    //     }
+    //     fetchData();
+    // }, [drinks]);
 
-    if (isLoading) {
-        return (
-            <Stack.Navigator
-                headerMode='screen'
-                screenOptions={{
-                    headerStyle: { elevation: 0 },
-                    cardStyle: { backgroundColor: '#FFFFFF' },
-                }}>
-                <Stack.Screen
-                    name='SearchScreen'
-                    component={SearchScreen}
-                    initialParams={{ results: preloadedDrinks }}
-                    options={({ route, navigation }) => ({
-                        headerTitle: () => <SearchHeader navigation={navigation} preloadedDrinks={preloadedDrinks} />,
-                        headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },
-                        headerTitleAlign: 'center',
-                        headerStyle: {
-                            backgroundColor: Styles.PINK,
-                        },
-                    })}
-                />
-            </Stack.Navigator>
-        )
-    } else {
-        return (
-            <Stack.Navigator
-                headerMode='screen'
-                screenOptions={{
-                    headerStyle: { elevation: 0 },
-                    cardStyle: { backgroundColor: '#FFFFFF' },
-                }}>
-                <Stack.Screen
-                    name='SearchScreen'
-                    component={SearchScreen}
-                    initialParams={{ results: preloadedDrinks }}
-                    options={({ route, navigation }) => ({
-                        headerTitle: () => <SearchHeader navigation={navigation} preloadedDrinks={preloadedDrinks} />,
-                        headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },
-                        headerTitleAlign: 'center',
-                        headerStyle: {
-                            backgroundColor: Styles.PINK,
-                        },
-                    })}
-                />
-                <Stack.Screen
-                    name='DrinkDetailScreen'
-                    component={DrinkDetailScreen}
-                    options={({ route, navigation }) => ({
-                        headerTitle: () => <MainHeader />,
-                        headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
-                        headerTitleStyle: { flex: 1, textAlign: 'center' },
-                        headerTitleAlign: 'center',
-                        headerBackTitleVisible: false,
-                        headerTintColor: Styles.PINK,
-                        headerStyle: {
-                            backgroundColor: Styles.PINK,
-                        },
-                    })}
-                />
-                <Stack.Screen
-                    name='DrinkOptionsScreen'
-                    component={DrinkOptionsScreen}
-                    options={({ route, navigation }) => ({
-                        headerTitle: () => <MainHeader />,
-                        headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
-                        headerTitleStyle: { flex: 1, textAlign: 'center' },
-                        headerTitleAlign: 'center',
-                        headerBackTitleVisible: false,
-                        headerTintColor: Styles.PINK,
-                        headerStyle: {
-                            backgroundColor: Styles.PINK,
-                        },
-                    })}
-                />
-                <Stack.Screen
-                    name='DrinkListScreen'
-                    component={DrinkListScreen}
-                    options={({ route, navigation }) => ({
-                        headerTitle: () => <MainHeader />,
-                        headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
-                        headerTitleStyle: { flex: 1, textAlign: 'center' },
-                        headerTitleAlign: 'center',
-                        headerBackTitleVisible: false,
-                        headerTintColor: Styles.PINK,
-                        headerStyle: {
-                            backgroundColor: Styles.PINK,
-                        },
-                    })}
-                />
-                <Stack.Screen
-                    name='CommentsScreen'
-                    component={CommentsScreen}
-                    options={({ route, navigation }) => ({
-                        headerTitle: () => <MainHeader />,
-                        headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
-                        headerTitleStyle: { flex: 1, textAlign: 'center' },
-                        headerTitleAlign: 'center',
-                        headerBackTitleVisible: false,
-                        headerTintColor: Styles.PINK,
-                        headerStyle: {
-                            backgroundColor: Styles.PINK,
-                        },
-                    })}
-                />
-                <Stack.Screen
-                    name='ProfileScreen'
-                    component={ProfileScreen}
-                    initialParams={route, navigation}
-                    options={() => ({
-                        headerTitle: () => <MainHeader />,
-                        headerTitleStyle: { flex: 1, textAlign: 'center' },
-                        headerTitleAlign: 'center',
-                        headerStyle: {
-                            backgroundColor: Styles.PINK,
-                        },
-                    })}
-                />
-            </Stack.Navigator>
-        );
-    }
+    return (
+        <Stack.Navigator
+            headerMode='screen'
+            screenOptions={{
+                headerStyle: { elevation: 0 },
+                cardStyle: { backgroundColor: '#FFFFFF' },
+            }}>
+            <Stack.Screen
+                name='SearchScreen'
+                component={SearchScreen}
+                initialParams={{ results: [] }}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <SearchHeader navigation={navigation} />,
+                    headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='DrinkDetailScreen'
+                component={DrinkDetailScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='DrinkOptionsScreen'
+                component={DrinkOptionsScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='DrinkListScreen'
+                component={DrinkListScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='CommentsScreen'
+                component={CommentsScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='ProfileScreen'
+                component={ProfileScreen}
+                initialParams={route, navigation}
+                options={() => ({
+                    headerTitle: () => <MainHeader />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+        </Stack.Navigator>
+    );
 }
 
 const mapStateToProps = (state) => {
