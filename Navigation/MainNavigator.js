@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 
 // For main navigation
@@ -13,15 +13,67 @@ import ProfileNavigator from '../Navigation/StackNavigators/ProfileNavigator';
 import GlobalStyles from '../Styles/GlobalStyles';
 import Styles from '../Styles/StyleConstants';
 
+// For notifications permission
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
+import firebase from '../API/FirebaseSetup';
+
 const Tab = createBottomTabNavigator();
 
-const MainNavigator = () => {
+const MainNavigator = ({ userID }) => {
+    // Ask use for notification permissions on app startup in the main navigator
+    useEffect(() => {
+        (() => registerForPushNotificationsAsync())();
+    }, [])
+
+
+    // Decides whether or not the bottom tab bar should be visible
     const getTabBarVisibility = (route) => {
         const routeName = getFocusedRouteNameFromRoute(route);
         if (routeName === 'CommentsScreen') {
             return false;
         }
         return true;
+    }
+
+    // Register for push notifications
+    const registerForPushNotificationsAsync = async () => {
+        let token;
+        if (Constants.isDevice) {
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            token = (await Notifications.getExpoPushTokenAsync()).data;
+            console.log(token);
+        } else {
+            alert('Must use physical device for Push Notifications');
+        }
+
+        // Place user's expo notification token in their profile document
+        if (token) {
+            let db = firebase.firestore();
+            const res = await db
+                .collection('profiles')
+                .doc(userID)
+                .update({ expoToken: token })
+        }
+
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
     }
 
     return (

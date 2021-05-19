@@ -56,7 +56,7 @@ const Main = ({ user }) => {
     } else {
         return (
             <NavigationContainer linking={linking}>
-                {user ? <MainNavigator /> : <AuthNavigator />}
+                {user ? <MainNavigator userID={user.id} /> : <AuthNavigator />}
             </NavigationContainer>
         )
     }
