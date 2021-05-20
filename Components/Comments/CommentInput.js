@@ -8,8 +8,27 @@ import {
 } from 'react-native';
 
 
-const CommentInput = ({ text, setText, handleCreateComment }) => {
+const CommentInput = ({ text, setText, handleCreateComment, setFindingUser, findingUser, query, setQuery }) => {
     const [isFocused, setIsFocused] = useState(false);
+
+    const handleKeyPress = ({ nativeEvent }) => {
+        const { key } = nativeEvent;
+        if (key === '@') {
+            setQuery('@')
+            setFindingUser(true);
+        }
+
+        if (findingUser && key === 'Backspace') {
+            setQuery(query.substring(0, query.length - 1));
+            return;
+        }
+
+        if (findingUser) {
+            if (key !== ' ' || key !== 'Backspace') {
+                setQuery(query += key);
+            }
+        }
+    }
 
     return (
         <KeyboardAvoidingView
@@ -28,7 +47,8 @@ const CommentInput = ({ text, setText, handleCreateComment }) => {
                     value={text}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
-                    onChangeText={setText} // handle input changes
+                    onChangeText={(text) => setText(text)} // handle input changes
+                    onKeyPress={handleKeyPress}
                     onSubmitEditing={handleCreateComment} // handle submit event
                 />
                 {/* Post button */}
@@ -66,7 +86,7 @@ const styles = StyleSheet.create({
     text: {
         color: '#3F51B5',
         fontWeight: 'bold',
-        fontFamily: 'Avenir',
+        fontFamily: 'SourceSerifRegular',
         textAlign: 'center',
         fontSize: 15,
     },

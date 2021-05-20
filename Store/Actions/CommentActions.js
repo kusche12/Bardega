@@ -2,7 +2,7 @@
 export const createComment = (comment) => {
     console.log('Create Comment Action');
     console.log(comment);
-    const { authorID, text, commentID } = comment;
+    const { authorID, text, commentID, taggedUsers } = comment;
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = await getFirebase();
         const firestore = await firebase.firestore();
@@ -45,7 +45,8 @@ export const createComment = (comment) => {
                 dateCreated: date.toISOString(),
                 commentLikesID: commentLikesID,
                 id: id,
-                numLikes: 0
+                numLikes: 0,
+                taggedUsers: taggedUsers
             })
 
             dispatch({ type: 'CREATE_COMMENT', id })

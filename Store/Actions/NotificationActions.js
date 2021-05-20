@@ -111,9 +111,6 @@ const sendPushNotification = async (token, type, fromUser, drink, comment) => {
     let item = { type: type, comment: comment };
     body += renderNotificationText(item, drink);
 
-    console.log(token);
-    console.log(body);
-
     const message = {
         to: token,
         sound: 'default',

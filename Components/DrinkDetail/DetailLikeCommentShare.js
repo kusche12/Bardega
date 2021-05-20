@@ -106,7 +106,7 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
                         </View>
                     </TouchableWithoutFeedback>
 
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink, user: authors[userID] })}>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <Image source={Images.detail.emptyComment} style={[DetailStyles.heartImg, { width: 35 }]}></Image>
                             <Text style={GlobalStyles.titlebold3}>{renderNum(numComments - 1)}</Text>

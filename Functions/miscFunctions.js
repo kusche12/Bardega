@@ -5,7 +5,7 @@ export const renderTime = (dateCreated) => {
     let num = (now - date) / (1000 * 60);
     const minutes = Math.abs(num);
     if (minutes < 60) {
-        return `${Math.round(minutes)}min`;
+        return `${Math.round(minutes)}m`;
     } else if (minutes >= 60 && minutes <= 1440) {
         return `${Math.round(minutes / 60)}h`;
     } else if (minutes > 1440 && minutes <= 10080) {
@@ -13,7 +13,7 @@ export const renderTime = (dateCreated) => {
     } else if (minutes > 10080 && minutes <= 43800) {
         return `${Math.round(minutes / 60 / 24 / 7)}w`;
     } else if (minutes > 43800 && minutes <= 525600) {
-        return `${Math.round(minutes / 60 / 24 / 7 / 4.345238095238095)}m`;
+        return `${Math.round(minutes / 60 / 24 / 7 / 4.345238095238095)}mo`;
     } else {
         return `${Math.round(minutes / 60 / 24 / 7 / 12)}y`;
     }
@@ -47,6 +47,8 @@ export const renderNotificationText = (item, drink) => {
             return 'declined your follow request.';
         case 'requestAccepted':
             return 'accepted your follow request.';
+        case 'taggedComment':
+            return 'tagged you in a comment: ' + item.comment;
         default:
             return '';
     }

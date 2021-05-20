@@ -95,6 +95,11 @@ export const signUp = (newUser) => {
                 return;
             }
 
+            if (username.includes(' ')) {
+                dispatch({ type: 'SIGNUP_ERROR', err: { message: 'Your username must not include any spaces' } });
+                return;
+            }
+
             // Create collection for the followers and following users of this profile and save ID
             // As well as the users who are requesting to follow (when this account is privated)
             const followersRef = await firestore.collection('profileFollowers').doc();

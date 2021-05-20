@@ -10,10 +10,11 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { createNotification } from '../../Store/Actions/NotificationActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
+import Styles from '../../Styles/StyleConstants';
 
 const Comment = ({ comment, author, navigation, commentID,
     likedByUsers, numLikes, userID, likeComment,
-    unLikeComment, deleteComment, createNotification, drinkID }) => {
+    unLikeComment, deleteComment, createNotification, drinkID, profiles }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
 
@@ -59,6 +60,8 @@ const Comment = ({ comment, author, navigation, commentID,
     }
 
     const handleRemove = () => {
+        console.log(userID)
+        console.log(comment.authorID)
         if (userID === comment.authorID) {
             Vibration.vibrate([0, 500]);
             return Alert.alert(
@@ -81,6 +84,31 @@ const Comment = ({ comment, author, navigation, commentID,
         }
     }
 
+    const renderText = () => {
+        if (!comment.taggedUsers || comment.taggedUsers.length == 0) {
+            return <Text>{comment.text}</Text>
+        } else {
+            let words = comment.text.split(' ');
+            let res = words;
+
+            // Render all the other words as normal text
+            for (let j = 0; j < res.length; j++) {
+                res[j] = <Text key={'' + j} style={GlobalStyles.paragraph3}>{words[j]} </Text>
+            }
+
+            for (let i = 0; i < comment.taggedUsers.length; i++) {
+                let tag = comment.taggedUsers[i];
+                res[tag.wordPosition] = <Text onPress={() => handleNavUser(tag.userID)} style={{ color: Styles.DARK_PINK }}>{words[tag.wordPosition]} </Text>
+            }
+
+            return <Text>{res}</Text>
+        }
+    }
+
+    const handleNavUser = (userID) => {
+        navigation.push('ProfileScreen', { user: profiles[userID] })
+    }
+
     if (isLoading) {
         return <Loading />
     } else {
@@ -91,25 +119,24 @@ const Comment = ({ comment, author, navigation, commentID,
             >
                 <DoubleTapButton onDoubleTap={() => handleLike()}>
                     <View style={styles.container}>
-
-                        <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
-                            <View style={styles.user}>
+                        <View style={styles.user}>
+                            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => navigation.push('ProfileScreen', { user: author })}>
                                 <Image source={{ uri: author.imageURL }} style={styles.img} />
-                                <View>
-                                    <Text style={{ marginBottom: 2 }}>
-                                        <Text style={GlobalStyles.paragraphbold3}>{author.userName} </Text>
-                                        <Text style={GlobalStyles.paragraph3}>{comment.text}</Text>
-                                    </Text>
-                                    <Text>
-                                        <Text style={GlobalStyles.paragraph3}>{renderTime(comment.dateCreated)}  </Text>
-                                        {numLikes && numLikes === 1
-                                            ? <Text style={GlobalStyles.paragraph3}>1 Like</Text>
-                                            : <Text style={GlobalStyles.paragraph3}>{renderNum(numLikes)} Likes</Text>
-                                        }
-                                    </Text>
-                                </View>
+                            </TouchableWithoutFeedback>
+                            <View>
+                                <Text style={{ marginBottom: 2 }}>
+                                    <Text style={GlobalStyles.paragraphbold3}>{author.userName} </Text>
+                                    <Text style={GlobalStyles.paragraph3}>{renderText()}</Text>
+                                </Text>
+                                <Text>
+                                    <Text style={GlobalStyles.paragraph3}>{renderTime(comment.dateCreated)}  </Text>
+                                    {numLikes && numLikes === 1
+                                        ? <Text style={GlobalStyles.paragraph3}>1 Like</Text>
+                                        : <Text style={GlobalStyles.paragraph3}>{renderNum(numLikes)} Likes</Text>
+                                    }
+                                </Text>
                             </View>
-                        </TouchableWithoutFeedback>
+                        </View>
                         <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleLike()}>
                             {renderHeart()}
                         </TouchableWithoutFeedback>
@@ -156,7 +183,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         userID: state.firebase.auth.uid,
         numLikes: ownProps.comment.numLikes,
-        likedByUsers: likedByUsers ? likedByUsers : null
+        likedByUsers: likedByUsers ? likedByUsers : null,
+        profiles: state.firestore.data.profiles
     }
 }
 

@@ -69,7 +69,7 @@ export default StyleSheet.create({
         top: Platform.OS === 'ios' ? 30 : 20,
     },
     footerSafeArea: {
-        paddingBottom: Platform.OS === 'ios' ? 80 : 60,
+        paddingBottom: Platform.OS === 'ios' ? 60 : 60,
     },
     flexCenter: {
         flex: 1,

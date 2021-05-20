@@ -19,21 +19,7 @@ import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
 
-const SearchNavigator = ({ route, navigation, drinks }) => {
-    // Random drinks preloaded into the search page before user searches anything
-    // const [isLoading, setIsLoading] = useState(true);
-    // const [preloadedDrinks, setPreloadedDrinks] = useState([]);
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         if (drinks) {
-    //             const res = await getRandomDrinksNoQuery(drinks, 10);
-    //             setPreloadedDrinks(res);
-    //             setIsLoading(false);
-    //         }
-    //     }
-    //     fetchData();
-    // }, [drinks]);
-
+const SearchNavigator = ({ route, navigation }) => {
     return (
         <Stack.Navigator
             headerMode='screen'

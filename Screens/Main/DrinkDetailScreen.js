@@ -215,7 +215,7 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                     <StrengthAndPrep strength={drink.strength} prepTime={drink.prepTime} />
 
                     {drink.commentsAllowed &&
-                        <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink })}>
+                        <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink, user: authors[userID] })}>
                             <View style={CreateStyles.ingrContainerWide}>
                                 <Text style={[GlobalStyles.titlebold2]}>COMMENTS</Text>
                                 <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
