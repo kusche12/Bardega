@@ -16,8 +16,9 @@ const CommentInput = ({ text, setText, handleCreateComment }) => {
             keyboardVerticalOffset={Platform.select({ ios: 0, android: -300 })}
             behavior='position'
             style={isFocused && Platform.OS === 'ios'
-                ? { paddingBottom: 150 }
-                : null}>
+                ? { paddingBottom: 115 }
+                : { paddingBottom: 0 }
+            }>
             <View style={styles.container}>
                 <TextInput
                     placeholder="Add a comment..."
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        height: 40,
+        height: Platform.OS === 'ios' ? 50 : 20,
         fontSize: 15,
     },
     button: {
