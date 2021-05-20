@@ -28,7 +28,7 @@ const RenderDrink = ({ object, navigation }) => {
         return null;
     } else {
         return (
-            <TouchableWithoutFeedback key={item.id} onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item, fromScreen: 'Profile' })}>
+            <TouchableWithoutFeedback key={item.id} onPress={() => navigation.push('DrinkDetailScreen', { drink: item, fromScreen: 'Profile' })}>
                 <View style={UserStyles.drinkContainer}>
                     <Image source={{ uri: image }} key={new Date()} style={UserStyles.drinkImage} />
                 </View>

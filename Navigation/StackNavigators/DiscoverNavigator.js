@@ -100,6 +100,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                 initialParams={route.params, navigation}
                 options={() => ({
                     headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {

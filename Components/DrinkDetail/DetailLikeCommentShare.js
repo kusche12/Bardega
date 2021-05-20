@@ -91,7 +91,7 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
         return (
             <View style={[CreateStyles.ingrContainerWide, DetailStyles.buttonContainer]}>
 
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('ProfileScreen', { user: authors[drink.authorID] })}>
+                <TouchableWithoutFeedback onPress={() => navigation.push('ProfileScreen', { user: authors[drink.authorID] })}>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                         <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { width: 35, height: 35 }]}></Image>
                         <Text style={GlobalStyles.titlebold3}>@{author.userName}</Text>
