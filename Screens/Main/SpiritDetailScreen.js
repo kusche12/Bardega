@@ -8,7 +8,6 @@ import { compose } from 'redux';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import InputComment from '../../Components/DrinkDetail/InputComment';
 import Ratings from '../../Components/Spirit/Ratings';
-import DetailLikeCommentShare from '../../Components/DrinkDetail/DetailLikeCommentShare';
 import { renderTime } from '../../Functions/miscFunctions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
@@ -108,9 +107,6 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
                             {renderComments()}
                         </View>
                     </TouchableWithoutFeedback>
-
-
-                    {/* <DetailLikeCommentShare navigation={navigation} drink={drink} numComments={comments.length} /> */}
                 </SafeAreaView>
             </KeyboardAwareScrollView>
         )

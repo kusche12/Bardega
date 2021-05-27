@@ -69,7 +69,6 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
 
     // When there is an @ in the text, use the rest of the query to find similar user profiles
     useEffect(() => {
-        console.log(query);
         if (query.length === 0) {
             setFindingUser(false);
         }
@@ -91,6 +90,7 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
     }
 
     const renderTags = () => {
+        if (!drink.tags) return null;
         let res = '';
         for (let i = 0; i < drink.tags.length; i++) {
             res += drink.tags[i].name + ', '
@@ -124,28 +124,32 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             commentID: drink.commentID,
             taggedUsers: formatTags
         });
-        createNotification({
-            drinkID: drink.id,
-            type: 'comment',
-            userID: userID,
-            comment: text,
-            notifID: notifID,
-            token: token
-        });
+        if (notifID && token) {
+            createNotification({
+                drinkID: drink.id,
+                type: 'comment',
+                userID: userID,
+                comment: text,
+                notifID: notifID,
+                token: token
+            });
+        }
 
         setText('');
 
         // Traverse the formatTags and send a notification to each tagged user
         for (let j = 0; j < confirmedTagNotifs.length; j++) {
             let tagged = confirmedTagNotifs[j];
-            createNotification({
-                drinkID: drink.id,
-                type: 'taggedComment',
-                userID: userID,
-                comment: text,
-                notifID: tagged.notifID,
-                token: tagged.expoToken
-            });
+            if (tagged.notifID) {
+                createNotification({
+                    drinkID: drink.id,
+                    type: 'taggedComment',
+                    userID: userID,
+                    comment: text,
+                    notifID: tagged.notifID,
+                    token: tagged.expoToken
+                });
+            }
         }
     }
 
@@ -219,9 +223,16 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state, ownProps) => {
     const profiles = state.firestore.data.profiles;
-    const author = profiles[ownProps.route.params.drink.authorID];
-    const notifID = author.notificationsID;
-    const token = author.expoToken;
+    let notifID;
+    let token;
+
+    // If the drink that this comment refers to has no author ID
+    // (it is a spirit), so do not create a notifID or token
+    if (ownProps.route.params.drink.authorID) {
+        const author = profiles[ownProps.route.params.drink.authorID];
+        notifID = author.notificationsID;
+        token = author.expoToken;
+    }
 
     return {
         profiles: state.firestore.data.profiles,

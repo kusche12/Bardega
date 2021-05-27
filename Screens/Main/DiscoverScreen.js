@@ -117,6 +117,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
                         query={selectedQueries[index]}
                         navigation={navigation}
                         navigateTo={'DrinkDetailScreen'}
+                        drinkType={'Drink'}
                     />
                 })}
             </SafeAreaView>

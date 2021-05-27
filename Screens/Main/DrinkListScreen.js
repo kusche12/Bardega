@@ -5,7 +5,7 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
 const DrinkListScreen = ({ route, navigation }) => {
-    const { drinks, collection, removable } = route.params;
+    const { drinks, collection, drinkType } = route.params;
 
     useEffect(() => {
         if (route.params) {
@@ -14,7 +14,7 @@ const DrinkListScreen = ({ route, navigation }) => {
     }, []);
 
     const renderItem = ({ item }) => {
-        return <SearchResult navigation={navigation} item={item} removable={removable} />
+        return <SearchResult navigation={navigation} item={item} drinkType={drinkType} />
     }
 
     return (

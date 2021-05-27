@@ -86,6 +86,7 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits }) => {
                         query={spiritQueries[index]}
                         navigation={navigation}
                         navigateTo={'SpiritDetailScreen'}
+                        drinkType={'Spirit'}
                     />
                 })}
             </SafeAreaView>

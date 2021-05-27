@@ -7,7 +7,7 @@ import Styles from '../../Styles/StyleConstants';
 
 // This is a horizontal list item that either includes a drink object or a user object based
 // on the passed in item
-const SearchResult = ({ item, navigation }) => {
+const SearchResult = ({ item, navigation, drinkType }) => {
     // Only cache the drink images
     useEffect(() => {
         if (item) {
@@ -27,12 +27,16 @@ const SearchResult = ({ item, navigation }) => {
         return null;
     }
 
-    if (item.authorID) {
+    // If the item is either a drink (symbolized by authorID) or a spirit (symbolized by numRatings)
+    if (item.authorID || item.numRatings) {
         return (
-            <TouchableHighlight
+            <TouchableWithoutFeedback
                 underlayColor={Styles.UNDERLAY}
-                onPress={() => navigation.navigate('DrinkDetailScreen', { drink: item })}
-            >
+                onPress={() =>
+                    drinkType === 'Drink'
+                        ? navigation.navigate('DrinkDetailScreen', { drink: item })
+                        : navigation.navigate('SpiritDetailScreen', { drink: item })
+                }>
                 <View style={DiscoverStyles.searchContainer}>
                     <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={DiscoverStyles.searchImage} />
                     <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
@@ -41,7 +45,7 @@ const SearchResult = ({ item, navigation }) => {
                         {renderTags()}
                     </View>
                 </View>
-            </TouchableHighlight>
+            </TouchableWithoutFeedback>
         )
     } else {
         return (
