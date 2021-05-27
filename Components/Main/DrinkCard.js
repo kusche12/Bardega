@@ -5,7 +5,7 @@ import DetailStyles from '../../Styles/DetailStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
-const DrinkCard = ({ drink, navigation }) => {
+const DrinkCard = ({ drink, navigation, navigateTo }) => {
     const [cached, setCached] = useState(false);
     useEffect(() => {
         if (!cached) {
@@ -15,7 +15,7 @@ const DrinkCard = ({ drink, navigation }) => {
     }, []);
 
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('DrinkDetailScreen', { drink: drink })}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate(navigateTo, { drink: drink })}>
             <View style={DetailStyles.shadowContainer}>
                 <View style={DiscoverStyles.cardContainer}>
                     <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.drinkImg} />

@@ -140,5 +140,9 @@ export default StyleSheet.create({
         paddingTop: 20,
         alignItems: 'center',
         paddingVertical: 10,
+    },
+    rateStar: {
+        width: 45,
+        height: 40
     }
 });

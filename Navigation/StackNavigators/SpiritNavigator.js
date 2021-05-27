@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
+import SpiritDetailScreen from '../../Screens/Main/SpiritDetailScreen';
 import SpiritScreen from '../../Screens/Main/SpiritScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
-
+// TODO: Implement a DrinkListScreen when clicking the "See more" button on the horizontal list of spirit screen
 const SpiritNavigator = ({ route, navigation }) => {
 
     return (
@@ -31,8 +31,8 @@ const SpiritNavigator = ({ route, navigation }) => {
                 })}
             />
             <Stack.Screen
-                name='DrinkDetailScreen'
-                component={DrinkDetailScreen}
+                name='SpiritDetailScreen'
+                component={SpiritDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,

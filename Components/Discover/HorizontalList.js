@@ -8,17 +8,16 @@ import DrinkCard from '../Main/DrinkCard';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
-const HorizontalList = ({ data, query, navigation, drinks }) => {
+const HorizontalList = ({ data, query, navigation, drinks, navigateTo }) => {
     const renderItem = ({ item }) => {
         return (
-            <DrinkCard drink={item} navigation={navigation} prev={'Discover'} />
+            <DrinkCard drink={item} navigation={navigation} navigateTo={navigateTo} />
         )
     }
 
     const getDrinksAndNavigate = async () => {
         const collection = { name: query.name };
         const res = await getDrinksWithQuery(drinks, query, 100);
-        console.log(res.length);
         navigation.navigate('DrinkListScreen', { collection: collection, drinks: res, removable: false });
     }
 

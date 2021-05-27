@@ -106,3 +106,19 @@ export const drinkIsPrivate = async (drink) => {
         })
     return drink.private || authorPrivate;
 }
+
+export const getSpiritsWithQuery = (spirits, query, max) => {
+    let nums = randomUniqueNum(spirits.length, spirits.length);
+
+    let result = [];
+    for (let i in nums) {
+        if (result.length === max) {
+            return result;
+        }
+        const spiritType = spirits[nums[i]].spirit;
+        if (spiritType.toLowerCase() === query.name.toLowerCase()) {
+            result.push(spirits[nums[i]]);
+        }
+    }
+    return result;
+}
