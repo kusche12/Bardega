@@ -352,7 +352,11 @@ export const createRateSpirit = (data) => {
                 .then((doc) => {
                     if (doc.exists) {
                         newNumRatings = doc.data().numRatings;
-                        oldRatingTotal = doc.data().rating * doc.data().numRatings;
+                        let num = doc.data().numRatings;
+                        if (num > 0) {
+                            num -= 1;
+                        }
+                        oldRatingTotal = doc.data().rating * num;
                     }
                 });
 

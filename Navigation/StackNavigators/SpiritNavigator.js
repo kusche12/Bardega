@@ -9,7 +9,6 @@ import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
-// TODO: Test the ratings once more when two users send in a rating
 const SpiritNavigator = ({ route, navigation }) => {
     return (
         <Stack.Navigator
