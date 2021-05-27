@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { createRateSpirit, updateRateSpirit } from '../../Store/Actions/DrinkActions';
 import { connect } from 'react-redux';
 import firebase from '../../API/FirebaseSetup'
 import Images from '../../Images/Images';
@@ -12,9 +12,11 @@ import Styles from '../../Styles/StyleConstants';
 // 1. Render the star rating given by user
 // 2. If no star rating, render empty stars
 // 3. Scroll stars to give rating
-// 4. Trigger API call to update ratings collection with user's rating AND the rating field in the spirits collection
-const Ratings = ({ userID, drink }) => {
+// 4. Trigger API call to update ratings collection with user's rating 
+// AND the rating field in the spirits collection
+const Ratings = ({ userID, drink, createRateSpirit, updateRateSpirit }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [isDisabled, setIsDisabled] = useState(false);
     const [rating, setRating] = useState(null);
 
     useEffect(() => {
@@ -40,10 +42,16 @@ const Ratings = ({ userID, drink }) => {
             }
         }
         fetchData();
-    }, [userID]);
+    }, [userID, isDisabled]);
 
-    const handleRateSpirit = (index) => {
-
+    const handleRateSpirit = async (index) => {
+        setIsDisabled(true);
+        if (rating === 0) {
+            await createRateSpirit({ spirit: drink, userID: userID, rating: index });
+        } else {
+            await updateRateSpirit({ spirit: drink, userID: userID, rating: index });
+        }
+        setIsDisabled(false);
     }
 
     const renderStars = (rating, rateable) => {
@@ -70,7 +78,7 @@ const Ratings = ({ userID, drink }) => {
 
     const renderStar = (img, rateable, index) => {
         return (
-            <TouchableWithoutFeedback onPress={() => rateable && handleRateSpirit(index)}>
+            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => rateable && handleRateSpirit(index)}>
                 <Image source={img} style={DetailStyles.rateStar} />
             </TouchableWithoutFeedback>
         )
@@ -87,10 +95,18 @@ const Ratings = ({ userID, drink }) => {
     )
 };
 
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        createRateSpirit: (data) => dispatch(createRateSpirit(data)),
+        updateRateSpirit: (data) => dispatch(updateRateSpirit(data)),
+    }
+}
+
 const mapStateToProps = (state) => {
     return {
         userID: state.firebase.auth.uid,
     }
 }
 
-export default connect(mapStateToProps)(Ratings);
+export default connect(mapStateToProps, mapDispatchToProps)(Ratings);

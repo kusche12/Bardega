@@ -316,3 +316,112 @@ export const updateDrinkCommentAllowed = (drink) => {
         }
     }
 };
+
+// CREATE: Called when this is the first time a user rates a spirit
+// It adds the user to the spirits ratings collection, 
+// incremements the numRatings field by 1
+// and calculates the new average of the spirit's rating
+export const createRateSpirit = (data) => {
+    console.log('Create Spirit Rating Action')
+    const { userID, rating, spirit } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            // New user rating
+            await firestore
+                .collection('ratings')
+                .doc(spirit.rateID)
+                .collection('allRatings')
+                .doc(userID)
+                .set({ rating: rating, userID: userID });
+
+            // Increment numRating
+            await firestore
+                .collection('spirits')
+                .doc(spirit.id)
+                .update({ numRatings: firebase.firestore.FieldValue.increment(1) });
+
+            let newNumRatings;
+            let oldRatingTotal;
+            await firestore
+                .collection('spirits')
+                .doc(spirit.id)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        newNumRatings = doc.data().numRatings;
+                        oldRatingTotal = doc.data().rating * doc.data().numRatings;
+                    }
+                });
+
+            // New average
+            await firestore
+                .collection('spirits')
+                .doc(spirit.id)
+                .update({ rating: (oldRatingTotal + rating) / newNumRatings })
+
+
+            dispatch({ type: 'UPDATE_DRINK', id: spirit.id })
+        } catch (err) {
+            dispatch({ type: 'UPDATE_DRINK_ERROR', err });
+        }
+    }
+};
+
+// UPDATE: The user's value for the spirit AND the average spirit value amount
+export const updateRateSpirit = (data) => {
+    console.log('Update Spirit Rating Action')
+    const { userID, rating, spirit } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            let userPrevRating;
+            await firestore
+                .collection('ratings')
+                .doc(spirit.rateID)
+                .collection('allRatings')
+                .doc(userID)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        userPrevRating = doc.data().rating;
+                    }
+                });
+
+            // New user rating
+            await firestore
+                .collection('ratings')
+                .doc(spirit.rateID)
+                .collection('allRatings')
+                .doc(userID)
+                .set({ rating: rating, userID: userID });
+
+            let newNumRatings;
+            let oldRatingTotal;
+            await firestore
+                .collection('spirits')
+                .doc(spirit.id)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        newNumRatings = doc.data().numRatings;
+                        oldRatingTotal = doc.data().rating * doc.data().numRatings;
+                    }
+                });
+
+            // New average
+            await firestore
+                .collection('spirits')
+                .doc(spirit.id)
+                .update({ rating: (oldRatingTotal - userPrevRating + rating) / newNumRatings })
+
+            dispatch({ type: 'UPDATE_DRINK', id: spirit.id })
+        } catch (err) {
+            dispatch({ type: 'UPDATE_DRINK_ERROR', err });
+        }
+    }
+};

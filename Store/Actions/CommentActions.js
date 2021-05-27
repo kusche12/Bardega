@@ -61,7 +61,6 @@ export const createComment = (comment) => {
 // within the commentLikes collection
 export const likeComment = (data) => {
     console.log('Like Comment Action');
-    console.log(data);
     const { comment, userID, commentID } = data;
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = await getFirebase();
