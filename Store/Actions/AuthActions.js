@@ -5,6 +5,7 @@ export const logIn = (credentials) => {
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase();
 
+        // User signs in with email
         if (validateEmail(credentials.email)) {
             firebase.auth().signInWithEmailAndPassword(
                 credentials.email,
@@ -14,8 +15,9 @@ export const logIn = (credentials) => {
                 dispatch({ type: 'LOGIN_SUCCESS' })
             }).catch((err) => {
                 console.log('error')
-                dispatch({ type: 'LOGIN_ERROR', err })
+                dispatch({ type: 'LOGIN_ERROR', err });
             });
+            // User signs in with password
         } else {
             const firestore = firebase.firestore();
 
@@ -78,7 +80,7 @@ export const signUp = (newUser) => {
                     snapshot.forEach((doc) => {
                         isUnique = false;
                     })
-                })
+                });
 
             if (!isUnique) {
                 dispatch({ type: 'SIGNUP_ERROR', err: { message: 'That username already exists. Your username must be unique.' } });
@@ -164,7 +166,7 @@ export const signUp = (newUser) => {
                 const date = new Date();
                 return firestore.collection('profiles').doc(resp.user.uid).set({
                     fName: nameArray[0],
-                    lName: nameArray[1],
+                    lName: nameArray[1] || '',
                     userName: newUser.userName.trim(),
                     email: newUser.email.trim(),
                     bio: '',

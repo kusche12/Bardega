@@ -124,7 +124,7 @@ const Comment = ({ comment, author, navigation, commentID,
                                 <Image source={{ uri: author.imageURL }} style={styles.img} />
                             </TouchableWithoutFeedback>
                             <View>
-                                <Text style={{ marginBottom: 2 }}>
+                                <Text style={{ marginBottom: 2, width: Styles.width * .67 }}>
                                     <Text style={GlobalStyles.paragraphbold3}>{author.userName} </Text>
                                     <Text style={GlobalStyles.paragraph3}>{renderText()}</Text>
                                 </Text>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         paddingRight: 24,
         paddingTop: 12,
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         overflow: 'hidden'
     },
     user: {

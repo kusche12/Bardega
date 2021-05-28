@@ -1,36 +1,58 @@
-import React, { useState } from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 import AuthInput from '../../Components/Auth/AuthInput';
 import { connect } from 'react-redux';
 import Images from '../../Images/Images';
 import { deleteAccount } from '../../Store/Actions/ProfileActions';
+import { logIn } from '../../Store/Actions/AuthActions'
 import GlobalStyles from '../../Styles/GlobalStyles';
 import AuthStyles from '../../Styles/AuthStyles'
 
 import Styles from '../../Styles/StyleConstants';
 
-const ReAuthenticationScreen = ({ userID, error, user, deleteAccount, navigation }) => {
+const ReAuthenticationScreen = ({ error, authError, user, deleteAccount, logIn }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [authed, setAuthed] = useState(false);
+    const [signedIn, setSignedIn] = useState(false);
 
-    const handleChange = async () => {
+    useEffect(() => {
+        if (!authError && !error) {
+            setAuthed(true);
+        } else {
+            setSignedIn(false);
+        }
+    }, [authError, error]);
+
+    useEffect(() => {
+        if (authed && signedIn) {
+            deleteAccount(user);
+        }
+    }, [authed, signedIn]);
+
+    const handleChange = () => {
         return Alert.alert(
             "Are you sure?",
-            "Oncwe your account is deleted, all of your created drinks will be deleted with no way to recover them.",
+            "Once your account is deleted, all of your data will be deleted with no way to recover them.",
             [
                 {
                     text: "Yes, Delete my Account",
-                    onPress: () => deleteAccount(),
+                    onPress: () => handleSubmit(),
                     style: "destructive",
                 },
                 {
                     text: "Cancel",
-                    onPress: console.log(false),
+                    onPress: console.log('canceled'),
                     style: "cancel",
                 }
             ],
             { cancelable: true }
         );
+    }
+
+    const handleSubmit = async () => {
+        await logIn({ email: email, password, password });
+        setSignedIn(true);
     }
 
     return (
@@ -54,7 +76,10 @@ const ReAuthenticationScreen = ({ userID, error, user, deleteAccount, navigation
                     </TouchableWithoutFeedback>
                 </View>
 
-                {error && <Text style={[GlobalStyles.paragraphError2, { textAlign: 'center' }]}>{error}</Text>}
+                <View style={{ alignSelf: 'center' }}>
+                    {error && <Text style={[GlobalStyles.paragraphError2, { textAlign: 'center' }]}>{error}</Text>}
+                    {authError && <Text style={[GlobalStyles.paragraphError2, { textAlign: 'center' }]}>{authError}</Text>}
+                </View>
             </View>
         </SafeAreaView>
     )
@@ -63,9 +88,10 @@ const ReAuthenticationScreen = ({ userID, error, user, deleteAccount, navigation
 const mapStateToProps = state => {
     const profiles = state.firestore.data.profiles;
     const profile = profiles ? profiles[state.firebase.auth.uid] : null;
+
     return {
-        userID: state.firebase.auth.uid,
         error: state.profile.profileError,
+        authError: state.auth.authError,
         user: profile
     }
 }
@@ -73,8 +99,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => {
     return {
         deleteAccount: (data) => dispatch(deleteAccount(data)),
+        logIn: (data) => dispatch(logIn(data)),
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReAuthenticationScreen);

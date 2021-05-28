@@ -156,6 +156,7 @@ export const clearDrinkState = (drink) => {
 // Remove the drink's image from firebase storage
 // Remove the comments collection
 // Remove the drink from the user's drink array
+// Remove all the users from the likedByUsers collection in the drinkLikes collection
 export const deleteDrink = (drink) => {
     console.log('Delete Drink Action')
     const { id, authorID, commentID, drinkLikesID } = drink;
@@ -182,13 +183,33 @@ export const deleteDrink = (drink) => {
             // Delete the comments collection
             await firestore.collection('comments').doc(commentID).delete();
 
+            // Remove this drink from all the user's likedDrinks arrays
+            firestore
+                .collection('drinkLikes')
+                .doc(drinkLikesID)
+                .collection('likedByUsers')
+                .get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        let user = doc.data();
+                        if (user[1]) {
+                            firestore
+                                .collection('profiles')
+                                .doc(user[1])
+                                .update({
+                                    likedDrinks: firebase.firestore.FieldValue.arrayRemove({ id: id })
+                                });
+                        }
+                    })
+                });
+
             // Delete the drink likes collection
             await firestore.collection('drinkLikes').doc(drinkLikesID).delete();
 
             // Delete the drink from the drinks collection
             await firestore.collection('drinks').doc(id).delete();
 
-            dispatch({ type: 'DELETE_DRINK' })
+            dispatch({ type: 'DELETE_DRINK' });
         } catch (err) {
             dispatch({ type: 'DELETE_DRINK_ERROR', err });
         }
@@ -268,7 +289,7 @@ export const unLikeDrink = (data) => {
                 .doc(userID)
                 .update({
                     likedDrinks: firebase.firestore.FieldValue.arrayRemove({ id: drink.id })
-                })
+                });
 
             dispatch({ type: 'LIKE_DRINK' })
         } catch (err) {

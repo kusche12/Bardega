@@ -21,6 +21,8 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
+// TODO: Update the profile screen after new drink creation
+// TODO: Update the profile screen after a refresh is initiated from the screen pull-down
 const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [isPrivate, setIsPrivate] = useState(true);
     const [isLoading, setIsLoading] = useState(true);

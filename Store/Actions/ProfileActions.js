@@ -1,3 +1,5 @@
+import { deleteDrink, unLikeDrink } from './DrinkActions';
+
 // UPDATE: Profile Bio
 // Called while editing the Biography of the user's profile
 export const updateBio = (data) => {
@@ -212,31 +214,134 @@ export const updateNotifications = (data) => {
     }
 }
 
-// DELETE: Delete the profile from profiles collection
+// DELETE: 
 // Remove ALL of the user's created drinks
 // Remove the user's account from ALL of the drinks that he/she liked
 // Remove the user's account from All of the user's that he/she followed
+// Remove the user's account from All of the user's that follow him/her
 // Remove the user's profile image (if they had one)
+// Remove the user's notifications collection
+// Delete the profile from profiles collection
 // Remove the user's account from the Firebase Auth
-export const deleteAccount = (data) => {
+// TODO: Remove all the user's comments (this can totally be down outside of this function)
+export const deleteAccount = (user) => {
     console.log('Delete Profile and Account Action');
-    const { id } = data;
+    const { id, drinks, likedDrinks, profileFollowID, notificationsID } = user;
+
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = await getFirebase();
         const firestore = await firebase.firestore();
-
         try {
+            // Connect to the storage and delete profile image
+            const storage = firebase.storage();
+            const storageRef = storage.ref();
+            const fileRef = storageRef.child('images/profiles/' + id);
+            await fileRef.getDownloadURL().then((resp) => {
+                fileRef.delete()
+            }).catch((err) => {
+                console.log('image does not exist')
+            });
+
+            // Delete all user's created drinks
+            for (let i = 0; i < drinks.length; i++) {
+                firestore
+                    .collection('drinks')
+                    .doc(drinks[i].id)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            dispatch(deleteDrink(doc.data()));
+                        }
+                    })
+            }
+
+            // Remove user from all the drinks they liked
+            for (let j = 0; j < likedDrinks.length; j++) {
+                firestore
+                    .collection('drinks')
+                    .doc(likedDrinks[j].id)
+                    .get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            dispatch(unLikeDrink({ drink: doc.data(), userID: id }))
+                        }
+                    })
+            }
+
+            // Remove user from all the profiles they followed
+            firestore
+                .collection('profileFollowing')
+                .doc(profileFollowID)
+                .collection('followingUsers')
+                .get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        let userBID = doc.data()[1];
+                        if (userBID) {
+                            firestore.collection('profiles').doc(userBID).get().then((doc) => {
+                                let userB = doc.data();
+                                dispatch(unfollowUser({ userA: user, userB: userB }));
+                            })
+                        }
+                    });
+                });
+            // Delete the profileFollowing collection
+            await firestore
+                .collection('profileFollowing')
+                .doc(profileFollowID)
+                .delete();
+
+            // Remove user from all the profiles that follow them
+            firestore
+                .collection('profileFollowers')
+                .doc(profileFollowID)
+                .collection('followerUsers')
+                .get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        let userBID = doc.data()[1];
+                        if (userBID) {
+                            firestore.collection('profiles').doc(userBID).get().then((doc) => {
+                                let userB = doc.data();
+                                dispatch(unfollowUser({ userA: userB, userB: user }));
+                            })
+                        }
+                    });
+                });
+            // Delete the profileFollowing collection
+            await firestore
+                .collection('profileFollowers')
+                .doc(profileFollowID)
+                .delete();
+
+            // Delete notifications collection
+            if (notificationsID) {
+                await firestore
+                    .collection('notifications')
+                    .doc(notificationsID)
+                    .delete();
+            }
+
+            // Delete the profile from profiles collection
             await firestore
                 .collection('profiles')
                 .doc(id)
-                .update({
-                    private: privacy,
-                })
-            dispatch({ type: 'UPDATE_PROFILE' });
+                .delete();
+
+            // Delete user from firebase auth
+            var user = firebase.auth().currentUser;
+            user.delete().then(function () {
+                console.log('User deleted from firebase auth')
+            }).catch(function (error) {
+                console.log('error: Could not delete user');
+                console.log(error)
+            });
+
+            dispatch({ type: 'DELETE_PROFILE' });
             return true;
         } catch (err) {
             console.log(err);
-            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: "There was an error updating your privacy" } });
+            dispatch({ type: 'DELETE_PROFILE_ERROR', err: { message: "There was an error deleting your account" } });
             return false;
         }
     }

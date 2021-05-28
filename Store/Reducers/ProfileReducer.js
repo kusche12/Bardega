@@ -34,6 +34,21 @@ const profileReducer = (state = initState, action) => {
                 profileError: action.err.message,
                 profileSuccess: null
             }
+        case 'DELETE_PROFILE':
+            console.log('DELETE Profile Reducer')
+            return {
+                ...state,
+                profileError: null,
+                profileSuccess: 'successfully updated profile'
+            };
+        case 'DELETE_PROFILE_ERROR':
+            console.log('DELETE Profile Error Reducer')
+            console.log(action.err.message);
+            return {
+                ...state,
+                profileError: action.err.message,
+                profileSuccess: null
+            }
         case 'UPDATE_PROFILE_IMAGE':
             console.log('Update Profile Image Reducer')
             return {
