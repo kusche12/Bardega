@@ -50,7 +50,6 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     // Navigate to drink detail as soon as there is a drinkID in the screen's state
     useEffect(() => {
         if (drinkID) {
-            const drink = drinks[drinkID];
             navigation.navigate('ProfileScreen');
         } else if (drinkError) {
             console.log("THERE WAS AN ERROR IN THE CREATE SCREEN")

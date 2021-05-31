@@ -28,13 +28,14 @@ const SearchScreen = ({ route, navigation }) => {
                 <FlatList
                     data={items}
                     renderItem={renderItem}
+                    keyExtractor={(item, idx) => '' + idx}
                 />
             )
         }
     }
 
     const renderItem = ({ item }) => {
-        return <SearchResult navigation={navigation} item={item} removable={false} />
+        return <SearchResult navigation={navigation} item={item} />
     }
 
     if (isLoading) {
