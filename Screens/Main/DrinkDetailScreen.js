@@ -68,7 +68,8 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
             while (i < totalComments && i < comments.length) {
                 const comment = comments[i];
                 const author = authors[comment.authorID];
-                if (comments[i].id !== 'default') {
+                console.log(author);
+                if (comments[i].id !== 'default' && author) {
                     result.push(
                         <View style={DetailStyles.commentRow} key={i}>
                             <Image source={{ uri: author.imageURL }} style={DetailStyles.commentImage} />

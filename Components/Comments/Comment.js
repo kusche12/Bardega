@@ -19,7 +19,9 @@ const Comment = ({ comment, author, navigation, commentID,
     const [isDisabled, setIsDisabled] = useState(false);
 
     useEffect(() => {
-        if (likedByUsers !== null && comment !== null && userID !== null) {
+        if (!author) {
+            deleteComment({ commentID: commentID, comment: comment });
+        } else if (likedByUsers !== null && comment !== null && userID !== null) {
             setIsLoading(false);
         }
     }, [likedByUsers])
@@ -98,7 +100,7 @@ const Comment = ({ comment, author, navigation, commentID,
 
             for (let i = 0; i < comment.taggedUsers.length; i++) {
                 let tag = comment.taggedUsers[i];
-                res[tag.wordPosition] = <Text onPress={() => handleNavUser(tag.userID)} style={{ color: Styles.DARK_PINK }}>{words[tag.wordPosition]} </Text>
+                res[tag.wordPosition] = <Text key={'' + (i + 1) * 50} onPress={() => handleNavUser(tag.userID)} style={{ color: Styles.DARK_PINK }}>{words[tag.wordPosition]} </Text>
             }
 
             return <Text>{res}</Text>
