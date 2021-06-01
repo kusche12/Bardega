@@ -41,4 +41,13 @@ const App = () => {
   )
 }
 
+// BUGS FOUND WHILE ADDING DRINK IMAGES:
+// TODO: Add a cancel button in the top navbar
+// TODO: Fix the create directions component. Currently, the X button breaks it
+// TODO: Search screen does not fill with search results and sometimes returns nothing at all until refresh
+// TODO: DetailScreen ingredients component goes too far to the left in width, exceeds borders of componnet
+// TODO: When editing a drink from the search component, it does not know what screen to navigate to afterwards and just goes blank
+// TODO: Homescreen horizozntal list drink card is not all the same height
+// TODO: Some tags are capital first letter, some are all lowercase. Make them consistent.
+
 export default App;
