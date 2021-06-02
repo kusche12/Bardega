@@ -7,6 +7,7 @@ import DrinkOptionsScreen from '../../Screens/Main/DrinkOptionsScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import DiscoverScreen from '../../Screens/Main/DiscoverScreen';
+import CreateScreen from '../../Screens/Main/CreateScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import Styles from '../../Styles/StyleConstants';
 
@@ -44,6 +45,19 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='CreateScreen'
+                component={CreateScreen}
+                initialParams={route.params, navigation}
+                options={() => ({
+                    headerTitle: () => <MainHeader />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: Styles.PINK,
                     },

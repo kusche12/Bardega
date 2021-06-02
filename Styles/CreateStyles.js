@@ -112,7 +112,7 @@ export default StyleSheet.create({
         paddingVertical: 4,
         borderRadius: RADIUS,
         backgroundColor: PINK,
-        marginBottom: 40,
+        marginBottom: 20,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -125,5 +125,11 @@ export default StyleSheet.create({
             height: 2
         },
         elevation: 4
+    },
+    cancelBtn: {
+        backgroundColor: 'white',
+        borderWidth: 2,
+        borderColor: Styles.DARK_PINK,
+        marginBottom: 40,
     }
 });

@@ -15,7 +15,7 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigation, drinkError, drinkID, drinks }) => {
+const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigation, drinkError, drinkID }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
     const [drinkName, setDrinkName] = useState('');
@@ -32,25 +32,16 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     // Also make sure to clean the data so that this screen is prepared to edit it
     useEffect(() => {
         if (route.params.drink && tags) {
-            const edit = route.params.drink;
-            let ingrObject = getIngredients(edit.recipe);
-            setDrinkName(edit.name)
-            setDrinkDesc(edit.description)
-            setDrinkImage(edit.imageURL)
-            setIngredients(ingrObject)
-            setDirection(edit.instructions)
-            setDrinkPrep(edit.prepTime)
-            setDrinkStrength(edit.strength)
-            setSelectedTags(edit.tags)
+            setDrinkData();
         }
         setIsLoading(false);
-    }, [route, tags])
+    }, [route, tags]);
 
     // Update application state if there is a drink error message or
     // Navigate to drink detail as soon as there is a drinkID in the screen's state
     useEffect(() => {
         if (drinkID) {
-            navigation.navigate('ProfileScreen');
+            navigation.navigate('Profile', { screen: 'ProfileScreen' })
         } else if (drinkError) {
             console.log("THERE WAS AN ERROR IN THE CREATE SCREEN")
         }
@@ -117,6 +108,56 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
         return blob;
     }
 
+    // Resets the screen's state to null values and navigates away from the create screen
+    const handleCancel = () => {
+        return Alert.alert(
+            "Discard Changes",
+            "Are you sure you want to discard the changes you made to this drink?",
+            [
+                {
+                    text: "Yes, discard changes",
+                    onPress: () => discardChanges()
+                },
+                {
+                    text: "Cancel",
+                    onPress: console.log("cancel pressed"),
+                    style: 'cancel'
+                },
+            ],
+            { cancelable: true }
+        );
+    }
+
+    const discardChanges = () => {
+        if (route.params.drink) {
+            setDrinkData();
+        } else {
+            setDrinkName('')
+            setDrinkDesc('')
+            setDrinkImage(null)
+            setIngredients([])
+            setDirection(null)
+            setDrinkPrep({ value: 'light', label: 'Light' })
+            setDrinkStrength({ value: 'virgin', label: 'Virgin' })
+            setSelectedTags([])
+        }
+
+        navigation.goBack();
+    }
+
+    const setDrinkData = () => {
+        const edit = route.params.drink;
+        let ingrObject = getIngredients(edit.recipe);
+        setDrinkName(edit.name)
+        setDrinkDesc(edit.description)
+        setDrinkImage(edit.imageURL)
+        setIngredients(ingrObject)
+        setDirection(edit.instructions)
+        setDrinkPrep(edit.prepTime)
+        setDrinkStrength(edit.strength)
+        setSelectedTags(edit.tags)
+    }
+
     // Give the tags some time to load from firestore
     if (!tags || isLoading) {
         return null;
@@ -176,6 +217,13 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                             }
                         </View>
                     </TouchableWithoutFeedback>
+
+                    <TouchableWithoutFeedback onPress={() => handleCancel()}>
+                        <View style={[CreateStyles.submitBtn, CreateStyles.cancelBtn]}>
+                            <Text style={[GlobalStyles.titlebold2, { color: Styles.DARK_PINK }]}>Discard Changes</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+
                     {drinkError &&
                         <Text style={{ color: 'red', textAlign: 'center', width: Styles.width * .8, marginBottom: 20 }}>{drinkError}</Text>
                     }
