@@ -15,7 +15,7 @@ export const getDrinksWithQuery = async (drinks, query, max) => {
             if (drinks[nums[i]].tags) {
                 for (let j = 0; j < drinks[nums[i]].tags.length; j++) {
                     const tag = drinks[nums[i]].tags[j];
-                    if (tag === query.filterName) {
+                    if (tag.name.toLowerCase() === query.filterName.toLowerCase()) {
                         const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
                         if (!isPrivate) {
                             result.push(drinks[nums[i]]);

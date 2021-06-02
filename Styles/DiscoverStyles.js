@@ -17,6 +17,7 @@ export default StyleSheet.create({
         height: 200,
         borderRadius: Styles.BORDER_RADIUS,
         alignItems: "center",
+        overflow: 'hidden',
         marginRight: 8,
         backgroundColor: "white",
     },
