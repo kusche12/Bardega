@@ -7,7 +7,14 @@ const IOS = Platform.OS === 'ios';
 
 // https://github.com/nikitawolfik/flatlist-pagination
 const AnimatedFlatList = ({ data, renderItem, keyExtractor, contentContainerStyle, itemWidth, setActiveIndex, activeIndex }) => {
+    console.log(data[0].length)
+
     const [ranOnce, setRanOnce] = useState(true);
+    const [refresh, setRefresh] = useState(false);
+
+    useEffect(() => {
+        setRefresh(!refresh)
+    }, [data])
 
     const scrollValue = React.useRef(new Animated.Value(0));
 
@@ -105,6 +112,7 @@ const AnimatedFlatList = ({ data, renderItem, keyExtractor, contentContainerStyl
                 contentContainerStyle={contentContainerStyle}
                 keyExtractor={keyExtractor}
                 ref={flatlist}
+                extraData={refresh}
 
                 getItemLayout={getItemLayout}
                 viewabilityConfig={VIEWABILITY_CONFIG.current}

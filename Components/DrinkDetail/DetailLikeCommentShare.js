@@ -14,7 +14,6 @@ import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 import { createNotification } from '../../Store/Actions/NotificationActions';
 
-// TODO: DEV: Test if share link actually works
 const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
     likedByUsers, author, userID, numComments, likeDrink, unLikeDrink, createNotification }) => {
 

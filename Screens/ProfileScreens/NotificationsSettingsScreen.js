@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Switch, Image, Alert, Platform, Linking } from 'react-native';
+import { SafeAreaView, View, Text, Switch, Image, Alert, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import Images from '../../Images/Images';
 import { updateNotifications } from '../../Store/Actions/ProfileActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-// TODO: Currently watching notification settings at the firestore level, but might be unnecessary
-// Maybe you should just watch this from the app level and not include in FB
 const NotificationsSettingsScreen = ({ userID, error, user, updateNotifications }) => {
 
     const [allowNotifs, setAllowNotifs] = useState(true);

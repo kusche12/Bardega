@@ -21,8 +21,6 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-// TODO: Update the profile screen after new drink creation
-// TODO: Update the profile screen after a refresh is initiated from the screen pull-down
 const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [isPrivate, setIsPrivate] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +72,25 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const loadUserDrinks = async () => {
         let res = [];
         let liked = [];
-        for (let i = user.drinks.length - 1; i >= 0; i--) {
+        let drinksArray = [];
+        let likedArray = [];
+
+        let db = firebase.firestore();
+        await db
+            .collection('profiles')
+            .doc(user.id)
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    console.log(doc.data());
+                    drinksArray = doc.data().drinks;
+                    likedArray = doc.data().likedDrinks;
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+
+        for (let i = drinksArray.length - 1; i >= 0; i--) {
             const drink = await drinks[user.drinks[i].id];
             if (ownProfile || !drink.private) {
                 cacheImages(drink.imageURL, drink.id);
@@ -83,7 +99,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
         }
         setUserDrinks(res);
         if (ownProfile || !user.likedDrinksPrivate) {
-            for (let i = user.likedDrinks.length - 1; i >= 0; i--) {
+            for (let i = likedArray.length - 1; i >= 0; i--) {
                 const drink = await drinks[user.likedDrinks[i].id];
                 if (drink) {
                     cacheImages(drink.imageURL, drink.id);

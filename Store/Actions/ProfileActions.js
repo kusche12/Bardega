@@ -223,7 +223,6 @@ export const updateNotifications = (data) => {
 // Remove the user's notifications collection
 // Delete the profile from profiles collection
 // Remove the user's account from the Firebase Auth
-// TODO: Remove all the user's comments (this can totally be down outside of this function)
 export const deleteAccount = (user) => {
     console.log('Delete Profile and Account Action');
     const { id, drinks, likedDrinks, profileFollowID, notificationsID } = user;
