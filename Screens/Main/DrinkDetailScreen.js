@@ -54,7 +54,7 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
 
     const renderComments = () => {
         let result = [];
-        if (comments.length === 1) {
+        if (comments.length <= 1) {
             return (
                 <View>
                     <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>There are no comments for this drink yet!</Text>

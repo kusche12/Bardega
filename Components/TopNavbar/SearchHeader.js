@@ -9,8 +9,7 @@ import Images from '../../Images/Images';
 import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
-// TODO: Connect spirits when you set up that collection
-const SearchHeader = ({ drinks, navigation, profiles }) => {
+const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
     const [query, setQuery] = useState('');
     const [data, setData] = useState([]);
 
@@ -18,20 +17,25 @@ const SearchHeader = ({ drinks, navigation, profiles }) => {
     // Otherwise, render drinks AND profiles based on public availability and user input
     useEffect(() => {
         async function fetchData() {
-            if (drinks && profiles) {
+            if (drinks && profiles && spirits) {
                 if (query) {
                     const drinkRes = await findDrink(drinks);
+                    const spiritRes = findSpirit(spirits);
                     const profileRes = findProfile(profiles);
                     const res = drinkRes.concat(profileRes);
-                    setData(res);
-                    navigation.setParams({ results: res });
+                    const res2 = res.concat(spiritRes);
+
+                    const shuffledResults = shuffleArray(res2);
+
+                    setData(shuffledResults);
+                    navigation.setParams({ results: shuffledResults });
                 }
             }
         }
         fetchData();
     }, [query, drinks]);
 
-    // Hard reset the search page to the original random drinks when query is empty
+    // Hard reset the search page to an empty array when query is empty
     useEffect(() => {
         if (!query) {
             const res = [];
@@ -39,6 +43,16 @@ const SearchHeader = ({ drinks, navigation, profiles }) => {
             navigation.setParams({ results: res });
         }
     }, [query]);
+
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * i)
+            const temp = array[i]
+            array[i] = array[j]
+            array[j] = temp
+        }
+        return array;
+    }
 
 
     const findDrink = async (drinks) => {
@@ -54,24 +68,19 @@ const SearchHeader = ({ drinks, navigation, profiles }) => {
                 if (drink.name.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
                     res.push(drink);
                     set.add(drink);
-                    break;
                 }
 
                 // If strength level matches query
                 if (drink.strength.value.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
                     res.push(drink);
                     set.add(drink);
-
-                    break;
                 }
 
-                // If one of the tags matches query
+                // If one of the recipes matches query
                 for (let k = 0; k < drink.recipe.length; k++) {
                     if (drink.recipe[k].type.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
                         res.push(drink);
                         set.add(drink);
-
-                        break;
                     }
                 }
 
@@ -80,11 +89,12 @@ const SearchHeader = ({ drinks, navigation, profiles }) => {
                     if (drink.tags[j].name.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
                         res.push(drink);
                         set.add(drink);
-
-                        break;
                     }
                 }
 
+                if (res.length > 30) {
+                    break;
+                }
             }
         }
         return res;
@@ -98,8 +108,45 @@ const SearchHeader = ({ drinks, navigation, profiles }) => {
             if (profile.userName.toLowerCase().search(regex) >= 0) {
                 res.push(profile)
             }
+
+            if (res.length > 30) {
+                break;
+            }
         }
 
+        return res;
+    }
+
+    const findSpirit = (spirits) => {
+        const regex = new RegExp(`${query.trim()}`, 'i');
+        const set = new Set();
+        let res = [];
+        for (let i = 0; i < spirits.length; i++) {
+            const spirit = spirits[i];
+
+            // If the name matches query
+            if (spirit.name.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
+                res.push(spirit);
+                set.add(spirit);
+            }
+
+            // If strength level matches query
+            if (spirit.strength.value.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
+                res.push(spirit);
+                set.add(spirit);
+            }
+
+            // If the spirit type (alcohol) matches the query
+            if (spirit.spirit.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
+                res.push(spirit);
+                set.add(spirit);
+            }
+
+
+            if (res.length > 30) {
+                break;
+            }
+        }
         return res;
     }
 
@@ -168,11 +215,13 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         drinks: state.firestore.ordered.drinks,
-        profiles: state.firestore.ordered.profiles
+        profiles: state.firestore.ordered.profiles,
+        spirits: state.firestore.ordered.spirits,
+
     }
 }
 
 export default compose(
     connect(mapStateToProps),
-    firestoreConnect(() => ['drinks', 'profiles'])
+    firestoreConnect(() => ['drinks', 'profiles', 'spirits'])
 )(SearchHeader);

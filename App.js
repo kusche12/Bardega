@@ -41,7 +41,4 @@ const App = () => {
   )
 }
 
-// BUGS FOUND WHILE ADDING DRINK IMAGES:
-// TODO: Search screen does not fill with search results and sometimes returns nothing at all until refresh
-
 export default App;

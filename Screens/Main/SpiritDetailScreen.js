@@ -30,7 +30,8 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
 
     const renderComments = () => {
         let result = [];
-        if (comments.length === 1) {
+        console.log(comments.length)
+        if (comments.length <= 1) {
             return (
                 <View>
                     <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>There are no comments for this drink yet!</Text>

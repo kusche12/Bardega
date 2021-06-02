@@ -78,7 +78,7 @@ const Ratings = ({ userID, drink, createRateSpirit, updateRateSpirit }) => {
 
     const renderStar = (img, rateable, index) => {
         return (
-            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => rateable && handleRateSpirit(index)}>
+            <TouchableWithoutFeedback key={index} disabled={isDisabled} onPress={() => rateable && handleRateSpirit(index)}>
                 <Image source={img} style={DetailStyles.rateStar} />
             </TouchableWithoutFeedback>
         )

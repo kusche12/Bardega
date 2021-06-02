@@ -9,6 +9,7 @@ const SearchScreen = ({ route, navigation }) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
+        console.log(route.params.results);
         if (route.params.results) {
             setItems(route.params.results);
             setIsLoading(false);
