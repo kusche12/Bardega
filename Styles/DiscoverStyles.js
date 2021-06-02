@@ -9,12 +9,12 @@ export default StyleSheet.create({
         marginBottom: 20,
     },
     horizontalContainer: {
-        height: 240,
-        marginBottom: 60,
+        height: 250,
+        marginBottom: 50,
     },
     cardContainer: {
         width: 140,
-        height: 'auto',
+        height: 200,
         borderRadius: Styles.BORDER_RADIUS,
         alignItems: "center",
         marginRight: 8,

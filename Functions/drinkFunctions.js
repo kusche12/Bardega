@@ -39,6 +39,7 @@ export const getDrinksWithQuery = async (drinks, query, max) => {
                 }
             }
         }
+
         return result;
     }
     return null;

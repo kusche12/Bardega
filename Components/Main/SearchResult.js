@@ -19,7 +19,8 @@ const SearchResult = ({ item, navigation }) => {
         let res = '';
         if (item.tags) {
             for (let i = 0; i < item.tags.length; i++) {
-                res += item.tags[i].name + ', '
+                let tag = item.tags[i].name;
+                res += tag.charAt(0).toUpperCase() + tag.slice(1) + ', '
             };
             res = res.substr(0, res.length - 2);
             return <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{res}</Text>

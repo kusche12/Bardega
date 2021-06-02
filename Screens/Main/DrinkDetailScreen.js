@@ -68,7 +68,6 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
             while (i < totalComments && i < comments.length) {
                 const comment = comments[i];
                 const author = authors[comment.authorID];
-                console.log(author);
                 if (comments[i].id !== 'default' && author) {
                     result.push(
                         <View style={DetailStyles.commentRow} key={i}>
@@ -199,7 +198,7 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                             <FlatList
                                 data={drink.instructions}
                                 keyExtractor={(_, x) => '' + x}
-                                renderItem={({ item }) => <Text style={[GlobalStyles.paragraph2, { marginBottom: 4 }]}>•  {item}</Text>}
+                                renderItem={({ item }) => <Text style={[GlobalStyles.paragraph2, { marginBottom: 6 }]}>•  {item}</Text>}
                             />
 
                         </View>

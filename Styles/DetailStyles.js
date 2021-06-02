@@ -42,7 +42,7 @@ export default StyleSheet.create({
     },
     col1: {
         justifyContent: 'flex-start',
-        width: Styles.width * .4,
+        width: Styles.width * .33,
         alignItems: 'flex-end',
         paddingRight: 20
     },

@@ -12,7 +12,7 @@ const CreateDirectionsList = ({ direction, setDirection }) => {
     const renderItem = ({ item, index }) => {
         return (
             <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-evenly' }}>
-                <Text style={{ color: Styles.GRAY, marginTop: 4 }}>•</Text>
+                <Text style={{ color: Styles.GRAY, marginTop: 6 }}>•</Text>
                 <TextInput
                     style={[GlobalStyles.paragraph2, { color: Styles.GRAY, paddingBottom: 0, includeFontPadding: false, width: 240 }]}
                     onChangeText={(text) => setText(text, index)}
@@ -43,17 +43,20 @@ const CreateDirectionsList = ({ direction, setDirection }) => {
     const renderClose = (index) => {
         return (
             <TouchableWithoutFeedback onPress={() => removeItem(index)}>
-                <View style={{ width: 20, height: 20, flexDirection: 'row', alignItems: 'center' }}>
-                    <Image source={Images.close} style={{ width: 10, height: 12, marginTop: 4 }} />
+                <View style={{ width: 20, height: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 6 }}>
+                    <Image source={Images.close} style={{ width: 10, height: 12 }} />
                 </View>
             </TouchableWithoutFeedback>
         )
     }
 
     const removeItem = (index) => {
-        console.log(direction[1])
         if (index === 0 && !direction[1]) {
             setDirection(null)
+        } else if (index === 0) {
+            let array = direction.slice();
+            let arrayMinusFirst = array.splice(1);
+            setDirection(arrayMinusFirst);
         } else {
             let array = direction.slice();
             let arrayMinusOne = array.splice(index - 1, 1);

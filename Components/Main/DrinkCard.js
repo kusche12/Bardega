@@ -14,13 +14,19 @@ const DrinkCard = ({ drink, navigation, navigateTo }) => {
         setCached(true);
     }, []);
 
+    const renderText = () => {
+        let text = drink.name;
+        if (text.length > 28) {
+            text = text.substring(0, 28) + '...';
+        }
+        return <Text style={[GlobalStyles.paragraphbold3, { paddingBottom: 8, paddingTop: 8, paddingHorizontal: 8, textAlign: 'center' }]}>{text}</Text>
+    }
+
     return (
         <TouchableWithoutFeedback onPress={() => navigation.navigate(navigateTo, { drink: drink })}>
-            <View style={DetailStyles.shadowContainer}>
-                <View style={DiscoverStyles.cardContainer}>
-                    <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.drinkImg} />
-                    <Text style={[GlobalStyles.paragraphbold3, { paddingBottom: 8, paddingTop: 8, paddingHorizontal: 8, textAlign: 'center' }]}>{drink.name}</Text>
-                </View>
+            <View style={[DiscoverStyles.cardContainer, DetailStyles.shadowContainer]}>
+                <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.drinkImg} />
+                {renderText()}
             </View>
         </TouchableWithoutFeedback>
     );
