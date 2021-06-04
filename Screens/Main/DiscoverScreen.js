@@ -27,6 +27,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 
     // TODO: Speed up the initial drink rendering for this page OR implement a better loading component
     // Or just do both, maybe need to incorporate lazy loading here
+
     // Wait for drinks and queries to be fully loaded into the app
     useEffect(() => {
         // If the user enters the app from a deep link sent to them by another user,
@@ -46,7 +47,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
         }
     }, [queries, drinks, allDrinks, drinkID]);
 
-    // TODO: Test function only. Replcace this with the function below for production
+    // Test function only. Replcace this with the function below for production
     // const loadData = async () => {
     //     const ranQueries = [{
     //         filterName: "Citrusy",
