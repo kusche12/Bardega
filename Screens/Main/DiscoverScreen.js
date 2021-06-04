@@ -9,10 +9,14 @@ import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
+import Styles from '../../Styles/StyleConstants';
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
+
+// TODO: Add queries in the firestore for DRINK STRENGTH, be sure to render these in the drinkFunctions function
+// AND the DrinkListScreen
 
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
@@ -27,7 +31,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 
     // TODO: Speed up the initial drink rendering for this page OR implement a better loading component
     // Or just do both, maybe need to incorporate lazy loading here
-
     // Wait for drinks and queries to be fully loaded into the app
     useEffect(() => {
         // If the user enters the app from a deep link sent to them by another user,
@@ -50,10 +53,14 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     // Test function only. Replcace this with the function below for production
     // const loadData = async () => {
     //     const ranQueries = [{
-    //         filterName: "Citrusy",
+    //         filterName: "Sweet",
     //         filterType: "tag",
-    //         id: "uw9Ba0uxslDp3Qct3MKK",
-    //         name: "Citrusy",
+    //         name: "Sweet & Simple",
+    //     }, {
+    //         filterName: "light",
+    //         filterType: "prepTime",
+    //         id: "6QxFD8AtrI4cgPt61Che",
+    //         name: "Light Prep",
     //     }]
     //     setSelectedQueries(ranQueries)
 
@@ -68,12 +75,12 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     // }
 
     const loadData = async () => {
-        let ranQueries = getRandomQueries(queries, 10);
+        let ranQueries = getRandomQueries(queries, 8);
         setSelectedQueries(ranQueries);
 
         let drinkMatrix = [];
         for (let i = 0; i < ranQueries.length; i++) {
-            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
+            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
             if (drinkRow.length > 3) {
                 drinkMatrix.push(drinkRow);
             }
@@ -93,7 +100,9 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     if (!isLoaded) {
         return (
             <SafeAreaView style={[GlobalStyles.headerSafeArea, { paddingLeft: 8 }]}>
-                <Loading />
+                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: Styles.height / 4 }}>
+                    <Loading />
+                </View>
             </SafeAreaView>
         );
     }

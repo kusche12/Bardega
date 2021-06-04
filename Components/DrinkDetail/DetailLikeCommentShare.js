@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableWithoutFeedback, Image, Text, Share, Alert } from 'react-native';
+import { View, TouchableWithoutFeedback, Image, Text, Share, Alert, ActivityIndicator } from 'react-native';
 import * as Linking from 'expo-linking';
 import Loading from '../Main/Loading';
 import { connect } from 'react-redux';
@@ -85,7 +85,7 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
     }
 
     if (isLoading) {
-        return <Loading />
+        return null;
     } else {
         return (
             <View style={[CreateStyles.ingrContainerWide, DetailStyles.buttonContainer]}>
