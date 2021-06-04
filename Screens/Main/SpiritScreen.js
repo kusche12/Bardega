@@ -7,6 +7,7 @@ import { compose } from 'redux';
 import { getSpiritsWithQuery } from '../../Functions/drinkFunctions';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
+import Styles from '../../Styles/StyleConstants';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
@@ -58,7 +59,9 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits }) => {
     if (!isLoaded) {
         return (
             <SafeAreaView style={[GlobalStyles.headerSafeArea, { paddingLeft: 8 }]}>
-                <Loading />
+                <View style={{ marginTop: Styles.height / 4 }}>
+                    <Loading />
+                </View>
             </SafeAreaView>
         );
     }

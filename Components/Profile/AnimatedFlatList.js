@@ -1,13 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FlatList, Animated, Platform } from 'react-native';
+import { FlatList, Animated, Platform, View } from 'react-native';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants'
 
 const IOS = Platform.OS === 'ios';
 
+// TODO: Implement pagination. Look at the Bardega profile and see how long it takes to transition between flatlists
+// Only render the drinks that can currently be seen and use the DrinkListScreen as an example of this
 // https://github.com/nikitawolfik/flatlist-pagination
-const AnimatedFlatList = ({ data, renderItem, keyExtractor, contentContainerStyle, itemWidth, setActiveIndex, activeIndex }) => {
-    console.log(data[0].length)
+const AnimatedFlatList = ({ data, renderItem, contentContainerStyle, itemWidth, setActiveIndex, activeIndex }) => {
 
     const [ranOnce, setRanOnce] = useState(true);
     const [refresh, setRefresh] = useState(false);
@@ -18,7 +19,6 @@ const AnimatedFlatList = ({ data, renderItem, keyExtractor, contentContainerStyl
 
     const scrollValue = React.useRef(new Animated.Value(0));
 
-    //let activeIndex = 0;
     const flatlist = React.useRef();
 
     const VIEWABILITY_CONFIG = useRef({
@@ -47,10 +47,12 @@ const AnimatedFlatList = ({ data, renderItem, keyExtractor, contentContainerStyl
             }).start()
         }
         flatlist.current.scrollToIndex({ index: activeIndex, animated: true, viewPosition: 0.5 });
-        //console.log('activeIndex ' + activeIndex);
+        // console.log('activeIndex ' + activeIndex);
     }, [activeIndex]);
 
     const renderIndexLine = () => {
+        console.log("MOVE LINE")
+        // return <View style={[UserStyles.indexButtonLine, { marginLeft: (Styles.width / 2) * activeIndex }]}></View>
         return (
             <Animated.View style={[UserStyles.indexButtonLine, {
                 transform: [
@@ -110,7 +112,7 @@ const AnimatedFlatList = ({ data, renderItem, keyExtractor, contentContainerStyl
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={contentContainerStyle}
-                keyExtractor={keyExtractor}
+                keyExtractor={(_, index) => '' + index}
                 ref={flatlist}
                 extraData={refresh}
 

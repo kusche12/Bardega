@@ -9,7 +9,7 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const LIMIT = 9;
+const LIMIT = 6;
 
 // Lazy loading is incorporated to load in drinks or spirits based on their specific query type
 const DrinkListScreen = ({ route, navigation, drinks, spirits }) => {
@@ -72,6 +72,17 @@ const DrinkListScreen = ({ route, navigation, drinks, spirits }) => {
                 }
                 currIndex++;
             }
+        } else if (query.filterType === 'strength') {
+            while (currIndex < drinks.length && currItems.length < LIMIT) {
+                const strength = drinks[currIndex].strength.value;
+                if (strength.toLowerCase() === query.filterName.toLowerCase()) {
+                    const isPrivate = await drinkIsPrivate(drinks[currIndex]);
+                    if (!isPrivate) {
+                        currItems.push(drinks[currIndex]);
+                    }
+                }
+                currIndex++;
+            }
         }
         setDocumentData(allItems.concat(currItems));
         setLastIndex(currIndex);
@@ -84,8 +95,6 @@ const DrinkListScreen = ({ route, navigation, drinks, spirits }) => {
         let currIndex = lastIndex;
         let allItems = [...documentData];
         setIsRefreshing(true);
-
-        console.log('get spirits')
 
         while (currIndex < spirits.length && currItems.length < LIMIT) {
             const spiritType = spirits[currIndex].spirit;
@@ -116,11 +125,11 @@ const DrinkListScreen = ({ route, navigation, drinks, spirits }) => {
                     renderItem={renderItem}
                     keyExtractor={(item, index) => '' + index}
                     onEndReached={retrieveData}
-                    onEndReachedThreshold={.01}
+                    onEndReachedThreshold={5}
                     refreshing={isRefreshing}
                     ListFooterComponent={isRefreshing &&
                         <View style={{ marginTop: 20 }} >
-                            <ActivityIndicator />
+                            <ActivityIndicator color={Styles.DARK_PINK} />
                         </View>
                     }
                 />

@@ -41,6 +41,21 @@ export const getDrinksWithQuery = async (drinks, query, max) => {
         }
 
         return result;
+    } else if (query.filterType === 'strength') {
+        for (let i in nums) {
+            if (result.length === max) {
+                return result;
+            }
+            const strength = drinks[nums[i]].strength.value;
+            if (strength.toLowerCase() === query.filterName.toLowerCase()) {
+                const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
+                if (!isPrivate) {
+                    result.push(drinks[nums[i]]);
+                }
+            }
+        }
+
+        return result;
     }
     return null;
 }

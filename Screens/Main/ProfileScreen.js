@@ -82,7 +82,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             .get()
             .then((doc) => {
                 if (doc.exists) {
-                    console.log(doc.data());
                     drinksArray = doc.data().drinks;
                     likedArray = doc.data().likedDrinks;
                 }
@@ -218,7 +217,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                     <AnimatedFlatList
                         data={[userDrinks, likedDrinks]}
                         renderItem={({ item, index }) => <RenderList {...{ item, navigation, ownProfile, index, user }} />}
-                        keyExtractor={(_, index) => '' + index}
                         itemWidth={Styles.width}
                         setActiveIndex={setActiveIndex}
                         activeIndex={activeIndex}

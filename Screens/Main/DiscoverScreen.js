@@ -15,9 +15,6 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-// TODO: Add queries in the firestore for DRINK STRENGTH, be sure to render these in the drinkFunctions function
-// AND the DrinkListScreen
-
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of 10 drinks that fit each query
@@ -29,8 +26,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [drinksRendered, setDrinksRendered] = useState(false);
 
-    // TODO: Speed up the initial drink rendering for this page OR implement a better loading component
-    // Or just do both, maybe need to incorporate lazy loading here
+    // TODO: Speed up the initial drink rendering. This takes upwards of 20 seconds when app loads in
     // Wait for drinks and queries to be fully loaded into the app
     useEffect(() => {
         // If the user enters the app from a deep link sent to them by another user,
@@ -51,44 +47,51 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     }, [queries, drinks, allDrinks, drinkID]);
 
     // Test function only. Replcace this with the function below for production
-    // const loadData = async () => {
-    //     const ranQueries = [{
-    //         filterName: "Sweet",
-    //         filterType: "tag",
-    //         name: "Sweet & Simple",
-    //     }, {
-    //         filterName: "light",
-    //         filterType: "prepTime",
-    //         id: "6QxFD8AtrI4cgPt61Che",
-    //         name: "Light Prep",
-    //     }]
-    //     setSelectedQueries(ranQueries)
-
-    //     let drinkMatrix = [];
-    //     for (let i = 0; i < ranQueries.length; i++) {
-    //         let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
-    //         drinkMatrix.push(drinkRow);
-    //     }
-
-    //     setSelectedDrinks(drinkMatrix);
-    //     setIsLoaded(true);
-    // }
-
     const loadData = async () => {
-        let ranQueries = getRandomQueries(queries, 8);
-        setSelectedQueries(ranQueries);
+        const ranQueries = [{
+            filterName: "Sweet",
+            filterType: "tag",
+            name: "Sweet & Simple",
+        },
+        {
+            filterName: "light",
+            filterType: "prepTime",
+            id: "6QxFD8AtrI4cgPt61Che",
+            name: "Light Prep",
+        },
+        {
+            filterName: "very_strong",
+            filterType: "strength",
+            name: "Not For The Weak",
+        }
+        ]
+        setSelectedQueries(ranQueries)
 
         let drinkMatrix = [];
         for (let i = 0; i < ranQueries.length; i++) {
-            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
-            if (drinkRow.length > 3) {
-                drinkMatrix.push(drinkRow);
-            }
+            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
+            drinkMatrix.push(drinkRow);
         }
 
         setSelectedDrinks(drinkMatrix);
         setIsLoaded(true);
     }
+
+    // const loadData = async () => {
+    //     let ranQueries = getRandomQueries(queries, 8);
+    //     setSelectedQueries(ranQueries);
+
+    //     let drinkMatrix = [];
+    //     for (let i = 0; i < ranQueries.length; i++) {
+    //         let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
+    //         if (drinkRow.length > 3) {
+    //             drinkMatrix.push(drinkRow);
+    //         }
+    //     }
+
+    //     setSelectedDrinks(drinkMatrix);
+    //     setIsLoaded(true);
+    // }
 
     const onRefresh = React.useCallback(() => {
         setIsRefreshing(true);

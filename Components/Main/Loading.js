@@ -38,11 +38,11 @@ const Loading = () => {
     }, []);
 
     const renderText = () => {
-        return <Text style={[GlobalStyles.paragraphbold2, { color: Styles.DARK_PINK, marginTop: 10 }]}>{loadingText[index]}</Text>
+        return <Text style={[GlobalStyles.paragraphbold2, { color: Styles.DARK_PINK, marginTop: 15 }]}>{loadingText[index]}</Text>
     };
 
     return (
-        <View>
+        <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator size="large" color={Styles.DARK_PINK} />
             {renderText()}
         </View>
