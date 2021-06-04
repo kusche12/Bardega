@@ -75,7 +75,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
     }
 
     if (isLoading) {
-        return <Loading />
+        return null;
     } else {
         return (
             <SafeAreaView style={GlobalStyles.headerSafeArea}>
