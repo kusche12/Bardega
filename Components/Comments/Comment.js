@@ -62,8 +62,6 @@ const Comment = ({ comment, author, navigation, commentID,
     }
 
     const handleRemove = () => {
-        console.log(userID)
-        console.log(comment.authorID)
         if (userID === comment.authorID) {
             Vibration.vibrate([0, 500]);
             return Alert.alert(

@@ -12,6 +12,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import * as Linking from 'expo-linking';
 
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 import { useFonts } from 'expo-font';
 
@@ -27,6 +28,11 @@ const Main = ({ user }) => {
         SourceSerifSemiBold: require('../assets/fonts/SourceSerifPro-SemiBold.ttf'),
         SourceSerifBold: require('../assets/fonts/SourceSerifPro-Bold.ttf'),
     });
+
+    // This is supposed to lock the status bar at the top of portrait mode, however, 
+    // this does not work on iOS14
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+
 
     // Create a linking object that will allow a third party application to enter this app
     const prefix = Linking.createURL('/');
