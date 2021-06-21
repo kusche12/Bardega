@@ -53,6 +53,7 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
     }
 
     const renderComments = () => {
+        console.log(comments);
         let result = [];
         if (comments.length <= 1) {
             return (
@@ -242,7 +243,7 @@ const mapStateToProps = (state, ownProps) => {
 
     return {
         author: profile,
-        comments: state.firestore.ordered['allComments'],
+        comments: state.firestore.ordered['allComments' + drink.commentID],
         authors: state.firestore.data.profiles,
         userID: state.firebase.auth.uid,
         drink: drink
@@ -264,7 +265,7 @@ export default compose(
         {
             collection: "comments",
             doc: props.route.params.drink.commentID,
-            storeAs: 'allComments',
+            storeAs: 'allComments' + props.route.params.drink.commentID,
             subcollections: [{
                 collection: "allComments"
             }

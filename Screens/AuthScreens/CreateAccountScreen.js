@@ -31,7 +31,7 @@ const CreateAccountScreen = ({ navigation, signUp, authError, loginFacebook, log
                 <BardegaLogoSVG width={Styles.width} height={Styles.height / 5} style={{ top: 20, marginBottom: 40 }} />
 
                 <View style={AuthStyles.form}>
-                    <AuthInput image={'user'} value={name} setValue={setName} type={'Firstname Lastname'} />
+                    <AuthInput image={'user'} value={name} setValue={setName} type={'Firstname Lastname'} capitalize={true} />
                     <AuthInput image={'userName'} value={userName} setValue={setUserName} type={'Username'} />
                     <AuthInput image={'email'} value={email} setValue={setEmail} type={'Email'} />
                     <AuthInput image={'password'} value={password} setValue={setPassword} type={'Password'} />

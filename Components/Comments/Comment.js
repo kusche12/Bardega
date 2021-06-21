@@ -18,6 +18,7 @@ const Comment = ({ comment, author, navigation, commentID,
     const [isDisabled, setIsDisabled] = useState(false);
 
     useEffect(() => {
+        // If this comment's author no longer has a profile, then delete the comment
         if (!author) {
             deleteComment({ commentID: commentID, comment: comment });
         } else if (likedByUsers !== null && comment !== null && userID !== null) {

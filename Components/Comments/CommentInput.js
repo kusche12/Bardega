@@ -6,10 +6,11 @@ import {
     Text,
     View, TouchableOpacity, Platform
 } from 'react-native';
-
+import { useKeyboard } from '@react-native-community/hooks'
 
 const CommentInput = ({ text, setText, handleCreateComment, setFindingUser, findingUser, query, setQuery }) => {
     const [isFocused, setIsFocused] = useState(false);
+    const keyboard = useKeyboard();
 
     const handleKeyPress = ({ nativeEvent }) => {
         const { key } = nativeEvent;
@@ -28,17 +29,15 @@ const CommentInput = ({ text, setText, handleCreateComment, setFindingUser, find
                 setQuery(query += key);
             }
         }
+
+        if (findingUser && key === ' ') {
+            setQuery('');
+        }
     }
 
     return (
-        <KeyboardAvoidingView
-            keyboardVerticalOffset={Platform.select({ ios: 0, android: -300 })}
-            behavior='position'
-            style={isFocused && Platform.OS === 'ios'
-                ? { paddingBottom: 115 }
-                : { paddingBottom: 0 }
-            }>
-            <View style={styles.container}>
+        <KeyboardAvoidingView>
+            <View style={[styles.container, isFocused && Platform.OS === 'ios' && { paddingBottom: keyboard.keyboardHeight - 15 }]}>
                 <TextInput
                     placeholder="Add a comment..."
                     keyboardType="twitter" // keyboard with no return button
@@ -67,11 +66,14 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderColor: '#EEE',
         alignItems: 'center',
+        justifyContent: 'flex-end',
         paddingLeft: 15,
     },
     input: {
         flex: 1,
-        height: Platform.OS === 'ios' ? 50 : 20,
+        //height: Platform.OS === 'ios' ? 50 : 20,
+        // marginBottom: 0,
+        // justifyContent: 'center',
         fontSize: 15,
     },
     button: {

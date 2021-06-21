@@ -125,14 +125,18 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             taggedUsers: formatTags
         });
         if (notifID && token) {
-            createNotification({
-                drinkID: drink.id,
-                type: 'comment',
-                userID: userID,
-                comment: text,
-                notifID: notifID,
-                token: token
-            });
+
+            // Only create a notification if the user is commenting on someone else's drink, not their own
+            if (drink.authorID !== user.id) {
+                createNotification({
+                    drinkID: drink.id,
+                    type: 'comment',
+                    userID: userID,
+                    comment: text,
+                    notifID: notifID,
+                    token: token
+                });
+            }
         }
 
         setText('');
@@ -239,7 +243,7 @@ const mapStateToProps = (state, ownProps) => {
         userID: state.firebase.auth.uid,
         comments: state.firestore.ordered['allComments'],
         notifID: notifID,
-        token: token
+        token: token,
     }
 }
 

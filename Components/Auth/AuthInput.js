@@ -5,7 +5,7 @@ import AuthStyles from '../../Styles/AuthStyles';
 import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
-const AuthInput = ({ type, value, setValue, image, reauth }) => {
+const AuthInput = ({ type, value, setValue, image, reauth, capitalize }) => {
 
     return (
         <View style={[AuthStyles.inputContainer, reauth && { borderBottomColor: Styles.LIGHT_GRAY, width: Styles.width * .95 }]}>
@@ -17,7 +17,7 @@ const AuthInput = ({ type, value, setValue, image, reauth }) => {
                 placeholder={type}
                 multiline={false}
                 placeholderTextColor={Styles.DARK_GRAY}
-                autoCapitalize={'none'}
+                autoCapitalize={capitalize ? 'words' : 'none'}
                 autoCorrect={false}
                 secureTextEntry={type === 'Password'}
             />
