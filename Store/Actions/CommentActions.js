@@ -83,7 +83,7 @@ export const likeComment = (data) => {
                 .doc(comment.id)
                 .update({ numLikes: firebase.firestore.FieldValue.increment(1) })
 
-            dispatch({ type: 'LIKE_COMMENT' })
+            dispatch({ type: 'LIKE_COMMENT' });
         } catch (err) {
             dispatch({ type: 'LIKE_COMMENT_ERROR', err });
         }

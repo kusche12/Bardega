@@ -3,10 +3,6 @@ import { View, ActivityIndicator, Text } from 'react-native';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
-
 const loadingText = [
     'Blending ice...',
     'Getting ingredients...',
@@ -24,7 +20,6 @@ const loadingText = [
     'Drinking...',
     'Adding foam...',
     'Chopping strawberries...',
-    'Rubbing peel...'
 ]
 
 const Loading = () => {

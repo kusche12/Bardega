@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, Text, Image, View, ActivityIndicator } from 'react-native';
+import { ScrollView, Text, Image, View, ActivityIndicator, FlatList } from 'react-native';
 import fb from '../../API/FirebaseSetup';
 import CommentInput from '../../Components/Comments/CommentInput';
 import Comment from '../../Components/Comments/Comment';
@@ -14,15 +14,26 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
+const LIMIT = 10;
+
 const CommentsScreen = ({ route, profiles, navigation, comments, createComment, userID, createNotification, notifID, token }) => {
     const { drink, user } = route.params;
 
+    // For comment text input
     const [text, setText] = useState('');
+
+    // For tagging users
     const [findingUser, setFindingUser] = useState(false);
     const [query, setQuery] = useState('');
     const [users, setUsers] = useState([]);
     const [focusedUsers, setFocusedUsers] = useState([]);
     const [textedUsers, setTextedUsers] = useState([]);
+
+    // For comment pagination
+    const [isRefreshing, setIsRefreshing] = useState(null);
+    const [lastIndex, setLastIndex] = useState(0);
+    const [currComments, setCurrComments] = useState([]);
+    const [updateLikeComment, setUpdateLikeComment] = useState(true);
 
     // When screen is initialized, fetch all of the user's followers and following accounts
     useEffect(() => {
@@ -64,6 +75,7 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
                 })
             setUsers(res);
         }
+        retrieveData();
         fetchData();
     }, []);
 
@@ -76,6 +88,21 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
             findProfile();
         }
     }, [query]);
+
+    // Rerender the entire flatlist when the user likes a comment
+    useEffect(() => {
+        console.log("Fetching updated comments")
+        if (lastIndex === 0) {
+            return;
+        }
+        let newComments = [];
+        for (let i = 0; i < lastIndex; i++) {
+            if (comments[i].id !== 'default') {
+                newComments.push(comments[i]);
+            }
+        }
+        setCurrComments(newComments);
+    }, [updateLikeComment]);
 
     const findProfile = () => {
         const regex = new RegExp(`${query.substring(1).trim()}`, 'i');
@@ -153,6 +180,39 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
         }
     }
 
+    const renderItem = ({ item, index }) => {
+        if (item.id !== 'default') {
+            return <Comment
+                comment={item}
+                key={'' + index}
+                commentID={drink.commentID}
+                author={profiles[item.authorID]}
+                navigation={navigation}
+                drinkID={drink.id}
+                updateLikeComment={updateLikeComment}
+                setUpdateLikeComment={setUpdateLikeComment}
+            />
+        }
+    }
+
+    const retrieveData = async () => {
+        let currItems = [];
+        let currIndex = lastIndex;
+        let allItems = [...currComments];
+        setIsRefreshing(true);
+        console.log('getting data at: ' + currIndex)
+
+        while (currIndex < comments.length && currItems.length < LIMIT) {
+            const comment = comments[currIndex];
+            currItems.push(comment)
+            currIndex++;
+        }
+
+        setCurrComments(allItems.concat(currItems));
+        setLastIndex(currIndex);
+        setIsRefreshing(false);
+    }
+
     // If the user is currently typing an '@', then render a list of their followers / following
     // to add their handle into the text
     const renderCommentScreen = () => {
@@ -172,28 +232,46 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
                 </ScrollView>
             )
         } else {
+            console.log('UPDATE LIKE COMMENT: ' + updateLikeComment)
             return (
-                <ScrollView>
-                    {comments && comments.length > 0
-                        ?
-                        comments.slice(0).reverse().map((comment, index) => {
-                            if (comment.id !== 'default') {
-                                return <Comment
-                                    comment={comment}
-                                    key={'' + index}
-                                    commentID={drink.commentID}
-                                    author={profiles[comment.authorID]}
-                                    navigation={navigation}
-                                    drinkID={drink.id}
-                                />
-                            }
-                        }
-                        )
-                        : null
-
+                <FlatList
+                    data={currComments}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => '' + index}
+                    onEndReached={retrieveData}
+                    onEndReachedThreshold={5}
+                    refreshing={isRefreshing}
+                    extraData={updateLikeComment}
+                    ListFooterComponent={isRefreshing &&
+                        <View style={{ marginTop: 20 }} >
+                            <ActivityIndicator color={Styles.DARK_PINK} />
+                        </View>
                     }
-                </ScrollView>
+                />
+
             )
+            // return (
+            //     <ScrollView>
+            //         {comments && comments.length > 0
+            //             ?
+            //             comments.slice(0).reverse().map((comment, index) => {
+            //                 if (comment.id !== 'default') {
+            //                     return <Comment
+            //                         comment={comment}
+            //                         key={'' + index}
+            //                         commentID={drink.commentID}
+            //                         author={profiles[comment.authorID]}
+            //                         navigation={navigation}
+            //                         drinkID={drink.id}
+            //                     />
+            //                 }
+            //             }
+            //             )
+            //             : null
+
+            //         }
+            //     </ScrollView>
+            // )
         }
     }
 
@@ -237,7 +315,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         profiles: state.firestore.data.profiles,
         userID: state.firebase.auth.uid,
-        comments: state.firestore.ordered['allComments'],
+        comments: state.firestore.ordered['allComments'].slice(0).reverse(),
         notifID: notifID,
         token: token
     }

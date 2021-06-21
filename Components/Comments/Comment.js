@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, TouchableWithoutFeedback, TouchableHighlight, Text, StyleSheet, Vibration, Alert } from 'react-native';
+import { Image, View, TouchableWithoutFeedback, TouchableHighlight, Text, StyleSheet, Vibration, Alert, ActivityIndicator } from 'react-native';
 import { renderTime, renderNum } from '../../Functions/miscFunctions';
 import { likeComment, unLikeComment, deleteComment } from '../../Store/Actions/CommentActions';
 import Images from '../../Images/Images';
@@ -12,7 +12,7 @@ import { createNotification } from '../../Store/Actions/NotificationActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const Comment = ({ comment, author, navigation, commentID,
+const Comment = ({ comment, author, navigation, commentID, setUpdateLikeComment, updateLikeComment,
     likedByUsers, numLikes, userID, likeComment,
     unLikeComment, deleteComment, createNotification, drinkID, profiles }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +43,7 @@ const Comment = ({ comment, author, navigation, commentID,
             return;
         }
         setIsDisabled(true);
+        setUpdateLikeComment(!updateLikeComment)
         if (likedByUsers && likedByUsers[userID]) {
             await unLikeComment({ userID: userID, comment: comment, commentID: commentID });
         } else {
@@ -112,7 +113,7 @@ const Comment = ({ comment, author, navigation, commentID,
     }
 
     if (isLoading) {
-        return <Loading />
+        return <ActivityIndicator />
     } else {
         return (
             <TouchableHighlight

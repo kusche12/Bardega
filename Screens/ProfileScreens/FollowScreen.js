@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image } from 'react-native';
-import Loading from '../../Components/Main/Loading';
+import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, ActivityIndicator } from 'react-native';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -9,23 +8,27 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
 
+const LIMIT = 10;
+
 const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing, userID }) => {
     const { name } = route.params;
 
-    const [userProfiles, setUserProfiles] = useState(null);
+    const [userProfiles, setUserProfiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [lastIndex, setLastIndex] = useState(0);
+    const [isRefreshing, setIsRefreshing] = useState(null);
 
     // Wait for userData to be fully loaded into the screen
     useEffect(() => {
         if (allFollowers && allFollowing && userID) {
-            loadData();
+            retrieveData();
         }
     }, [allFollowers, allFollowing, userID])
 
     const loadData = async () => {
         let res = [];
         if (name === 'Following') {
-            for (let i = 0; i < allFollowing.length; i++) {
+            while (currIndex < allFollowing.length && currItems.length < LIMIT) {
                 if (allFollowing[i].id !== 'default') {
                     const profile = await profiles[allFollowing[i].id];
                     cacheImages(profile.imageURL, profile.id);
@@ -74,6 +77,38 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
         )
     }
 
+    const retrieveData = async () => {
+        let currItems = [];
+        let currIndex = lastIndex;
+        let allItems = [...userProfiles];
+        setIsRefreshing(true);
+
+        if (name === 'Following') {
+            while (currIndex < allFollowing.length && currItems.length < LIMIT) {
+                if (allFollowing[currIndex].id !== 'default') {
+                    const profile = await profiles[allFollowing[currIndex].id];
+                    cacheImages(profile.imageURL, profile.id);
+                    currItems.push(profile)
+                }
+                currIndex++;
+            }
+        } else {
+            while (currIndex < allFollowers.length && currItems.length < LIMIT) {
+                if (allFollowers[currIndex].id !== 'default') {
+                    const profile = await profiles[allFollowers[currIndex].id];
+                    cacheImages(profile.imageURL, profile.id);
+                    currItems.push(profile)
+                }
+                currIndex++;
+            }
+        }
+
+        setUserProfiles(allItems.concat(currItems));
+        setLastIndex(currIndex);
+        setIsLoading(false);
+        setIsRefreshing(false);
+    }
+
     if (isLoading) {
         return null;
     } else {
@@ -87,6 +122,14 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
                     data={userProfiles}
                     keyExtractor={item => item.id}
                     renderItem={renderUser}
+                    onEndReached={retrieveData}
+                    onEndReachedThreshold={5}
+                    refreshing={isRefreshing}
+                    ListFooterComponent={isRefreshing &&
+                        <View style={{ marginTop: 20 }} >
+                            <ActivityIndicator color={Styles.DARK_PINK} />
+                        </View>
+                    }
                 />
             </SafeAreaView>
         )
