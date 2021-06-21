@@ -164,6 +164,8 @@ export const signUp = (newUser) => {
                 // Create a new profile in the firestore using the auto-generated user id
                 const nameArray = newUser.name.trim().split(" ");
                 const date = new Date();
+                date.setTime(date.getTime() - new Date().getTimezoneOffset() * 60 * 1000);
+
                 return firestore.collection('profiles').doc(resp.user.uid).set({
                     fName: nameArray[0],
                     lName: nameArray[1] || '',
@@ -181,7 +183,8 @@ export const signUp = (newUser) => {
                     profileFollowID: profileFollowID,
                     numFollowers: 0,
                     numFollowing: 0,
-                    notificationsID: notifID
+                    notificationsID: notifID,
+                    lastCheckedNotifs: date.toISOString()
                 })
             })
                 .then(() => {

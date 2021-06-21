@@ -226,5 +226,16 @@ export default StyleSheet.create({
         paddingHorizontal: 8,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    inboxNum: {
+        width: 20,
+        height: 20,
+        borderRadius: 100,
+        backgroundColor: Styles.DARK_PINK,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        right: -12,
+        top: -10
     }
 });

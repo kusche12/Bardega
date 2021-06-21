@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, TouchableWithoutFeedback, TouchableHighlight, Text, StyleSheet, Vibration, Alert } from 'react-native';
+import { Image, View, TouchableWithoutFeedback, TouchableHighlight, Text, StyleSheet, Vibration, Alert, ActivityIndicator } from 'react-native';
 import { renderTime, renderNum } from '../../Functions/miscFunctions';
 import { likeComment, unLikeComment, deleteComment } from '../../Store/Actions/CommentActions';
 import Images from '../../Images/Images';
-import Loading from '../../Components/Main/Loading';
 import DoubleTapButton from '../Main/DoubleTapButton';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -112,7 +111,7 @@ const Comment = ({ comment, author, navigation, commentID,
     }
 
     if (isLoading) {
-        return <Loading />
+        return <ActivityIndicator />
     } else {
         return (
             <TouchableHighlight

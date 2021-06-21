@@ -5,7 +5,7 @@ import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { rejectRequest, followUser } from '../../Store/Actions/ProfileActions';
+import { rejectRequest, followUser, updateNotificationChecked } from '../../Store/Actions/ProfileActions';
 import { createNotification, deleteNotification } from '../../Store/Actions/NotificationActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
@@ -13,9 +13,14 @@ import Styles from '../../Styles/StyleConstants';
 import Images from '../../Images/Images';
 
 const NotificationsScreen = ({ userA, navigation, notifications, deleteNotification,
-    profiles, drinks, rejectRequest, createNotification, followUser, allRequests }) => {
+    profiles, drinks, rejectRequest, createNotification, followUser, allRequests, updateNotificationChecked }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
+
+    // Every time this screen is entered, update the user's notifsLastChecked dateTime field
+    useEffect(() => {
+        updateNotificationChecked({ id: userA.id });
+    }, []);
 
     useEffect(() => {
         if (notifications && allRequests && userA) {
@@ -168,7 +173,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
         return null;
     } else {
         return (
-            <SafeAreaView style={GlobalStyles.headerSafeArea}>
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginBottom: 20 }]}>
                 <View style={[UserStyles.followerHeader]}>
                     <Text style={GlobalStyles.titlebold2}>NOTIFICATIONS</Text>
                 </View>
@@ -197,9 +202,19 @@ const mapStateToProps = (state) => {
     let allRequests = state.firestore.ordered['allRequests'];
     let notifications = state.firestore.ordered['allNotifications'];
 
+    let orderedNotifs = notifications.slice(0).sort((a, b) => {
+        if (a.id === 'default') {
+            return -1;
+        }
+        let dateA = Date.parse(a.dateCreated);
+        let dateB = Date.parse(b.dateCreated);
+
+        return dateB - dateA;
+    });
+
     return {
         profiles: profiles,
-        notifications: notifications,
+        notifications: orderedNotifs,
         drinks: drinks,
         allRequests: allRequests,
         userA: userA
@@ -212,6 +227,7 @@ const mapDispatchToProps = (dispatch) => {
         createNotification: (data) => dispatch(createNotification(data)),
         followUser: (data) => dispatch(followUser(data)),
         deleteNotification: (data) => dispatch(deleteNotification(data)),
+        updateNotificationChecked: (data) => dispatch(updateNotificationChecked(data)),
     }
 }
 

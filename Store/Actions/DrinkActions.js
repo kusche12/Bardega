@@ -27,6 +27,7 @@ export const createDrink = (drink) => {
         console.log('drinkLIkesID: ' + drinkLikesID);
 
         const date = new Date();
+        date.setTime(date.getTime() - new Date().getTimezoneOffset() * 60 * 1000);
 
         try {
             // Connect to the storage and upload drink image

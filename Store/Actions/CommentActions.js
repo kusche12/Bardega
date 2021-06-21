@@ -31,6 +31,7 @@ export const createComment = (comment) => {
             })
 
         const date = new Date();
+        date.setTime(date.getTime() - new Date().getTimezoneOffset() * 60 * 1000);
 
         // Current Comment ID
         const ref = await firestore.collection('comments').doc(commentID).collection('allComments').doc();

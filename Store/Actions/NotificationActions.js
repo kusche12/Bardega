@@ -13,6 +13,7 @@ export const createNotification = (data) => {
         const firestore = await firebase.firestore();
 
         const date = new Date();
+        date.setTime(date.getTime() - new Date().getTimezoneOffset() * 60 * 1000);
 
         // Current Comment ID
         const ref = await firestore

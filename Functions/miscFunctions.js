@@ -1,6 +1,7 @@
 // Renders time in hours, days, months, years according to how many minutes ago it was posted
 export const renderTime = (dateCreated) => {
     const now = new Date();
+    now.setTime(now.getTime() - new Date().getTimezoneOffset() * 60 * 1000);
     const date = new Date(dateCreated);
     let num = (now - date) / (1000 * 60);
     const minutes = Math.abs(num);

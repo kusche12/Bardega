@@ -214,6 +214,35 @@ export const updateNotifications = (data) => {
     }
 }
 
+// UPDATE: Profile lastCheckedNotifs field
+// Called everytime the user opens up their notifications page and sets
+// this field to that specific timestamp
+export const updateNotificationChecked = (data) => {
+    console.log('Update Notifications Checked Action');
+    const { id } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        const date = new Date();
+        date.setTime(date.getTime() - new Date().getTimezoneOffset() * 60 * 1000);
+        try {
+            await firestore
+                .collection('profiles')
+                .doc(id)
+                .update({
+                    lastCheckedNotifs: date.toISOString(),
+                })
+            dispatch({ type: 'UPDATE_PROFILE' });
+            return true;
+        } catch (err) {
+            console.log(err);
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: "There was an error updating your privacy" } });
+            return false;
+        }
+    }
+}
+
 // DELETE: 
 // Remove ALL of the user's created drinks
 // Remove the user's account from ALL of the drinks that he/she liked
