@@ -19,18 +19,30 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
 
     useEffect(() => {
         if (notifications && allRequests && userA) {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }, [notifications, allRequests, userA]);
 
     const renderNotification = ({ item }) => {
         if (item.id !== 'default') {
             const user = profiles[item.userID];
+
+            // User account was deleted, do not render notif AND delete this notification
+            if (!user) {
+                deleteNotification({ notifID: userA.notificationsID, id: item.id });
+                return null;
+            }
+
             cacheImages(user.imageURL, user.id);
 
             let drink = null;
             if (item.drinkID) {
                 drink = drinks[item.drinkID];
+                // Drink was deleted, do not render notif AND TODO: delete this notification
+                if (!drink) {
+                    deleteNotification({ notifID: userA.notificationsID, id: item.id });
+                    return null;
+                }
                 cacheImages(drink.imageURL, drink.id);
             }
 
