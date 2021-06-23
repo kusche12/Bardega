@@ -74,19 +74,20 @@ export const getDiscoverDrinks = async (query, max) => {
             .orderBy('strength')
             .get()
             .then((snapshot) => {
-                snapshot.docs.forEach(async (doc) => {
+                return snapshot.docs.forEach(async (doc) => {
                     if (doc.exists) {
-                        if (doc.data().strength.label.toLowerCase() === query.filterName.toLowerCase()) {
-                            let isPrivate = await drinkIsPrivate(doc.data());
+                        if (doc.data().strength.value.toLowerCase() === query.filterName.toLowerCase()) {
+                            const isPrivate = await drinkIsPrivate(doc.data());
                             if (!isPrivate) {
-                                result.push(doc.data());
+                                console.log('not private')
+                                result.push(doc.data().id);
                             }
                         }
                     }
                 })
-                console.log(result.length);
-                    return result;
-            });
+            }).then((result) => {
+                console.log(result);
+            })
     }
 
     // if (query.filterType === 'tag') {
