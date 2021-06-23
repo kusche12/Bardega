@@ -170,7 +170,7 @@ export const signUp = (newUser) => {
                     fName: nameArray[0],
                     lName: nameArray[1] || '',
                     userName: newUser.userName.trim(),
-                    email: newUser.email.trim(),
+                    email: newUser.email.trim().toLowerCase(),
                     bio: '',
                     dateCreated: date.toISOString(),
                     drinks: [],
@@ -184,7 +184,8 @@ export const signUp = (newUser) => {
                     numFollowers: 0,
                     numFollowing: 0,
                     notificationsID: notifID,
-                    lastCheckedNotifs: date.toISOString()
+                    lastCheckedNotifs: date.toISOString(),
+                    isMember: false
                 })
             })
                 .then(() => {

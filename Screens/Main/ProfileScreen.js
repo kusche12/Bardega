@@ -91,10 +91,13 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
         for (let i = drinksArray.length - 1; i >= 0; i--) {
             const drink = await drinks[user.drinks[i].id];
-            if (ownProfile || !drink.private) {
-                cacheImages(drink.imageURL, drink.id);
-                res.push(drink);
+            if (drink) {
+                if (ownProfile || !drink.private) {
+                    cacheImages(drink.imageURL, drink.id);
+                    res.push(drink);
+                }
             }
+
         }
         setUserDrinks(res);
         if (ownProfile || !user.likedDrinksPrivate) {
@@ -169,7 +172,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 />
             }
         >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginTop: 20 }]} >
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginTop: 20, marginBottom: 40 }]} >
 
                 {userID === user.id &&
                     <View style={UserStyles.cogContainer}>

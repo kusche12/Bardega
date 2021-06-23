@@ -243,6 +243,34 @@ export const updateNotificationChecked = (data) => {
     }
 }
 
+// UPDATE: Profile isMember field
+// Called everytime the application opens up and their is a discrepency between the user's
+// isMember field and their actual membership with Bardega. If the two are different, then this function is called.
+// This is called within the MainNavigator.js
+export const updateIsMember = (data) => {
+    console.log('Update Is Member Action');
+    const { id, memberRole } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        try {
+            await firestore
+                .collection('profiles')
+                .doc(id)
+                .update({
+                    isMember: memberRole,
+                })
+            dispatch({ type: 'UPDATE_PROFILE' });
+            return true;
+        } catch (err) {
+            console.log(err);
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: "There was an error updating your privacy" } });
+            return false;
+        }
+    }
+}
+
 // DELETE: 
 // Remove ALL of the user's created drinks
 // Remove the user's account from ALL of the drinks that he/she liked

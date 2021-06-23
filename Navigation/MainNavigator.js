@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 
 // For main navigation
@@ -18,13 +18,36 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import firebase from '../API/FirebaseSetup';
 
+// For checking if user is still a member
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { updateIsMember } from '../Store/Actions/ProfileActions';
+
 const Tab = createBottomTabNavigator();
 
-const MainNavigator = ({ userID }) => {
+const MainNavigator = ({ userID, memberEmails, profiles, updateIsMember }) => {
+    const [checkMember, setCheckMember] = useState(false);
     // Ask use for notification permissions on app startup in the main navigator
     useEffect(() => {
         (() => registerForPushNotificationsAsync())();
-    }, [])
+    }, []);
+
+    // Check if the user is still a member, if membership role has changed, then update their member field
+    useEffect(() => {
+        if (profiles && memberEmails && !checkMember) {
+            const profile = profiles[userID];
+            // User is on member list but not reflected in their isMember field, update it
+            if (memberEmails[profile.email] && !userID.isMember) {
+                updateIsMember({ id: userID, memberRole: true });
+                // User is not on member list but it is reflected as true in their isMember field, update it
+            } else if (!memberEmails[profile.email] && profile.isMember) {
+                updateIsMember({ id: userID, memberRole: false });
+            }
+            setCheckMember(true);
+        }
+
+    }, [memberEmails, profiles]);
 
     // Decides whether or not the bottom tab bar should be visible
     const getTabBarVisibility = (route) => {
@@ -73,6 +96,7 @@ const MainNavigator = ({ userID }) => {
             });
         }
     }
+
 
     return (
         <Tab.Navigator
@@ -159,4 +183,23 @@ const MainNavigator = ({ userID }) => {
     )
 }
 
-export default MainNavigator;
+const mapStateToProps = (state) => {
+    const profiles = state.firestore.data.profiles;
+    const memberEmails = state.firestore.data.memberEmails;
+
+    return {
+        profiles: profiles,
+        memberEmails: memberEmails
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateIsMember: (data) => dispatch(updateIsMember(data))
+    }
+}
+
+export default compose(
+    firestoreConnect(() => ['memberEmails', 'profiles']),
+    connect(mapStateToProps, mapDispatchToProps)
+)(MainNavigator);

@@ -12,13 +12,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import * as Linking from 'expo-linking';
 
-import * as ScreenOrientation from 'expo-screen-orientation';
-
 import { useFonts } from 'expo-font';
 
 // Application Navigator
 const Main = ({ user }) => {
-    // Cache the local header image file on the user's device to speed up the access of the image
+    // Custom fonts
     const [isLoading, setIsLoading] = useState(true);
     let [fontLoaded] = useFonts({
         Raisonne: require('../assets/fonts/DMSans-Regular.ttf'),
@@ -28,11 +26,6 @@ const Main = ({ user }) => {
         SourceSerifSemiBold: require('../assets/fonts/SourceSerifPro-SemiBold.ttf'),
         SourceSerifBold: require('../assets/fonts/SourceSerifPro-Bold.ttf'),
     });
-
-    // This is supposed to lock the status bar at the top of portrait mode, however, 
-    // this does not work on iOS14
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-
 
     // Create a linking object that will allow a third party application to enter this app
     const prefix = Linking.createURL('/');
@@ -53,7 +46,7 @@ const Main = ({ user }) => {
         if (fontLoaded) {
             setIsLoading(false);
         }
-    }, [fontLoaded, user])
+    }, [fontLoaded, user]);
 
     // While the app is still loading in data, show the splash screen.
     // After it is loaded, either load the Authentication Flow for unauthenicated users or go directly to the Main Flow
@@ -78,17 +71,9 @@ const mapStateToProps = (state) => {
         const UID = state.firebase.auth.uid;
         const profile = profiles ? profiles[UID] : null;
         return {
-            user: profile
+            user: profile,
         }
     }
-
-    // JUST FOR TESTING
-    // const profiles = state.firestore.data.profiles;
-    // const UID = state.firebase.auth.uid;
-    // const profile = profiles ? profiles['IcEeZVtsDnZfFwdDpTRhwmtp6vf1'] : null;
-    // return {
-    //     user: profile
-    // }
 }
 
 export default compose(
