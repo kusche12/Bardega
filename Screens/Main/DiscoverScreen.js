@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
+import { getRandomQueries, getDrinksWithQuery, getDiscoverDrinks } from '../../Functions/drinkFunctions';
 import LoadingBar from '../../Components/Main/LoadingBar';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
@@ -50,28 +50,30 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 
     // Test function only. Replcace this with the function below for production
     const loadData = async () => {
-        const ranQueries = [{
-            filterName: "Sweet",
-            filterType: "tag",
-            name: "Sweet & Simple",
-        },
-        {
-            filterName: "light",
-            filterType: "prepTime",
-            id: "6QxFD8AtrI4cgPt61Che",
-            name: "Light Prep",
-        },
-        {
-            filterName: "very_strong",
-            filterType: "strength",
-            name: "Not For The Weak",
-        }
+        const ranQueries = [
+            //     {
+            //     filterName: "Sweet",
+            //     filterType: "tag",
+            //     name: "Sweet & Simple",
+            // },
+            // {
+            //     filterName: "light",
+            //     filterType: "prepTime",
+            //     id: "6QxFD8AtrI4cgPt61Che",
+            //     name: "Light Prep",
+            // },
+            {
+                filterName: "strong",
+                filterType: "strength",
+                name: "Strong",
+            }
         ]
         setSelectedQueries(ranQueries)
 
         let drinkMatrix = [];
         for (let i = 0; i < ranQueries.length; i++) {
-            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
+            // let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
+            let drinkRow = await getDiscoverDrinks(ranQueries[i], 10);
             drinkMatrix.push(drinkRow);
         }
 
@@ -85,7 +87,8 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 
     //     let drinkMatrix = [];
     //     for (let i = 0; i < ranQueries.length; i++) {
-    //         let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
+    //         // let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
+    //         let drinkRow = await getDiscoverDrinks(ranQueries[i], 8);
     //         if (drinkRow.length > 3) {
     //             drinkMatrix.push(drinkRow);
     //         }
@@ -123,6 +126,8 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
                 <RefreshControl
                     refreshing={isRefreshing}
                     onRefresh={onRefresh}
+                    tintColor={Styles.DARK_PINK}
+                    colors={[Styles.DARK_PINK]}
                 />
             }
         >

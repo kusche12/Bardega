@@ -60,6 +60,89 @@ export const getDrinksWithQuery = async (drinks, query, max) => {
     return null;
 }
 
+// Get an array of all drinks that fit a certain search filter.
+// Can be either tag or prep time.
+export const getDiscoverDrinks = async (query, max) => {
+    console.log('getting drinks')
+    let result = [];
+    let drinksRef = firebase
+        .firestore()
+        .collection('drinks')
+
+    if (query.filterType === 'strength') {
+        await drinksRef
+            .orderBy('strength')
+            .get()
+            .then((snapshot) => {
+                snapshot.docs.forEach(async (doc) => {
+                    if (doc.exists) {
+                        if (doc.data().strength.label.toLowerCase() === query.filterName.toLowerCase()) {
+                            let isPrivate = await drinkIsPrivate(doc.data());
+                            if (!isPrivate) {
+                                result.push(doc.data());
+                            }
+                        }
+                    }
+                })
+                console.log(result.length);
+                    return result;
+            });
+    }
+
+    // if (query.filterType === 'tag') {
+    //     for (let i in nums) {
+    //         if (result.length === max) {
+    //             return result;
+    //         }
+
+    //         if (drinks[nums[i]].tags) {
+    //             for (let j = 0; j < drinks[nums[i]].tags.length; j++) {
+    //                 const tag = drinks[nums[i]].tags[j];
+    //                 if (tag.name.toLowerCase() === query.filterName.toLowerCase()) {
+    //                     const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
+    //                     if (!isPrivate) {
+    //                         result.push(drinks[nums[i]]);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return result;
+    // } else if (query.filterType === 'prepTime') {
+    //     for (let i in nums) {
+    //         if (result.length === max) {
+    //             return result;
+    //         }
+    //         const prepTime = drinks[nums[i]].prepTime.value;
+    //         if (prepTime.toLowerCase() === query.filterName.toLowerCase()) {
+    //             const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
+    //             if (!isPrivate) {
+    //                 result.push(drinks[nums[i]]);
+    //             }
+    //         }
+    //     }
+
+    //     return result;
+    // } else if (query.filterType === 'strength') {
+    //     for (let i in nums) {
+    //         if (result.length === max) {
+    //             return result;
+    //         }
+    //         const strength = drinks[nums[i]].strength.value;
+    //         if (strength.toLowerCase() === query.filterName.toLowerCase()) {
+    //             const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
+    //             if (!isPrivate) {
+    //                 result.push(drinks[nums[i]]);
+    //             }
+    //         }
+    //     }
+
+    //     return result;
+    // }
+    // return null;
+}
+
 // Get 'amount' number of randomized queries in random order from 'queries' list
 export const getRandomQueries = (queries, amount) => {
     let result = [];
@@ -109,6 +192,10 @@ function randomUniqueNum(range, outputCount) {
 // Helper function to decide if the drink or the drink's creator is private
 // This is used to decide if the drink should be returned by a query function or not
 export const drinkIsPrivate = async (drink) => {
+    if (drink.private) {
+        return true;
+    }
+
     let authorPrivate;
     await firebase
         .firestore()
@@ -120,7 +207,7 @@ export const drinkIsPrivate = async (drink) => {
                 authorPrivate = doc.data().private;
             }
         })
-    return drink.private || authorPrivate;
+    return authorPrivate;
 }
 
 export const getSpiritsWithQuery = (spirits, query, max) => {
