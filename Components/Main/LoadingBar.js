@@ -1,32 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Animated } from 'react-native';
+import { View, Animated, Easing } from 'react-native';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
 const LoadingBar = () => {
+    const [loop, setLoop] = useState(false);
     const bar = useRef(new Animated.Value(0)).current;
 
-    const animated = () => {
-        console.log('animate')
+    useEffect(() => {
+        bar.setValue(0)
+        animation();
+    }, [loop])
+
+    const animation = () => {
         Animated.sequence([
-            Animated.timing(fadeAnim, {
+            Animated.timing(bar, {
                 toValue: 1,
-                duration: 400,
-                useNativeDriver: true
+                duration: 600,
+                useNativeDriver: true,
+                easing: Easing.ease
             }),
-            Animated.delay(1200),
-            Animated.timing(fadeAnim, {
-                toValue: 0,
-                duration: 400,
-                useNativeDriver: true
+            Animated.delay(800),
+            Animated.timing(bar, {
+                toValue: 2,
+                duration: 600,
+                useNativeDriver: true,
+                easing: Easing.ease
             }),
-        ]).start();
+            Animated.delay(400),
+        ]).start(() => {
+            setLoop(!loop);
+        });
+    };
+
+    const animatedStyles = {
+        transform: [{
+            translateX: bar.interpolate({
+                inputRange: [0, 1, 2],
+                outputRange: [-Styles.width, 0, Styles.width]  // 0 : 150, 0.5 : 75, 1 : 0
+            }),
+        }],
     };
 
     return (
-        <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'red', width: Styles.width, height: Styles.height }}>
+        <Animated.View style={[{ backgroundColor: Styles.DARK_PINK, height: 10, width: Styles.width }, animatedStyles]}>
 
-        </View>
+        </Animated.View>
     )
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Animated } from 'react-native';
+import { View, Animated, ActivityIndicator } from 'react-native';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
@@ -39,7 +39,6 @@ const Loading = () => {
     }, [index])
 
     const fadeIn = () => {
-        console.log('animate')
         Animated.sequence([
             Animated.timing(fadeAnim, {
                 toValue: 1,
@@ -64,7 +63,8 @@ const Loading = () => {
 
     return (
         <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            {renderText()}
+            {/* {renderText()} */}
+            <ActivityIndicator color={Styles.DARK_PINK} />
         </View>
     )
 }

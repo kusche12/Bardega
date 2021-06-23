@@ -104,10 +104,10 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 
     if (!isLoaded) {
         return (
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { paddingLeft: 8 }]}>
-                <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <SafeAreaView>
+                <View>
                     <LoadingBar />
-                    <View style={{ marginTop: Styles.height / 4 }}>
+                    <View style={{ marginTop: Styles.height * .33, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <Loading />
                     </View>
                 </View>
