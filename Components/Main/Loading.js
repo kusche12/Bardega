@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, Text } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Animated } from 'react-native';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
-
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
 
 const loadingText = [
     'Blending ice...',
@@ -20,15 +16,16 @@ const loadingText = [
     'Looking for salt...',
     'Adding egg whites...',
     'Cutting orange peel...',
-    'Cleaning glasses...',
+    'Cleaning cups...',
     'Drinking...',
     'Adding foam...',
     'Chopping strawberries...',
-    'Rubbing peel...'
 ]
 
 const Loading = () => {
     const [index, setIndex] = useState(0);
+
+    const fadeAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -37,13 +34,36 @@ const Loading = () => {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        fadeIn();
+    }, [index])
+
+    const fadeIn = () => {
+        console.log('animate')
+        Animated.sequence([
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 400,
+                useNativeDriver: true
+            }),
+            Animated.delay(1200),
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 400,
+                useNativeDriver: true
+            }),
+        ]).start();
+    };
+
+
     const renderText = () => {
-        return <Text style={[GlobalStyles.paragraphbold2, { color: Styles.DARK_PINK, marginTop: 15 }]}>{loadingText[index]}</Text>
+        return <Animated.Text style={[GlobalStyles.paragraphbold2, { color: Styles.DARK_PINK, marginTop: 15, opacity: fadeAnim }]}>
+            {loadingText[index]}
+        </Animated.Text>
     };
 
     return (
         <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <ActivityIndicator size="large" color={Styles.DARK_PINK} />
             {renderText()}
         </View>
     )

@@ -23,7 +23,7 @@ const NotificationsHeader = ({ navigation, user, notifications }) => {
 
     const renderInbox = () => {
         if (isLoading) {
-            return <ActivityIndicator />
+            return <View></View>
         } else {
             // Get the total number of unchecked notifications
             // If greater than 9, stop counting
