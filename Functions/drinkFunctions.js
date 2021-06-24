@@ -63,85 +63,63 @@ export const getDrinksWithQuery = async (drinks, query, max) => {
 // Get an array of all drinks that fit a certain search filter.
 // Can be either tag or prep time.
 export const getDiscoverDrinks = async (query, max) => {
-    console.log('getting drinks')
     let result = [];
     let drinksRef = firebase
         .firestore()
         .collection('drinks')
 
     if (query.filterType === 'strength') {
-        await drinksRef
-            .orderBy('strength')
-            .get()
-            .then((snapshot) => {
-                return snapshot.docs.forEach(async (doc) => {
-                    if (doc.exists) {
-                        if (doc.data().strength.value.toLowerCase() === query.filterName.toLowerCase()) {
-                            const isPrivate = await drinkIsPrivate(doc.data());
-                            if (!isPrivate) {
-                                console.log('not private')
-                                result.push(doc.data().id);
-                            }
+        try {
+            const drinksSnapshot = await drinksRef.orderBy('strength').get();
+
+            for (const doc of drinksSnapshot.docs) {
+                if (doc.exists) {
+                    if (doc.data().strength.value.toLowerCase() === query.filterName.toLowerCase()) {
+                        const isPrivate = await drinkIsPrivate(doc.data());
+                        if (!isPrivate) {
+                            result.push(doc.data());
                         }
                     }
-                })
-            }).then((result) => {
-                console.log(result);
-            })
+                }
+            }
+
+            let nums = randomUniqueNum(result.length, result.length);
+            let randomRes = [];
+            for (let i = 0; i < max; i++) {
+                randomRes.push(result[nums[i]]);
+            }
+
+            return randomRes;
+
+
+        } catch (err) {
+            console.log('Error getting drinks: ' + err);
+        }
     }
 
-    // if (query.filterType === 'tag') {
-    //     for (let i in nums) {
-    //         if (result.length === max) {
-    //             return result;
-    //         }
 
-    //         if (drinks[nums[i]].tags) {
-    //             for (let j = 0; j < drinks[nums[i]].tags.length; j++) {
-    //                 const tag = drinks[nums[i]].tags[j];
-    //                 if (tag.name.toLowerCase() === query.filterName.toLowerCase()) {
-    //                     const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
-    //                     if (!isPrivate) {
-    //                         result.push(drinks[nums[i]]);
+    // await drinksRef
+    //     .orderBy('strength')
+    //     .get()
+    //     .then((snapshot) => {
+    //         var getAllResults = new Promise((resolve, reject) => {
+    //             snapshot.docs.forEach(async (doc) => {
+    //                 if (doc.exists) {
+    //                     if (doc.data().strength.value.toLowerCase() === query.filterName.toLowerCase()) {
+    //                         const isPrivate = await drinkIsPrivate(doc.data());
+    //                         if (!isPrivate) {
+    //                             console.log('not private')
+    //                             result.push(doc.data().id);
+    //                         }
     //                     }
     //                 }
-    //             }
-    //         }
+    //             })
+    //         })
+    //         getAllResults.then(() => {
+    //             console.log("DONE")
+    //         })
     //     }
-
-    //     return result;
-    // } else if (query.filterType === 'prepTime') {
-    //     for (let i in nums) {
-    //         if (result.length === max) {
-    //             return result;
-    //         }
-    //         const prepTime = drinks[nums[i]].prepTime.value;
-    //         if (prepTime.toLowerCase() === query.filterName.toLowerCase()) {
-    //             const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
-    //             if (!isPrivate) {
-    //                 result.push(drinks[nums[i]]);
-    //             }
-    //         }
-    //     }
-
-    //     return result;
-    // } else if (query.filterType === 'strength') {
-    //     for (let i in nums) {
-    //         if (result.length === max) {
-    //             return result;
-    //         }
-    //         const strength = drinks[nums[i]].strength.value;
-    //         if (strength.toLowerCase() === query.filterName.toLowerCase()) {
-    //             const isPrivate = await drinkIsPrivate(drinks[nums[i]]);
-    //             if (!isPrivate) {
-    //                 result.push(drinks[nums[i]]);
-    //             }
-    //         }
-    //     }
-
-    //     return result;
     // }
-    // return null;
 }
 
 // Get 'amount' number of randomized queries in random order from 'queries' list

@@ -78,7 +78,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
         }
 
         setSelectedDrinks(drinkMatrix);
-        // setIsLoaded(true);
+        setIsLoaded(true);
     }
 
     // const loadData = async () => {
