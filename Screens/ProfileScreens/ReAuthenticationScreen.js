@@ -10,7 +10,8 @@ import AuthStyles from '../../Styles/AuthStyles'
 
 import Styles from '../../Styles/StyleConstants';
 
-const ReAuthenticationScreen = ({ error, authError, user, deleteAccount, logIn }) => {
+const ReAuthenticationScreen = ({ error, authError, user, deleteAccount, logIn, route }) => {
+    const { type, navigation } = route.params;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [authed, setAuthed] = useState(false);
@@ -26,28 +27,56 @@ const ReAuthenticationScreen = ({ error, authError, user, deleteAccount, logIn }
 
     useEffect(() => {
         if (authed && signedIn) {
-            deleteAccount(user);
+            if (type === 'deleteAccount') {
+                deleteAccount(user);
+            } else if (type === 'changeEmail') {
+                navigation.navigate('ChangeEmailScreen', { navigation });
+            }
         }
-    }, [authed, signedIn]);
+    }, [authed, signedIn, error]);
+
+    const renderType = () => {
+        if (type === 'deleteAccount') {
+            return {
+                paragraph: 'deleting your account.',
+                button: 'Delete Account',
+                buttonImg: Images.settings.trash,
+                emailText: 'Email / Username'
+            }
+        } else if (type === 'changeEmail') {
+            return {
+                paragraph: 'changing your email.',
+                button: 'Update Email',
+                buttonImg: Images.settings.email,
+                emailText: 'Current Email / Username'
+
+            }
+        }
+    }
 
     const handleChange = () => {
-        return Alert.alert(
-            "Are you sure?",
-            "Once your account is deleted, all of your data will be deleted with no way to recover them.",
-            [
-                {
-                    text: "Yes, Delete my Account",
-                    onPress: () => handleSubmit(),
-                    style: "destructive",
-                },
-                {
-                    text: "Cancel",
-                    onPress: console.log('canceled'),
-                    style: "cancel",
-                }
-            ],
-            { cancelable: true }
-        );
+        if (type === 'deleteAccount') {
+            return Alert.alert(
+                "Are you sure?",
+                "Once your account is deleted, all of your data will be deleted with no way to recover them.",
+                [
+                    {
+                        text: "Yes, Delete my Account",
+                        onPress: () => handleSubmit(),
+                        style: "destructive",
+                    },
+                    {
+                        text: "Cancel",
+                        onPress: console.log('canceled'),
+                        style: "cancel",
+                    }
+                ],
+                { cancelable: true }
+            );
+        } else if (type === 'changeEmail') {
+            handleSubmit();
+        }
+
     }
 
     const handleSubmit = async () => {
@@ -61,17 +90,17 @@ const ReAuthenticationScreen = ({ error, authError, user, deleteAccount, logIn }
                 <Text style={GlobalStyles.paragraphbold2}>Account Settings</Text>
             </View>
             <View style={[GlobalStyles.line, { backgroundColor: Styles.LIGHT_GRAY, marginBottom: 8 }]}></View>
-            <Text style={[GlobalStyles.paragraph3, { paddingLeft: 8, marginBottom: 32 }]}>For privacy purposes, you will need to authenticate yourself before deleting your account.</Text>
+            <Text style={[GlobalStyles.paragraph3, { paddingLeft: 8, marginBottom: 32 }]}>For privacy purposes, you will need to authenticate yourself before {renderType().paragraph}</Text>
 
             <View style={{ paddingHorizontal: 8, alignItems: 'flex-start' }}>
-                <AuthInput image={'user'} value={email} setValue={setEmail} type={'Email / Username'} reauth={true} />
+                <AuthInput image={'user'} value={email} setValue={setEmail} type={renderType().emailText} reauth={true} />
                 <AuthInput image={'password'} value={password} setValue={setPassword} type={'Password'} reauth={true} />
 
                 <View style={{ alignSelf: 'center', marginTop: 16 }}>
                     <TouchableWithoutFeedback onPress={() => handleChange()}>
                         <View style={[AuthStyles.mainButton, { flexDirection: 'row' }]}>
-                            <Image source={Images.settings.trash} style={{ width: 20, height: 20, resizeMode: 'contain', marginRight: 8 }} />
-                            <Text style={[GlobalStyles.titlebold2, { fontSize: 16 }]}>Delete Account</Text>
+                            <Image source={renderType().buttonImg} style={{ width: 20, height: 20, resizeMode: 'contain', marginRight: 8 }} />
+                            <Text style={[GlobalStyles.titlebold2, { fontSize: 16 }]}>{renderType().button}</Text>
                         </View>
                     </TouchableWithoutFeedback>
                 </View>

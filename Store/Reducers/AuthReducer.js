@@ -48,15 +48,15 @@ const authReducer = (state = initState, action) => {
                 authError: action.err.message,
                 authSuccess: null
             }
-        case 'FACEBOOK_SUCCESS':
-            console.log('social media password success');
+        case 'CHANGE_EMAIL_SUCCESS':
+            console.log('change email success');
             return {
                 ...state,
                 authError: null,
                 authSuccess: null
             }
-        case 'FACEBOOK_ERROR':
-            console.log('social media password failure');
+        case 'CHANGE_EMAIL_ERROR':
+            console.log('change email failure');
             return {
                 ...state,
                 authError: action.err.message,

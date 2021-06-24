@@ -12,6 +12,7 @@ import MakePrivateScreen from '../../Screens/ProfileScreens/MakePrivateScreen';
 import DeleteAccountScreen from '../../Screens/ProfileScreens/DeleteAccountScreen';
 import NotificationsSettingsScreen from '../../Screens/ProfileScreens/NotificationsSettingsScreen';
 import ReAuthenticationScreen from '../../Screens/ProfileScreens/ReAuthenticationScreen';
+import ChangeEmailScreen from '../../Screens/ProfileScreens/ChangeEmailScreen';
 import SettingsScreen from '../../Screens/ProfileScreens/SettingsScreen';
 import EditProfileScreen from '../../Screens/ProfileScreens/EditProfileScreen';
 import CreateScreen from '../../Screens/Main/CreateScreen';
@@ -209,6 +210,21 @@ const ProfileNavigator = ({ route, navigation, user }) => {
             <Stack.Screen
                 name='ReAuthenticationScreen'
                 component={ReAuthenticationScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='ChangeEmailScreen'
+                component={ChangeEmailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,

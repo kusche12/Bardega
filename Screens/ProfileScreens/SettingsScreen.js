@@ -12,7 +12,7 @@ const SettingsScreen = ({ logOut, navigation }) => {
 
     return (
         <ScrollView>
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center' }]} >
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 50 }]} >
                 <Text style={[GlobalStyles.titlebold1, { marginBottom: 25 }]}>SETTINGS</Text>
                 <View style={[UserStyles.settingsButton, { backgroundColor: Styles.BRIGHT_PINK, height: 50, marginBottom: 16 }]}>
                     <Text style={GlobalStyles.titlebold2}>YOUR ACCOUNT</Text>
@@ -22,6 +22,11 @@ const SettingsScreen = ({ logOut, navigation }) => {
                     name="Privacy"
                     icon={Images.settings.lock}
                     action={() => navigation.navigate('MakePrivateScreen')}
+                />
+                <SettingsButton
+                    name="Change Email"
+                    icon={Images.settings.email}
+                    action={() => navigation.navigate('ReAuthenticationScreen', { navigation, type: 'changeEmail' })}
                 />
                 <SettingsButton name="Log out" icon={Images.settings.signout} action={() => logOut()} />
                 <SettingsButton

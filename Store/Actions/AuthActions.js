@@ -214,6 +214,28 @@ export const forgotPassword = (email) => {
     }
 }
 
+// UPDATE: User Object and Profile Field for user's email
+export const updateEmail = (data) => {
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        const firestore = firebase.firestore();
+        const { email, userID } = data;
+        try {
+            await firebase.auth().currentUser.updateEmail(email)
+
+            await firestore
+                .collection('profiles')
+                .doc(userID)
+                .update({ email: email });
+
+            dispatch({ type: 'CHANGE_EMAIL_SUCCESS' });
+        } catch (err) {
+            dispatch({ type: 'CHANGE_EMAIL_ERROR', err });
+        }
+
+    }
+}
+
 // Helper function to check if string is an email
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
