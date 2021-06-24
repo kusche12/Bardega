@@ -63,8 +63,8 @@ const Loading = () => {
 
     return (
         <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            {/* {renderText()} */}
-            <ActivityIndicator color={Styles.DARK_PINK} />
+            {renderText()}
+            {/* <ActivityIndicator color={Styles.DARK_PINK} /> */}
         </View>
     )
 }

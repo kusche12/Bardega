@@ -12,6 +12,7 @@ import InputComment from '../../Components/DrinkDetail/InputComment';
 import StrengthAndPrep from '../../Components/DrinkDetail/StrengthAndPrep';
 import DetailLikeCommentShare from '../../Components/DrinkDetail/DetailLikeCommentShare';
 import { renderTime } from '../../Functions/miscFunctions';
+import { ADMIN_ID } from '../../API/ADMIN_ID';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
@@ -53,7 +54,6 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
     }
 
     const renderComments = () => {
-        console.log(comments);
         let result = [];
         if (comments.length <= 1) {
             return (
@@ -163,13 +163,13 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                 contentContainerStyle={{ flexGrow: 1 }}
             >
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 40 }]} >
-                    {/* Title (add the right edit button if the userID === authorID) */}
+                    {/* Title: (add the right edit button if the userID === authorID) */}
                     <View style={{ flexDirection: 'row' }}>
-                        {userID === drink.authorID && <View style={{ flex: 1 }} ></View>}
+                        {userID === drink.authorID || userID === ADMIN_ID && <View style={{ flex: 1 }} ></View>}
                         <View style={{ width: Styles.width * .8, alignItems: 'center', textAlign: 'center' }}>
                             <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
                         </View>
-                        {userID === drink.authorID &&
+                        {userID === drink.authorID || userID === ADMIN_ID &&
                             <TouchableWithoutFeedback onPress={() => handleEditDrink()}>
                                 <Image source={Images.threedots} style={DetailStyles.editImage} />
                             </TouchableWithoutFeedback>

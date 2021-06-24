@@ -4,11 +4,17 @@ import DrinkCard from '../Main/DrinkCard';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
-const HorizontalList = ({ data, query, navigation, navigateTo, drinkType }) => {
+const HorizontalList = ({ data, query, navigation, navigateTo, drinkType, isRefreshing }) => {
+    // Do not render a list if it does not have at least 3 drinks in it
+    if (data.length < 3) {
+        return null;
+    }
+
     const renderItem = ({ item }) => {
         return (
-            <DrinkCard drink={item} navigation={navigation} navigateTo={navigateTo} />
+            <DrinkCard isRefreshing={isRefreshing} drink={item} navigation={navigation} navigateTo={navigateTo} />
         )
+
     }
 
     return (

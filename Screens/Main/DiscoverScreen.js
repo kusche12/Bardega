@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, Text, SafeAreaView, View } from 'react-native';
+import { RefreshControl, Text, SafeAreaView, View, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -49,54 +49,50 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     }, [queries, drinks, allDrinks, drinkID]);
 
     // Test function only. Replcace this with the function below for production
+    // const loadData = async () => {
+    //     const ranQueries = [
+    //             {
+    //             filterName: "Sweet",
+    //             filterType: "tag",
+    //             name: "Sweet & Simple",
+    //         },
+    //         {
+    //             filterName: "light",
+    //             filterType: "prepTime",
+    //             id: "6QxFD8AtrI4cgPt61Che",
+    //             name: "Light Prep",
+    //         },
+    //         {
+    //             filterName: "virgin",
+    //             filterType: "strength",
+    //             name: "Non-Alcoholic",
+    //         }
+    //     ]
+    //     setSelectedQueries(ranQueries)
+
+    //     let drinkMatrix = [];
+    //     for (let i = 0; i < ranQueries.length; i++) {
+    //         let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
+    //         drinkMatrix.push(drinkRow);
+    //     }
+
+    //     setSelectedDrinks(drinkMatrix);
+    //     setIsLoaded(true);
+    // }
+
     const loadData = async () => {
-        const ranQueries = [
-            //     {
-            //     filterName: "Sweet",
-            //     filterType: "tag",
-            //     name: "Sweet & Simple",
-            // },
-            // {
-            //     filterName: "light",
-            //     filterType: "prepTime",
-            //     id: "6QxFD8AtrI4cgPt61Che",
-            //     name: "Light Prep",
-            // },
-            {
-                filterName: "strong",
-                filterType: "strength",
-                name: "Strong",
-            }
-        ]
-        setSelectedQueries(ranQueries)
+        let ranQueries = getRandomQueries(queries, 8);
+        setSelectedQueries(ranQueries);
 
         let drinkMatrix = [];
         for (let i = 0; i < ranQueries.length; i++) {
-            // let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
-            let drinkRow = await getDiscoverDrinks(ranQueries[i], 10);
+            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
             drinkMatrix.push(drinkRow);
         }
 
         setSelectedDrinks(drinkMatrix);
         setIsLoaded(true);
     }
-
-    // const loadData = async () => {
-    //     let ranQueries = getRandomQueries(queries, 8);
-    //     setSelectedQueries(ranQueries);
-
-    //     let drinkMatrix = [];
-    //     for (let i = 0; i < ranQueries.length; i++) {
-    //         // let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
-    //         let drinkRow = await getDiscoverDrinks(ranQueries[i], 8);
-    //         if (drinkRow.length > 3) {
-    //             drinkMatrix.push(drinkRow);
-    //         }
-    //     }
-
-    //     setSelectedDrinks(drinkMatrix);
-    //     setIsLoaded(true);
-    // }
 
     const onRefresh = React.useCallback(() => {
         setIsRefreshing(true);
@@ -131,12 +127,13 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
                 />
             }
         >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8 }]}>
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8 }, isRefreshing && Platform.OS === 'ios' && { top: 0 }]}>
                 <View style={DiscoverStyles.titleContainer}>
                     <Text style={GlobalStyles.titlebold1}>DISCOVER</Text>
                 </View>
                 {selectedDrinks.map((drinks, index) => {
                     return <HorizontalList
+                        isRefreshing={isRefreshing}
                         data={drinks}
                         index={index}
                         key={index}
