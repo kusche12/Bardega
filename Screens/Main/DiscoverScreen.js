@@ -28,19 +28,17 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [drinksRendered, setDrinksRendered] = useState(false);
 
-    // TODO: Speed up the initial drink rendering. This takes upwards of 20 seconds when app loads in
-    // Wait for drinks and queries to be fully loaded into the app
     useEffect(() => {
         // If the user enters the app from a deep link sent to them by another user,
         // then move directly from the discover screen into the drink detail screen.
         if (drinkID && allDrinks) {
             navigation.navigate('DrinkDetailScreen', { drink: allDrinks[drinkID] });
         }
-        // Otherwise, just stay on this screen and get data whenever the user pulls to refresh the page
+        // Otherwise, stay on this screen and get data whenever the user pulls to refresh the page
         if (allDrinks && drinks && queries) {
             async function fetchData() {
-                if (drinks && queries && !drinksRendered) {
-                    loadData();
+                if (!drinksRendered) {
+                    await loadData();
                     setDrinksRendered(true);
                 }
             }
@@ -81,22 +79,25 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     // }
 
     const loadData = async () => {
-        let ranQueries = getRandomQueries(queries, 8);
-        setSelectedQueries(ranQueries);
+        if (queries) {
+            let ranQueries = await getRandomQueries(queries, 8);
+            setSelectedQueries(ranQueries);
 
-        let drinkMatrix = [];
-        for (let i = 0; i < ranQueries.length; i++) {
-            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
-            drinkMatrix.push(drinkRow);
+            let drinkMatrix = [];
+            for (let i = 0; i < ranQueries.length; i++) {
+                let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
+                drinkMatrix.push(drinkRow);
+            }
+
+            setSelectedDrinks(drinkMatrix);
+            setIsLoaded(true);
         }
 
-        setSelectedDrinks(drinkMatrix);
-        setIsLoaded(true);
     }
 
     const onRefresh = React.useCallback(() => {
         setIsRefreshing(true);
-        wait(10)
+        wait(1)
             .then(() => loadData())
             .then(() => setIsRefreshing(false));
     }, []);

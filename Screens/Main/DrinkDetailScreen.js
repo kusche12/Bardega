@@ -165,11 +165,11 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 40 }]} >
                     {/* Title: (add the right edit button if the userID === authorID) */}
                     <View style={{ flexDirection: 'row' }}>
-                        {userID === drink.authorID || userID === ADMIN_ID && <View style={{ flex: 1 }} ></View>}
+                        {[userID === drink.authorID || userID === ADMIN_ID] && <View style={{ flex: 1 }} ></View>}
                         <View style={{ width: Styles.width * .8, alignItems: 'center', textAlign: 'center' }}>
                             <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
                         </View>
-                        {userID === drink.authorID || userID === ADMIN_ID &&
+                        {[userID === drink.authorID || userID === ADMIN_ID] &&
                             <TouchableWithoutFeedback onPress={() => handleEditDrink()}>
                                 <Image source={Images.threedots} style={DetailStyles.editImage} />
                             </TouchableWithoutFeedback>

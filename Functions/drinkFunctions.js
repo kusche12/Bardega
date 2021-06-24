@@ -132,8 +132,7 @@ export const getDrinksWithQuery = async (drinks, query, max) => {
 // }
 
 // Get 'amount' number of randomized queries in random order from 'queries' list
-export const getRandomQueries = (queries, amount) => {
-    console.log(queries);
+export const getRandomQueries = async (queries, amount) => {
     let result = [];
     let nums = randomUniqueNum(queries.length, amount);
     for (let i in nums) {
