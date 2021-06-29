@@ -71,5 +71,12 @@ export default {
         starFull: require('./star_full.png'),
         starEmpty: require('./star_empty.png'),
         starHalf: require('./star_half.png'),
+    },
+    about: {
+        smile: require('./smile-face.png'),
+        cocktail: require('./cocktail.png'),
+        question: require('./help-web-button.png'),
+        laptop: require('./laptop.png'),
+        eye: require('./eye.png'),
     }
 }

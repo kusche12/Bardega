@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { getRandomQueries, getDrinksWithQuery, getDiscoverDrinks } from '../../Functions/drinkFunctions';
+import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
 import LoadingBar from '../../Components/Main/LoadingBar';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
@@ -19,7 +19,6 @@ const wait = (timeout) => {
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of 10 drinks that fit each query
-// TODO: While loading, show a colored bar at the top that is animated from left to right (like on uber eats)
 const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => {
 
     const [isLoaded, setIsLoaded] = useState(false);

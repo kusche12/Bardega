@@ -22,6 +22,7 @@ import ProfileScreen from '../../Screens/Main/ProfileScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import NotificationsScreen from '../../Screens/ProfileScreens/NotificationsScreen';
 import FollowRequestsScreen from '../../Screens/ProfileScreens/FollowRequestsScreen';
+import AboutUsScreen from '../../Screens/ProfileScreens/AboutUsScreen';
 
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
@@ -285,6 +286,21 @@ const ProfileNavigator = ({ route, navigation, user }) => {
             <Stack.Screen
                 name='FollowRequestsScreen'
                 component={FollowRequestsScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='AboutUsScreen'
+                component={AboutUsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
                     headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
