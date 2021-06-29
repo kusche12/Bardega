@@ -38,7 +38,7 @@ const SettingsScreen = ({ logOut, navigation }) => {
                 </View>
                 <SettingsButton name="Notifications" icon={Images.settings.notifications} action={() => navigation.navigate('NotificationsSettingsScreen')} />
                 <SettingsButton name="About us" icon={Images.settings.about} action={() => navigation.navigate('AboutUsScreen')} />
-                <SettingsButton name="Contact us" icon={Images.settings.contact} action={() => console.log('contact us')} />
+                <SettingsButton name="Contact us" icon={Images.settings.contact} action={() => navigation.navigate('ContactUsScreen')} />
             </SafeAreaView>
         </ScrollView>
     )
