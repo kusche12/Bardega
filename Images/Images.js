@@ -66,6 +66,8 @@ export default {
         emptyHeartBold: require('./empty_heart_bold.png'),
         emptyComment: require('./empty_comment.png'),
         share: require('./share.png'),
+        flag: require('./flag.png'),
+        success: require('./success.png')
     },
     star: {
         starFull: require('./star_full.png'),

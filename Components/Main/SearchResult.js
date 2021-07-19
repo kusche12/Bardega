@@ -42,7 +42,10 @@ const SearchResult = ({ item, navigation }) => {
                     <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={DiscoverStyles.searchImage} />
                     <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
                         <Text style={GlobalStyles.paragraphbold1}>{item.name}</Text>
-                        <Text style={GlobalStyles.paragraph3}>{item.strength.label}</Text>
+                        {item.strength
+                            ? <Text style={GlobalStyles.paragraph3}>{item.strength.label}</Text>
+                            : <Text style={GlobalStyles.paragraph3}>{item.drinkability}</Text>
+                        }
                         {renderTags()}
                     </View>
                 </View>

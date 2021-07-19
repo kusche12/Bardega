@@ -131,7 +131,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
             }
 
             // If strength level matches query
-            if (spirit.strength.value.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
+            if (spirit.drinkability.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
                 res.push(spirit);
                 set.add(spirit);
             }

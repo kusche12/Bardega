@@ -171,8 +171,8 @@ export default StyleSheet.create({
         top: -24
     },
     settingsCog: {
-        width: 30,
-        height: 30
+        width: 25,
+        height: 25
     },
     profileInputContainer: {
         flexDirection: 'row',

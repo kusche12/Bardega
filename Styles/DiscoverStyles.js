@@ -41,6 +41,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 8,
         marginHorizontal: 8,
+        paddingRight: 100,
         borderBottomColor: Styles.GRAY,
         borderBottomWidth: 1,
     },

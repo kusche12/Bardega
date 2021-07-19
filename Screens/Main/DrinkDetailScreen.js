@@ -153,6 +153,27 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
         deleteDrink(drink);
     }
 
+    // If the currently authed user is the author of this drink OR if the currently authed user is the Bardega Admin,
+    // Then render the edit drink button,
+    // Otherwise, render the flag drink button
+    const renderEditOrFlag = () => {
+        const renderEditDrink = (userID === author.id || userID === ADMIN_ID);
+        if (renderEditDrink) {
+            return (
+                <TouchableWithoutFeedback onPress={() => handleEditDrink()}>
+                    <Image source={Images.threedots} style={DetailStyles.editImage} />
+                </TouchableWithoutFeedback>
+
+            )
+        } else {
+            return (
+                <TouchableWithoutFeedback onPress={() => navigation.navigate('ReportDrinkScreen', { drink, userID })}>
+                    <Image source={Images.detail.flag} style={DetailStyles.editImage} />
+                </TouchableWithoutFeedback>
+            )
+        }
+    }
+
     if (isLoading) {
         return null;
     } else {
@@ -165,15 +186,11 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 40 }]} >
                     {/* Title: (add the right edit button if the userID === authorID) */}
                     <View style={{ flexDirection: 'row' }}>
-                        {[userID === drink.authorID || userID === ADMIN_ID] && <View style={{ flex: 1 }} ></View>}
+                        <View style={{ flex: 1 }} ></View>
                         <View style={{ width: Styles.width * .8, alignItems: 'center', textAlign: 'center' }}>
                             <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
                         </View>
-                        {[userID === drink.authorID || userID === ADMIN_ID] &&
-                            <TouchableWithoutFeedback onPress={() => handleEditDrink()}>
-                                <Image source={Images.threedots} style={DetailStyles.editImage} />
-                            </TouchableWithoutFeedback>
-                        }
+                        {renderEditOrFlag()}
                     </View>
                     <View style={DetailStyles.shadowContainer}>
                         <View style={DetailStyles.photoContainer}>

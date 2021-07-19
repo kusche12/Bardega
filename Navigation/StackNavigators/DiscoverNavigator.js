@@ -9,6 +9,9 @@ import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import DiscoverScreen from '../../Screens/Main/DiscoverScreen';
 import CreateScreen from '../../Screens/Main/CreateScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
+import ReportDrinkScreen from '../../Screens/Main/ReportDrinkScreen';
+import ReportSuccessScreen from '../../Screens/Main/ReportSuccessScreen';
+
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
@@ -111,6 +114,34 @@ const DiscoverNavigator = ({ route, navigation }) => {
             <Stack.Screen
                 name='ProfileScreen'
                 component={ProfileScreen}
+                initialParams={route.params, navigation}
+                options={() => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='ReportDrinkScreen'
+                component={ReportDrinkScreen}
+                initialParams={route.params, navigation}
+                options={() => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} save={false} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='ReportSuccessScreen'
+                component={ReportSuccessScreen}
                 initialParams={route.params, navigation}
                 options={() => ({
                     headerTitle: () => <MainHeader />,

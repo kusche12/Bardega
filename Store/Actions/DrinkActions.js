@@ -451,3 +451,31 @@ export const updateRateSpirit = (data) => {
         }
     }
 };
+
+export const reportDrink = (data) => {
+    console.log('Like Drink Action');
+    const { drink, userID, type } = data;
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = await getFirebase();
+        const firestore = await firebase.firestore();
+
+        const date = new Date();
+        date.setTime(date.getTime() - new Date().getTimezoneOffset() * 60 * 1000);
+
+        try {
+            // Add user to the drinkLikes object
+            await firestore
+                .collection('reports')
+                .doc()
+                .set({
+                    reportedByUser: userID,
+                    reason: type,
+                    drink: drink,
+                    dateCreated: date.toISOString()
+                })
+            dispatch({ type: 'UPDATE_DRINK' })
+        } catch (err) {
+            dispatch({ type: 'UPDATE_DRINK_ERROR', err });
+        }
+    }
+};

@@ -169,6 +169,8 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 <RefreshControl
                     refreshing={isRefreshing}
                     onRefresh={onRefresh}
+                    tintColor={Styles.DARK_PINK}
+                    colors={[Styles.DARK_PINK]}
                 />
             }
         >
