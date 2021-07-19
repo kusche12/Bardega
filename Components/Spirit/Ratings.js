@@ -18,6 +18,7 @@ const Ratings = ({ userID, drink, createRateSpirit, updateRateSpirit }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
     const [rating, setRating] = useState(null);
+    const [totalRating, setTotalRating] = useState(null);
 
     useEffect(() => {
         async function fetchData() {
@@ -32,8 +33,10 @@ const Ratings = ({ userID, drink, createRateSpirit, updateRateSpirit }) => {
                     .then((doc) => {
                         if (doc.exists) {
                             setRating(doc.data().rating);
+                            setTotalRating(drink.rating);
                         } else {
                             setRating(0);
+                            setTotalRating(drink.rating);
                         }
                     }).catch((err) => {
                         console.log(err)
@@ -90,7 +93,7 @@ const Ratings = ({ userID, drink, createRateSpirit, updateRateSpirit }) => {
             <Text style={GlobalStyles.titlebold2}>YOUR RATING</Text>
             {renderStars(rating, true)}
             <Text style={[GlobalStyles.titlebold2, { marginTop: 40 }]}>OVERALL RATING</Text>
-            {renderStars(drink.rating, false)}
+            {renderStars(totalRating, false)}
         </View>
     )
 };

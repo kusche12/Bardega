@@ -30,7 +30,6 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
 
     const renderComments = () => {
         let result = [];
-        console.log(comments.length)
         if (comments.length <= 1) {
             return (
                 <View>
@@ -72,6 +71,35 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
         }
     }
 
+    const renderFeatureRow = (type, name) => {
+        return (
+            <View style={DetailStyles.row}>
+                <View style={[DetailStyles.col1, { width: Styles.width * .5 }]}>
+                    <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>{type}</Text>
+                </View>
+                <View style={DetailStyles.col2}>
+                    <Text style={GlobalStyles.paragraph2}>{name}</Text>
+                </View>
+            </View>
+        )
+    }
+
+    const renderFeatures = () => {
+
+        return (
+            <View style={CreateStyles.ingrContainerWide}>
+                <Text style={[GlobalStyles.titlebold2]}>FEATURES</Text>
+                <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
+                <View style={{ flexDirection: 'column' }}>
+                    {renderFeatureRow('Spirit', drink.spirit)}
+                    {renderFeatureRow('Used For', drink.drinkability)}
+                    {renderFeatureRow('Availability', drink.availability)}
+                    {renderFeatureRow('Price', drink.price)}
+                </View>
+            </View>
+        )
+    }
+
     if (isLoading) {
         return null;
     } else {
@@ -98,6 +126,8 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
                             <Text style={[GlobalStyles.paragraph2, { lineHeight: 22 }]}>{drink.description}</Text>
                         </View>
                     }
+
+                    {renderFeatures()}
 
                     <Ratings drink={drink} />
 

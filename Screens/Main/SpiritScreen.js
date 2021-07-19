@@ -4,7 +4,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { getSpiritsWithQuery } from '../../Functions/drinkFunctions';
+import { getSpiritsWithQuery, getRandomQueries } from '../../Functions/drinkFunctions';
+import LoadingBar from '../../Components/Main/LoadingBar';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
 import Styles from '../../Styles/StyleConstants';
@@ -22,6 +23,7 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits }) => {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [selectedDrinks, setSelectedDrinks] = useState(null);
+    const [selectedQueries, setSelectedQueries] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [drinksRendered, setDrinksRendered] = useState(false);
 
@@ -39,9 +41,12 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits }) => {
     }, [spiritQueries, spirits, allSpirits]);
 
     const loadData = async () => {
+        let ranQueries = await getRandomQueries(spiritQueries, 7);
+        setSelectedQueries(ranQueries);
+
         let spiritMatrix = [];
-        for (let i = 0; i < spiritQueries.length; i++) {
-            let drinkRow = getSpiritsWithQuery(spirits, spiritQueries[i], 10);
+        for (let i = 0; i < ranQueries.length; i++) {
+            let drinkRow = getSpiritsWithQuery(spirits, ranQueries[i], 10);
             spiritMatrix.push(drinkRow);
         }
 
@@ -58,9 +63,12 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits }) => {
 
     if (!isLoaded) {
         return (
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { paddingLeft: 8 }]}>
-                <View style={{ marginTop: Styles.height / 4 }}>
-                    <Loading />
+            <SafeAreaView>
+                <View>
+                    <LoadingBar />
+                    <View style={{ marginTop: Styles.height * .33, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <Loading />
+                    </View>
                 </View>
             </SafeAreaView>
         );
@@ -74,10 +82,12 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits }) => {
                 <RefreshControl
                     refreshing={isRefreshing}
                     onRefresh={onRefresh}
+                    tintColor={Styles.DARK_PINK}
+                    colors={[Styles.DARK_PINK]}
                 />
             }
         >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8 }]}>
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8 }, isRefreshing && Platform.OS === 'ios' && { top: 0 }]}>
                 <View style={DiscoverStyles.titleContainer}>
                     <Text style={GlobalStyles.titlebold1}>REVIEW A SPIRIT</Text>
                 </View>
@@ -86,7 +96,7 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits }) => {
                         data={spirits}
                         index={index}
                         key={index}
-                        query={spiritQueries[index]}
+                        query={selectedQueries[index]}
                         navigation={navigation}
                         navigateTo={'SpiritDetailScreen'}
                         drinkType={'Spirit'}

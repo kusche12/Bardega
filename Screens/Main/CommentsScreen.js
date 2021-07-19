@@ -90,6 +90,9 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
     }
 
     const renderTags = () => {
+        if (drink.spirit) {
+            return <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{drink.spirit}</Text>
+        }
         if (!drink.tags) return null;
         let res = '';
         for (let i = 0; i < drink.tags.length; i++) {
@@ -207,7 +210,12 @@ const CommentsScreen = ({ route, profiles, navigation, comments, createComment, 
                 <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DetailStyles.commentHeaderImage} />
                 <View>
                     <Text style={[GlobalStyles.paragraph1, { fontSize: 20 }]}>{drink.name}</Text>
-                    <Text style={GlobalStyles.paragraph2}>{drink.strength.label}</Text>
+                    {/* If it is a spirit, render the drinkability and spirit type. If it is a cocktail, render the strength and tags */}
+                    {drink.drinkability
+                        ? <Text style={GlobalStyles.paragraph2}>{drink.drinkability}</Text>
+                        : <Text style={GlobalStyles.paragraph2}>{drink.strength.label}</Text>
+                    }
+
                     {renderTags()}
                 </View>
             </View>

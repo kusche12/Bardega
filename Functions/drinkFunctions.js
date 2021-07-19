@@ -136,8 +136,10 @@ export const getSpiritsWithQuery = (spirits, query, max) => {
             return result;
         }
         const spiritType = spirits[nums[i]].spirit;
-        if (spiritType.toLowerCase() === query.name.toLowerCase()) {
-            result.push(spirits[nums[i]]);
+        if (spiritType.toLowerCase() === query.filterName.toLowerCase()) {
+            if (!spirits[nums[i]].private) {
+                result.push(spirits[nums[i]]);
+            }
         }
     }
     return result;

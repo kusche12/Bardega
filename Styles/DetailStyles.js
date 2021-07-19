@@ -44,7 +44,7 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
         width: Styles.width * .33,
         alignItems: 'flex-end',
-        paddingRight: 20
+        paddingRight: 20,
     },
     col2: {
         width: Styles.width * .5,
