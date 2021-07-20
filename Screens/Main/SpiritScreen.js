@@ -41,6 +41,7 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits }) => {
     }, [spiritQueries, spirits, allSpirits]);
 
     const loadData = async () => {
+        // console.log(spiritQueries.length);
         let ranQueries = await getRandomQueries(spiritQueries, 7);
         setSelectedQueries(ranQueries);
 
