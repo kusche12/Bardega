@@ -36,10 +36,27 @@ export const updateProfile = (data) => {
         const firebase = await getFirebase();
         const firestore = await firebase.firestore();
 
-        // Check if username already exists
         const username = userName.trim();
         var ref = firestore.collection("profiles");
 
+        // Ensure  proper username rules
+        if (username.length < 1) {
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: 'Your username must be at least 1 character long' } });
+            return;
+        }
+
+        if (username.length > 30) {
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: 'Your username must be 30 characters or less' } });
+            return;
+        }
+
+        if (username.includes(' ')) {
+            dispatch({ type: 'UPDATE_PROFILE_ERROR', err: { message: 'Your username must not include any spaces' } });
+            return;
+        }
+
+
+        // Check if username already exists
         // Create a query against the collection.
         // This returns all the users with the username provided by the input
         const allProfiles = await ref.get();

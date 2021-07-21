@@ -56,6 +56,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -71,6 +72,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
 
@@ -87,6 +89,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -100,6 +103,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -115,6 +119,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -130,6 +135,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -145,6 +151,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -160,6 +167,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -175,6 +183,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -190,6 +199,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -205,6 +215,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -220,6 +231,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -235,6 +247,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -250,6 +263,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -265,6 +279,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -280,6 +295,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -295,6 +311,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -310,6 +327,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -324,6 +342,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}

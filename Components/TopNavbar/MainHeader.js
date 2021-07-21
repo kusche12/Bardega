@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, SafeAreaView, Platform } from 'react-native';
 import BardegaTextSVG from '../Main/BardegaTextSVG';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
@@ -7,9 +7,9 @@ const width = Dimensions.get('screen').width;
 
 const MainHeader = () => {
     return (
-        <View style={GlobalStyles.headerContainer}>
-            <BardegaTextSVG width={width / 2.5} height={50} />
-        </View>
+        <SafeAreaView style={GlobalStyles.headerContainer}>
+            <BardegaTextSVG style={Platform.OS === 'ios' && { marginLeft: 24 }} width={width / 2.5} height={50} />
+        </SafeAreaView>
     )
 }
 

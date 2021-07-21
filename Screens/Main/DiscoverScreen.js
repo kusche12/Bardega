@@ -79,7 +79,9 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 
     const loadData = async () => {
         if (queries) {
+            console.log('queries')
             let ranQueries = await getRandomQueries(queries, 8);
+            console.log(ranQueries.length);
             setSelectedQueries(ranQueries);
 
             let drinkMatrix = [];

@@ -105,7 +105,7 @@ const MainNavigator = ({ userID, memberEmails, profiles, updateIsMember }) => {
                 activeBackgroundColor: Styles.PINK,
                 inactiveBackgroundColor: Styles.PINK,
                 style: {
-                    backgroundColor: Styles.PINK,
+                    backgroundColor: Styles.PINK
                 },
                 showLabel: false,
             }}

@@ -84,13 +84,23 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
         setIsDisabled(false);
     }
 
+    // If the search result is the current user's account, then change the tab navigator to their profile navigation
+    // If not, then stay in the current Search tab navigator
+    const handleProfileNavigation = () => {
+        if (item.id === userID) {
+            navigation.navigate('Profile', { screen: 'ProfileScreen', user: authors[drink.authorID] });
+        } else {
+            navigation.push('ProfileScreen', { user: authors[drink.authorID] })
+        }
+    }
+
     if (isLoading) {
         return null;
     } else {
         return (
             <View style={[CreateStyles.ingrContainerWide, DetailStyles.buttonContainer]}>
 
-                <TouchableWithoutFeedback onPress={() => navigation.push('ProfileScreen', { user: authors[drink.authorID] })}>
+                <TouchableWithoutFeedback onPress={() => handleProfileNavigation()}>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                         <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { width: 35, height: 35 }]}></Image>
                         <Text style={GlobalStyles.titlebold3}>@{author.userName}</Text>
@@ -147,7 +157,6 @@ const mapDispatchToProps = (dispatch) => {
         likeDrink: (data) => dispatch(likeDrink(data)),
         unLikeDrink: (data) => dispatch(unLikeDrink(data)),
         createNotification: (data) => dispatch(createNotification(data)),
-
     }
 }
 

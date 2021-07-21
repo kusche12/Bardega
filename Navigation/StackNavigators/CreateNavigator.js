@@ -27,6 +27,7 @@ const CreateNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -42,6 +43,7 @@ const CreateNavigator = ({ route, navigation }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -57,6 +59,7 @@ const CreateNavigator = ({ route, navigation }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}

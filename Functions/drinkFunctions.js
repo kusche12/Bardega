@@ -64,7 +64,6 @@ export const getDrinksWithQuery = async (drinks, query, max) => {
 export const getRandomQueries = async (queries, amount) => {
     let result = [];
     let nums = randomUniqueNum(queries.length, amount);
-    // if (!nums) return;
     for (let i in nums) {
         result.push(queries[nums[i]]);
     }

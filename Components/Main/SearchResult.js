@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Image, Text, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
+import { connect } from 'react-redux';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -7,7 +8,7 @@ import Styles from '../../Styles/StyleConstants';
 
 // This is a horizontal list item that either includes a drink object or a user object based
 // on the passed in item
-const SearchResult = ({ item, navigation }) => {
+const SearchResult = ({ item, navigation, userID }) => {
     // Only cache the drink images
     useEffect(() => {
         if (item) {
@@ -26,6 +27,16 @@ const SearchResult = ({ item, navigation }) => {
             return <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{res}</Text>
         }
         return null;
+    }
+
+    // If the search result is the current user's account, then change the tab navigator to their profile navigation
+    // If not, then stay in the current Search tab navigator
+    const handleProfileNavigation = () => {
+        if (item.id === userID) {
+            navigation.navigate('Profile', { screen: 'ProfileScreen', user: item });
+        } else {
+            navigation.navigate('ProfileScreen', { user: item })
+        }
     }
 
     // If the item is either a drink (symbolized by authorID) or a spirit (symbolized by numRatings)
@@ -54,7 +65,7 @@ const SearchResult = ({ item, navigation }) => {
     } else {
         return (
             <TouchableHighlight
-                onPress={() => navigation.navigate('ProfileScreen', { user: item })}
+                onPress={() => handleProfileNavigation()}
                 underlayColor={'#d6d6d6'}
             >
                 <View style={DiscoverStyles.searchContainer}>
@@ -67,7 +78,13 @@ const SearchResult = ({ item, navigation }) => {
             </TouchableHighlight>
         )
     }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        userID: state.firebase.auth.uid,
+    }
 
 }
 
-export default SearchResult;
+export default connect(mapStateToProps)(SearchResult);

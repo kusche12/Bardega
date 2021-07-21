@@ -28,7 +28,7 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
                     <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
                     <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY, width: Styles.width * .3, textAlign: 'center' }]}>
                         Add photo from photo album
-                        </Text>
+                    </Text>
                 </View>
             );
         } else {
@@ -65,7 +65,7 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
             );
         } else {
             let result = await ImagePicker.launchCameraAsync({
-                mediaTypes: MediaTypeOptions.Images,
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: .5,
@@ -80,7 +80,7 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
     // Handle choose from camera roll
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: .5,

@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 
-import { getRandomDrinksNoQuery } from '../../Functions/drinkFunctions';
 import { createStackNavigator } from '@react-navigation/stack';
 import SpiritDetailScreen from '../../Screens/Main/SpiritDetailScreen';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import SearchScreen from '../../Screens/Main/SearchScreen';
 import ProfileScreen from '../../Screens/Main/ProfileScreen';
+import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import DrinkOptionsScreen from '../../Screens/Main/DrinkOptionsScreen';
 import CreateScreen from '../../Screens/Main/CreateScreen';
@@ -38,6 +38,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },
                     headerTitleAlign: 'center',
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -53,6 +54,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -66,6 +68,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -81,6 +84,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -96,6 +100,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -111,6 +116,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -124,6 +130,23 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {
+                        height: 100,
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='FollowScreen'
+                component={FollowScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
+                    headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -138,6 +161,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
                     headerStyle: {
+                        height: 100,
                         backgroundColor: Styles.PINK,
                     },
                     headerTintColor: Styles.PINK

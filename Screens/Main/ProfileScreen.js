@@ -178,7 +178,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
                 {userID === user.id &&
                     <View style={UserStyles.cogContainer}>
-                        <TouchableWithoutFeedback onPress={() => navigation.navigate('SettingsScreen')}>
+                        <TouchableWithoutFeedback onPress={() => navigation.navigate('Profile', { screen: 'SettingsScreen' })}>
                             <Image source={Images.profile.settings} style={UserStyles.settingsCog} />
                         </TouchableWithoutFeedback>
                     </View>
