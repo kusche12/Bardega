@@ -17,6 +17,7 @@ export default {
     edit: require('./edit.png'),
     threedots: require('./threedots.png'),
     close: require('./close.png'),
+    plusBlack: require('./plus_black.png'),
     bottomTab: {
         create: require('./create.png'),
         createUnfocused: require('./createUnfocused.png'),

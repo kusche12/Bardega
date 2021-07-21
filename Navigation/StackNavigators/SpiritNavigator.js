@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import SpiritDetailScreen from '../../Screens/Main/SpiritDetailScreen';
 import SpiritScreen from '../../Screens/Main/SpiritScreen';
+import SpiritUploadScreen from '../../Screens/Main/SpiritUploadScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
@@ -25,6 +26,22 @@ const SpiritNavigator = ({ route, navigation }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerStyle: {
+                        height: 100,
+                        backgroundColor: Styles.PINK,
+                    },
+                })}
+            />
+            <Stack.Screen
+                name='SpiritUploadScreen'
+                component={SpiritUploadScreen}
+                options={({ route, navigation }) => ({
+                    headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
+                    headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,

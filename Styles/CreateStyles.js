@@ -92,7 +92,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
-        flex: 1
+        flex: 1,
     },
     tag: {
         backgroundColor: Styles.DARK_PINK,

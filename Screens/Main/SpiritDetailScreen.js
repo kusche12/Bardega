@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { deleteSpirit } from '../../Store/Actions/SpiritActions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
+import Images from '../../Images/Images';
+import { ADMIN_ID } from '../../API/ADMIN_ID';
 import InputComment from '../../Components/DrinkDetail/InputComment';
 import Ratings from '../../Components/Spirit/Ratings';
 import { renderTime } from '../../Functions/miscFunctions';
@@ -14,7 +16,7 @@ import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) => {
+const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID, deleteSpirit }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [image, setImage] = useState(null);
 
@@ -85,7 +87,6 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
     }
 
     const renderFeatures = () => {
-
         return (
             <View style={CreateStyles.ingrContainerWide}>
                 <Text style={[GlobalStyles.titlebold2]}>FEATURES</Text>
@@ -100,6 +101,30 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
         )
     }
 
+    const handleDeleteSpirit = () => {
+        return Alert.alert(
+            "Delete Spirit?",
+            "Once you delete this spirit, you will no longer be able to recover it.",
+            [
+                {
+                    text: 'Yes, delete this spirit',
+                    onPress: () => handleDeleteSpiritHelper(),
+                    style: "destructive"
+                },
+                {
+                    text: "Cancel",
+                    onPress: () => console.log('action cancelled'),
+                }
+            ],
+            { cancelable: true }
+        );
+    }
+
+    const handleDeleteSpiritHelper = async () => {
+        await navigation.navigate('SpiritScreen');
+        deleteSpirit(drink);
+    }
+
     if (isLoading) {
         return null;
     } else {
@@ -110,14 +135,26 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
                 contentContainerStyle={{ flexGrow: 1 }}
             >
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 40 }]} >
-                    <View style={{ width: Styles.width * .8, alignItems: 'center', textAlign: 'center' }}>
-                        <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                        <View style={{ flex: 1 }}></View>
+                        <View style={{ flex: 3, justifyContent: 'center' }}>
+                            <Text style={[GlobalStyles.titlebold1, { textAlign: 'center' }]}>{drink.name}</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'center' }}>
+                            {userID === ADMIN_ID &&
+                                <TouchableWithoutFeedback style={{ width: 40, height: 40 }} onPress={() => handleDeleteSpirit()}>
+                                    <Image source={Images.settings.trash} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
+                                </TouchableWithoutFeedback>
+                            }
+                        </View>
                     </View>
+
                     <View style={DetailStyles.shadowContainer}>
                         <View style={DetailStyles.photoContainer}>
                             <Image source={{ uri: image }} key={new Date()} style={DetailStyles.drinkImage} />
                         </View>
                     </View>
+
 
                     {drink.description.length > 0 &&
                         <View style={CreateStyles.ingrContainerWide}>
@@ -146,7 +183,6 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID }) =>
 
 const mapStateToProps = (state, ownProps) => {
     const profiles = state.firestore.data.profiles;
-
     const drinks = state.firestore.data.spirits;
     const drink = drinks ? drinks[ownProps.route.params.drink.id] : null
 
@@ -158,8 +194,14 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        deleteSpirit: (data) => dispatch(deleteSpirit(data)),
+    }
+}
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect((props) => [
         { collection: 'profiles' },
         { collection: 'spirits' },
