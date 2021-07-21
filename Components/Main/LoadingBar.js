@@ -43,7 +43,7 @@ const LoadingBar = () => {
     };
 
     return (
-        <Animated.View style={[{ backgroundColor: Styles.DARK_PINK, height: 7, width: Styles.width }, animatedStyles]}>
+        <Animated.View style={[{ backgroundColor: Styles.DARK_PINK, height: 5, width: Styles.width }, animatedStyles]}>
 
         </Animated.View>
     )

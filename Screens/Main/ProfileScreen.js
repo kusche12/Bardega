@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import firebase from '../../API/FirebaseSetup'
-import { RefreshControl, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform } from 'react-native';
+import { RefreshControl, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, FlatList } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import RenderList from '../../Components/Profile/RenderList';
-import AnimatedFlatList from '../../Components/Profile/AnimatedFlatList';
+import RenderDrink from '../../Components/Profile/RenderDrink';
 import FollowButton from '../../Components/Profile/FollowButton';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -136,6 +135,46 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
         }
     }
 
+    // Renders either the user's drinks or liked drinks WITH pagination
+    const renderDrinkList = () => {
+        if (activeIndex === 0) {
+            return (
+                <View style={{ width: Styles.width }}>
+                    <FlatList
+                        data={userDrinks}
+                        renderItem={(item) => <RenderDrink navigation={navigation} object={item} />}
+                        keyExtractor={item => item.id}
+                        numColumns={3}
+                        scrollEnabled={false}
+                        horizontal={false}
+                    />
+                </View>
+            )
+        } else {
+            if (ownProfile || !user.likedDrinksPrivate) {
+                return (
+                    <View style={{ width: Styles.width }}>
+                        <FlatList
+                            data={likedDrinks}
+                            renderItem={(item) => <RenderDrink navigation={navigation} object={item} />}
+                            keyExtractor={item => item.id}
+                            numColumns={3}
+                            scrollEnabled={false}
+                            horizontal={false}
+                        />
+                    </View>
+                )
+            } else {
+                return (
+                    <View style={{ width: Styles.width, flexDirection: 'column', alignItems: 'center' }}>
+                        <Text style={[GlobalStyles.paragraphbold2, { marginTop: 48, marginBottom: 8 }]}>The user's liked drinks are private</Text>
+                        <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>Drinks liked by {user.userName} are currently hidden</Text>
+                    </View>
+                )
+            }
+        }
+    }
+
     const renderIndexButton = (index, type) => {
         let img;
         if (type === 'grid' && index === activeIndex) {
@@ -149,7 +188,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
         }
         return (
             <View style={[UserStyles.indexButtonContainer, isPrivate && index === 0 && { borderBottomColor: 'black', borderBottomWidth: 1.75 }]}>
-                <TouchableWithoutFeedback disabled={isPrivate} onPress={() => setActiveIndex(index)}>
+                <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(index) }}>
                     <Image source={img} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
                 </TouchableWithoutFeedback>
             </View>
@@ -209,6 +248,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                     {renderIndexButton(0, 'grid')}
                     {renderIndexButton(1, 'heart')}
                 </View>
+                <View style={[UserStyles.indexButtonLine, { marginLeft: (Styles.width / 2) * activeIndex }]}></View>
 
                 {isPrivate
                     ?
@@ -217,16 +257,8 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                         <Text style={GlobalStyles.paragraphbold2}>This account is private</Text>
                         <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>Follow the account to see their drinks</Text>
                     </View>
-
                     :
-                    <AnimatedFlatList
-                        data={[userDrinks, likedDrinks]}
-                        renderItem={({ item, index }) => <RenderList {...{ item, navigation, ownProfile, index, user }} />}
-                        itemWidth={Styles.width}
-                        setActiveIndex={setActiveIndex}
-                        activeIndex={activeIndex}
-                    />
-
+                    renderDrinkList()
                 }
 
             </SafeAreaView>

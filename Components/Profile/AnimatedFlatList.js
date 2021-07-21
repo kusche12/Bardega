@@ -51,7 +51,6 @@ const AnimatedFlatList = ({ data, renderItem, contentContainerStyle, itemWidth, 
     }, [activeIndex]);
 
     const renderIndexLine = () => {
-        // return <View style={[UserStyles.indexButtonLine, { marginLeft: (Styles.width / 2) * activeIndex }]}></View>
         return (
             <Animated.View style={[UserStyles.indexButtonLine, {
                 transform: [

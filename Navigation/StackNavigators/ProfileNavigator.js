@@ -55,10 +55,13 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     },
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
                     },
+
                 })}
             />
             <Stack.Screen
