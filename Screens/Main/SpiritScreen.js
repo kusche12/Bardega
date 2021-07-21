@@ -43,17 +43,20 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits, userID }
     }, [spiritQueries, spirits, allSpirits, userID]);
 
     const loadData = async () => {
-        let ranQueries = await getRandomQueries(spiritQueries, 7);
-        setSelectedQueries(ranQueries);
+        if (spiritQueries) {
+            let ranQueries = await getRandomQueries(spiritQueries, spiritQueries.length);
+            setSelectedQueries(ranQueries);
 
-        let spiritMatrix = [];
-        for (let i = 0; i < ranQueries.length; i++) {
-            let drinkRow = getSpiritsWithQuery(spirits, ranQueries[i], 10);
-            spiritMatrix.push(drinkRow);
+            let spiritMatrix = [];
+            for (let i = 0; i < ranQueries.length; i++) {
+                let drinkRow = getSpiritsWithQuery(spirits, ranQueries[i], 10);
+                spiritMatrix.push(drinkRow);
+            }
+
+            setSelectedDrinks(spiritMatrix);
+            setIsLoaded(true);
         }
 
-        setSelectedDrinks(spiritMatrix);
-        setIsLoaded(true);
     }
 
     const onRefresh = React.useCallback(() => {

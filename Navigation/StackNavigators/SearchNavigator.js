@@ -32,7 +32,7 @@ const SearchNavigator = ({ route, navigation }) => {
             <Stack.Screen
                 name='SearchScreen'
                 component={SearchScreen}
-                initialParams={{ results: [] }}
+                initialParams={{ results: [], isLoading: false, query: '' }}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <SearchHeader navigation={navigation} />,
                     headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },

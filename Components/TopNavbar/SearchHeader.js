@@ -18,17 +18,21 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
     useEffect(() => {
         async function fetchData() {
             if (drinks && profiles && spirits) {
+                console.log(query);
                 if (query) {
+                    navigation.setParams({ isLoading: true });
+                    navigation.setParams({ query: query });
                     const drinkRes = await findDrink(drinks);
                     const spiritRes = findSpirit(spirits);
                     const profileRes = findProfile(profiles);
-                    const res = drinkRes.concat(profileRes);
-                    const res2 = res.concat(spiritRes);
+                    const res = drinkRes.concat(spiritRes);
+                    const res2 = res.concat(profileRes);
 
-                    const shuffledResults = shuffleArray(res2);
+                    setData(res2);
 
-                    setData(shuffledResults);
-                    navigation.setParams({ results: shuffledResults });
+                    console.log(res2.length);
+                    navigation.setParams({ results: res2 });
+                    navigation.setParams({ isLoading: false });
                 }
             }
         }
@@ -36,13 +40,18 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
     }, [query, drinks]);
 
     // Hard reset the search page to an empty array when query is empty
-    useEffect(() => {
-        if (!query) {
-            const res = [];
-            setData(res);
-            navigation.setParams({ results: res });
-        }
-    }, [query]);
+    // useEffect(() => {
+    //     if (!query) {
+    //         setData([]);
+    //         navigation.setParams({ results: [] });
+    //         navigation.setParams({ isLoading: false });
+    //     }
+    // }, [query]);
+
+    // const onChange = (text) => {
+    //     navigation.setParams({ isLoading: true })
+    //     setQuery(text);
+    // }
 
     const shuffleArray = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
@@ -53,7 +62,6 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
         }
         return array;
     }
-
 
     const findDrink = async (drinks) => {
         const regex = new RegExp(`${query.trim()}`, 'i');
@@ -158,6 +166,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                     data={data}
                     query={query}
                     inputContainerStyle={{ borderColor: 'transparent' }}
+                    // onChangeText={(text) => onChange(text)}
                     onChangeText={setQuery}
                     hideResults={true}
                     autoCorrect={false}

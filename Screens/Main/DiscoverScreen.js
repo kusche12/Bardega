@@ -78,6 +78,8 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
     // }
 
     const loadData = async () => {
+        console.log('loadData');
+        console.log(queries.length);
         if (queries) {
             console.log('queries')
             let ranQueries = await getRandomQueries(queries, 8);
