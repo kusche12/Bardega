@@ -4,10 +4,10 @@ import DrinkCard from '../Main/DrinkCard';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
-const HorizontalList = ({ data, query, navigation, navigateTo, drinkType, isRefreshing }) => {
+const HorizontalList = ({ data, query, navigation, navigateTo, drinkType }) => {
     const renderItem = ({ item }) => {
         return (
-            <DrinkCard isRefreshing={isRefreshing} drink={item} navigation={navigation} navigateTo={navigateTo} />
+            <DrinkCard isRefreshing={false} drink={item} navigation={navigation} navigateTo={navigateTo} />
         )
 
     }

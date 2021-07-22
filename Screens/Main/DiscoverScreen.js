@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, Text, SafeAreaView, View, Platform } from 'react-native';
+import { RefreshControl, Text, SafeAreaView, View, Platform, FlatList, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -7,7 +7,6 @@ import { compose } from 'redux';
 import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
 import LoadingBar from '../../Components/Main/LoadingBar';
 import AdBanner1 from '../../Components/SVG/AdBanner1';
-// import AdBanner2 from '../../Components/SVG/AdBanner2';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
@@ -20,14 +19,15 @@ const wait = (timeout) => {
 
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
-// of 10 drinks that fit each query
+// of a number of drinks that fit each query
 const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMember }) => {
 
     const [isLoaded, setIsLoaded] = useState(false);
-    const [selectedDrinks, setSelectedDrinks] = useState(null);
-    const [selectedQueries, setSelectedQueries] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [drinksRendered, setDrinksRendered] = useState(false);
+    const [initalized, setInitialized] = useState(false);
+    const [selectedQueries, setSelectedQueries] = useState(null);
+    const [queryIndex, setQueryIndex] = useState(0);
+    const [renderItems, setRenderItems] = useState([]);
 
     useEffect(() => {
         // If the user enters the app from a deep link sent to them by another user,
@@ -35,87 +35,93 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         if (drinkID && allDrinks) {
             navigation.navigate('DrinkDetailScreen', { drink: allDrinks[drinkID] });
         }
-        // Otherwise, stay on this screen and get data whenever the user pulls to refresh the page
-        if (allDrinks && drinks && queries) {
+
+        // Otherwise, stay on this screen and fetch data
+        if (allDrinks && drinks && queries && !initalized) {
             async function fetchData() {
-                if (!drinksRendered) {
-                    await loadData();
-                    setDrinksRendered(true);
+                // Randomize the array of queries
+                const ranQueries = await getRandomQueries(queries, queries.length);
+                setSelectedQueries(ranQueries);
+
+                // Generate the first 3 horizontal lists
+                let drinkMatrix = [];
+                for (let i = 0; i < 3; i++) {
+                    let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
+                    drinkMatrix.push(drinkRow);
                 }
+
+                setQueryIndex(3);
+                setRenderItems(drinkMatrix);
+                setIsLoaded(true);
+                setInitialized(true);
             }
             fetchData();
         }
     }, [queries, drinks, allDrinks, drinkID]);
 
-    const loadData = async () => {
-        console.log('loadData');
-        console.log(queries.length);
-        if (queries) {
-            console.log('queries')
-            let ranQueries = await getRandomQueries(queries, 9);
-            console.log(ranQueries.length);
-            setSelectedQueries(ranQueries);
+    // Every time a component is added to the Render Items state,
+    // Check the number of items in the state.
+    // On certain conditions (total lengths of the currently rendered items), 
+    // you must add an advertisement OR a single drink component
+    useEffect(() => {
+        if (renderItems.length % 4 === 0) {
+            let currItems = [...renderItems];
+            currItems.push({ itemType: 'advertisement' });
+            setRenderItems(currItems);
 
-            let drinkMatrix = [];
-            for (let i = 0; i < ranQueries.length; i++) {
-                let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
-                drinkMatrix.push(drinkRow);
-            }
-
-            setSelectedDrinks(drinkMatrix);
-            setIsLoaded(true);
         }
+    }, [renderItems]);
 
+    // Get the drinks corresponding to the current drink query
+    const fetchDrinkRow = async () => {
+        let res = await getDrinksWithQuery(drinks, selectedQueries[queryIndex], 6);
+        setQueryIndex(queryIndex + 1);
+        return res;
     }
 
-    const onRefresh = React.useCallback(() => {
-        setIsRefreshing(true);
-        wait(1)
-            .then(() => loadData())
-            .then(() => setIsRefreshing(false));
-    }, []);
-
-    // TODO: for some funking reason the banner ad here does not want to cooperate.
-    // The horizontal List above it has a weirdly long margin bottom, even though I am specifically 
-    // setting marginAmount. Any fix would be fucking great, thanks.
-    const renderHorizontalList = (drinks, index) => {
-        if (drinks.length < 3) {
+    const retrieveData = async () => {
+        console.log("fetching more data");
+        // If the query index is already at the end of all queries
+        // then you can no longer retrieve more data
+        if (queryIndex >= selectedQueries.length) {
             return;
         }
 
-        let res = [];
-        if (isMember && index === 4) {
-            res.push(<View style={{ marginBottom: 30, backgroundColor: 'red', marginTop: 0, top: 0 }}>
-                <AdBanner1 />
-            </View>);
-        } else if (isMember && index === 8) {
-            res.push(<View style={{ marginBottom: 30 }}>
-                <AdBanner1 />
-            </View>)
+        setIsRefreshing(true);
+        let currRow = await fetchDrinkRow();
+        if (currRow) {
+            setRenderItems([...renderItems, currRow]);
         }
+        console.log(renderItems.length);
+        setIsRefreshing(false);
+    }
 
-        let marginAmount = 0;
-        if (res.length == 0) {
-            marginAmount = 50;
-        }
-
-        return (
-            <>
-                {res}
-                <View style={{ marginLeft: 8, marginBottom: marginAmount }}>
-                    <HorizontalList
-                        isRefreshing={isRefreshing}
-                        data={drinks}
-                        index={index}
-                        key={index}
-                        query={selectedQueries[index]}
-                        navigation={navigation}
-                        navigateTo={'DrinkDetailScreen'}
-                        drinkType={'Drink'}
-                    />
+    // Render the items here. This could either be the horizontal list or an advertisement
+    const renderItem = ({ item, index }) => {
+        // console.log(index);
+        if (item.itemType === 'advertisement') {
+            return (
+                <View style={{ marginBottom: 30 }}>
+                    <AdBanner1 />
                 </View>
-            </>
-        )
+            )
+        } else {
+            if (item.length > 2) {
+                return (
+                    <View style={{ marginLeft: 8, marginBottom: 50 }}>
+                        <HorizontalList
+                            data={item}
+                            index={index}
+                            key={index}
+                            query={selectedQueries[index]}
+                            navigation={navigation}
+                            navigateTo={'DrinkDetailScreen'}
+                            drinkType={'Drink'}
+                        />
+                    </View>
+                )
+            }
+        }
     }
 
     if (!isLoaded) {
@@ -130,30 +136,30 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
             </SafeAreaView>
         );
     }
-    // TODO: Change the 'isMember' to '!isMember' after testing UI
     return (
-        <KeyboardAwareScrollView
-            enableOnAndroid={true}
-            enableAutomaticScroll={(Platform.OS === 'ios')}
-            contentContainerStyle={{ flexGrow: 1 }}
-            refreshControl={
-                <RefreshControl
-                    refreshing={isRefreshing}
-                    onRefresh={onRefresh}
-                    tintColor={Styles.DARK_PINK}
-                    colors={[Styles.DARK_PINK]}
-                />
-            }
-        >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, isRefreshing && Platform.OS === 'ios' && { top: 0 }]}>
-                <View style={DiscoverStyles.titleContainer}>
-                    <Text style={GlobalStyles.titlebold1}>DISCOVER</Text>
-                </View>
-                {selectedDrinks.map((drinks, index) => {
-                    return renderHorizontalList(drinks, index)
-                })}
-            </SafeAreaView>
-        </KeyboardAwareScrollView>
+        <SafeAreaView>
+            <FlatList
+                ListHeaderComponent={
+                    <View style={[DiscoverStyles.titleContainer, GlobalStyles.headerSafeArea, { marginBottom: 50 }]}>
+                        <Text style={GlobalStyles.titlebold1}>DISCOVER</Text>
+                    </View>
+                }
+                data={renderItems}
+                keyExtractor={(item, index) => '' + index}
+                renderItem={renderItem}
+                horizontal={false}
+                bounces={false}
+
+                onEndReached={retrieveData}
+                onEndReachedThreshold={0.5}
+                refreshing={isRefreshing}
+                ListFooterComponent={isRefreshing &&
+                    <View style={{ marginTop: 20 }} >
+                        <ActivityIndicator color={Styles.DARK_PINK} />
+                    </View>
+                }
+            />
+        </SafeAreaView>
     );
 }
 
