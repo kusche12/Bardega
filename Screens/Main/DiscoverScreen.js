@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, Text, SafeAreaView, View, Platform, FlatList, ActivityIndicator } from 'react-native';
+import { RefreshControl, Text, SafeAreaView, View, Platform, FlatList, ActivityIndicator, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -20,13 +20,14 @@ const wait = (timeout) => {
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of a number of drinks that fit each query
-const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMember }) => {
+const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMember, ads }) => {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [initalized, setInitialized] = useState(false);
     const [selectedQueries, setSelectedQueries] = useState(null);
     const [queryIndex, setQueryIndex] = useState(0);
+    const [adIndex, setAdIndex] = useState(0);
     const [renderItems, setRenderItems] = useState([]);
 
     useEffect(() => {
@@ -37,7 +38,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         }
 
         // Otherwise, stay on this screen and fetch data
-        if (allDrinks && drinks && queries && !initalized) {
+        if (allDrinks && drinks && queries && !initalized && ads) {
             async function fetchData() {
                 // Randomize the array of queries
                 const ranQueries = await getRandomQueries(queries, queries.length);
@@ -57,20 +58,23 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
             }
             fetchData();
         }
-    }, [queries, drinks, allDrinks, drinkID]);
+    }, [queries, drinks, allDrinks, drinkID, ads]);
 
     // Every time a component is added to the Render Items state,
     // Check the number of items in the state.
     // On certain conditions (total lengths of the currently rendered items), 
     // you must add an advertisement OR a single drink component
     useEffect(() => {
-        if (renderItems.length % 4 === 0) {
-            let currItems = [...renderItems];
-            currItems.push({ itemType: 'advertisement' });
-            setRenderItems(currItems);
-
+        if (ads) {
+            if (renderItems.length % 3 === 0 && adIndex < ads.length) {
+                let currItems = [...renderItems];
+                currItems.push({ itemType: 'advertisement', imageURL: ads[adIndex].imageURL });
+                setRenderItems(currItems);
+                setAdIndex(adIndex + 1);
+            }
         }
-    }, [renderItems]);
+
+    }, [ads, renderItems]);
 
     // Get the drinks corresponding to the current drink query
     const fetchDrinkRow = async () => {
@@ -79,10 +83,10 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         return res;
     }
 
+    // If the query index is already at the end of all queries
+    // then you can no longer retrieve more data
     const retrieveData = async () => {
-        console.log("fetching more data");
-        // If the query index is already at the end of all queries
-        // then you can no longer retrieve more data
+        //console.log("fetching more data");
         if (queryIndex >= selectedQueries.length) {
             return;
         }
@@ -92,33 +96,36 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         if (currRow) {
             setRenderItems([...renderItems, currRow]);
         }
-        console.log(renderItems.length);
+        //console.log(renderItems.length);
         setIsRefreshing(false);
     }
 
     // Render the items here. This could either be the horizontal list or an advertisement
     const renderItem = ({ item, index }) => {
-        // console.log(index);
         if (item.itemType === 'advertisement') {
+            console.log('RENDERING AN AD')
+            console.log(item.imageURL);
             return (
-                <View style={{ marginBottom: 30 }}>
-                    <AdBanner1 />
+                <View style={{ marginLeft: 8, marginBottom: 50 }}>
+                    <Text>HELLO WORLDDDDDDDDDDDDDDS</Text>
+                    <Image source={item.imageURL} style={{ width: Styles.width, height: Styles.height }} />
                 </View>
             )
         } else {
             if (item.length > 2) {
                 return (
-                    <View style={{ marginLeft: 8, marginBottom: 50 }}>
-                        <HorizontalList
-                            data={item}
-                            index={index}
-                            key={index}
-                            query={selectedQueries[index]}
-                            navigation={navigation}
-                            navigateTo={'DrinkDetailScreen'}
-                            drinkType={'Drink'}
-                        />
-                    </View>
+                    null
+                    // <View style={{ marginLeft: 8, marginBottom: 50 }}>
+                    //     <HorizontalList
+                    //         data={item}
+                    //         index={index}
+                    //         key={index}
+                    //         query={selectedQueries[index]}
+                    //         navigation={navigation}
+                    //         navigateTo={'DrinkDetailScreen'}
+                    //         drinkType={'Drink'}
+                    //     />
+                    // </View>
                 )
             }
         }
@@ -137,7 +144,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         );
     }
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ marginBottom: 50 }}>
             <FlatList
                 ListHeaderComponent={
                     <View style={[DiscoverStyles.titleContainer, GlobalStyles.headerSafeArea, { marginBottom: 50 }]}>
@@ -170,19 +177,20 @@ const mapStateToProps = (state, ownProps) => {
     const profiles = state.firestore.data.profiles;
     const userEmail = profiles[state.firebase.auth.uid].email || '';
     const memberEmails = state.firestore.data.memberEmails || [];
-    const isMember = memberEmails[userEmail]
+    const isMember = memberEmails[userEmail];
 
     return {
         drinkID: ownProps.route.params.drinkID || null,
         allDrinks: state.firestore.data.drinks,
         drinks: state.firestore.ordered.drinks,
         queries: state.firestore.ordered.queries,
-        isMember: isMember
+        ads: state.firestore.ordered.ads,
+        isMember: isMember,
     }
 }
 
 // Connect the drink detail page to our redux store and firestore DB
 export default compose(
-    firestoreConnect(() => ['drinks', 'queries', 'memberEmails', 'profiles']),
+    firestoreConnect(() => ['drinks', 'queries', 'memberEmails', 'profiles', 'ads']),
     connect(mapStateToProps)
 )(DiscoverScreen);

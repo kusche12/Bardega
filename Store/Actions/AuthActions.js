@@ -151,7 +151,7 @@ export const signUp = (newUser) => {
                 .doc(notifID)
                 .set({ 1: 'default' });
             await firestore
-                .collection('collections')
+                .collection('notifications')
                 .doc(notifID)
                 .collection('allNotifications')
                 .doc('default')
