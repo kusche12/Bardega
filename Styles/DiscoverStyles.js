@@ -9,8 +9,7 @@ export default StyleSheet.create({
         marginBottom: 20,
     },
     horizontalContainer: {
-        height: 250,
-        marginBottom: 50,
+        height: 250
     },
     cardContainer: {
         width: 140,

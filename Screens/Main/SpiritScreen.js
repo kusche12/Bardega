@@ -107,15 +107,17 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits, userID }
                     </View>
                 </View>
                 {selectedDrinks.map((spirits, index) => {
-                    return <HorizontalList
-                        data={spirits}
-                        index={index}
-                        key={index}
-                        query={selectedQueries[index]}
-                        navigation={navigation}
-                        navigateTo={'SpiritDetailScreen'}
-                        drinkType={'Spirit'}
-                    />
+                    if (spirits.length >= 3) {
+                        return <HorizontalList
+                            data={spirits}
+                            index={index}
+                            key={index}
+                            query={selectedQueries[index]}
+                            navigation={navigation}
+                            navigateTo={'SpiritDetailScreen'}
+                            drinkType={'Spirit'}
+                        />
+                    }
                 })}
             </SafeAreaView>
         </KeyboardAwareScrollView>

@@ -6,6 +6,8 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
 import LoadingBar from '../../Components/Main/LoadingBar';
+import AdBanner1 from '../../Components/SVG/AdBanner1';
+// import AdBanner2 from '../../Components/SVG/AdBanner2';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
@@ -19,7 +21,7 @@ const wait = (timeout) => {
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of 10 drinks that fit each query
-const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => {
+const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMember }) => {
 
     const [isLoaded, setIsLoaded] = useState(false);
     const [selectedDrinks, setSelectedDrinks] = useState(null);
@@ -45,44 +47,12 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
         }
     }, [queries, drinks, allDrinks, drinkID]);
 
-    // Test function only. Replcace this with the function below for production
-    // const loadData = async () => {
-    //     const ranQueries = [
-    //             {
-    //             filterName: "Sweet",
-    //             filterType: "tag",
-    //             name: "Sweet & Simple",
-    //         },
-    //         {
-    //             filterName: "light",
-    //             filterType: "prepTime",
-    //             id: "6QxFD8AtrI4cgPt61Che",
-    //             name: "Light Prep",
-    //         },
-    //         {
-    //             filterName: "virgin",
-    //             filterType: "strength",
-    //             name: "Non-Alcoholic",
-    //         }
-    //     ]
-    //     setSelectedQueries(ranQueries)
-
-    //     let drinkMatrix = [];
-    //     for (let i = 0; i < ranQueries.length; i++) {
-    //         let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 10);
-    //         drinkMatrix.push(drinkRow);
-    //     }
-
-    //     setSelectedDrinks(drinkMatrix);
-    //     setIsLoaded(true);
-    // }
-
     const loadData = async () => {
         console.log('loadData');
         console.log(queries.length);
         if (queries) {
             console.log('queries')
-            let ranQueries = await getRandomQueries(queries, 8);
+            let ranQueries = await getRandomQueries(queries, 9);
             console.log(ranQueries.length);
             setSelectedQueries(ranQueries);
 
@@ -105,6 +75,49 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
             .then(() => setIsRefreshing(false));
     }, []);
 
+    // TODO: for some funking reason the banner ad here does not want to cooperate.
+    // The horizontal List above it has a weirdly long margin bottom, even though I am specifically 
+    // setting marginAmount. Any fix would be fucking great, thanks.
+    const renderHorizontalList = (drinks, index) => {
+        if (drinks.length < 3) {
+            return;
+        }
+
+        let res = [];
+        if (isMember && index === 4) {
+            res.push(<View style={{ marginBottom: 30, backgroundColor: 'red', marginTop: 0, top: 0 }}>
+                <AdBanner1 />
+            </View>);
+        } else if (isMember && index === 8) {
+            res.push(<View style={{ marginBottom: 30 }}>
+                <AdBanner1 />
+            </View>)
+        }
+
+        let marginAmount = 0;
+        if (res.length == 0) {
+            marginAmount = 50;
+        }
+
+        return (
+            <>
+                {res}
+                <View style={{ marginLeft: 8, marginBottom: marginAmount }}>
+                    <HorizontalList
+                        isRefreshing={isRefreshing}
+                        data={drinks}
+                        index={index}
+                        key={index}
+                        query={selectedQueries[index]}
+                        navigation={navigation}
+                        navigateTo={'DrinkDetailScreen'}
+                        drinkType={'Drink'}
+                    />
+                </View>
+            </>
+        )
+    }
+
     if (!isLoaded) {
         return (
             <SafeAreaView>
@@ -117,6 +130,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
             </SafeAreaView>
         );
     }
+    // TODO: Change the 'isMember' to '!isMember' after testing UI
     return (
         <KeyboardAwareScrollView
             enableOnAndroid={true}
@@ -131,21 +145,12 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
                 />
             }
         >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8 }, isRefreshing && Platform.OS === 'ios' && { top: 0 }]}>
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, isRefreshing && Platform.OS === 'ios' && { top: 0 }]}>
                 <View style={DiscoverStyles.titleContainer}>
                     <Text style={GlobalStyles.titlebold1}>DISCOVER</Text>
                 </View>
                 {selectedDrinks.map((drinks, index) => {
-                    return <HorizontalList
-                        isRefreshing={isRefreshing}
-                        data={drinks}
-                        index={index}
-                        key={index}
-                        query={selectedQueries[index]}
-                        navigation={navigation}
-                        navigateTo={'DrinkDetailScreen'}
-                        drinkType={'Drink'}
-                    />
+                    return renderHorizontalList(drinks, index)
                 })}
             </SafeAreaView>
         </KeyboardAwareScrollView>
@@ -153,18 +158,25 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks }) => 
 }
 
 // If this screen is navigated to with a drinkID, then redirect to the DrinkDetailScreen
+// Also, check if the current user is a member. If they are, do not render ads. If they are not
+// then render them ads
 const mapStateToProps = (state, ownProps) => {
+    const profiles = state.firestore.data.profiles;
+    const userEmail = profiles[state.firebase.auth.uid].email || '';
+    const memberEmails = state.firestore.data.memberEmails || [];
+    const isMember = memberEmails[userEmail]
 
     return {
         drinkID: ownProps.route.params.drinkID || null,
         allDrinks: state.firestore.data.drinks,
         drinks: state.firestore.ordered.drinks,
-        queries: state.firestore.ordered.queries
+        queries: state.firestore.ordered.queries,
+        isMember: isMember
     }
 }
 
 // Connect the drink detail page to our redux store and firestore DB
 export default compose(
-    firestoreConnect(() => ['drinks', 'queries']),
+    firestoreConnect(() => ['drinks', 'queries', 'memberEmails', 'profiles']),
     connect(mapStateToProps)
 )(DiscoverScreen);
