@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableWithoutFeedback, Text, SafeAreaView, View, FlatList, ActivityIndicator, Image, Linking } from 'react-native';
+import { TouchableWithoutFeedback, Text, SafeAreaView, View, FlatList, ActivityIndicator, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
+import Image from 'react-native-scalable-image';
 import LoadingBar from '../../Components/Main/LoadingBar';
+import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
+import { Placeholder, PlaceholderMedia, Fade } from 'rn-placeholder';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const AD_WIDTH = 375;
-const AD_HEIGHT = 250;
-
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of a number of drinks that fit each query
 const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMember, ads }) => {
 
+    const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [initalized, setInitialized] = useState(false);
     const [selectedQueries, setSelectedQueries] = useState(null);
@@ -36,6 +37,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         // Otherwise, stay on this screen and fetch data
         if (allDrinks && drinks && queries && !initalized && ads) {
             async function fetchData() {
+                setInitialized(true);
                 // Randomize the array of queries
                 const ranQueries = await getRandomQueries(queries, queries.length);
                 setSelectedQueries(ranQueries);
@@ -49,9 +51,9 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                     }
                 }
 
+                setIsLoading(false)
                 setQueryIndex(3);
                 setRenderItems(drinkMatrix);
-                setInitialized(true);
             }
             fetchData();
         }
@@ -79,7 +81,9 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         // if (renderItems.length % 5 === 0 && ads && adIndex < ads.length && !isMember) {
         if (renderItems.length % 5 === 0 && ads && adIndex < ads.length) {
             let currItems = [...renderItems];
-            currItems.push({ itemType: 'advertisement', imageURL: ads[adIndex].imageURL });
+            const image = ads[adIndex].imageURL;
+            cacheImages(image, image);
+            currItems.push({ itemType: 'advertisement', imageURL: image });
             setRenderItems(currItems);
             setAdIndex(adIndex + 1);
         } else {
@@ -97,9 +101,9 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
     const renderItem = ({ item, index }) => {
         if (item.itemType === 'advertisement') {
             return (
-                <View style={{ marginBottom: 50 }}>
+                <View style={{ flexDirection: 'row', marginBottom: 50, alignItems: 'center', justifyContent: 'center' }}>
                     <TouchableWithoutFeedback onPress={() => Linking.openURL('https://bardegacocktails.com')}>
-                        <Image source={{ uri: item.imageURL }} style={{ width: AD_WIDTH, height: AD_HEIGHT }} />
+                        <Image source={{ uri: item.imageURL }} width={Styles.width * .95} />
                     </TouchableWithoutFeedback>
                 </View>
             )
@@ -121,7 +125,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
     }
 
 
-    if (!initalized) {
+    if (isLoading) {
         return (
             <SafeAreaView>
                 <View>
@@ -148,7 +152,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                 bounces={false}
 
                 onEndReached={retrieveData}
-                onEndReachedThreshold={0.5}
+                onEndReachedThreshold={0.6}
                 refreshing={isRefreshing}
                 ListFooterComponent={isRefreshing &&
                     <View style={{ marginTop: 0, marginBottom: 20 }} >
