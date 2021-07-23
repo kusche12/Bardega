@@ -82,7 +82,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                     }
                 }
 
-                if (res.length > 10) {
+                if (res.length > 20) {
                     break;
                 }
             }
@@ -143,6 +143,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
     return (
         <View style={styles.container}>
             <View style={styles.inputImageRow}>
+                <Image source={Images.topNav.search} style={styles.image} />
                 <Autocomplete
                     clearButtonMode={'always'}
                     data={data}
@@ -153,7 +154,6 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                     autoCorrect={false}
                     style={[GlobalStyles.paragraph2, styles.inputContainerStyle]}
                 />
-                <Image source={Images.topNav.search} style={styles.image} />
             </View>
 
         </View>

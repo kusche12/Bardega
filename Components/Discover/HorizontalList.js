@@ -5,9 +5,9 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 
 const HorizontalList = ({ data, query, navigation, navigateTo, drinkType }) => {
-    const renderItem = ({ item }) => {
+    const renderItem = ({ item, index }) => {
         return (
-            <DrinkCard isRefreshing={false} drink={item} navigation={navigation} navigateTo={navigateTo} />
+            <DrinkCard key={'' + index} isRefreshing={false} drink={item} navigation={navigation} navigateTo={navigateTo} />
         )
 
     }

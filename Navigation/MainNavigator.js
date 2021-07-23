@@ -37,11 +37,11 @@ const MainNavigator = ({ userID, memberEmails, profiles, updateIsMember }) => {
     useEffect(() => {
         if (profiles && memberEmails && !checkMember) {
             const profile = profiles[userID];
-            // User is on member list but not reflected in their isMember field, update it
-            if (memberEmails[profile.email] && !userID.isMember) {
+            // User is on member list
+            if (memberEmails[profile.email]) {
                 updateIsMember({ id: userID, memberRole: true });
-                // User is not on member list but it is reflected as true in their isMember field, update it
-            } else if (!memberEmails[profile.email] && profile.isMember) {
+                // User is not on member list
+            } else if (!memberEmails[profile.email]) {
                 updateIsMember({ id: userID, memberRole: false });
             }
             setCheckMember(true);

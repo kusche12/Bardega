@@ -109,11 +109,11 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits, userID }
                 {selectedDrinks.map((spirits, index) => {
                     if (spirits.length >= 3) {
                         return (
-                            <View style={{ marginBottom: 50 }}>
+                            <View key={'' + index} style={{ marginBottom: 50 }}>
                                 <HorizontalList
                                     data={spirits}
                                     index={index}
-                                    key={index}
+                                    key={'' + index}
                                     query={selectedQueries[index]}
                                     navigation={navigation}
                                     navigateTo={'SpiritDetailScreen'}

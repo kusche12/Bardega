@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableWithoutFeedback, Text, SafeAreaView, View, FlatList, ActivityIndicator, Linking } from 'react-native';
+import { TouchableWithoutFeedback, Text, SafeAreaView, View, FlatList, ActivityIndicator, Linking, RefreshControl, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -19,6 +19,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [isReloading, setIsReloading] = useState(false);
     const [initalized, setInitialized] = useState(false);
     const [selectedQueries, setSelectedQueries] = useState(null);
     const [queryIndex, setQueryIndex] = useState(0);
@@ -34,28 +35,41 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 
         // Otherwise, stay on this screen and fetch data
         if (allDrinks && drinks && queries && !initalized && ads) {
-            async function fetchData() {
-                setInitialized(true);
-                // Randomize the array of queries
-                const ranQueries = await getRandomQueries(queries, queries.length);
-                setSelectedQueries(ranQueries);
-
-                // Generate the first 3 horizontal lists
-                let drinkMatrix = [];
-                for (let i = 0; i < 3; i++) {
-                    let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
-                    if (drinkRow.length > 2) {
-                        drinkMatrix.push({ drinkRow, query: ranQueries[i] });
-                    }
-                }
-
-                setIsLoading(false)
-                setQueryIndex(3);
-                setRenderItems(drinkMatrix);
-            }
             fetchData();
         }
     }, [queries, drinks, allDrinks, drinkID, ads]);
+
+    const fetchData = async () => {
+        setInitialized(true);
+        // Randomize the array of queries
+        const ranQueries = await getRandomQueries(queries, queries.length);
+        setSelectedQueries(ranQueries);
+
+        // Generate the first 3 horizontal lists
+        let drinkMatrix = [];
+        for (let i = 0; i < 3; i++) {
+            let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
+            if (drinkRow.length > 2) {
+                drinkMatrix.push({ drinkRow, query: ranQueries[i] });
+            }
+        }
+
+        setIsLoading(false)
+        setQueryIndex(3);
+        setRenderItems(drinkMatrix);
+    }
+
+    // Completely reload state when the user "pulls to refresh"
+    const reloadPage = async () => {
+        setIsReloading(true)
+        setIsLoading(true);
+        setQueryIndex(0);
+        setRenderItems([]);
+        setAdIndex(0);
+        setSelectedQueries(null);
+        await fetchData();
+        setIsReloading(false);
+    }
 
     // Get the drinks corresponding to the current drink query
     const fetchDrinkRow = async () => {
@@ -132,22 +146,33 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         );
     }
     return (
-        <SafeAreaView style={{ marginBottom: 0 }}>
+        <SafeAreaView>
             <FlatList
                 ListHeaderComponent={
                     <View style={[DiscoverStyles.titleContainer, GlobalStyles.headerSafeArea, { marginBottom: 25 }]}>
                         <Text style={GlobalStyles.titlebold1}>DISCOVER</Text>
                     </View>
                 }
+
                 data={renderItems}
                 keyExtractor={(item, index) => '' + index}
                 renderItem={renderItem}
                 horizontal={false}
-                bounces={false}
 
                 onEndReached={retrieveData}
-                onEndReachedThreshold={1}
-                refreshing={isRefreshing}
+                onEndReachedThreshold={.5}
+
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isReloading}
+                        onRefresh={reloadPage}
+                        tintColor={Styles.DARK_PINK}
+                        colors={[Styles.DARK_PINK]}
+                    />
+                }
+
+                // style={{ marginBottom: 20 }}
+
                 ListFooterComponent={isRefreshing &&
                     <View style={{ marginTop: 0, marginBottom: 20 }} >
                         <ActivityIndicator color={Styles.DARK_PINK} />
@@ -166,13 +191,14 @@ const mapStateToProps = (state, ownProps) => {
     const userEmail = profiles[state.firebase.auth.uid].email || '';
     const memberEmails = state.firestore.data.memberEmails || [];
     const isMember = memberEmails[userEmail];
+    const ads = state.firestore.ordered.ads;
 
     return {
         drinkID: ownProps.route.params.drinkID || null,
         allDrinks: state.firestore.data.drinks,
         drinks: state.firestore.ordered.drinks,
         queries: state.firestore.ordered.queries,
-        ads: state.firestore.ordered.ads,
+        ads: ads,
         isMember: isMember,
     }
 }

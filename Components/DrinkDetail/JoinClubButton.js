@@ -11,8 +11,8 @@ function JoinClubButton() {
                 paddingHorizontal: 14, paddingVertical: 6, backgroundColor: Styles.DARK_PINK, borderRadius: 16, flexDirection: 'row',
                 alignItems: 'center', justifyContent: 'center', marginBottom: 22
             }}>
-                <Text style={[GlobalStyles.titlebold3, { color: 'white', fontSize: 16 }]}>Join the Club</Text>
-                <Image source={Images.detail.rightArrowWhite} style={{ width: 12, height: 12, resizeMode: 'contain', marginLeft: 8 }} />
+                <Text style={[GlobalStyles.titlebold3, { color: 'white', fontSize: 14 }]}>Join the Club</Text>
+                <Image source={Images.detail.rightArrowWhite} style={{ width: 10, height: 10, resizeMode: 'contain', marginLeft: 8 }} />
             </View>
         </TouchableWithoutFeedback>
     )
