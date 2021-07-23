@@ -53,12 +53,11 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser,
                         } else {
                             setIsRequested(false);
                         }
+                        setIsLoading(false);
                     }).catch((err) => {
                         console.log(err)
                     });
             }
-
-            setIsLoading(false);
         }
         fetchData();
     }, [userB, userA, isDisabled]);
@@ -108,7 +107,13 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser,
     }
 
     if (isLoading) {
-        return null;
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <View style={[UserStyles.button, { backgroundColor: Styles.LOADING_GRAY, borderColor: Styles.LOADING_GRAY, marginTop: 4 }]}>
+                    <Text></Text>
+                </View>
+            </View>
+        )
     }
 
     if (ownProfile) {

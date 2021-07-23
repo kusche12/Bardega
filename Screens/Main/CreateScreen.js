@@ -160,7 +160,28 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
 
     // Give the tags some time to load from firestore
     if (!tags || isLoading) {
-        return null;
+        return (
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]}>
+
+                <Text style={GlobalStyles.titlebold1}>CREATE A COCKTAIL</Text>
+
+                <View style={CreateStyles.inputBox}>
+                    <Text style={GlobalStyles.titlebold2}>Cocktail Name</Text>
+                    <Text
+                        style={[GlobalStyles.paragraph1, { color: Styles.GRAY, width: Styles.width * .9, textAlign: 'center' }]}
+                    >Give your drink a name</Text>
+                </View>
+
+                <View style={CreateStyles.inputBox}>
+                    <Text style={GlobalStyles.titlebold2}>Description</Text>
+                    <Text
+                        style={[GlobalStyles.paragraph1, { color: Styles.GRAY, width: Styles.width * .9, textAlign: 'center', marginTop: 5 }]}
+                    >Give your drink a description</Text>
+                </View>
+
+                <CreateImage {...{ drinkImage, setDrinkImage }} />
+            </SafeAreaView>
+        );
     } else {
         return (
             <KeyboardAwareScrollView

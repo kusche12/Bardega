@@ -14,12 +14,13 @@ import DetailLikeCommentShare from '../../Components/DrinkDetail/DetailLikeComme
 import { renderTime } from '../../Functions/miscFunctions';
 import { ADMIN_ID } from '../../API/ADMIN_ID';
 import { Placeholder, PlaceholderMedia, Loader } from 'rn-placeholder';
+import JoinClubButton from '../../Components/DrinkDetail/JoinClubButton';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
+const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userID, clearDrinkState, deleteDrink, isMember }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [image, setImage] = useState(null);
 
@@ -213,10 +214,15 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
                         </View>
                         {renderEditOrFlag()}
                     </View>
-                    <View style={DetailStyles.shadowContainer}>
-                        <View style={DetailStyles.photoContainer}>
-                            <Image source={{ uri: image }} key={new Date()} style={DetailStyles.drinkImage} />
+                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                        <View style={DetailStyles.shadowContainer}>
+                            <View style={[DetailStyles.photoContainer, !isMember && drink.authorID === ADMIN_ID && { marginBottom: 8 }]}>
+                                <Image source={{ uri: image }} key={new Date()} style={DetailStyles.drinkImage} />
+                            </View>
                         </View>
+                        {!isMember && drink.authorID === ADMIN_ID &&
+                            <JoinClubButton />
+                        }
                     </View>
 
                     {drink.recipe && drink.recipe.length > 0 &&
@@ -277,14 +283,19 @@ const mapStateToProps = (state, ownProps) => {
     const profile = profiles ? profiles[authorID] : null;
 
     const drinks = state.firestore.data.drinks;
-    const drink = drinks ? drinks[ownProps.route.params.drink.id] : null
+    const drink = drinks ? drinks[ownProps.route.params.drink.id] : null;
+
+    const userEmail = profiles[state.firebase.auth.uid].email || '';
+    const memberEmails = state.firestore.data.memberEmails;
+    const isMember = memberEmails[userEmail];
 
     return {
         author: profile,
         comments: state.firestore.ordered['allComments' + drink.commentID],
         authors: state.firestore.data.profiles,
         userID: state.firebase.auth.uid,
-        drink: drink
+        drink: drink,
+        isMember: isMember
     }
 }
 
@@ -300,6 +311,7 @@ export default compose(
     firestoreConnect((props) => [
         { collection: 'profiles' },
         { collection: 'drinks' },
+        { collection: 'memberEmails' },
         {
             collection: "comments",
             doc: props.route.params.drink.commentID,

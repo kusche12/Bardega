@@ -75,6 +75,8 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 
         setIsRefreshing(true);
 
+        // TODO: Replace if statement with the comment when done testing ads
+        // if (renderItems.length % 5 === 0 && ads && adIndex < ads.length && !isMember) {
         if (renderItems.length % 5 === 0 && ads && adIndex < ads.length) {
             let currItems = [...renderItems];
             currItems.push({ itemType: 'advertisement', imageURL: ads[adIndex].imageURL });

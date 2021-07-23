@@ -68,7 +68,8 @@ export default {
         emptyComment: require('./empty_comment.png'),
         share: require('./share.png'),
         flag: require('./flag.png'),
-        success: require('./success.png')
+        success: require('./success.png'),
+        rightArrowWhite: require('./right_arrow_white.png')
     },
     star: {
         starFull: require('./star_full.png'),

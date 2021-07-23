@@ -10,6 +10,7 @@ import { compose } from 'redux';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Images from '../../Images/Images';
 import { renderNum } from '../../Functions/miscFunctions';
+import { Placeholder, PlaceholderMedia, Fade } from 'rn-placeholder';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -24,8 +25,8 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [isPrivate, setIsPrivate] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const [userDrinks, setUserDrinks] = useState(null);
-    const [likedDrinks, setLikedDrinks] = useState(null);
+    const [userDrinks, setUserDrinks] = useState([]);
+    const [likedDrinks, setLikedDrinks] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
 
     // When the user pulls down on the profile screen,
@@ -41,6 +42,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     // Load all the drinks AND liked drinks any time either of these arrays change
     useEffect(() => {
         if (user && drinks) {
+            cacheImages(user.imageURL, user.id);
             // Check if this profile should be rendered based on privacy settings
             if (!ownProfile && user.private) {
                 let db = firebase.firestore();
@@ -63,7 +65,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 setIsPrivate(false);
             }
             loadUserDrinks();
-            cacheImages(user.imageURL, user.id);
         }
     }, [user]);
 
@@ -195,8 +196,65 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
         )
     }
 
+    // Render the animated blocks in place of the drinks while the screen is loading in
+    const renderLoadingDrink = (item) => {
+        return (
+            // <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} key={item.id}>
+            <View style={[UserStyles.drinkImage]} key={item.id}>
+                <Placeholder Animation={Fade}>
+                    <PlaceholderMedia style={{ width: .33 * Styles.width, height: .33 * Styles.width }} />
+                </Placeholder>
+            </View>
+        )
+    }
+
     if (isLoading) {
-        return null;
+        return (
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginTop: 20, marginBottom: 40 }]} >
+                <View style={UserStyles.infoContainer}>
+                    <View style={UserStyles.infoRow}>
+                        <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={UserStyles.profileImage} />
+                        <View style={{ marginLeft: 16 }}>
+                            <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>
+                            <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={[UserStyles.button, { backgroundColor: Styles.LOADING_GRAY, borderColor: Styles.LOADING_GRAY, marginTop: 4 }]}>
+                                    <Text></Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+
+                <View style={UserStyles.infoContainer}>
+                    <Text style={GlobalStyles.paragraph2}>{user.bio}</Text>
+                </View>
+
+                <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>
+                    {renderStatBox(userDrinks.length, 'Recipes')}
+                    {renderStatBox(user.numFollowers, 'Followers')}
+                    {renderStatBox(user.numFollowing, 'Following')}
+                </View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
+                    {renderIndexButton(0, 'grid')}
+                    {renderIndexButton(1, 'heart')}
+                </View>
+                <View style={[UserStyles.indexButtonLine, { marginLeft: (Styles.width / 2) * activeIndex }]}></View>
+
+                <View style={{ width: Styles.width }}>
+                    <FlatList
+                        data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }]}
+                        renderItem={(item) => renderLoadingDrink(item)}
+                        keyExtractor={item => item.id}
+                        numColumns={3}
+                        scrollEnabled={false}
+                        horizontal={false}
+                    />
+                </View>
+
+            </SafeAreaView>
+        )
     }
 
     return (

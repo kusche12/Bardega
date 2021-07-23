@@ -19,7 +19,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
-        marginBottom: 20,
+        marginBottom: 30,
         overflow: 'hidden',
     },
     shadowContainer: {
