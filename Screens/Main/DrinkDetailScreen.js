@@ -21,6 +21,7 @@ import Styles from '../../Styles/StyleConstants';
 const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [image, setImage] = useState(null);
+    console.log(drink);
 
     // Load the component after all props are set
     useEffect(() => {

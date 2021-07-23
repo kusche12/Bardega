@@ -108,15 +108,19 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits, userID }
                 </View>
                 {selectedDrinks.map((spirits, index) => {
                     if (spirits.length >= 3) {
-                        return <HorizontalList
-                            data={spirits}
-                            index={index}
-                            key={index}
-                            query={selectedQueries[index]}
-                            navigation={navigation}
-                            navigateTo={'SpiritDetailScreen'}
-                            drinkType={'Spirit'}
-                        />
+                        return (
+                            <View style={{ marginBottom: 50 }}>
+                                <HorizontalList
+                                    data={spirits}
+                                    index={index}
+                                    key={index}
+                                    query={selectedQueries[index]}
+                                    navigation={navigation}
+                                    navigateTo={'SpiritDetailScreen'}
+                                    drinkType={'Spirit'}
+                                />
+                            </View>
+                        )
                     }
                 })}
             </SafeAreaView>

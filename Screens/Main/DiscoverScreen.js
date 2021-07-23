@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { RefreshControl, Text, SafeAreaView, View, Platform, FlatList, ActivityIndicator, Image } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
 import LoadingBar from '../../Components/Main/LoadingBar';
-import AdBanner1 from '../../Components/SVG/AdBanner1';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
@@ -16,6 +14,10 @@ import Styles from '../../Styles/StyleConstants';
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
+
+const AD_WIDTH = 375;
+const AD_HEIGHT = 250;
+const RESOLUTION = Styles.width / 375;
 
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
@@ -48,88 +50,79 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                 let drinkMatrix = [];
                 for (let i = 0; i < 3; i++) {
                     let drinkRow = await getDrinksWithQuery(drinks, ranQueries[i], 6);
-                    drinkMatrix.push(drinkRow);
+                    if (drinkRow.length > 2) {
+                        drinkMatrix.push({ drinkRow, query: ranQueries[i] });
+                    }
                 }
 
                 setQueryIndex(3);
                 setRenderItems(drinkMatrix);
-                setIsLoaded(true);
                 setInitialized(true);
+                setIsLoaded(true);
             }
             fetchData();
         }
     }, [queries, drinks, allDrinks, drinkID, ads]);
 
-    // Every time a component is added to the Render Items state,
-    // Check the number of items in the state.
-    // On certain conditions (total lengths of the currently rendered items), 
-    // you must add an advertisement OR a single drink component
-    useEffect(() => {
-        if (ads) {
-            if (renderItems.length % 3 === 0 && adIndex < ads.length) {
-                let currItems = [...renderItems];
-                currItems.push({ itemType: 'advertisement', imageURL: ads[adIndex].imageURL });
-                setRenderItems(currItems);
-                setAdIndex(adIndex + 1);
-            }
-        }
-
-    }, [ads, renderItems]);
-
     // Get the drinks corresponding to the current drink query
     const fetchDrinkRow = async () => {
         let res = await getDrinksWithQuery(drinks, selectedQueries[queryIndex], 6);
-        setQueryIndex(queryIndex + 1);
         return res;
     }
 
-    // If the query index is already at the end of all queries
-    // then you can no longer retrieve more data
+    // Either get another horizontal row OR an ad based on the number of currently rendered items
     const retrieveData = async () => {
-        //console.log("fetching more data");
+        // If the query index is already at the end of all queries
+        // then you can no longer retrieve more data
         if (queryIndex >= selectedQueries.length) {
+            console.log('end reached')
             return;
         }
 
         setIsRefreshing(true);
-        let currRow = await fetchDrinkRow();
-        if (currRow) {
-            setRenderItems([...renderItems, currRow]);
+
+        if (renderItems.length % 5 === 0 && ads && adIndex < ads.length) {
+            let currItems = [...renderItems];
+            currItems.push({ itemType: 'advertisement', imageURL: ads[adIndex].imageURL });
+            setRenderItems(currItems);
+            setAdIndex(adIndex + 1);
+            setIsLoaded(true);
+        } else {
+            let drinkRow = await fetchDrinkRow();
+            if (drinkRow.length > 2) {
+                setRenderItems([...renderItems, { drinkRow, query: selectedQueries[queryIndex] }]);
+            }
+            setQueryIndex(queryIndex + 1);
         }
-        //console.log(renderItems.length);
+
         setIsRefreshing(false);
     }
 
     // Render the items here. This could either be the horizontal list or an advertisement
     const renderItem = ({ item, index }) => {
         if (item.itemType === 'advertisement') {
-            console.log('RENDERING AN AD')
-            console.log(item.imageURL);
             return (
-                <View style={{ marginLeft: 8, marginBottom: 50 }}>
-                    <Text>HELLO WORLDDDDDDDDDDDDDDS</Text>
-                    <Image source={item.imageURL} style={{ width: Styles.width, height: Styles.height }} />
+                <View style={{ marginBottom: 50 }}>
+                    <Image source={{ uri: item.imageURL }} style={{ width: AD_WIDTH, height: AD_HEIGHT }} />
                 </View>
             )
         } else {
-            if (item.length > 2) {
-                return (
-                    null
-                    // <View style={{ marginLeft: 8, marginBottom: 50 }}>
-                    //     <HorizontalList
-                    //         data={item}
-                    //         index={index}
-                    //         key={index}
-                    //         query={selectedQueries[index]}
-                    //         navigation={navigation}
-                    //         navigateTo={'DrinkDetailScreen'}
-                    //         drinkType={'Drink'}
-                    //     />
-                    // </View>
-                )
-            }
+            return (
+                <View style={{ marginLeft: 8, marginBottom: 50 }}>
+                    <HorizontalList
+                        data={item.drinkRow}
+                        index={index}
+                        key={index}
+                        query={item.query}
+                        navigation={navigation}
+                        navigateTo={'DrinkDetailScreen'}
+                        drinkType={'Drink'}
+                    />
+                </View>
+            )
         }
     }
+
 
     if (!isLoaded) {
         return (
@@ -144,7 +137,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         );
     }
     return (
-        <SafeAreaView style={{ marginBottom: 50 }}>
+        <SafeAreaView style={{ marginBottom: 0 }}>
             <FlatList
                 ListHeaderComponent={
                     <View style={[DiscoverStyles.titleContainer, GlobalStyles.headerSafeArea, { marginBottom: 50 }]}>
@@ -161,7 +154,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                 onEndReachedThreshold={0.5}
                 refreshing={isRefreshing}
                 ListFooterComponent={isRefreshing &&
-                    <View style={{ marginTop: 20 }} >
+                    <View style={{ marginTop: 20, paddinBottom: 10 }} >
                         <ActivityIndicator color={Styles.DARK_PINK} />
                     </View>
                 }
