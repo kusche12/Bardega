@@ -95,7 +95,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
             setQueryIndex(queryIndex + 1);
         }
 
-        setIsRefreshing(false);
+        //setIsRefreshing(false);
     }
 
     // Render the items here. This could either be the horizontal list or an advertisement
@@ -151,10 +151,10 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                 bounces={false}
 
                 onEndReached={retrieveData}
-                onEndReachedThreshold={0.5}
+                onEndReachedThreshold={0.8}
                 refreshing={isRefreshing}
                 ListFooterComponent={isRefreshing &&
-                    <View style={{ marginTop: 20, paddinBottom: 10 }} >
+                    <View style={{ marginTop: 0, marginBottom: 20 }} >
                         <ActivityIndicator color={Styles.DARK_PINK} />
                     </View>
                 }

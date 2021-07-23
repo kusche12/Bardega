@@ -104,6 +104,7 @@ const MainNavigator = ({ userID, memberEmails, profiles, updateIsMember }) => {
             tabBarOptions={{
                 activeBackgroundColor: Styles.PINK,
                 inactiveBackgroundColor: Styles.PINK,
+                lazyLoad: false,
                 style: {
                     backgroundColor: Styles.PINK
                 },

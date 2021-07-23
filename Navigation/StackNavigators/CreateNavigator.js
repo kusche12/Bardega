@@ -17,6 +17,7 @@ const CreateNavigator = ({ route, navigation }) => {
             screenOptions={{
                 headerStyle: { elevation: 0 },
                 cardStyle: { backgroundColor: '#FFFFFF' },
+                lazyLoad: false,
             }}>
             <Stack.Screen
                 name='CreateScreen'

@@ -28,6 +28,7 @@ const SearchNavigator = ({ route, navigation }) => {
             screenOptions={{
                 headerStyle: { elevation: 0 },
                 cardStyle: { backgroundColor: '#FFFFFF' },
+                lazyLoad: false,
             }}>
             <Stack.Screen
                 name='SearchScreen'
@@ -125,10 +126,13 @@ const SearchNavigator = ({ route, navigation }) => {
                 name='ProfileScreen'
                 component={ProfileScreen}
                 initialParams={route, navigation}
-                options={() => ({
+                options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
+                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,

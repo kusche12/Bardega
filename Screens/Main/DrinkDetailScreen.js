@@ -13,6 +13,7 @@ import StrengthAndPrep from '../../Components/DrinkDetail/StrengthAndPrep';
 import DetailLikeCommentShare from '../../Components/DrinkDetail/DetailLikeCommentShare';
 import { renderTime } from '../../Functions/miscFunctions';
 import { ADMIN_ID } from '../../API/ADMIN_ID';
+import { Placeholder, PlaceholderMedia, Fade, Progressive, Shine, ShineOverlay, Loader } from 'rn-placeholder';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
@@ -21,7 +22,6 @@ import Styles from '../../Styles/StyleConstants';
 const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userID, clearDrinkState, deleteDrink }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [image, setImage] = useState(null);
-    console.log(drink);
 
     // Load the component after all props are set
     useEffect(() => {
@@ -176,7 +176,27 @@ const DrinkDetailScreen = ({ navigation, drink, author, comments, authors, userI
     }
 
     if (isLoading) {
-        return null;
+        return (
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 40 }]} >
+                {/* Title: (add the right edit button if the userID === authorID) */}
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 1 }} ></View>
+                    <View style={{ width: Styles.width * .8, alignItems: 'center', textAlign: 'center' }}>
+                        <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
+                    </View>
+                    <View style={DetailStyles.editImage} ></View>
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                    <Placeholder Animation={Loader}>
+                        <PlaceholderMedia style={[DetailStyles.photoContainer, { alignSelf: 'center' }]} />
+                    </Placeholder>
+
+                    <Placeholder Animation={Loader}>
+                        <PlaceholderMedia style={[DetailStyles.photoContainer, { alignSelf: 'center', width: Styles.width * .95 }]} />
+                    </Placeholder>
+                </View>
+            </SafeAreaView>
+        )
     } else {
         return (
             <KeyboardAwareScrollView
