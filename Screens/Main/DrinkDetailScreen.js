@@ -13,7 +13,7 @@ import StrengthAndPrep from '../../Components/DrinkDetail/StrengthAndPrep';
 import DetailLikeCommentShare from '../../Components/DrinkDetail/DetailLikeCommentShare';
 import { renderTime } from '../../Functions/miscFunctions';
 import { ADMIN_ID } from '../../API/ADMIN_ID';
-import { Placeholder, PlaceholderMedia, Fade, Progressive, Shine, ShineOverlay, Loader } from 'rn-placeholder';
+import { Placeholder, PlaceholderMedia, Loader } from 'rn-placeholder';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';

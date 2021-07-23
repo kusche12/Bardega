@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { RefreshControl, Text, SafeAreaView, View, Platform, FlatList, ActivityIndicator, Image } from 'react-native';
+import { TouchableWithoutFeedback, Text, SafeAreaView, View, FlatList, ActivityIndicator, Image, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -11,20 +11,14 @@ import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-}
-
 const AD_WIDTH = 375;
 const AD_HEIGHT = 250;
-const RESOLUTION = Styles.width / 375;
 
 // Home page of the application. 
 // It takes a number of random query terms and returns a horizontal list
 // of a number of drinks that fit each query
 const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMember, ads }) => {
 
-    const [isLoaded, setIsLoaded] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [initalized, setInitialized] = useState(false);
     const [selectedQueries, setSelectedQueries] = useState(null);
@@ -58,7 +52,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                 setQueryIndex(3);
                 setRenderItems(drinkMatrix);
                 setInitialized(true);
-                setIsLoaded(true);
             }
             fetchData();
         }
@@ -72,6 +65,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 
     // Either get another horizontal row OR an ad based on the number of currently rendered items
     const retrieveData = async () => {
+        console.log('retreiving data')
         // If the query index is already at the end of all queries
         // then you can no longer retrieve more data
         if (queryIndex >= selectedQueries.length) {
@@ -86,7 +80,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
             currItems.push({ itemType: 'advertisement', imageURL: ads[adIndex].imageURL });
             setRenderItems(currItems);
             setAdIndex(adIndex + 1);
-            setIsLoaded(true);
         } else {
             let drinkRow = await fetchDrinkRow();
             if (drinkRow.length > 2) {
@@ -95,7 +88,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
             setQueryIndex(queryIndex + 1);
         }
 
-        //setIsRefreshing(false);
+        setIsRefreshing(false);
     }
 
     // Render the items here. This could either be the horizontal list or an advertisement
@@ -103,7 +96,9 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         if (item.itemType === 'advertisement') {
             return (
                 <View style={{ marginBottom: 50 }}>
-                    <Image source={{ uri: item.imageURL }} style={{ width: AD_WIDTH, height: AD_HEIGHT }} />
+                    <TouchableWithoutFeedback onPress={() => Linking.openURL('https://bardegacocktails.com')}>
+                        <Image source={{ uri: item.imageURL }} style={{ width: AD_WIDTH, height: AD_HEIGHT }} />
+                    </TouchableWithoutFeedback>
                 </View>
             )
         } else {
@@ -124,7 +119,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
     }
 
 
-    if (!isLoaded) {
+    if (!initalized) {
         return (
             <SafeAreaView>
                 <View>
@@ -151,7 +146,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                 bounces={false}
 
                 onEndReached={retrieveData}
-                onEndReachedThreshold={0.8}
+                onEndReachedThreshold={0.5}
                 refreshing={isRefreshing}
                 ListFooterComponent={isRefreshing &&
                     <View style={{ marginTop: 0, marginBottom: 20 }} >

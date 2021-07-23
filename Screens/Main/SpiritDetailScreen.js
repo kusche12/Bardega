@@ -11,6 +11,7 @@ import { ADMIN_ID } from '../../API/ADMIN_ID';
 import InputComment from '../../Components/DrinkDetail/InputComment';
 import Ratings from '../../Components/Spirit/Ratings';
 import { renderTime } from '../../Functions/miscFunctions';
+import { Placeholder, PlaceholderMedia, Loader } from 'rn-placeholder';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import DetailStyles from '../../Styles/DetailStyles';
@@ -126,7 +127,22 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID, dele
     }
 
     if (isLoading) {
-        return null;
+        return (
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 40 }]} >
+                <View style={{ width: Styles.width * .8, alignItems: 'center', textAlign: 'center' }}>
+                    <Text style={GlobalStyles.titlebold1}>{drink.name}</Text>
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                    <Placeholder Animation={Loader}>
+                        <PlaceholderMedia style={[DetailStyles.photoContainer, { alignSelf: 'center' }]} />
+                    </Placeholder>
+
+                    <Placeholder Animation={Loader}>
+                        <PlaceholderMedia style={[DetailStyles.photoContainer, { alignSelf: 'center', width: Styles.width * .95 }]} />
+                    </Placeholder>
+                </View>
+            </SafeAreaView>
+        )
     } else {
         return (
             <KeyboardAwareScrollView

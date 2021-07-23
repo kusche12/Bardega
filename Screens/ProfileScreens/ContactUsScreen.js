@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, SafeAreaView, View, Image, Linking } from 'react-native';
 import GlobalStyles from '../../Styles/GlobalStyles';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Styles from '../../Styles/StyleConstants';
 import Images from '../../Images/Images';
 
