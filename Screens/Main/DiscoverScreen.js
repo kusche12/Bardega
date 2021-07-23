@@ -4,11 +4,8 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
-import Image from 'react-native-scalable-image';
 import LoadingImage from '../../Components/Discover/LoadingImage';
 import LoadingBar from '../../Components/Main/LoadingBar';
-import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
-import { Placeholder, PlaceholderMedia, Fade } from 'rn-placeholder';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
@@ -78,12 +75,9 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 
         setIsRefreshing(true);
 
-        // TODO: Replace if statement with the comment when done testing ads
-        // if (renderItems.length % 5 === 0 && ads && adIndex < ads.length && !isMember) {
-        if (renderItems.length % 5 === 0 && ads && adIndex < ads.length) {
+        if (renderItems.length % 5 === 0 && ads && adIndex < ads.length && !isMember) {
             let currItems = [...renderItems];
             const image = ads[adIndex].imageURL;
-            cacheImages(image, image);
             currItems.push({ itemType: 'advertisement', imageURL: image });
             setRenderItems(currItems);
             setAdIndex(adIndex + 1);
@@ -124,12 +118,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
             )
         }
     }
-
-    // if (isLoading) {
-    //     return (
-    //         <LoadingImage imageURL={'https://firebasestorage.googleapis.com/v0/b/culture-bardega.appspot.com/o/images%2Fads%2FBanner1.jpg?alt=media&token=57f5545a-2efa-4cf9-ab53-c29a85634d30'} />
-    //     )
-    // }
 
     if (isLoading) {
         return (

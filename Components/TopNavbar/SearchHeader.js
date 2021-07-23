@@ -18,10 +18,8 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
     useEffect(() => {
         async function fetchData() {
             if (drinks && profiles && spirits) {
-                console.log(query);
+                navigation.setParams({ query: query });
                 if (query) {
-                    navigation.setParams({ isLoading: true });
-                    navigation.setParams({ query: query });
                     const drinkRes = await findDrink(drinks);
                     const spiritRes = findSpirit(spirits);
                     const profileRes = findProfile(profiles);
@@ -33,34 +31,18 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                     console.log(res2.length);
                     navigation.setParams({ results: res2 });
                     navigation.setParams({ isLoading: false });
+                } else {
+                    navigation.setParams({ results: [] });
+                    navigation.setParams({ isLoading: false });
                 }
             }
         }
         fetchData();
-    }, [query, drinks]);
+    }, [query]);
 
-    // Hard reset the search page to an empty array when query is empty
-    // useEffect(() => {
-    //     if (!query) {
-    //         setData([]);
-    //         navigation.setParams({ results: [] });
-    //         navigation.setParams({ isLoading: false });
-    //     }
-    // }, [query]);
-
-    // const onChange = (text) => {
-    //     navigation.setParams({ isLoading: true })
-    //     setQuery(text);
-    // }
-
-    const shuffleArray = (array) => {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * i)
-            const temp = array[i]
-            array[i] = array[j]
-            array[j] = temp
-        }
-        return array;
+    const onChange = (text) => {
+        navigation.setParams({ isLoading: true });
+        setQuery(text);
     }
 
     const findDrink = async (drinks) => {
@@ -100,7 +82,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                     }
                 }
 
-                if (res.length > 30) {
+                if (res.length > 10) {
                     break;
                 }
             }
@@ -117,7 +99,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                 res.push(profile)
             }
 
-            if (res.length > 30) {
+            if (res.length > 10) {
                 break;
             }
         }
@@ -151,7 +133,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
             }
 
 
-            if (res.length > 30) {
+            if (res.length > 10) {
                 break;
             }
         }
@@ -166,8 +148,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                     data={data}
                     query={query}
                     inputContainerStyle={{ borderColor: 'transparent' }}
-                    // onChangeText={(text) => onChange(text)}
-                    onChangeText={setQuery}
+                    onChangeText={(text) => onChange(text)}
                     hideResults={true}
                     autoCorrect={false}
                     style={[GlobalStyles.paragraph2, styles.inputContainerStyle]}

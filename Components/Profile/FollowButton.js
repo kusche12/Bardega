@@ -36,6 +36,7 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser,
                         } else {
                             setIsFollowing(false);
                         }
+                        setIsLoading(false);
                     }).catch((err) => {
                         console.log(err)
                     })
@@ -58,6 +59,7 @@ const FollowButton = ({ navigation, userA, userB, ownProfile, followUser,
                         console.log(err)
                     });
             }
+            setIsLoading(false);
         }
         fetchData();
     }, [userB, userA, isDisabled]);
