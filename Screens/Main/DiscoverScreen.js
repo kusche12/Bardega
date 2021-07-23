@@ -5,6 +5,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { getRandomQueries, getDrinksWithQuery } from '../../Functions/drinkFunctions';
 import Image from 'react-native-scalable-image';
+import LoadingImage from '../../Components/Discover/LoadingImage';
 import LoadingBar from '../../Components/Main/LoadingBar';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { Placeholder, PlaceholderMedia, Fade } from 'rn-placeholder';
@@ -101,15 +102,15 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
     const renderItem = ({ item, index }) => {
         if (item.itemType === 'advertisement') {
             return (
-                <View style={{ flexDirection: 'row', marginBottom: 50, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{ flexDirection: 'row', marginBottom: 10, alignItems: 'center', justifyContent: 'center' }}>
                     <TouchableWithoutFeedback onPress={() => Linking.openURL('https://bardegacocktails.com')}>
-                        <Image source={{ uri: item.imageURL }} width={Styles.width * .95} />
+                        <LoadingImage imageURL={item.imageURL} />
                     </TouchableWithoutFeedback>
                 </View>
             )
         } else {
             return (
-                <View style={{ marginLeft: 8, marginBottom: 50 }}>
+                <View style={{ marginLeft: 8, marginBottom: 25, marginTop: 25 }}>
                     <HorizontalList
                         data={item.drinkRow}
                         index={index}
@@ -124,6 +125,11 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         }
     }
 
+    // if (isLoading) {
+    //     return (
+    //         <LoadingImage imageURL={'https://firebasestorage.googleapis.com/v0/b/culture-bardega.appspot.com/o/images%2Fads%2FBanner1.jpg?alt=media&token=57f5545a-2efa-4cf9-ab53-c29a85634d30'} />
+    //     )
+    // }
 
     if (isLoading) {
         return (
@@ -141,7 +147,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         <SafeAreaView style={{ marginBottom: 0 }}>
             <FlatList
                 ListHeaderComponent={
-                    <View style={[DiscoverStyles.titleContainer, GlobalStyles.headerSafeArea, { marginBottom: 50 }]}>
+                    <View style={[DiscoverStyles.titleContainer, GlobalStyles.headerSafeArea, { marginBottom: 25 }]}>
                         <Text style={GlobalStyles.titlebold1}>DISCOVER</Text>
                     </View>
                 }
@@ -152,7 +158,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                 bounces={false}
 
                 onEndReached={retrieveData}
-                onEndReachedThreshold={0.6}
+                onEndReachedThreshold={1}
                 refreshing={isRefreshing}
                 ListFooterComponent={isRefreshing &&
                     <View style={{ marginTop: 0, marginBottom: 20 }} >

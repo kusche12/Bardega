@@ -37,7 +37,7 @@ const DrinkCard = ({ drink, navigation, navigateTo, isRefreshing }) => {
         return (
             <TouchableWithoutFeedback onPress={() => navigation.navigate(navigateTo, { drink: drink })}>
                 <View style={DetailStyles.shadowContainer}>
-                    <View style={[DiscoverStyles.cardContainer]}>
+                    <View style={DiscoverStyles.cardContainer}>
                         <>
                             <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.drinkImg} />
                             {renderText()}
