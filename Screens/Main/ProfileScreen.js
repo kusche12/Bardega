@@ -104,8 +104,10 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             for (let i = likedArray.length - 1; i >= 0; i--) {
                 const drink = await drinks[user.likedDrinks[i].id];
                 if (drink) {
-                    cacheImages(drink.imageURL, drink.id);
-                    liked.push(drink);
+                    if (ownProfile || !drink.private) {
+                        cacheImages(drink.imageURL, drink.id);
+                        liked.push(drink);
+                    }
                 }
             }
             setLikedDrinks(liked);
@@ -176,30 +178,9 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
         }
     }
 
-    const renderIndexButton = (index, type) => {
-        let img;
-        if (type === 'grid' && index === activeIndex) {
-            img = Images.profile.grid;
-        } else if (type === 'grid' && index !== activeIndex) {
-            img = Images.profile.gridOff;
-        } else if (type === 'heart' && index === activeIndex) {
-            img = Images.profile.emptyHeart;
-        } else {
-            img = Images.profile.emptyHeartOff;
-        }
-        return (
-            <View style={[UserStyles.indexButtonContainer, isPrivate && index === 0 && { borderBottomColor: 'black', borderBottomWidth: 1.75 }]}>
-                <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(index) }}>
-                    <Image source={img} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
-                </TouchableWithoutFeedback>
-            </View>
-        )
-    }
-
     // Render the animated blocks in place of the drinks while the screen is loading in
     const renderLoadingDrink = (item) => {
         return (
-            // <View style={{ flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} key={item.id}>
             <View style={[UserStyles.drinkImage]} key={item.id}>
                 <Placeholder Animation={Fade}>
                     <PlaceholderMedia style={{ width: .33 * Styles.width, height: .33 * Styles.width }} />
@@ -237,8 +218,16 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
-                    {renderIndexButton(0, 'grid')}
-                    {renderIndexButton(1, 'heart')}
+                    <View style={[UserStyles.indexButtonContainer]}>
+                        <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(0) }}>
+                            <Image source={activeIndex === 0 ? Images.profile.grid : Images.profile.gridOff} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                        </TouchableWithoutFeedback>
+                    </View>
+                    <View style={[UserStyles.indexButtonContainer]}>
+                        <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(1) }}>
+                            <Image source={activeIndex === 1 ? Images.profile.emptyHeart : Images.profile.emptyHeartOff} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                        </TouchableWithoutFeedback>
+                    </View>
                 </View>
                 <View style={[UserStyles.indexButtonLine, { marginLeft: (Styles.width / 2) * activeIndex }]}></View>
 
@@ -303,8 +292,16 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
-                    {renderIndexButton(0, 'grid')}
-                    {renderIndexButton(1, 'heart')}
+                    <View style={[UserStyles.indexButtonContainer]}>
+                        <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(0) }}>
+                            <Image source={activeIndex === 0 ? Images.profile.grid : Images.profile.gridOff} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                        </TouchableWithoutFeedback>
+                    </View>
+                    <View style={[UserStyles.indexButtonContainer]}>
+                        <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(1) }}>
+                            <Image source={activeIndex === 1 ? Images.profile.emptyHeart : Images.profile.emptyHeartOff} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                        </TouchableWithoutFeedback>
+                    </View>
                 </View>
                 <View style={[UserStyles.indexButtonLine, { marginLeft: (Styles.width / 2) * activeIndex }]}></View>
 

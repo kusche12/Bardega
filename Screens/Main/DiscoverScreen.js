@@ -35,6 +35,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 
         // Otherwise, stay on this screen and fetch data
         if (allDrinks && drinks && queries && !initalized && ads) {
+            console.log(ads.length);
             fetchData();
         }
     }, [queries, drinks, allDrinks, drinkID, ads]);
@@ -90,6 +91,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         setIsRefreshing(true);
 
         if (renderItems.length % 5 === 0 && ads && adIndex < ads.length && !isMember) {
+            console.log('render image')
             let currItems = [...renderItems];
             const image = ads[adIndex].imageURL;
             currItems.push({ itemType: 'advertisement', imageURL: image });

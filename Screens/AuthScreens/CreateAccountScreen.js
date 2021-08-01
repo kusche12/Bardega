@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, Image, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
+import { View, TouchableOpacity, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BardegaLogoSVG from '../../Components/Main/BardegaLogoSVG';
 import { connect } from 'react-redux';
 import { signUp, loginFacebook, loginGoogle } from '../../Store/Actions/AuthActions';
 import AuthInput from '../../Components/Auth/AuthInput';
-import Images from '../../Images/Images';
 import AuthStyles from '../../Styles/AuthStyles';
 import Styles from '../../Styles/StyleConstants';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -35,11 +34,11 @@ const CreateAccountScreen = ({ navigation, signUp, authError, loginFacebook, log
                     <AuthInput image={'userName'} value={userName} setValue={setUserName} type={'Username'} />
                     <AuthInput image={'email'} value={email} setValue={setEmail} type={'Email'} />
                     <AuthInput image={'password'} value={password} setValue={setPassword} type={'Password'} />
-                    <TouchableWithoutFeedback onPress={() => handleCreateAccount()}>
+                    <TouchableOpacity onPress={() => handleCreateAccount()}>
                         <View style={AuthStyles.mainButton}>
                             <Text style={[GlobalStyles.titlebold2, { fontSize: 16 }]}>Create Account</Text>
                         </View>
-                    </TouchableWithoutFeedback>
+                    </TouchableOpacity>
                     {authError !== null &&
                         <Text style={{ color: 'red', textAlign: 'center', marginBottom: 8 }}>{authError}</Text>
                     }

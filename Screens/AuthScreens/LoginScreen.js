@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableWithoutFeedback, Text, SafeAreaView } from 'react-native';
+import { View, TouchableWithoutFeedback, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 import BardegaLogoSVG from '../../Components/Main/BardegaLogoSVG';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
@@ -26,11 +26,11 @@ const LoginScreen = ({ navigation, logIn, authError }) => {
                 <View style={AuthStyles.loginForm}>
                     <AuthInput image={'user'} value={email} setValue={setEmail} type={'Email / Username'} />
                     <AuthInput image={'password'} value={password} setValue={setPassword} type={'Password'} />
-                    <TouchableWithoutFeedback onPress={() => logIn({ email, password })}>
+                    <TouchableOpacity onPress={() => logIn({ email, password })}>
                         <View style={AuthStyles.mainButton}>
                             <Text style={[GlobalStyles.titlebold2, { fontSize: 16 }]}>Sign In</Text>
                         </View>
-                    </TouchableWithoutFeedback>
+                    </TouchableOpacity>
                     {authError !== null &&
                         <Text style={{ color: 'red', textAlign: 'center' }}>{authError}</Text>
                     }
