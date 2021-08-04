@@ -20,17 +20,23 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "notification": {
+      "icon": "./assets/icon.png",
+      "iosDisplayInForeground": true
+    },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.culture.bardega",
       "buildNumber": "1.0.0",
-      "requireFullScreen": true
+      "requireFullScreen": true,
+      "icon": "./assets/icon.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "versionCode": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"

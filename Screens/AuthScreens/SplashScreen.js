@@ -7,7 +7,7 @@ import Styles from '../../Styles/StyleConstants';
 const SplashScreen = () => {
 
     return (
-        <View style={{ alignItems: 'center', backgroundColor: Styles.PINK, flex: 1 }}>
+        <View style={{ alignItems: 'center', flex: 1 }}>
             <DrinkCircleOne style={{ position: 'absolute', opacity: .4, left: Styles.width * .38, bottom: Styles.height * .5 }} width={Styles.width * .8} />
             <BardegaLogoSVG width={Styles.width * .9} height={Styles.height * .9} />
             <DrinkCircleOne style={{ position: 'absolute', opacity: .4, left: Styles.width * - .2, top: Styles.height * .6 }} width={Styles.width * 1.2} />
