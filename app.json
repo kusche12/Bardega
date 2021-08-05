@@ -36,7 +36,8 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "versionCode": "1.0.0"
+      "versionCode": 1,
+      "package": "com.culture.bardega"
     },
     "web": {
       "favicon": "./assets/favicon.png"
