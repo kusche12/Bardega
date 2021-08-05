@@ -99,7 +99,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
                     keyExtractor={item => item.id}
                     renderItem={renderUser}
                     onEndReached={retrieveData}
-                    onEndReachedThreshold={5}
+                    onEndReachedThreshold={.1}
                     refreshing={isRefreshing}
                     ListFooterComponent={isRefreshing &&
                         <View style={{ marginTop: 20 }} >

@@ -173,8 +173,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                     />
                 }
 
-                // style={{ marginBottom: 20 }}
-
                 ListFooterComponent={isRefreshing &&
                     <View style={{ marginTop: 0, marginBottom: 20 }} >
                         <ActivityIndicator color={Styles.DARK_PINK} />

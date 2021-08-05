@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image } from 'react-native';
+import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, ActivityIndicator } from 'react-native';
 import { renderTime, renderNotificationText } from '../../Functions/miscFunctions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
@@ -12,21 +12,46 @@ import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
 import Images from '../../Images/Images';
 
+const LIMIT = 10;
+
 const NotificationsScreen = ({ userA, navigation, notifications, deleteNotification,
     profiles, drinks, rejectRequest, createNotification, followUser, allRequests, updateNotificationChecked }) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [updateOnce, setUpdateOnce] = useState(true);
+    const [renderedNotifs, setRenderedNotifs] = useState([]);
+    const [lastIndex, setLastIndex] = useState(0);
+    const [isRefreshing, setIsRefreshing] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
 
     // Every time this screen is entered, update the user's notifsLastChecked dateTime field
     useEffect(() => {
-        updateNotificationChecked({ id: userA.id });
+        if (updateOnce) {
+            updateNotificationChecked({ id: userA.id });
+            retrieveData();
+            setUpdateOnce(false);
+        }
     }, []);
 
-    useEffect(() => {
-        if (notifications && allRequests && userA) {
-            setIsLoading(false);
+    // Fetch more notifications as use scrolls
+    const retrieveData = () => {
+        setIsRefreshing(true);
+        console.log('getting data')
+        let currItems = [];
+        let currIndex = lastIndex;
+        let allItems = [...renderedNotifs];
+
+        while (currIndex < notifications.length && renderedNotifs.length < LIMIT) {
+            if (notifications[currIndex].id !== 'default') {
+                currItems.push(notifications[currIndex]);
+            }
+            currIndex++;
         }
-    }, [notifications, allRequests, userA]);
+
+        setRenderedNotifs(allItems.concat(currItems));
+        setLastIndex(currIndex);
+        setIsLoading(false);
+        setIsRefreshing(false);
+    }
 
     const renderNotification = ({ item }) => {
         if (item.id !== 'default') {
@@ -173,19 +198,31 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
         return null;
     } else {
         return (
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginBottom: 20 }]}>
-                <View style={[UserStyles.followerHeader]}>
+            <SafeAreaView style={{ marginBottom: 80 }}>
+                <View style={[UserStyles.followerHeader, { marginTop: 20 }]}>
                     <Text style={GlobalStyles.titlebold2}>NOTIFICATIONS</Text>
                 </View>
-                <View style={[GlobalStyles.line, { width: Styles.width, alignSelf: 'center', marginBottom: 16 }]}></View>
+                <View style={[GlobalStyles.line, { width: Styles.width * .9, alignSelf: 'center', marginBottom: 16 }]}></View>
 
-                { allRequests.length > 1 && renderFollowRequestPage()}
+                {allRequests.length > 1 && renderFollowRequestPage()}
 
-                <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY, marginLeft: 10, marginBottom: 10 }]}>Activity</Text>
+
+
                 <FlatList
-                    data={notifications}
+                    ListHeaderComponent={
+                        <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY, marginLeft: 10, marginBottom: 10 }]}>Activity</Text>
+                    }
+                    data={renderedNotifs}
                     keyExtractor={item => item.id}
                     renderItem={renderNotification}
+                    onEndReached={retrieveData}
+                    onEndReachedThreshold={.1}
+                    refreshing={isRefreshing}
+                    ListFooterComponent={isRefreshing &&
+                        <View style={{ marginTop: 20 }} >
+                            <ActivityIndicator color={Styles.DARK_PINK} />
+                        </View>
+                    }
                 />
             </SafeAreaView>
         )
