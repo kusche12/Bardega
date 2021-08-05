@@ -389,7 +389,7 @@ export const createRateSpirit = (data) => {
                 .update({ rating: (oldRatingTotal + rating) / newNumRatings })
 
 
-            dispatch({ type: 'UPDATE_DRINK', id: spirit.id })
+            dispatch({ type: 'UPDATE_DRINK', id: null })
         } catch (err) {
             dispatch({ type: 'UPDATE_DRINK_ERROR', err });
         }
@@ -445,7 +445,7 @@ export const updateRateSpirit = (data) => {
                 .doc(spirit.id)
                 .update({ rating: (oldRatingTotal - userPrevRating + rating) / newNumRatings })
 
-            dispatch({ type: 'UPDATE_DRINK', id: spirit.id })
+            dispatch({ type: 'UPDATE_DRINK', id: null })
         } catch (err) {
             dispatch({ type: 'UPDATE_DRINK_ERROR', err });
         }
