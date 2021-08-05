@@ -106,7 +106,7 @@ const Comment = ({ comment, author, navigation, commentID,
     }
 
     const handleNavUser = (userID) => {
-        navigation.push('ProfileScreen', { user: profiles[userID] })
+        navigation.navigate('ProfileScreen', { user: profiles[userID] })
     }
 
     if (isLoading) {
@@ -120,7 +120,7 @@ const Comment = ({ comment, author, navigation, commentID,
                 <DoubleTapButton onDoubleTap={() => handleLike()}>
                     <View style={styles.container}>
                         <View style={styles.user}>
-                            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => navigation.push('ProfileScreen', { user: author })}>
+                            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
                                 <Image source={{ uri: author.imageURL }} style={styles.img} />
                             </TouchableWithoutFeedback>
                             <View>

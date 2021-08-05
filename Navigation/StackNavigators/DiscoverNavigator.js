@@ -129,6 +129,8 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerRight: () => <GoBackOrSaveHeader navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerBackTitleVisible: false,
+                    headerTintColor: Styles.PINK,
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
