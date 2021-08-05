@@ -50,6 +50,7 @@ const Main = ({ user }) => {
 
     // While the app is still loading in data, show the splash screen.
     // After it is loaded, either load the Authentication Flow for unauthenicated users or go directly to the Main Flow
+    if (isLoading) return null;
     return (
         <NavigationContainer linking={linking}>
             {user ? <MainNavigator userID={user.id} /> : <AuthNavigator />}

@@ -106,8 +106,15 @@ const Comment = ({ comment, author, navigation, commentID,
     }
 
     const handleNavUser = (userID) => {
-        navigation.navigate('ProfileScreen', { user: profiles[userID] })
+        navigation.push('ProfileScreen', { user: profiles[userID], ownProfile: drink.authorID === userID });
     }
+
+    const handleNavComment = () => {
+        console.log('nav comment')
+        navigation.navigate('Profile');
+        navigation.push('ProfileScreen', { user: author, ownProfile: author.id === userID });
+    }
+
 
     if (isLoading) {
         return <ActivityIndicator />
@@ -120,7 +127,7 @@ const Comment = ({ comment, author, navigation, commentID,
                 <DoubleTapButton onDoubleTap={() => handleLike()}>
                     <View style={styles.container}>
                         <View style={styles.user}>
-                            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => navigation.navigate('ProfileScreen', { user: author })}>
+                            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleNavComment()}>
                                 <Image source={{ uri: author.imageURL }} style={styles.img} />
                             </TouchableWithoutFeedback>
                             <View>

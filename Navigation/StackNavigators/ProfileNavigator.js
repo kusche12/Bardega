@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
-import FavoritesScreen from '../../Screens/ProfileScreens/FavoritesScreen';
 import MakePrivateScreen from '../../Screens/ProfileScreens/MakePrivateScreen';
 import DeleteAccountScreen from '../../Screens/ProfileScreens/DeleteAccountScreen';
 import NotificationsSettingsScreen from '../../Screens/ProfileScreens/NotificationsSettingsScreen';
@@ -48,16 +47,11 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 options={(props) => ({
                     headerTitle: () => <MainHeader />,
                     headerRight: () => {
-                        if (props.route.params.ownProfile) {
-                            return <NotificationsHeader navigation={navigation} user={user} />
-                        } else {
-                            return <GoBackOrSaveHeader navigation={navigation} save={false} />
-                        }
+                        return <NotificationsHeader navigation={navigation} user={user} />
                     },
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -70,16 +64,13 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
                     },
-
                 })}
             />
             <Stack.Screen
@@ -87,11 +78,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={CommentsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -106,10 +95,12 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
                     },
+
                 })}
             />
             <Stack.Screen
@@ -117,31 +108,14 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={FollowScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
                     },
-                })}
-            />
-            <Stack.Screen
-                name='FavoritesScreen'
-                component={FavoritesScreen}
-                options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
-                    headerTitleStyle: { flex: 1, textAlign: 'center' },
-                    headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
-                    headerStyle: {
-                        height: 100,
-                        backgroundColor: Styles.PINK,
-                    },
+
                 })}
             />
             <Stack.Screen
@@ -149,11 +123,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={SettingsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -197,11 +169,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={MakePrivateScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -213,11 +183,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={DeleteAccountScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -229,11 +197,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={ReAuthenticationScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -245,11 +211,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={ChangeEmailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -261,11 +225,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={NotificationsSettingsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -277,11 +239,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={DrinkOptionsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -293,11 +253,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={NotificationsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -309,11 +267,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={FollowRequestsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -325,11 +281,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={AboutUsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -340,11 +294,9 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 component={ContactUsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,

@@ -23,7 +23,7 @@ const GoBackOrSaveHeader = ({ route, navigation, error, success, save }) => {
 
     return (
         <View style={GlobalStyles.headerWithButtons} >
-            <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <TouchableWithoutFeedback onPress={() => navigation.goBack(null)}>
                 <Image
                     style={{ height: 20, width: 20, bottom: 6 }}
                     source={Images.topNav.backButton}

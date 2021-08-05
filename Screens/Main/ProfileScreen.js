@@ -42,6 +42,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     // Load all the drinks AND liked drinks any time either of these arrays change
     useEffect(() => {
         if (user && drinks) {
+            setIsLoading(true);
             cacheImages(user.imageURL, user.id);
             // Check if this profile should be rendered based on privacy settings
             if (!ownProfile && user.private) {
@@ -66,7 +67,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             }
             loadUserDrinks();
         }
-    }, [user]);
+    }, [user, drinks.length]);
 
     // Load all the user's drinks to the state
     const loadUserDrinks = async () => {
@@ -92,7 +93,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
         for (let i = drinksArray.length - 1; i >= 0; i--) {
             const drink = await drinks[user.drinks[i].id];
             if (drink) {
-                if (ownProfile || !drink.private) {
+                if (ownProfile || !drink.private && drink.id) {
                     cacheImages(drink.imageURL, drink.id);
                     res.push(drink);
                 }
@@ -104,7 +105,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             for (let i = likedArray.length - 1; i >= 0; i--) {
                 const drink = await drinks[user.likedDrinks[i].id];
                 if (drink) {
-                    if (ownProfile || !drink.private) {
+                    if (ownProfile || !drink.private && drink.id) {
                         cacheImages(drink.imageURL, drink.id);
                         liked.push(drink);
                     }

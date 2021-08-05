@@ -122,7 +122,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     },
                 })}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name='ProfileScreen'
                 component={ProfileScreen}
                 initialParams={route, navigation}
@@ -154,7 +154,7 @@ const SearchNavigator = ({ route, navigation }) => {
                         backgroundColor: Styles.PINK,
                     },
                 })}
-            />
+            /> */}
             <Stack.Screen
                 name='SpiritDetailScreen'
                 component={SpiritDetailScreen}

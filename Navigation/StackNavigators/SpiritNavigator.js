@@ -6,7 +6,6 @@ import SpiritUploadScreen from '../../Screens/Main/SpiritUploadScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
-import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
@@ -38,11 +37,9 @@ const SpiritNavigator = ({ route, navigation }) => {
                 component={SpiritUploadScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -54,11 +51,9 @@ const SpiritNavigator = ({ route, navigation }) => {
                 component={DrinkListScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -70,15 +65,13 @@ const SpiritNavigator = ({ route, navigation }) => {
                 component={SpiritDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
                     },
-                    headerTintColor: Styles.PINK
                 })}
             />
             <Stack.Screen
@@ -86,11 +79,9 @@ const SpiritNavigator = ({ route, navigation }) => {
                 component={CommentsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,

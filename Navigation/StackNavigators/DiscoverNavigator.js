@@ -120,7 +120,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     },
                 })}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name='ProfileScreen'
                 component={ProfileScreen}
                 initialParams={route.params, navigation}
@@ -152,7 +152,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                         backgroundColor: Styles.PINK,
                     },
                 })}
-            />
+            /> */}
             <Stack.Screen
                 name='ReportDrinkScreen'
                 component={ReportDrinkScreen}

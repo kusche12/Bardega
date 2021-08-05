@@ -24,7 +24,7 @@ const RenderDrink = ({ object, navigation }) => {
         setIsLoading(false);
     }, [])
 
-    if (isLoading) {
+    if (isLoading || item.id === null) {
         return null;
     } else {
         return (

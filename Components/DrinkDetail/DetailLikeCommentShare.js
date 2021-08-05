@@ -86,11 +86,8 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
     // If the search result is the current user's account, then change the tab navigator to their profile navigation
     // If not, then stay in the current Search tab navigator
     const handleProfileNavigation = () => {
-        if (drink.authorID === userID) {
-            navigation.navigate('Profile', { screen: 'ProfileScreen', user: authors[drink.authorID] });
-        } else {
-            navigation.push('ProfileScreen', { user: authors[drink.authorID] })
-        }
+        navigation.navigate('Profile');
+        navigation.push('ProfileScreen', { user: authors[drink.authorID], ownProfile: drink.authorID === userID });
     }
 
     if (isLoading) {

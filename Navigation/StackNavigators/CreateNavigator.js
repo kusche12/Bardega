@@ -38,11 +38,9 @@ const CreateNavigator = ({ route, navigation }) => {
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -54,11 +52,9 @@ const CreateNavigator = ({ route, navigation }) => {
                 component={DrinkOptionsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
