@@ -1,18 +1,18 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import Styles from './StyleConstants';
 const RADIUS = 22;
 
 export default StyleSheet.create({
     editImage: {
-        width: 20,
-        height: 20,
+        width: Platform.isPad ? 40 : 20,
+        height: Platform.isPad ? 40 : 20,
         top: 6,
         resizeMode: 'contain',
         justifyContent: 'flex-end',
         flex: 1,
     },
     photoContainer: {
-        width: Styles.width * .8,
+        width: Platform.isPad ? Styles.width * .7 : Styles.width * .8,
         height: Styles.height * .4,
         borderWidth: 0,
         borderRadius: RADIUS,

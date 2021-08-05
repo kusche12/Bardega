@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image } from 'react-native';
+import { Image, Platform } from 'react-native';
 
 // For main navigation
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
@@ -61,6 +61,7 @@ const MainNavigator = ({ userID, memberEmails, profiles, updateIsMember }) => {
     // Register for push notifications
     const registerForPushNotificationsAsync = async () => {
         let token;
+        if (Platform.isPad) return;
         if (Constants.isDevice) {
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
@@ -106,6 +107,7 @@ const MainNavigator = ({ userID, memberEmails, profiles, updateIsMember }) => {
                 inactiveBackgroundColor: Styles.PINK,
                 lazyLoad: false,
                 style: {
+                    height: Platform.isPad ? 90 : 80,
                     backgroundColor: Styles.PINK
                 },
                 showLabel: false,

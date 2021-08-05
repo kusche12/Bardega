@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
@@ -34,7 +35,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -48,7 +49,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -63,7 +64,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -77,7 +78,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -91,7 +92,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -105,7 +106,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -120,7 +121,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -135,7 +136,7 @@ const DiscoverNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}

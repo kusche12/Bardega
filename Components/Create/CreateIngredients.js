@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, ScrollView, Image, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, ScrollView, Image, TouchableWithoutFeedback, Platform } from 'react-native';
 import Images from '../../Images/Images'
 import CreateAddIngredient from './CreateAddIngredient';
 import CreateSingleIngredient from './CreateSingleIngredient';
@@ -66,8 +66,8 @@ const CreateIngredients = ({ ingredients, setIngredients }) => {
             <TouchableWithoutFeedback onPress={() => addIngredient()}>
                 <View style={[CreateStyles.ingrContainer, { height: 250 }]}>
                     <Text style={GlobalStyles.titlebold2}>INGREDIENTS</Text>
-                    <View style={GlobalStyles.line}></View>
-                    <View style={[GlobalStyles.flexCenter, { bottom: 20 }]}>
+                    <View style={[GlobalStyles.line]}></View>
+                    <View style={[GlobalStyles.flexCenter, { bottom: Platform.isPad ? 0 : 20 }]}>
                         <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
                         <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>Add ingredients here</Text>
                     </View>
@@ -79,11 +79,11 @@ const CreateIngredients = ({ ingredients, setIngredients }) => {
             <View style={CreateStyles.ingrContainer}>
                 <Text style={GlobalStyles.titlebold2}>INGREDIENTS</Text>
 
-                <View style={[GlobalStyles.line, { marginBottom: 16 }]}></View>
+                <View style={[GlobalStyles.line, { marginBottom: Platform.isPad ? 32 : 16 }]}></View>
 
                 <View style={CreateStyles.ingrsubTitle}>
                     <Text style={[GlobalStyles.paragraph4, { color: Styles.GRAY }]}>Quantity - Ex: 2 TBS</Text>
-                    <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>               </Text>
+                    <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}></Text>
                     <Text style={[GlobalStyles.paragraph4, { color: Styles.GRAY }]}>Ingredient - Ex: Limes</Text>
                 </View>
                 <ScrollView scrollEnabled={false}>

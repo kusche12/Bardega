@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -37,7 +38,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -51,7 +52,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -66,7 +67,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -80,7 +81,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -94,7 +95,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -108,7 +109,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -122,7 +123,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}

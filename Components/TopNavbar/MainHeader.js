@@ -8,7 +8,7 @@ const width = Dimensions.get('screen').width;
 const MainHeader = () => {
     return (
         <SafeAreaView style={GlobalStyles.headerContainer}>
-            <BardegaTextSVG style={Platform.OS === 'ios' && { marginLeft: 24 }} width={width / 2.5} height={50} />
+            <BardegaTextSVG style={Platform.OS === 'ios' && { marginLeft: 24 }} width={width / 2.5} height={Platform.isPad ? 80 : 50} />
         </SafeAreaView>
     )
 }

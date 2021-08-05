@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Image, TouchableWithoutFeedback, FlatList, TextInput } from 'react-native';
+import { Text, View, Image, TouchableWithoutFeedback, FlatList, TextInput, Platform } from 'react-native';
 import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
@@ -71,7 +71,7 @@ const CreateDirectionsList = ({ direction, setDirection }) => {
                 <View style={[CreateStyles.ingrContainer, { height: 250 }]}>
                     <Text style={GlobalStyles.titlebold2}>DIRECTIONS</Text>
                     <View style={GlobalStyles.line}></View>
-                    <View style={[GlobalStyles.flexCenter, { bottom: 20 }]}>
+                    <View style={[GlobalStyles.flexCenter, { bottom: Platform.isPad ? 0 : 20 }]}>
                         <Image source={Images.profile.plus} style={CreateStyles.plusImage} />
                         <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>Add directions here</Text>
                     </View>

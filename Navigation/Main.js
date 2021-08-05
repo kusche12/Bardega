@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
-import SplashScreen from '../Screens/AuthScreens/SplashScreen';
 import AuthNavigator from './AuthNavigators/AuthNavigator';
 
 // For navigation

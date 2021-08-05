@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import Styles from './StyleConstants';
 
 const PINK = '#F29288';
@@ -19,7 +19,7 @@ export default StyleSheet.create({
         marginBottom: 4,
     },
     photoContainer: {
-        width: Styles.width * .8,
+        width: Platform.isPad ? Styles.width * .7 : Styles.width * .8,
         height: Styles.height * .45,
         borderColor: '#707070',
         borderWidth: 1,
@@ -27,20 +27,20 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
-        marginBottom: 20,
+        marginBottom: Platform.isPad ? 40 : 20,
         overflow: 'hidden'
     },
     drinkImage: {
-        width: Styles.width * .8,
+        width: Platform.isPad ? Styles.width * .7 : Styles.width * .8,
         height: Styles.height * .45,
     },
     plusImage: {
-        width: Styles.width * .16,
-        height: Styles.width * .16,
+        width: Platform.isPad ? Styles.width * .10 : Styles.width * .16,
+        height: Platform.isPad ? Styles.width * .10 : Styles.width * .16,
         marginBottom: 8
     },
     ingrContainer: {
-        width: Styles.width * .8,
+        width: Platform.isPad ? Styles.width * .7 : Styles.width * .8,
         paddingHorizontal: 12,
         paddingTop: 14,
         paddingBottom: 12,
@@ -59,7 +59,7 @@ export default StyleSheet.create({
         elevation: 4
     },
     ingrContainerWide: {
-        width: Styles.width * .95,
+        width: Platform.isPad ? Styles.width * .85 : Styles.width * .95,
         paddingHorizontal: 24,
         paddingTop: 14,
         paddingBottom: 24,
@@ -79,7 +79,7 @@ export default StyleSheet.create({
     },
     ingrsubTitle: {
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
         alignSelf: 'stretch',
         marginBottom: 4
     },

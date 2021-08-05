@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import Styles from './StyleConstants';
 
 export default StyleSheet.create({
@@ -9,20 +9,20 @@ export default StyleSheet.create({
         marginBottom: 20,
     },
     horizontalContainer: {
-        height: 250
+        height: Platform.isPad ? 360 : 250
     },
     cardContainer: {
-        width: 140,
-        height: 200,
+        width: Platform.isPad ? 175 : 140,
+        height: Platform.isPad ? 300 : 200,
         borderRadius: Styles.BORDER_RADIUS,
         alignItems: "center",
         overflow: 'hidden',
-        marginRight: 8,
+        marginRight: Platform.isPad ? 16 : 8,
         backgroundColor: "white",
     },
     drinkImg: {
-        width: 140,
-        height: 150,
+        width: Platform.isPad ? 175 : 140,
+        height: Platform.isPad ? 225 : 150,
         borderRadius: Styles.BORDER_RADIUS,
     },
     horizRow: {

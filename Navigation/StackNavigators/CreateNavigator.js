@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import CreateScreen from '../../Screens/Main/CreateScreen';
@@ -27,7 +28,7 @@ const CreateNavigator = ({ route, navigation }) => {
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -41,7 +42,7 @@ const CreateNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -55,7 +56,7 @@ const CreateNavigator = ({ route, navigation }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
