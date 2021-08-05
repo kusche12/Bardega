@@ -32,11 +32,6 @@ const SearchResult = ({ item, navigation, userID }) => {
     // If the search result is the current user's account, then change the tab navigator to their profile navigation
     // If not, then stay in the current Search tab navigator
     const handleProfileNavigation = () => {
-        // if (item.id === userID) {
-        //     navigation.navigate('Profile', { screen: 'ProfileScreen', user: item });
-        // } else {
-        //     navigation.navigate('ProfileScreen', { user: item })
-        // }
         navigation.navigate('Profile');
         navigation.push('ProfileScreen', { user: item, ownProfile: item.id === userID });
     }

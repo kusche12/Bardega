@@ -9,14 +9,11 @@ import SpiritDetailScreen from '../../Screens/Main/SpiritDetailScreen';
 import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import DrinkListScreen from '../../Screens/Main/DrinkListScreen';
 import SearchScreen from '../../Screens/Main/SearchScreen';
-import ProfileScreen from '../../Screens/Main/ProfileScreen';
-import FollowScreen from '../../Screens/ProfileScreens/FollowScreen';
 import CommentsScreen from '../../Screens/Main/CommentsScreen';
 import DrinkOptionsScreen from '../../Screens/Main/DrinkOptionsScreen';
 import CreateScreen from '../../Screens/Main/CreateScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
 import SearchHeader from '../../Components/TopNavbar/SearchHeader'
-import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();
@@ -36,8 +33,9 @@ const SearchNavigator = ({ route, navigation }) => {
                 initialParams={{ results: [], isLoading: false, query: '' }}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <SearchHeader navigation={navigation} />,
-                    headerTitleStyle: { flexDirection: 'row', flex: 1, backgroundColor: Styles.PINK },
+                    headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -49,11 +47,9 @@ const SearchNavigator = ({ route, navigation }) => {
                 component={DrinkDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -68,6 +64,7 @@ const SearchNavigator = ({ route, navigation }) => {
                     headerTitle: () => <MainHeader />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -79,11 +76,9 @@ const SearchNavigator = ({ route, navigation }) => {
                 component={DrinkOptionsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader route={route} navigation={navigation} save={false} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -95,11 +90,9 @@ const SearchNavigator = ({ route, navigation }) => {
                 component={DrinkListScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
@@ -111,64 +104,27 @@ const SearchNavigator = ({ route, navigation }) => {
                 component={CommentsScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
             />
-            {/* <Stack.Screen
-                name='ProfileScreen'
-                component={ProfileScreen}
-                initialParams={route, navigation}
-                options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
-                    headerTitleStyle: { flex: 1, textAlign: 'center' },
-                    headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
-                    headerStyle: {
-                        height: 100,
-                        backgroundColor: Styles.PINK,
-                    },
-                })}
-            />
-            <Stack.Screen
-                name='FollowScreen'
-                component={FollowScreen}
-                options={({ route, navigation }) => ({
-                    headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
-                    headerTitleStyle: { flex: 1, textAlign: 'center' },
-                    headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
-                    headerTintColor: Styles.PINK,
-                    headerStyle: {
-                        height: 100,
-                        backgroundColor: Styles.PINK,
-                    },
-                })}
-            /> */}
             <Stack.Screen
                 name='SpiritDetailScreen'
                 component={SpiritDetailScreen}
                 options={({ route, navigation }) => ({
                     headerTitle: () => <MainHeader />,
-                    headerRight: () => <GoBackOrSaveHeader navigation={navigation} />,
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
-                    headerBackTitleVisible: false,
+                    headerTintColor: 'black',
                     headerStyle: {
                         height: 100,
                         backgroundColor: Styles.PINK,
                     },
-                    headerTintColor: Styles.PINK
                 })}
             />
         </Stack.Navigator>

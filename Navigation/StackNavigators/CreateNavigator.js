@@ -4,7 +4,6 @@ import DrinkDetailScreen from '../../Screens/Main/DrinkDetailScreen';
 import CreateScreen from '../../Screens/Main/CreateScreen';
 import DrinkOptionsScreen from '../../Screens/Main/DrinkOptionsScreen';
 import MainHeader from '../../Components/TopNavbar/MainHeader';
-import GoBackOrSaveHeader from '../../Components/TopNavbar/GoBackOrSaveHeader';
 import Styles from '../../Styles/StyleConstants';
 
 const Stack = createStackNavigator();

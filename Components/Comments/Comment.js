@@ -110,7 +110,6 @@ const Comment = ({ comment, author, navigation, commentID,
     }
 
     const handleNavComment = () => {
-        console.log('nav comment')
         navigation.navigate('Profile');
         navigation.push('ProfileScreen', { user: author, ownProfile: author.id === userID });
     }
