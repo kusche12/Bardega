@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Animated, Easing } from 'react-native';
+import { View, Animated, Easing, Platform } from 'react-native';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
@@ -43,7 +43,7 @@ const LoadingBar = () => {
     };
 
     return (
-        <Animated.View style={[{ backgroundColor: Styles.DARK_PINK, height: 5, width: Styles.width }, animatedStyles]}>
+        <Animated.View style={[{ backgroundColor: Styles.DARK_PINK, height: Platform.isPad ? 10 : 5, width: Styles.width }, animatedStyles]}>
 
         </Animated.View>
     )

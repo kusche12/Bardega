@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, Image } from 'react-native';
+import { TouchableOpacity, Text, View, Image, Platform } from 'react-native';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 
@@ -8,7 +8,7 @@ const SettingsButton = ({ name, action, icon }) => {
         <TouchableOpacity onPress={() => action()}>
             <View style={UserStyles.settingsButton}>
                 <Text style={GlobalStyles.paragraph3}>{name}</Text>
-                <Image source={icon} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                <Image source={icon} style={{ width: Platform.isPad ? 35 : 25, height: Platform.isPad ? 35 : 25, resizeMode: 'contain' }} />
             </View>
         </TouchableOpacity>
     )

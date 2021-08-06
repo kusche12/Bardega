@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert, Platform } from 'react-native';
 import AuthInput from '../../Components/Auth/AuthInput';
 import { connect } from 'react-redux';
 import Images from '../../Images/Images';
@@ -99,8 +99,8 @@ const ReAuthenticationScreen = ({ error, authError, user, deleteAccount, logIn, 
                 <View style={{ alignSelf: 'center', marginTop: 16 }}>
                     <TouchableWithoutFeedback onPress={() => handleChange()}>
                         <View style={[AuthStyles.mainButton, { flexDirection: 'row' }]}>
-                            <Image source={renderType().buttonImg} style={{ width: 20, height: 20, resizeMode: 'contain', marginRight: 8 }} />
-                            <Text style={[GlobalStyles.titlebold2, { fontSize: 16 }]}>{renderType().button}</Text>
+                            <Image source={renderType().buttonImg} style={{ width: Platform.isPad ? 30 : 20, height: Platform.isPad ? 30 : 20, resizeMode: 'contain', marginRight: 8 }} />
+                            <Text style={[GlobalStyles.titlebold3]}>{renderType().button}</Text>
                         </View>
                     </TouchableWithoutFeedback>
                 </View>

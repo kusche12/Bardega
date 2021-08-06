@@ -92,7 +92,7 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits, userID }
                 />
             }
         >
-            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8, alignItems: 'center' }, isRefreshing && Platform.OS === 'ios' && { top: 0 }]}>
+            <SafeAreaView style={[GlobalStyles.headerSafeArea, { marginLeft: 8, alignItems: 'flex-start' }, isRefreshing && Platform.OS === 'ios' && { top: 0 }]}>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                     <View style={{ flex: 1 }}></View>
                     <View style={{ flex: 3, justifyContent: 'center' }}>

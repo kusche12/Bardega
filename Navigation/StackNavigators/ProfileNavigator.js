@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { firestoreConnect } from 'react-redux-firebase';
@@ -53,7 +54,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
 
@@ -68,7 +69,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -82,7 +83,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -97,7 +98,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
 
@@ -112,7 +113,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
 
@@ -127,7 +128,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -143,7 +144,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -159,7 +160,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerBackTitleVisible: false,
                     headerTintColor: Styles.PINK,
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -173,7 +174,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -187,7 +188,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -201,7 +202,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -215,7 +216,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -229,7 +230,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -243,7 +244,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -257,7 +258,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -271,7 +272,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -285,7 +286,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}
@@ -298,7 +299,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitleAlign: 'center',
                     headerTintColor: 'black',
                     headerStyle: {
-                        height: 100,
+                        height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
                     },
                 })}

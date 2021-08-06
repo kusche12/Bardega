@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, ScrollView } from 'react-native';
+import { SafeAreaView, View, Text, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { logOut } from '../../Store/Actions/AuthActions';
 import GlobalStyles from '../../Styles/GlobalStyles';
@@ -14,7 +14,7 @@ const SettingsScreen = ({ logOut, navigation }) => {
         <ScrollView>
             <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginBottom: 50 }]} >
                 <Text style={[GlobalStyles.titlebold1, { marginBottom: 25 }]}>SETTINGS</Text>
-                <View style={[UserStyles.settingsButton, { backgroundColor: Styles.BRIGHT_PINK, height: 50, marginBottom: 16 }]}>
+                <View style={[UserStyles.settingsButton, { backgroundColor: Styles.BRIGHT_PINK, height: Platform.isPad ? 80 : 50, marginBottom: 16 }]}>
                     <Text style={GlobalStyles.titlebold2}>YOUR ACCOUNT</Text>
                 </View>
                 <SettingsButton name="Edit Profile" icon={Images.settings.switch} action={() => navigation.navigate('EditProfileScreen')} />
@@ -33,7 +33,7 @@ const SettingsScreen = ({ logOut, navigation }) => {
                     name="Delete account"
                     icon={Images.settings.trash}
                     action={() => navigation.navigate('DeleteAccountScreen', { navigation })} />
-                <View style={[UserStyles.settingsButton, { backgroundColor: Styles.BRIGHT_PINK, height: 50, marginBottom: 16 }]}>
+                <View style={[UserStyles.settingsButton, { backgroundColor: Styles.BRIGHT_PINK, height: Platform.isPad ? 80 : 50, marginBottom: 16 }]}>
                     <Text style={GlobalStyles.titlebold2}>DEVICE & ADDITIONAL SERVICES</Text>
                 </View>
                 <SettingsButton name="Notifications" icon={Images.settings.notifications} action={() => navigation.navigate('NotificationsSettingsScreen')} />

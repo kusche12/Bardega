@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, ActivityIndicator } from 'react-native';
+import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, ActivityIndicator, Platform } from 'react-native';
 import { renderTime, renderNotificationText } from '../../Functions/miscFunctions';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
@@ -25,12 +25,12 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
 
     // Every time this screen is entered, update the user's notifsLastChecked dateTime field
     useEffect(() => {
-        if (updateOnce) {
+        if (allRequests && notifications && profiles && drinks && updateOnce) {
             updateNotificationChecked({ id: userA.id });
             retrieveData();
             setUpdateOnce(false);
         }
-    }, []);
+    }, [allRequests, notifications, profiles, drinks]);
 
     // Fetch more notifications as use scrolls
     const retrieveData = () => {
@@ -85,11 +85,11 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
                 <TouchableWithoutFeedback onPress={() => handleCallback(item, user, drink)}>
                     <View style={{ width: Styles.width, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, paddingHorizontal: 10 }}>
                         <View style={{ flexDirection: 'row', width: Styles.width * WIDTH }}>
-                            <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={{ width: 45, height: 45, borderRadius: 100, marginRight: 10 }} />
+                            <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={{ width: Platform.isPad ? 60 : 45, height: Platform.isPad ? 60 : 45, borderRadius: 100, marginRight: 10 }} />
                             {renderText(item, user, drink)}
                         </View>
                         {drink &&
-                            <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={{ width: 50, height: 50, borderRadius: Styles.BORDER_RADIUS }} />
+                            <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={{ width: Platform.isPad ? 70 : 50, height: Platform.isPad ? 70 : 50, borderRadius: Styles.BORDER_RADIUS }} />
                         }
                         {renderAcceptFollow(item, user)}
                     </View>
@@ -106,6 +106,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
             <Text>
                 <Text style={GlobalStyles.paragraphbold2}>{user.userName} </Text>
                 <Text style={GlobalStyles.paragraph2}>{body} </Text>
+                {Platform.isPad && <Text style={GlobalStyles.paragraph2}> </Text>}
                 <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>{renderTime(item.dateCreated)}</Text>
             </Text>
 
@@ -164,27 +165,25 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
     }
 
     const renderFollowRequestPage = () => {
-        const userID = allRequests[0]['1']
-        const user = profiles[userID];
-        const userImg = user.imageURL;
         let num = allRequests.length - 1;
         if (num > 9) {
             num = 9;
         }
-
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('FollowRequestsScreen', { notificationsID: user.notificationsID, userA: user })}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('FollowRequestsScreen', { notificationsID: userA.notificationsID, userA: userA })}>
                 <View>
                     <View style={{ flexDirection: 'row', paddingHorizontal: 10, paddingBottom: 4, justifyContent: 'space-between' }}>
-                        <View>
-                            <Image source={{ uri: userImg }} style={{ width: 50, height: 50, borderRadius: 100 }} />
-                            <View style={[UserStyles.requestNumContainer, { position: 'absolute', left: 35, top: -10 }]}>
-                                <Text style={[GlobalStyles.paragraphbold3, { color: 'white' }]}>{num}+</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ marginRight: Platform.isPad ? 60 : 30 }}>
+                                <Image source={Images.profile.follower} style={{ width: Platform.isPad ? 54 : 40, height: Platform.isPad ? 53 : 40, objectFit: 'contain' }} />
+                                <View style={[UserStyles.requestNumContainer, { position: 'absolute', left: Platform.isPad ? 35 : 25, top: -10 }]}>
+                                    <Text style={[GlobalStyles.paragraphbold3, { color: 'white' }]}>{num}+</Text>
+                                </View>
                             </View>
-                        </View>
-                        <View>
-                            <Text style={GlobalStyles.paragraphbold2} >Follow Requests</Text>
-                            <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>Accept or decline requests</Text>
+                            <View>
+                                <Text style={GlobalStyles.paragraphbold2} >Follow Requests</Text>
+                                <Text style={[GlobalStyles.paragraph2, { color: Styles.GRAY }]}>Accept or decline requests</Text>
+                            </View>
                         </View>
                         <Image source={Images.settings.about} style={{ width: 12, height: 20, alignSelf: 'center', marginRight: 10 }} />
                     </View>
@@ -202,11 +201,10 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
                 <View style={[UserStyles.followerHeader, { marginTop: 20 }]}>
                     <Text style={GlobalStyles.titlebold2}>NOTIFICATIONS</Text>
                 </View>
-                <View style={[GlobalStyles.line, { width: Styles.width * .9, alignSelf: 'center', marginBottom: 16 }]}></View>
-
-                {allRequests.length > 1 && renderFollowRequestPage()}
+                <View style={[GlobalStyles.line, { width: Platform.isPad ? Styles.width * .95 : Styles.width * .9, alignSelf: 'center', marginBottom: 16 }]}></View>
 
 
+                {allRequests.length > 1 && profiles && renderFollowRequestPage()}
 
                 <FlatList
                     ListHeaderComponent={

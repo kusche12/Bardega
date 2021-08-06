@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback, Platform } from 'react-native';
 import { createRateSpirit, updateRateSpirit } from '../../Store/Actions/DrinkActions';
 import { connect } from 'react-redux';
 import firebase from '../../API/FirebaseSetup'
@@ -73,7 +73,7 @@ const Ratings = ({ userID, drink, createRateSpirit, updateRateSpirit }) => {
             index++;
         }
         return (
-            <View style={{ flexDirection: 'row', width: Styles.width * .65, alignItems: 'center', justifyContent: 'space-around' }}>
+            <View style={{ flexDirection: 'row', width: Platform.isPad ? Styles.width * .5 : Styles.width * .65, alignItems: 'center', justifyContent: 'space-around' }}>
                 {res}
             </View>
         )

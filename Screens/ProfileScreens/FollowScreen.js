@@ -44,7 +44,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
             <TouchableWithoutFeedback onPress={() => navigation.push('ProfileScreen', { user: item, ownProfile: ownProfile })}>
                 <View style={UserStyles.followRow}>
                     <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={UserStyles.followImage} />
-                    <View style={{ marginLeft: 8 }}>
+                    <View>
                         <Text style={GlobalStyles.titlebold2}>{item.userName}</Text>
                         <Text style={[GlobalStyles.title3, { color: Styles.GRAY }]}>{item.fName} {item.lName}</Text>
                     </View>

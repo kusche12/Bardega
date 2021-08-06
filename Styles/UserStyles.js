@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import Styles from './StyleConstants';
 const RADIUS = 22;
 
@@ -8,12 +8,12 @@ export default StyleSheet.create({
     infoContainer: {
         width: Styles.width * .95,
         marginBottom: 30,
-        paddingLeft: 8
+        paddingLeft: 8,
     },
     profileImage: {
         borderRadius: 100,
-        width: Styles.width * .22,
-        height: Styles.width * .22
+        width: Platform.isPad ? Styles.width * .18 : Styles.width * .22,
+        height: Platform.isPad ? Styles.width * .18 : Styles.width * .22
     },
     infoRow: {
         flexDirection: 'row',
@@ -29,7 +29,7 @@ export default StyleSheet.create({
     button: {
         borderRadius: 10,
         borderWidth: 1,
-        width: 100,
+        width: Platform.isPad ? 150 : 100,
         alignItems: 'center',
         paddingVertical: 4,
         backgroundColor: 'white',
@@ -44,7 +44,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-        width: 70,
+        width: Platform.isPad ? 110 : 70,
         height: 40,
     },
     buttonFavorites: {
@@ -61,8 +61,8 @@ export default StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: Styles.height * .11,
-        width: Styles.width * .27,
+        height: Platform.isPad ? Styles.height * .13 : Styles.height * .11,
+        width: Platform.isPad ? Styles.width * .20 : Styles.width * .27,
         borderWidth: 1,
         borderColor: 'transparent',
         borderRadius: 4,
@@ -70,7 +70,8 @@ export default StyleSheet.create({
     },
     statContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        width: Platform.isPad ? Styles.width * .75 : Styles.width
     },
     drinkContainer: {
         borderRadius: 6,
@@ -82,8 +83,8 @@ export default StyleSheet.create({
         resizeMode: 'contain'
     },
     drinkImage: {
-        width: Styles.width * .333,
-        height: Styles.width * .333,
+        width: Platform.isPad ? Styles.width * .25 : Styles.width * .333,
+        height: Platform.isPad ? Styles.width * .25 : Styles.width * .333,
     },
     followerHeader: {
         height: Styles.height * .04,
@@ -97,15 +98,16 @@ export default StyleSheet.create({
     },
     followRow: {
         width: Styles.width,
-        height: 60,
+        height: Platform.isPad ? 100 : 60,
         flexDirection: 'row',
         paddingLeft: 20,
         alignItems: 'center'
     },
     followImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 100
+        width: Platform.isPad ? 80 : 50,
+        height: Platform.isPad ? 80 : 50,
+        borderRadius: 100,
+        marginRight: Platform.isPad ? 20 : 8
     },
     faveImage1: {
         width: FAVEIMAGEWIDTH,
@@ -171,8 +173,8 @@ export default StyleSheet.create({
         top: -24
     },
     settingsCog: {
-        width: 25,
-        height: 25
+        width: Platform.isPad ? 45 : 25,
+        height: Platform.isPad ? 45 : 25
     },
     profileInputContainer: {
         flexDirection: 'row',
@@ -189,7 +191,7 @@ export default StyleSheet.create({
     },
     settingsButton: {
         width: Styles.width,
-        height: 45,
+        height: Platform.isPad ? 70 : 45,
         backgroundColor: Styles.PINK,
         flexDirection: 'row',
         paddingHorizontal: 16,
@@ -210,13 +212,13 @@ export default StyleSheet.create({
     indexButtonContainer: {
         width: Styles.width / 2,
         alignItems: 'center',
-        height: 50,
+        height: Platform.isPad ? 80 : 50,
         justifyContent: 'center'
     },
     indexButtonLine: {
         width: Styles.width / 2,
         backgroundColor: Styles.DARK_GRAY,
-        height: 1.75,
+        height: Platform.isPad ? 2.25 : 1.75,
         alignSelf: 'flex-start'
     },
     requestNumContainer: {
@@ -228,8 +230,8 @@ export default StyleSheet.create({
         justifyContent: 'center'
     },
     inboxNum: {
-        width: 20,
-        height: 20,
+        width: Platform.isPad ? 26 : 20,
+        height: Platform.isPad ? 26 : 20,
         borderRadius: 100,
         backgroundColor: Styles.DARK_PINK,
         alignItems: 'center',

@@ -32,11 +32,11 @@ export default StyleSheet.create({
     },
     paragraphbold2: {
         fontFamily: "SourceSerifSemiBold",
-        fontSize: Platform.isPad ? 24 : 16,
+        fontSize: Platform.isPad ? 26 : 16,
     },
     paragraphbold3: {
         fontFamily: "SourceSerifSemiBold",
-        fontSize: Platform.isPad ? 20 : 14,
+        fontSize: Platform.isPad ? 24 : 14,
     },
     paragraph1: {
         fontFamily: "SourceSerifRegular",
@@ -44,15 +44,15 @@ export default StyleSheet.create({
     },
     paragraph2: {
         fontFamily: "SourceSerifRegular",
-        fontSize: Platform.isPad ? 24 : 16,
+        fontSize: Platform.isPad ? 26 : 16,
     },
     paragraph3: {
         fontFamily: "SourceSerifRegular",
-        fontSize: Platform.isPad ? 20 : 14,
+        fontSize: Platform.isPad ? 24 : 14,
     },
     paragraph4: {
         fontFamily: "SourceSerifRegular",
-        fontSize: Platform.isPad ? 20 : 12,
+        fontSize: Platform.isPad ? 22 : 12,
     },
     paragraphError1: {
         fontFamily: "SourceSerifSemiBold",
@@ -117,7 +117,7 @@ export default StyleSheet.create({
     },
     line: {
         alignSelf: 'stretch',
-        height: 1.5,
+        height: Platform.isPad ? 2.25 : 1.5,
         backgroundColor: Styles.DARK_PINK,
         marginTop: 4,
         marginBottom: 4

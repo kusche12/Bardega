@@ -10,7 +10,7 @@ import { compose } from 'redux';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Images from '../../Images/Images';
 import { renderNum } from '../../Functions/miscFunctions';
-import { Placeholder, PlaceholderMedia, Fade } from 'rn-placeholder';
+import { Placeholder, PlaceholderMedia, Fade, PlaceholderLine } from 'rn-placeholder';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -28,6 +28,8 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [userDrinks, setUserDrinks] = useState([]);
     const [likedDrinks, setLikedDrinks] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const LOADING_LINE_LENGTH = Platform.isPad ? Styles.width * .09 : Styles.width * .25;
 
     // When the user pulls down on the profile screen,
     // their drinks / liked drinks lists AND followers / following counts get updated
@@ -120,6 +122,15 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
     // Renders either the recipes, followers, or following stat box given parameter type
     const renderStatBox = (num, type) => {
+        if (isLoading) {
+            return (
+                <View style={[UserStyles.statBox, GlobalStyles.boxShadow, { overflow: 'hidden' }]}>
+                    <Placeholder Animation={Fade}>
+                        <PlaceholderMedia style={{ width: 300, height: 300 }} />
+                    </Placeholder>
+                </View>
+            )
+        }
         return (
             <TouchableWithoutFeedback onPress={() => routeStatBox(type)}>
                 <View style={[UserStyles.statBox, GlobalStyles.boxShadow]}>
@@ -148,7 +159,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                         data={userDrinks}
                         renderItem={(item) => <RenderDrink navigation={navigation} object={item} />}
                         keyExtractor={item => item.id}
-                        numColumns={3}
+                        numColumns={Platform.isPad ? 4 : 3}
                         scrollEnabled={false}
                         horizontal={false}
                     />
@@ -162,7 +173,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                             data={likedDrinks}
                             renderItem={(item) => <RenderDrink navigation={navigation} object={item} />}
                             keyExtractor={item => item.id}
-                            numColumns={3}
+                            numColumns={Platform.isPad ? 4 : 3}
                             scrollEnabled={false}
                             horizontal={false}
                         />
@@ -184,7 +195,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
         return (
             <View style={[UserStyles.drinkImage]} key={item.id}>
                 <Placeholder Animation={Fade}>
-                    <PlaceholderMedia style={{ width: .33 * Styles.width, height: .33 * Styles.width }} />
+                    <PlaceholderMedia style={{ width: Platform.isPad ? Styles.width * .25 : .33 * Styles.width, height: Platform.isPad ? Styles.width * .25 : .33 * Styles.width }} />
                 </Placeholder>
             </View>
         )
@@ -198,7 +209,10 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                         <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={UserStyles.profileImage} />
                         <View style={{ marginLeft: 16 }}>
                             <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>
-                            <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                            {!user.fName && !user.lName
+                                ? <View style={{ marginBottom: 6 }}></View>
+                                : <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                            }
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={[UserStyles.button, { backgroundColor: Styles.LOADING_GRAY, borderColor: Styles.LOADING_GRAY, marginTop: 4 }]}>
                                     <Text></Text>
@@ -209,7 +223,11 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 </View>
 
                 <View style={UserStyles.infoContainer}>
-                    <Text style={GlobalStyles.paragraph2}>{user.bio}</Text>
+                    <Placeholder Animation={Fade}>
+                        <PlaceholderLine width={LOADING_LINE_LENGTH} />
+                        <PlaceholderLine width={LOADING_LINE_LENGTH} />
+                        <PlaceholderLine width={LOADING_LINE_LENGTH * .85} />
+                    </Placeholder>
                 </View>
 
                 <View style={[UserStyles.infoContainer, UserStyles.statContainer]}>
@@ -221,12 +239,12 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
                     <View style={[UserStyles.indexButtonContainer]}>
                         <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(0) }}>
-                            <Image source={activeIndex === 0 ? Images.profile.grid : Images.profile.gridOff} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                            <Image source={activeIndex === 0 ? Images.profile.grid : Images.profile.gridOff} style={{ width: Platform.isPad ? 45 : 25, height: Platform.isPad ? 45 : 25, resizeMode: 'contain' }} />
                         </TouchableWithoutFeedback>
                     </View>
-                    <View style={[UserStyles.indexButtonContainer]}>
+                    <View style={UserStyles.indexButtonContainer}>
                         <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(1) }}>
-                            <Image source={activeIndex === 1 ? Images.profile.emptyHeart : Images.profile.emptyHeartOff} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                            <Image source={activeIndex === 1 ? Images.profile.emptyHeart : Images.profile.emptyHeartOff} style={{ width: Platform.isPad ? 45 : 25, height: Platform.isPad ? 45 : 25, resizeMode: 'contain' }} />
                         </TouchableWithoutFeedback>
                     </View>
                 </View>
@@ -234,10 +252,10 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
                 <View style={{ width: Styles.width }}>
                     <FlatList
-                        data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }]}
+                        data={[{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }]}
                         renderItem={(item) => renderLoadingDrink(item)}
                         keyExtractor={item => item.id}
-                        numColumns={3}
+                        numColumns={Platform.isPad ? 4 : 3}
                         scrollEnabled={false}
                         horizontal={false}
                     />
@@ -276,7 +294,11 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                         <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={UserStyles.profileImage} />
                         <View style={{ marginLeft: 16 }}>
                             <Text style={GlobalStyles.titlebold1}>{user.userName}</Text>
-                            <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                            {!user.fName && !user.lName
+                                ? <View style={{ marginBottom: 6 }}></View>
+                                : <Text style={[GlobalStyles.title3, { marginBottom: 8 }]}>{user.fName} {user.lName}</Text>
+                            }
+
                             <FollowButton {...{ navigation, user, ownProfile }} />
                         </View>
                     </View>
@@ -295,12 +317,12 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 2 }}>
                     <View style={[UserStyles.indexButtonContainer]}>
                         <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(0) }}>
-                            <Image source={activeIndex === 0 ? Images.profile.grid : Images.profile.gridOff} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                            <Image source={activeIndex === 0 ? Images.profile.grid : Images.profile.gridOff} style={{ width: Platform.isPad ? 45 : 25, height: Platform.isPad ? 45 : 25, resizeMode: 'contain' }} />
                         </TouchableWithoutFeedback>
                     </View>
                     <View style={[UserStyles.indexButtonContainer]}>
                         <TouchableWithoutFeedback disabled={isPrivate} onPress={() => { setActiveIndex(1) }}>
-                            <Image source={activeIndex === 1 ? Images.profile.emptyHeart : Images.profile.emptyHeartOff} style={{ width: 25, height: 25, resizeMode: 'contain' }} />
+                            <Image source={activeIndex === 1 ? Images.profile.emptyHeart : Images.profile.emptyHeartOff} style={{ width: Platform.isPad ? 45 : 25, height: Platform.isPad ? 45 : 25, resizeMode: 'contain' }} />
                         </TouchableWithoutFeedback>
                     </View>
                 </View>

@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import Styles from './StyleConstants';
 
 const PINK = '#F29288';
@@ -25,8 +25,8 @@ export default StyleSheet.create({
         width: Styles.width * .8
     },
     inputImg: {
-        width: 22,
-        height: 21,
+        width: Platform.isPad ? 30 : 22,
+        height: Platform.isPad ? 30 : 21,
         marginRight: 15,
     },
     inputContainer: {

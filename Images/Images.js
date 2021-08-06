@@ -45,6 +45,7 @@ export default {
         padlock: require('./padlock.png'),
         inbox: require('./inbox.png'),
         follower: require('./follower.png'),
+        followerPink: require('./follower_pink.png')
     },
     comment: {
         emptyHeart: require('./empty_heart.png'),

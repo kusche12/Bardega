@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Switch, Image, Alert } from 'react-native';
+import { SafeAreaView, View, Text, Switch, Image, Alert, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import Images from '../../Images/Images';
 import { updatePrivacy, updateLikedDrinkPrivacy } from '../../Store/Actions/ProfileActions';
@@ -109,7 +109,7 @@ const MakePrivateScreen = ({ userID, error, user, updatePrivacy, updateLikedDrin
             <View style={[GlobalStyles.line, { backgroundColor: Styles.LIGHT_GRAY, marginBottom: 16 }]}></View>
             <View style={{ flexDirection: 'row', paddingHorizontal: 8, justifyContent: 'space-between', marginBottom: 16 }}>
                 <View style={{ flexDirection: 'row' }}>
-                    <Image source={Images.settings.lock} style={{ width: 20, height: 20, resizeMode: 'contain', marginRight: 8 }} />
+                    <Image source={Images.settings.lock} style={{ width: Platform.isPad ? 30 : 20, height: Platform.isPad ? 30 : 20, resizeMode: 'contain', marginRight: 8 }} />
                     <Text style={GlobalStyles.paragraph1}>Private Account</Text>
                 </View>
                 <Switch
@@ -119,7 +119,7 @@ const MakePrivateScreen = ({ userID, error, user, updatePrivacy, updateLikedDrin
             </View>
             <View style={{ flexDirection: 'row', paddingHorizontal: 8, justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'row' }}>
-                    <Image source={Images.profile.heart} style={{ width: 20, height: 20, resizeMode: 'contain', marginRight: 8 }} />
+                    <Image source={Images.profile.heart} style={{ width: Platform.isPad ? 30 : 20, height: Platform.isPad ? 30 : 20, resizeMode: 'contain', marginRight: 8 }} />
                     <Text style={GlobalStyles.paragraph1}>Private Liked Drinks</Text>
                 </View>
                 <Switch
@@ -127,7 +127,7 @@ const MakePrivateScreen = ({ userID, error, user, updatePrivacy, updateLikedDrin
                     onValueChange={handleChangeDrink}
                 />
             </View>
-            { error && <Text style={[GlobalStyles.paragraphError2, { textAlign: 'center' }]}>{error}</Text>}
+            {error && <Text style={[GlobalStyles.paragraphError2, { textAlign: 'center' }]}>{error}</Text>}
         </SafeAreaView>
     )
 }

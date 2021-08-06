@@ -29,8 +29,9 @@ export default StyleSheet.create({
         marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingRight: 12,
-        alignItems: 'flex-end'
+        paddingRight: 16,
+        alignItems: 'flex-end',
+        width: Styles.width
     },
     searchHeader: {
         marginBottom: 8,
@@ -42,11 +43,11 @@ export default StyleSheet.create({
         marginHorizontal: 8,
         paddingRight: 100,
         borderBottomColor: Styles.GRAY,
-        borderBottomWidth: 1,
+        borderBottomWidth: Platform.isPad ? 2 : 1,
     },
     searchImage: {
-        width: 80,
-        height: 80,
+        width: Platform.isPad ? 120 : 80,
+        height: Platform.isPad ? 120 : 80,
         borderRadius: Styles.BORDER_RADIUS,
         marginRight: 8
     },

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableWithoutFeedback, Image, Text, Share, Alert } from 'react-native';
+import { View, TouchableWithoutFeedback, Image, Text, Share, Alert, Platform } from 'react-native';
 import * as Linking from 'expo-linking';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -96,12 +96,12 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
 
                 <TouchableWithoutFeedback onPress={() => handleProfileNavigation()}>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                        <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { width: 35, height: 35 }]}></Image>
+                        <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { width: Platform.isPad ? 50 : 35, height: Platform.isPad ? 50 : 35 }]}></Image>
                         <Text style={GlobalStyles.titlebold3}>@{author.userName}</Text>
                     </View>
                 </TouchableWithoutFeedback>
 
-                <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: Styles.width * .38, justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'flex-end', width: Platform.isPad ? Styles.width * .3 : Styles.width * .38, justifyContent: 'space-between' }}>
                     <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleDrinkLike()}>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                             {renderHeart()}
@@ -111,14 +111,14 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
 
                     <TouchableWithoutFeedback onPress={() => navigation.navigate('CommentsScreen', { drink: drink, user: authors[userID] })}>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                            <Image source={Images.detail.emptyComment} style={[DetailStyles.heartImg, { width: 35 }]}></Image>
+                            <Image source={Images.detail.emptyComment} style={[DetailStyles.heartImg, { width: Platform.isPad ? 45 : 30, height: Platform.isPad ? 45 : 30 }]}></Image>
                             <Text style={GlobalStyles.titlebold3}>{renderNum(numComments - 1)}</Text>
                         </View>
                     </TouchableWithoutFeedback>
 
                     <TouchableWithoutFeedback onPress={() => onShare()}>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                            <Image source={Images.detail.share} style={[DetailStyles.heartImg]}></Image>
+                            <Image source={Images.detail.share} style={DetailStyles.heartImg}></Image>
                             <Text style={[GlobalStyles.titlebold3, { opacity: 0 }]}>Share</Text>
                         </View>
                     </TouchableWithoutFeedback>

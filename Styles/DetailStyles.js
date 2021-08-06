@@ -74,14 +74,14 @@ export default StyleSheet.create({
     },
     commentInputRow: {
         alignSelf: 'stretch',
-        height: 24,
+        height: Platform.isPad ? 40 : 24,
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
     },
     commentInputImage: {
-        width: 18,
-        height: 15,
+        width: Platform.isPad ? 28 : 18,
+        height: Platform.isPad ? 26 : 15,
     },
     imageContainer: {
         width: 22,
@@ -96,9 +96,9 @@ export default StyleSheet.create({
         borderColor: Styles.GRAY,
         borderRadius: 10,
         borderWidth: 1,
-        paddingLeft: 36,
+        paddingLeft: Platform.isPad ? 50 : 36,
         width: Styles.width * .75,
-        height: 30,
+        height: Platform.isPad ? 45 : 30,
         justifyContent: 'center'
     },
     commentHeaderImage: {
@@ -129,8 +129,8 @@ export default StyleSheet.create({
         width: Styles.width * .052,
     },
     heartImg: {
-        width: 28,
-        height: 28,
+        width: Platform.isPad ? 40 : 28,
+        height: Platform.isPad ? 40 : 28,
         resizeMode: 'contain'
     },
     buttonContainer: {
@@ -142,7 +142,7 @@ export default StyleSheet.create({
         paddingVertical: 10,
     },
     rateStar: {
-        width: 45,
-        height: 40
+        width: Platform.isPad ? 80 : 45,
+        height: Platform.isPad ? 80 : 40
     }
 });

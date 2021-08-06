@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Switch, Image, Alert, Linking } from 'react-native';
+import { SafeAreaView, View, Text, Switch, Image, Alert, Linking, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import Images from '../../Images/Images';
 import { updateNotifications } from '../../Store/Actions/ProfileActions';
@@ -56,7 +56,7 @@ const NotificationsSettingsScreen = ({ userID, error, user, updateNotifications 
             <View style={[GlobalStyles.line, { backgroundColor: Styles.LIGHT_GRAY, marginBottom: 16 }]}></View>
             <View style={{ flexDirection: 'row', paddingHorizontal: 8, justifyContent: 'space-between' }}>
                 <View style={{ flexDirection: 'row' }}>
-                    <Image source={Images.settings.bell} style={{ width: 20, height: 20, resizeMode: 'contain', marginRight: 8 }} />
+                    <Image source={Images.settings.bell} style={{ width: Platform.isPad ? 30 : 20, height: Platform.isPad ? 30 : 20, resizeMode: 'contain', marginRight: 8 }} />
                     <Text style={GlobalStyles.paragraph1}>Allow Notifications</Text>
                 </View>
                 <Switch
@@ -65,7 +65,7 @@ const NotificationsSettingsScreen = ({ userID, error, user, updateNotifications 
                 />
 
             </View>
-            { error && <Text style={[GlobalStyles.paragraphError2, { textAlign: 'center' }]}>{error}</Text>}
+            {error && <Text style={[GlobalStyles.paragraphError2, { textAlign: 'center' }]}>{error}</Text>}
         </SafeAreaView>
     )
 }

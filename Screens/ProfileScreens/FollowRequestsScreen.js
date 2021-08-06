@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image } from 'react-native';
+import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, Platform } from 'react-native';
 import { renderTime } from '../../Functions/miscFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -17,7 +17,7 @@ const FollowRequestsScreen = ({ userA, navigation, notifications, profiles, reje
     const [requestNotifs, setRequestNotifs] = useState([]);
 
     useEffect(() => {
-        if (notifications && userA) {
+        if (notifications && userA && profiles) {
             let res = [];
             for (let i = 0; i < notifications.length; i++) {
                 let notif = notifications[i];
@@ -28,7 +28,7 @@ const FollowRequestsScreen = ({ userA, navigation, notifications, profiles, reje
             setRequestNotifs(res);
             setIsLoading(false)
         }
-    }, [notifications, userA]);
+    }, [notifications, userA, profiles]);
 
     const renderNotification = ({ item }) => {
         if (item.id !== 'default') {
@@ -109,7 +109,7 @@ const FollowRequestsScreen = ({ userA, navigation, notifications, profiles, reje
                 <View style={[UserStyles.followerHeader]}>
                     <Text style={GlobalStyles.titlebold2}>FOLLOW REQUESTS</Text>
                 </View>
-                <View style={[GlobalStyles.line, { width: Styles.width, alignSelf: 'center', marginBottom: 16 }]}></View>
+                <View style={[GlobalStyles.line, { width: Platform.isPad ? Styles.width * .95 : Styles.width * .9, alignSelf: 'center', marginBottom: 16 }]}></View>
 
                 <FlatList
                     data={requestNotifs}

@@ -169,24 +169,25 @@ const styles = StyleSheet.create({
     },
     inputContainerStyle: {
         width: Styles.width * .9,
-        height: 42,
+        height: Platform.isPad ? 80 : 42,
         borderWidth: 1.5,
         borderColor: 'black',
-        paddingLeft: 35,
+        paddingLeft: Platform.isPad ? 50 : 35,
         borderRadius: Styles.BORDER_RADIUS,
         borderColor: Styles.OFF_BLACK,
         alignSelf: 'center',
         overflow: 'hidden',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        marginTop: 10
     },
     inputImageRow: {
         flexDirection: 'row',
         position: 'relative',
     },
     image: {
-        width: 18,
-        height: 18,
-        top: 13,
+        width: Platform.isPad ? 30 : 18,
+        height: Platform.isPad ? 30 : 18,
+        top: Platform.isPad ? 34 : 23,
         left: Platform.OS === 'ios' ? 12 : 30,
         position: 'absolute',
         zIndex: 900,

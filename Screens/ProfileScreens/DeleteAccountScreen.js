@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Platform } from 'react-native';
 import Images from '../../Images/Images';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -15,10 +15,10 @@ const DeleteAccountScreen = ({ error, navigation }) => {
                 <TouchableWithoutFeedback onPress={() => navigation.navigate('ReAuthenticationScreen', { type: "deleteAccount", navigation })}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', flex: 1 }}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Image source={Images.settings.trash} style={{ width: 20, height: 20, resizeMode: 'contain', marginRight: 8 }} />
+                            <Image source={Images.settings.trash} style={{ width: Platform.isPad ? 30 : 20, height: Platform.isPad ? 30 : 20, resizeMode: 'contain', marginRight: 8 }} />
                             <Text style={[GlobalStyles.paragraph1]}>Delete Account</Text>
                         </View>
-                        <Image source={Images.settings.about} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
+                        <Image source={Images.settings.about} style={{ width: Platform.isPad ? 30 : 20, height: Platform.isPad ? 30 : 20, resizeMode: 'contain' }} />
                     </View>
                 </TouchableWithoutFeedback>
 

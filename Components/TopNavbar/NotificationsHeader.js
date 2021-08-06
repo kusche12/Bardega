@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Image, View, TouchableWithoutFeedback, ActivityIndicator, Text } from 'react-native';
+import { Image, View, TouchableWithoutFeedback, Platform, Text } from 'react-native';
 import Images from '../../Images/Images';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import GlobalStyles from '../../Styles/GlobalStyles';
-import Styles from '../../Styles/StyleConstants';
 import UserStyles from '../../Styles/UserStyles';
 
 // Renders a notification button in the header
@@ -44,7 +43,7 @@ const NotificationsHeader = ({ navigation, user, notifications }) => {
             }
             return (
                 <View style={{ position: 'relative' }}>
-                    <Image source={Images.profile.inbox} style={{ width: 25, height: 25 }} />
+                    <Image source={Images.profile.inbox} style={{ width: Platform.isPad ? 45 : 25, height: Platform.isPad ? 45 : 25 }} />
                     {unCheckedNotifs > 0 &&
                         <View style={UserStyles.inboxNum}>
                             <Text style={[GlobalStyles.titlebold3, { color: "white", fontSize: 14 }]}>{unCheckedNotifs}</Text>

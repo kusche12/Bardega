@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert } from 'react-native';
+import { SafeAreaView, View, Text, Image, TouchableWithoutFeedback, Alert, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -176,7 +176,7 @@ const SpiritDetailScreen = ({ navigation, drink, comments, authors, userID, dele
                         <View style={CreateStyles.ingrContainerWide}>
                             <Text style={[GlobalStyles.titlebold2]}>DESCRIPTION</Text>
                             <View style={[GlobalStyles.line, { marginBottom: 8 }]}></View>
-                            <Text style={[GlobalStyles.paragraph2, { lineHeight: 22 }]}>{drink.description}</Text>
+                            <Text style={[GlobalStyles.paragraph2, { lineHeight: Platform.isPad ? 38 : 22 }]}>{drink.description}</Text>
                         </View>
                     }
 
