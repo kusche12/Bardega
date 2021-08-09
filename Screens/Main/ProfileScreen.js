@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import firebase from '../../API/FirebaseSetup'
 import { RefreshControl, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, FlatList, ScrollView } from 'react-native';
-import RenderDrink from '../../Components/Profile/RenderDrink';
 import FollowButton from '../../Components/Profile/FollowButton';
 import PaginatedFlatList from '../../Components/Profile/PaginatedFlatList';
 import { connect } from 'react-redux';
@@ -27,9 +26,12 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [userDrinks, setUserDrinks] = useState([]);
     const [likedDrinks, setLikedDrinks] = useState([]);
+
     const [activeIndex, setActiveIndex] = useState(0);
-    const [userDrinkIndex, setUserDrinkIndex] = useState(9);
-    const [likedDrinkIndex, setLikedDrinkIndex] = useState(9);
+    const [userDrinkIndex, setUserDrinkIndex] = useState(0);
+    const [likedDrinkIndex, setLikedDrinkIndex] = useState(0);
+    const [renderUserDrinks, setRenderUserDrinks] = useState([]);
+    const [renderLikedDrinks, setRenderLikedDrinks] = useState([]);
 
     const LOADING_LINE_LENGTH = Platform.isPad ? Styles.width * .09 : Styles.width * .25;
 
@@ -117,6 +119,11 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             }
             setLikedDrinks(liked);
         }
+
+        setUserDrinkIndex(9);
+        setLikedDrinkIndex(9);
+        setRenderUserDrinks(res.slice(0, 9));
+        setRenderLikedDrinks(liked.slice(0, 9));
         setIsLoading(false);
     }
 
@@ -154,12 +161,12 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const renderDrinkList = () => {
         if (activeIndex == 0) {
             return (
-                <PaginatedFlatList data={userDrinks} index={userDrinkIndex} navigation={navigation} />
+                <PaginatedFlatList data={renderUserDrinks} navigation={navigation} />
             )
         } else {
             if (ownProfile || !user.likedDrinksPrivate) {
                 return (
-                    <PaginatedFlatList data={likedDrinks} index={likedDrinkIndex} navigation={navigation} />
+                    <PaginatedFlatList data={renderLikedDrinks} navigation={navigation} />
                 )
             } else {
                 return (
@@ -185,17 +192,38 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
     // Check how far the user has scrolled on screen
     const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
-        const paddingToBottom = 10;
+        const paddingToBottom = 30;
         return layoutMeasurement.height + contentOffset.y >=
             contentSize.height - paddingToBottom;
     };
 
     // Get more data to fill up the rendered drink lists (respective of either the created or liked drinks)
+    // There was a bug when I tried putting this logic in the PaginatedFlatList component
     const getData = () => {
         if (activeIndex == 0 && userDrinkIndex < userDrinks.length) {
-            setUserDrinkIndex(userDrinkIndex + 9);
+            let currItems = [...renderUserDrinks];
+            let newItems = [];
+            let i = userDrinkIndex;
+
+            while (i < userDrinks.length && i < userDrinkIndex + 9) {
+                newItems.push(userDrinks[i]);
+                i++;
+            }
+
+            setUserDrinkIndex(i);
+            setRenderUserDrinks(currItems.concat(newItems));
         } else if (activeIndex == 1 && likedDrinkIndex < likedDrinks.length) {
-            setLikedDrinkIndex(likedDrinkIndex + 9);
+            let currItems = [...renderLikedDrinks];
+            let newItems = [];
+            let i = likedDrinkIndex;
+
+            while (i < likedDrinks.length && i < likedDrinkIndex + 9) {
+                newItems.push(likedDrinks[i]);
+                i++;
+            }
+
+            setLikedDrinkIndex(i);
+            setRenderLikedDrinks(currItems.concat(newItems));
         }
     }
 
@@ -268,6 +296,14 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
             enableOnAndroid={true}
             enableAutomaticScroll={(Platform.OS === 'ios')}
             contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={
+                <RefreshControl
+                    refreshing={isRefreshing}
+                    onRefresh={onRefresh}
+                    tintColor={Styles.DARK_PINK}
+                    colors={[Styles.DARK_PINK]}
+                />
+            }
             onScroll={({ nativeEvent }) => {
                 if (isCloseToBottom(nativeEvent)) {
                     getData();
