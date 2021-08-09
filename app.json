@@ -3,7 +3,7 @@
     "name": "bardega",
     "slug": "bardega",
     "scheme": "bardega",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "facebookScheme": "fb1643873412449618",
@@ -27,7 +27,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.culture.bardega",
-      "buildNumber": "1.0.1",
+      "buildNumber": "1.0.2",
       "infoPlist": {
         "NSCameraUsageDescription": "Allow Bardega to access your camera to upload customizable pictures to your individual drink recipes and profile",
         "NSPhotoLibraryUsageDescription": "Allow Bardega to access your photo library to allow for customizable pictures to your individual drink recipes and profile"
