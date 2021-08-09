@@ -28,6 +28,10 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.culture.bardega",
       "buildNumber": "1.0.1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow Bardega to access your camera to upload customizable pictures to your individual drink recipes and profile",
+        "NSPhotoLibraryUsageDescription": "Allow Bardega to access your photo library to allow for customizable pictures to your individual drink recipes and profile"
+      },
       "requireFullScreen": true,
       "icon": "./assets/icon.png"
     },
