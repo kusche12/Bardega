@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import firebase from '../../API/FirebaseSetup'
-import { RefreshControl, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, FlatList } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { RefreshControl, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, LogBox, Platform, FlatList, ScrollView } from 'react-native';
 import RenderDrink from '../../Components/Profile/RenderDrink';
 import FollowButton from '../../Components/Profile/FollowButton';
+import PaginatedFlatList from '../../Components/Profile/PaginatedFlatList';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -28,6 +28,8 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     const [userDrinks, setUserDrinks] = useState([]);
     const [likedDrinks, setLikedDrinks] = useState([]);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [userDrinkIndex, setUserDrinkIndex] = useState(9);
+    const [likedDrinkIndex, setLikedDrinkIndex] = useState(9);
 
     const LOADING_LINE_LENGTH = Platform.isPad ? Styles.width * .09 : Styles.width * .25;
 
@@ -114,8 +116,6 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 }
             }
             setLikedDrinks(liked);
-        } else {
-            setLikedDrinks([]);
         }
         setIsLoading(false);
     }
@@ -152,32 +152,14 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
 
     // Renders either the user's drinks or liked drinks WITH pagination
     const renderDrinkList = () => {
-        if (activeIndex === 0) {
+        if (activeIndex == 0) {
             return (
-                <View style={{ width: Styles.width }}>
-                    <FlatList
-                        data={userDrinks}
-                        renderItem={(item) => <RenderDrink navigation={navigation} object={item} />}
-                        keyExtractor={item => item.id}
-                        numColumns={Platform.isPad ? 4 : 3}
-                        scrollEnabled={false}
-                        horizontal={false}
-                    />
-                </View>
+                <PaginatedFlatList data={userDrinks} index={userDrinkIndex} navigation={navigation} />
             )
         } else {
             if (ownProfile || !user.likedDrinksPrivate) {
                 return (
-                    <View style={{ width: Styles.width }}>
-                        <FlatList
-                            data={likedDrinks}
-                            renderItem={(item) => <RenderDrink navigation={navigation} object={item} />}
-                            keyExtractor={item => item.id}
-                            numColumns={Platform.isPad ? 4 : 3}
-                            scrollEnabled={false}
-                            horizontal={false}
-                        />
-                    </View>
+                    <PaginatedFlatList data={likedDrinks} index={likedDrinkIndex} navigation={navigation} />
                 )
             } else {
                 return (
@@ -199,6 +181,22 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 </Placeholder>
             </View>
         )
+    }
+
+    // Check how far the user has scrolled on screen
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 10;
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom;
+    };
+
+    // Get more data to fill up the rendered drink lists (respective of either the created or liked drinks)
+    const getData = () => {
+        if (activeIndex == 0 && userDrinkIndex < userDrinks.length) {
+            setUserDrinkIndex(userDrinkIndex + 9);
+        } else if (activeIndex == 1 && likedDrinkIndex < likedDrinks.length) {
+            setLikedDrinkIndex(likedDrinkIndex + 9);
+        }
     }
 
     if (isLoading) {
@@ -266,18 +264,16 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
     }
 
     return (
-        <KeyboardAwareScrollView
+        <ScrollView
             enableOnAndroid={true}
             enableAutomaticScroll={(Platform.OS === 'ios')}
             contentContainerStyle={{ flexGrow: 1 }}
-            refreshControl={
-                <RefreshControl
-                    refreshing={isRefreshing}
-                    onRefresh={onRefresh}
-                    tintColor={Styles.DARK_PINK}
-                    colors={[Styles.DARK_PINK]}
-                />
-            }
+            onScroll={({ nativeEvent }) => {
+                if (isCloseToBottom(nativeEvent)) {
+                    getData();
+                }
+            }}
+            scrollEventThrottle={400}
         >
             <SafeAreaView style={[GlobalStyles.headerSafeArea, { alignItems: 'center', marginTop: 20, marginBottom: 40 }]} >
 
@@ -340,7 +336,7 @@ const ProfileScreen = ({ navigation, drinks, user, userID, ownProfile }) => {
                 }
 
             </SafeAreaView>
-        </KeyboardAwareScrollView>
+        </ScrollView>
     );
 }
 
