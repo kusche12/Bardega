@@ -119,10 +119,12 @@ export const signUp = (newUser) => {
                 .doc('default')
                 .set({ id: 'default' });
 
+
             await firestore
                 .collection('profileFollowing')
                 .doc(profileFollowID)
                 .set({ 1: 'default' });
+
             await firestore
                 .collection('profileFollowing')
                 .doc(profileFollowID)
@@ -130,16 +132,19 @@ export const signUp = (newUser) => {
                 .doc('default')
                 .set({ id: 'default' });
 
+
             await firestore
                 .collection('profileRequests')
                 .doc(profileFollowID)
                 .set({ 1: 'default' });
+
             await firestore
                 .collection('profileRequests')
                 .doc(profileFollowID)
                 .collection('allRequests')
                 .doc('default')
                 .set({ id: 'default' });
+
 
             // Create Notifications collection for this user and save ID
             const notifRef = await firestore.collection('notifications').doc();
