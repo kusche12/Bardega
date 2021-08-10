@@ -67,6 +67,7 @@ const Ratings = ({ userID, drink, createRateSpirit, updateRateSpirit }) => {
         };
         if (stars % 1 !== 0) {
             res.push(renderStar(Images.star.starHalf, rateable));
+            index++;
         };
         for (let j = 1; j <= 5 - stars; j++) {
             res.push(renderStar(Images.star.starEmpty, rateable, index));
@@ -80,6 +81,7 @@ const Ratings = ({ userID, drink, createRateSpirit, updateRateSpirit }) => {
     }
 
     const renderStar = (img, rateable, index) => {
+        console.log(index);
         return (
             <TouchableWithoutFeedback key={index} disabled={isDisabled} onPress={() => rateable && handleRateSpirit(index)}>
                 <Image source={img} style={DetailStyles.rateStar} />
