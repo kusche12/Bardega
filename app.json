@@ -40,6 +40,14 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "permissions": [
+          "CAMERA", "VIBRATE", 
+          "READ_EXTERNAL_STORAGE",
+          "READ_INTERNAL_STORAGE",
+          "WRITE_EXTERNAL_STORAGE",
+          "com.sec.android.provider.badge.permission.READ", 
+          "com.htc.launcher.permission.READ_SETTINGS"
+        ],
       "versionCode": 2,
       "package": "com.culture.bardega"
     },
