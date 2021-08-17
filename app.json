@@ -41,7 +41,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "permissions": [
-          "CAMERA", "VIBRATE", 
+          "CAMERA", "VIBRATE", "CAMERA_ROLL",
           "READ_EXTERNAL_STORAGE",
           "READ_INTERNAL_STORAGE",
           "WRITE_EXTERNAL_STORAGE",
