@@ -48,7 +48,6 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
     const findDrink = async (drinks) => {
         const regex = new RegExp(`${query.trim()}`, 'i');
         const set = new Set();
-        let res = [];
         for (let i = 0; i < drinks.length; i++) {
             const drink = drinks[i];
             const isPrivate = await drinkIsPrivate(drink);
@@ -56,20 +55,17 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
 
                 // If the name matches query
                 if (drink.name.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
-                    res.push(drink);
                     set.add(drink);
                 }
 
                 // If strength level matches query
                 if (drink.strength.value.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
-                    res.push(drink);
                     set.add(drink);
                 }
 
                 // If one of the recipes matches query
                 for (let k = 0; k < drink.recipe.length; k++) {
                     if (drink.recipe[k].type.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
-                        res.push(drink);
                         set.add(drink);
                     }
                 }
@@ -77,67 +73,69 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                 // If one of the tags matches query
                 for (let j = 0; j < drink.tags.length; j++) {
                     if (drink.tags[j].name.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
-                        res.push(drink);
                         set.add(drink);
                     }
                 }
 
-                if (res.length > 20) {
+                if (set.size > 15) {
                     break;
                 }
             }
         }
-        return res;
+        return [...set];
     }
 
     const findProfile = (profiles) => {
         const regex = new RegExp(`${query.trim()}`, 'i');
-        let res = [];
+        const set = new Set();
         for (let i = 0; i < profiles.length; i++) {
             const profile = profiles[i];
-            if (profile.userName.toLowerCase().search(regex) >= 0) {
-                res.push(profile)
+            if (profile.userName.toLowerCase().search(regex) >= 0 && !set.has(profile)) {
+                set.add(profile);
             }
 
-            if (res.length > 10) {
+            if (profile.fName.toLowerCase().search(regex) >= 0 && !set.has(profile)) {
+                set.add(profile);
+            }
+
+            if (profile.lName.toLowerCase().search(regex) >= 0 && !set.has(profile)) {
+                set.add(profile);
+            }
+
+            if (set.size > 10) {
                 break;
             }
         }
 
-        return res;
+        return [...set];
     }
 
     const findSpirit = (spirits) => {
         const regex = new RegExp(`${query.trim()}`, 'i');
         const set = new Set();
-        let res = [];
         for (let i = 0; i < spirits.length; i++) {
             const spirit = spirits[i];
 
             // If the name matches query
             if (spirit.name.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
-                res.push(spirit);
                 set.add(spirit);
             }
 
             // If strength level matches query
             if (spirit.drinkability.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
-                res.push(spirit);
                 set.add(spirit);
             }
 
             // If the spirit type (alcohol) matches the query
             if (spirit.spirit.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
-                res.push(spirit);
                 set.add(spirit);
             }
 
-
-            if (res.length > 10) {
+            if (set.size > 10) {
                 break;
             }
         }
-        return res;
+        return [...set];
     }
 
     return (

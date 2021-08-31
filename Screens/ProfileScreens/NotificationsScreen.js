@@ -14,12 +14,6 @@ import Images from '../../Images/Images';
 
 const LIMIT = 10;
 
-// notifications screen displays the renderedNotifs
-// because of this, when accepting a follow request, it does not get rid of the notification
-// until the screen is reloaded
-// TODO: Make a function that finds the correct rendered notification and removes it from the array after
-// accepting or rejecting it
-
 const NotificationsScreen = ({ userA, navigation, notifications, deleteNotification,
     profiles, drinks, rejectRequest, createNotification, followUser, allRequests, updateNotificationChecked }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -237,7 +231,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
                     onEndReached={retrieveData}
                     onEndReachedThreshold={.1}
                     refreshing={isRefreshing}
-                    contentContainerStyle={{ paddingBottom: 20 }}
+                    contentContainerStyle={{ paddingBottom: 30 }}
                     ListFooterComponent={isRefreshing &&
                         <View style={{ marginTop: 20 }} >
                             <ActivityIndicator color={Styles.DARK_PINK} />

@@ -42,6 +42,7 @@ const SearchScreen = ({ route, navigation }) => {
                     data={items}
                     renderItem={renderItem}
                     keyExtractor={(item, idx) => '' + idx}
+                    contentContainerStyle={{ paddingBottom: 30 }}
                 />
             )
         }

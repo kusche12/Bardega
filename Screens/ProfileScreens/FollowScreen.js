@@ -4,6 +4,7 @@ import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+// import firebase from '../../API/FirebaseSetup'
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -17,13 +18,34 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
     const [isLoading, setIsLoading] = useState(true);
     const [lastIndex, setLastIndex] = useState(0);
     const [isRefreshing, setIsRefreshing] = useState(null);
+    // const [users, setUsers] = useState([]);
 
     // Wait for userData to be fully loaded into the screen
     useEffect(() => {
         if (allFollowers && allFollowing && userID) {
             retrieveData();
         }
-    }, [allFollowers, allFollowing, userID])
+        // async function fetchData() {
+        //     if (userID) {
+        //         if (name == "Followers") {
+        //             let db = firebase.firestore();
+        //             db
+        //                 .collection('profileFollowers')
+        //                 .doc(profiles[userID].profileFollowID)
+        //                 .collection('followerUsers')
+        //                 .get()
+        //                 .then(querySnapshot => {
+        //                     let followUsers = querySnapshot.docs.map(doc => doc.data());
+        //                     setUsers(followUsers);
+        //                 }).catch((err) => {
+        //                     console.log(err)
+        //                 })
+        //         }
+        //     }
+        // }
+        // fetchData();
+
+    }, [userID])
 
     // Render the word Follower when there is only 1
     const getText = () => {
@@ -64,7 +86,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
                 if (allFollowing[currIndex].id !== 'default') {
                     const profile = await profiles[allFollowing[currIndex].id];
                     cacheImages(profile.imageURL, profile.id);
-                    currItems.push(profile)
+                    currItems.push(profile);
                 }
                 currIndex++;
             }
@@ -106,6 +128,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
                             <ActivityIndicator color={Styles.DARK_PINK} />
                         </View>
                     }
+                    contentContainerStyle={{ paddingBottom: 30 }}
                 />
             </SafeAreaView>
         )
