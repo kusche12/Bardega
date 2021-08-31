@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableWithoutFeedback, Text, SafeAreaView, TextInput, View, Alert, Platform, ActivityIndicator } from 'react-native';
+import { TouchableWithoutFeedback, Text, SafeAreaView, TextInput, View, Alert, Platform, ActivityIndicator, ScrollView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -185,6 +185,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     } else {
         return (
             <KeyboardAwareScrollView
+                extraHeight={150}
                 enableOnAndroid={true}
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flexGrow: 1 }}

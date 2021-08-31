@@ -19,7 +19,7 @@ const CreateDirectionsList = ({ direction, setDirection }) => {
                     value={direction[index]}
                     multiline={true}
                     blurOnSubmit={true}
-                    onSubmitEditing={handleEnter}
+                    onSubmitEditing={() => handleEnter(index)}
                     placeholderTextColor={Styles.GRAY}
                     scrollEnabled={false}
                 />
@@ -34,10 +34,11 @@ const CreateDirectionsList = ({ direction, setDirection }) => {
         setDirection(array)
     }
 
-    const handleEnter = () => {
-        const array = direction.slice();
+    const handleEnter = (index) => {
+        const array = direction.slice(0, index + 1);
         array.push('');
-        setDirection(array);
+        const newArray = array.concat(direction.slice(index + 1, direction.length));
+        setDirection(newArray);
     }
 
     const renderClose = (index) => {
@@ -55,11 +56,10 @@ const CreateDirectionsList = ({ direction, setDirection }) => {
             setDirection(null)
         } else if (index === 0) {
             let array = direction.slice();
-            let arrayMinusFirst = array.splice(1);
+            let arrayMinusFirst = array.slice(1, array.length);
             setDirection(arrayMinusFirst);
         } else {
-            let array = direction.slice();
-            let arrayMinusOne = array.splice(index - 1, 1);
+            let arrayMinusOne = direction.filter((value, i) => i !== index);
             setDirection(arrayMinusOne);
         }
 

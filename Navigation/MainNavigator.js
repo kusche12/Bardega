@@ -70,13 +70,11 @@ const MainNavigator = ({ userID, memberEmails, profiles, updateIsMember }) => {
                 finalStatus = status;
             }
             if (finalStatus !== 'granted') {
-                alert('Failed to get push token for push notification!');
                 return;
             }
             token = (await Notifications.getExpoPushTokenAsync()).data;
-            console.log(token);
         } else {
-            alert('Must use physical device for Push Notifications');
+            console.log('Must use physical device for Push Notifications');
         }
 
         // Place user's expo notification token in their profile document
