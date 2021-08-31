@@ -14,6 +14,12 @@ import Images from '../../Images/Images';
 
 const LIMIT = 10;
 
+// notifications screen displays the renderedNotifs
+// because of this, when accepting a follow request, it does not get rid of the notification
+// until the screen is reloaded
+// TODO: Make a function that finds the correct rendered notification and removes it from the array after
+// accepting or rejecting it
+
 const NotificationsScreen = ({ userA, navigation, notifications, deleteNotification,
     profiles, drinks, rejectRequest, createNotification, followUser, allRequests, updateNotificationChecked }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -83,7 +89,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
 
             return (
                 <TouchableWithoutFeedback onPress={() => handleCallback(item, user, drink)}>
-                    <View style={{ width: Styles.width, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, paddingHorizontal: 10 }}>
+                    <View style={{ width: Styles.width, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 10 }}>
                         <View style={{ flexDirection: 'row', width: Styles.width * WIDTH }}>
                             <Image source={{ uri: getCachedImage(user.id) || user.imageURL }} style={{ width: Platform.isPad ? 60 : 45, height: Platform.isPad ? 60 : 45, borderRadius: 100, marginRight: 10 }} />
                             {renderText(item, user, drink)}
@@ -146,7 +152,8 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
         setIsDisabled(true);
         await rejectRequest({ userA: userA, userB: user });
         await createNotification({ notifID: user.notificationsID, comment: null, drinkID: null, type: 'requestRejected', userID: userA.id });
-        await deleteNotification({ notifID: userA.notificationsID, id: item.id })
+        await deleteNotification({ notifID: userA.notificationsID, id: item.id });
+        removeRenderedNotification(item);
         setIsDisabled(false);
     }
 
@@ -161,7 +168,21 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
         await createNotification({ notifID: user.notificationsID, comment: null, drinkID: null, type: 'requestAccepted', userID: userA.id });
         await deleteNotification({ notifID: userA.notificationsID, id: item.id });
         await createNotification({ notifID: userA.notificationsID, comment: null, drinkID: null, type: 'follow', userID: user.id });
+        removeRenderedNotification(item);
         setIsDisabled(false);
+    }
+
+    // Removes the rendered notification of a follow request
+    const removeRenderedNotification = (item) => {
+        let result = [];
+        for (let i = 0; i < renderedNotifs.length; i++) {
+            if (renderedNotifs[i].id === item.id) {
+                result = renderedNotifs.filter((value, index) => i !== index);
+                break;
+            }
+        }
+
+        setRenderedNotifs(result);
     }
 
     const renderFollowRequestPage = () => {
@@ -197,7 +218,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
         return null;
     } else {
         return (
-            <SafeAreaView style={{ marginBottom: 80 }}>
+            <SafeAreaView style={GlobalStyles.headerSafeArea}>
                 <View style={[UserStyles.followerHeader, { marginTop: 20 }]}>
                     <Text style={GlobalStyles.titlebold2}>NOTIFICATIONS</Text>
                 </View>
@@ -216,6 +237,7 @@ const NotificationsScreen = ({ userA, navigation, notifications, deleteNotificat
                     onEndReached={retrieveData}
                     onEndReachedThreshold={.1}
                     refreshing={isRefreshing}
+                    contentContainerStyle={{ paddingBottom: 20 }}
                     ListFooterComponent={isRefreshing &&
                         <View style={{ marginTop: 20 }} >
                             <ActivityIndicator color={Styles.DARK_PINK} />
