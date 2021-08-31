@@ -112,11 +112,11 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
     const renderItem = ({ item, index }) => {
         if (item.itemType === 'advertisement') {
             return (
-                <View style={{ flexDirection: 'row', marginBottom: 10, alignItems: 'center', justifyContent: 'center' }}>
-                    <TouchableWithoutFeedback onPress={() => Linking.openURL('https://bardegacocktails.com')}>
+                <TouchableWithoutFeedback onPress={() => Linking.openURL('https://bardegacocktails.com')}>
+                    <View style={{ flexDirection: 'row', marginBottom: 10, alignItems: 'center', justifyContent: 'center' }}>
                         <LoadingImage imageURL={item.imageURL} />
-                    </TouchableWithoutFeedback>
-                </View>
+                    </View>
+                </TouchableWithoutFeedback>
             )
         } else {
             return (
