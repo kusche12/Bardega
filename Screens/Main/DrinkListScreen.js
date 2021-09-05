@@ -83,6 +83,14 @@ const DrinkListScreen = ({ route, navigation, drinks, spirits }) => {
                 }
                 currIndex++;
             }
+        } else if (query.filterType === 'all') {
+            while (currIndex < drinks.length && currItems.length < LIMIT) {
+                const isPrivate = await drinkIsPrivate(drinks[currIndex]);
+                if (!isPrivate) {
+                    currItems.push(drinks[currIndex]);
+                }
+                currIndex++;
+            }
         }
         setDocumentData(allItems.concat(currItems));
         setLastIndex(currIndex);
@@ -116,7 +124,7 @@ const DrinkListScreen = ({ route, navigation, drinks, spirits }) => {
                 <Text style={GlobalStyles.titlebold1}>{query.name}</Text>
             </View>
             <View style={GlobalStyles.line}></View>
-            { isLoading
+            {isLoading
                 ? <View style={{ marginTop: 20 }}>
                     <ActivityIndicator size="large" color={Styles.DARK_PINK} />
                 </View>
