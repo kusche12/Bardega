@@ -9,11 +9,11 @@ export default StyleSheet.create({
         marginBottom: 20,
     },
     horizontalContainer: {
-        height: Platform.isPad ? 360 : 250
+        height: Platform.isPad ? 380 : 270
     },
     cardContainer: {
         width: Platform.isPad ? 175 : 140,
-        height: Platform.isPad ? 300 : 200,
+        height: Platform.isPad ? 320 : 216,
         borderRadius: Styles.BORDER_RADIUS,
         alignItems: "center",
         overflow: 'hidden',
