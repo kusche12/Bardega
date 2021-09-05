@@ -19,34 +19,13 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
     const [isLoading, setIsLoading] = useState(true);
     const [lastIndex, setLastIndex] = useState(0);
     const [isRefreshing, setIsRefreshing] = useState(null);
-    // const [users, setUsers] = useState([]);
 
     // Wait for userData to be fully loaded into the screen
     useEffect(() => {
         if (allFollowers && allFollowing && userID) {
             retrieveData();
         }
-        // async function fetchData() {
-        //     if (userID) {
-        //         if (name == "Followers") {
-        //             let db = firebase.firestore();
-        //             db
-        //                 .collection('profileFollowers')
-        //                 .doc(profiles[userID].profileFollowID)
-        //                 .collection('followerUsers')
-        //                 .get()
-        //                 .then(querySnapshot => {
-        //                     let followUsers = querySnapshot.docs.map(doc => doc.data());
-        //                     setUsers(followUsers);
-        //                 }).catch((err) => {
-        //                     console.log(err)
-        //                 })
-        //         }
-        //     }
-        // }
-        // fetchData();
-
-    }, [userID])
+    }, [userID, allFollowers, allFollowing])
 
     // Render the word Follower when there is only 1
     const getText = () => {
@@ -79,7 +58,6 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
     }
 
     const retrieveData = async () => {
-        console.log('getting data')
         let currItems = [];
         let currIndex = lastIndex;
         let allItems = [...userProfiles];

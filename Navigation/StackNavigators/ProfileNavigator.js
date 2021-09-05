@@ -55,7 +55,6 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerLeft: (props) => {
                         const index = useNavigationState(state => state.index);
                         const routes = useNavigationState(state => state.routes);
-                        console.log(routes.length);
                         if (index > 0) {
                             return (
                                 <HeaderBackButton
@@ -67,7 +66,6 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                                         // If the Profile Screen was NOT entered from the Profile Stack, then you must call an extra goBack
                                         // to get to the original stack
                                         if (routes.length == 2 && routes[1].name == 'ProfileScreen') {
-                                            console.log('goBack')
                                             navigation.goBack();
                                         }
                                     }}
