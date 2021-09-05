@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { StackActions, useNavigationState } from '@react-navigation/native';
+import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
 
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -40,6 +41,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                 headerStyle: { elevation: 0 },
                 cardStyle: { backgroundColor: '#FFFFFF' },
                 lazyLoad: false,
+                headerBackTitleVisible: false
             }}>
             <Stack.Screen
                 name='ProfileScreen'
@@ -49,6 +51,29 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerTitle: () => <MainHeader />,
                     headerRight: () => {
                         return <NotificationsHeader navigation={navigation} user={user} />
+                    },
+                    headerLeft: (props) => {
+                        const index = useNavigationState(state => state.index);
+                        const routes = useNavigationState(state => state.routes);
+                        console.log(routes.length);
+                        if (index > 0) {
+                            return (
+                                <HeaderBackButton
+                                    {...props}
+                                    onPress={() => {
+                                        const popAction = StackActions.pop(1);
+                                        navigation.dispatch(popAction);
+
+                                        // If the Profile Screen was NOT entered from the Profile Stack, then you must call an extra goBack
+                                        // to get to the original stack
+                                        if (routes.length == 2 && routes[1].name == 'ProfileScreen') {
+                                            console.log('goBack')
+                                            navigation.goBack();
+                                        }
+                                    }}
+                                />
+                            )
+                        }
                     },
                     headerTitleStyle: { flex: 1, textAlign: 'center' },
                     headerTitleAlign: 'center',
@@ -71,7 +96,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerStyle: {
                         height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
-                    },
+                    }
                 })}
             />
             <Stack.Screen
@@ -115,8 +140,7 @@ const ProfileNavigator = ({ route, navigation, user }) => {
                     headerStyle: {
                         height: Platform.isPad ? 150 : 100,
                         backgroundColor: Styles.PINK,
-                    },
-
+                    }
                 })}
             />
             <Stack.Screen

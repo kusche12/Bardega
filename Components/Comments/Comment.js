@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, TouchableWithoutFeedback, TouchableHighlight, Text, StyleSheet, Vibration, Alert, ActivityIndicator } from 'react-native';
-import { renderTime, renderNum } from '../../Functions/miscFunctions';
+import { renderTime, renderNum, navigateToProfile } from '../../Functions/miscFunctions';
 import { likeComment, unLikeComment, deleteComment } from '../../Store/Actions/CommentActions';
 import Images from '../../Images/Images';
 import DoubleTapButton from '../Main/DoubleTapButton';
@@ -98,22 +98,12 @@ const Comment = ({ comment, author, navigation, commentID,
 
             for (let i = 0; i < comment.taggedUsers.length; i++) {
                 let tag = comment.taggedUsers[i];
-                res[tag.wordPosition] = <Text key={'' + (i + 1) * 50} onPress={() => handleNavUser(tag.userID)} style={{ color: Styles.DARK_PINK }}>{words[tag.wordPosition]} </Text>
+                res[tag.wordPosition] = <Text key={'' + (i + 1) * 50} onPress={() => navigateToProfile(navigation, profiles[tag.userID], userID)} style={{ color: Styles.DARK_PINK }}>{words[tag.wordPosition]} </Text>
             }
 
             return <Text>{res}</Text>
         }
     }
-
-    const handleNavUser = (userID) => {
-        navigation.push('ProfileScreen', { user: profiles[userID], ownProfile: drink.authorID === userID });
-    }
-
-    const handleNavComment = () => {
-        navigation.navigate('Profile');
-        navigation.push('ProfileScreen', { user: author, ownProfile: author.id === userID });
-    }
-
 
     if (isLoading) {
         return <ActivityIndicator />
@@ -126,7 +116,7 @@ const Comment = ({ comment, author, navigation, commentID,
                 <DoubleTapButton onDoubleTap={() => handleLike()}>
                     <View style={styles.container}>
                         <View style={styles.user}>
-                            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => handleNavComment()}>
+                            <TouchableWithoutFeedback disabled={isDisabled} onPress={() => navigateToProfile(navigation, author, userID)}>
                                 <Image source={{ uri: author.imageURL }} style={styles.img} />
                             </TouchableWithoutFeedback>
                             <View>

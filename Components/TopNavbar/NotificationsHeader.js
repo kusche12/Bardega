@@ -43,10 +43,10 @@ const NotificationsHeader = ({ navigation, user, notifications }) => {
             }
             return (
                 <View style={{ position: 'relative' }}>
-                    <Image source={Images.profile.inbox} style={{ width: Platform.isPad ? 45 : 25, height: Platform.isPad ? 45 : 25 }} />
+                    <Image source={Images.profile.inbox} style={{ width: Platform.isPad ? 50 : 28, height: Platform.isPad ? 50 : 28 }} />
                     {unCheckedNotifs > 0 &&
                         <View style={UserStyles.inboxNum}>
-                            <Text style={[GlobalStyles.titlebold3, { color: "white", fontSize: 14 }]}>{unCheckedNotifs}</Text>
+                            <Text style={[GlobalStyles.titlebold3, { color: "white", fontSize: 13 }]}>{unCheckedNotifs}</Text>
                         </View>
                     }
                 </View>
@@ -55,7 +55,7 @@ const NotificationsHeader = ({ navigation, user, notifications }) => {
     }
 
     return (
-        <View style={[GlobalStyles.headerWithButtons, { justifyContent: 'flex-end', paddingRight: 20 }]}>
+        <View style={{ justifyContent: 'center', paddingRight: 20, height: 50, width: 50 }}>
             <TouchableWithoutFeedback onPress={() => navigation.navigate('NotificationsScreen', { notificationsID: user.notificationsID, userA: user })}>
                 {renderInbox()}
             </TouchableWithoutFeedback>

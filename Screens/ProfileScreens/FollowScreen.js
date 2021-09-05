@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Text, SafeAreaView, View, TouchableWithoutFeedback, Image, ActivityIndicator } from 'react-native';
 import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
+import { navigateToProfile } from '../../Functions/miscFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -61,9 +62,11 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
     }
 
     const renderUser = ({ item }) => {
-        let ownProfile = item.id === userID;
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.push('ProfileScreen', { user: item, ownProfile: ownProfile })}>
+            <TouchableWithoutFeedback onPress={() => {
+                navigateToProfile(navigation, item, userID)
+            }
+            }>
                 <View style={UserStyles.followRow}>
                     <Image source={{ uri: getCachedImage(item.id) || item.imageURL }} style={UserStyles.followImage} />
                     <View>
@@ -76,6 +79,7 @@ const FollowScreen = ({ route, navigation, profiles, allFollowers, allFollowing,
     }
 
     const retrieveData = async () => {
+        console.log('getting data')
         let currItems = [];
         let currIndex = lastIndex;
         let allItems = [...userProfiles];

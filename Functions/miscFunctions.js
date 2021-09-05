@@ -54,3 +54,10 @@ export const renderNotificationText = (item, drink) => {
             return '';
     }
 }
+
+// Navigate to the correct profile screen by first navigating to the Profile Stack, and then pushing the 
+// user's profile screen on top of the stack
+export const navigateToProfile = async (navigation, item, userID) => {
+    await navigation.navigate('Profile');
+    navigation.push('ProfileScreen', { user: item, ownProfile: item.id === userID });
+}

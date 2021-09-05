@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Image, Text, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
+import { navigateToProfile } from '../../Functions/miscFunctions';
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -27,13 +28,6 @@ const SearchResult = ({ item, navigation, userID }) => {
             return <Text style={[GlobalStyles.paragraph3, { color: Styles.GRAY }]}>{res}</Text>
         }
         return null;
-    }
-
-    // If the search result is the current user's account, then change the tab navigator to their profile navigation
-    // If not, then stay in the current Search tab navigator
-    const handleProfileNavigation = () => {
-        navigation.navigate('Profile');
-        navigation.push('ProfileScreen', { user: item, ownProfile: item.id === userID });
     }
 
     // If the item is either a drink (symbolized by authorID) or a spirit (symbolized by numRatings)
@@ -62,7 +56,7 @@ const SearchResult = ({ item, navigation, userID }) => {
     } else {
         return (
             <TouchableHighlight
-                onPress={() => handleProfileNavigation()}
+                onPress={() => navigateToProfile(navigation, item, userID)}
                 underlayColor={'#d6d6d6'}
             >
                 <View style={DiscoverStyles.searchContainer}>

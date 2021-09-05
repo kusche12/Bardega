@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableWithoutFeedback, Image, Text, Share, Alert, Platform } from 'react-native';
 import * as Linking from 'expo-linking';
+import { navigateToProfile } from '../../Functions/miscFunctions';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -71,21 +72,20 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
             await unLikeDrink({ numLikes: likes, drink, userID });
         } else {
             await likeDrink({ numLikes: likes, drink, userID });
-            await createNotification({
-                drinkID: drink.id,
-                type: 'likedDrink',
-                userID: userID,
-                notifID: author.notificationsID,
-                comment: null,
-                token: author.expoToken
-            });
+
+            // Only create a notification if the user liking the drink is different than the author of the drink
+            if (userID !== author.id) {
+                await createNotification({
+                    drinkID: drink.id,
+                    type: 'likedDrink',
+                    userID: userID,
+                    notifID: author.notificationsID,
+                    comment: null,
+                    token: author.expoToken
+                });
+            }
         }
         setIsDisabled(false);
-    }
-
-    const handleProfileNavigation = () => {
-        navigation.navigate('Profile');
-        navigation.push('ProfileScreen', { user: authors[drink.authorID], ownProfile: drink.authorID === userID });
     }
 
     if (isLoading) {
@@ -94,7 +94,7 @@ const DetailLikeCommentShare = ({ navigation, drink, authors, numLikes,
         return (
             <View style={[CreateStyles.ingrContainerWide, DetailStyles.buttonContainer]}>
 
-                <TouchableWithoutFeedback onPress={() => handleProfileNavigation()}>
+                <TouchableWithoutFeedback onPress={() => navigateToProfile(navigation, author, userID)}>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                         <Image source={{ uri: author.imageURL }} style={[DetailStyles.commentImage, { width: Platform.isPad ? 50 : 35, height: Platform.isPad ? 50 : 35 }]}></Image>
                         <Text style={GlobalStyles.titlebold3}>@{author.userName}</Text>

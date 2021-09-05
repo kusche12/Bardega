@@ -92,8 +92,9 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
         backgroundColor: Styles.PINK,
         overflow: 'hidden',
-        paddingLeft: 24,
-        marginLeft: 48,
+        paddingLeft: 0,
+        marginLeft: 72,
+        zIndex: 0
     },
     headerWithButtons: {
         top: 6,

@@ -14,7 +14,7 @@ import * as Linking from 'expo-linking';
 import { useFonts } from 'expo-font';
 
 // Application Navigator
-const Main = ({ user }) => {
+const Main = ({ user, isAuthed }) => {
     // Custom fonts
     const [isLoading, setIsLoading] = useState(true);
     let [fontLoaded] = useFonts({
@@ -42,17 +42,17 @@ const Main = ({ user }) => {
     }
 
     useEffect(() => {
-        if (fontLoaded) {
+        if (fontLoaded && user) {
             setIsLoading(false);
         }
-    }, [fontLoaded, user]);
+    }, [fontLoaded, user, isAuthed]);
 
     // While the app is still loading in data, show the splash screen.
     // After it is loaded, either load the Authentication Flow for unauthenicated users or go directly to the Main Flow
     if (isLoading) return null;
     return (
         <NavigationContainer linking={linking}>
-            {user ? <MainNavigator userID={user.id} /> : <AuthNavigator />}
+            {isAuthed ? <MainNavigator userID={user.id} /> : <AuthNavigator />}
         </NavigationContainer>
     )
 }
@@ -60,7 +60,8 @@ const Main = ({ user }) => {
 const mapStateToProps = (state) => {
     if (state.firebase.auth.isEmpty) {
         return {
-            user: null
+            user: null,
+            isAuthed: false
         }
     } else {
         const profiles = state.firestore.data.profiles;
@@ -68,6 +69,7 @@ const mapStateToProps = (state) => {
         const profile = profiles ? profiles[UID] : null;
         return {
             user: profile,
+            isAuthed: true
         }
     }
 }

@@ -18,6 +18,7 @@ const SpiritNavigator = ({ route, navigation }) => {
                 headerStyle: { elevation: 0 },
                 cardStyle: { backgroundColor: '#FFFFFF' },
                 lazyLoad: false,
+                headerBackTitleVisible: false
             }}>
             <Stack.Screen
                 name='SpiritScreen'

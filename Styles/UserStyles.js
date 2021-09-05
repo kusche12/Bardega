@@ -230,14 +230,14 @@ export default StyleSheet.create({
         justifyContent: 'center'
     },
     inboxNum: {
-        width: Platform.isPad ? 26 : 20,
-        height: Platform.isPad ? 26 : 20,
+        width: Platform.isPad ? 26 : 18,
+        height: Platform.isPad ? 26 : 18,
         borderRadius: 100,
         backgroundColor: Styles.DARK_PINK,
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        right: -12,
-        top: -10
+        right: -8,
+        top: -6
     }
 });
