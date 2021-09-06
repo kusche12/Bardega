@@ -12,6 +12,7 @@ import { createFirestoreInstance } from 'redux-firestore';
 import rootReducer from './Store/Reducers/RootReducer';
 
 import Main from './Navigation/Main.js';
+import * as SplashScreen from 'expo-splash-screen';
 
 // Create store enhanced with redux reducers and firestore database
 const middleware = [
@@ -29,6 +30,11 @@ const rrfProps = {
   dispatch: store.dispatch,
   createFirestoreInstance
 }
+
+// TODO: 
+// 1. Show the Splash Screen while initializing the fonts and firebase database
+// 2. Make sure all data is loaded in here before showing the Main component
+//        This will allow for the authentication page to not render if the user is already authenticated
 
 // Application container wrapped in the React-Redux-Firebase State
 const App = () => {

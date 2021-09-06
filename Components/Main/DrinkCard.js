@@ -11,17 +11,23 @@ import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 
 const DrinkCard = ({ drink, navigation, navigateTo, isRefreshing, profiles }) => {
-    const [cached, setCached] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [cached, setCached] = useState(null);
 
     useEffect(() => {
-        if (profiles) {
-            if (!cached) {
-                cacheImages(drink.imageURL, drink.id);
+        async function getCachedImageAsync() {
+            if (profiles) {
+                let cachedImageUrl = await getCachedImage(drink.id);
+                if (cachedImageUrl) {
+                    setCached(cachedImageUrl);
+                } else {
+                    setCached(drink.imageURL)
+                }
+                setIsLoading(false);
             }
-            setCached(true);
-            setIsLoading(false);
         }
+
+        getCachedImageAsync();
     }, [profiles]);
 
     const renderText = () => {
@@ -55,7 +61,10 @@ const DrinkCard = ({ drink, navigation, navigateTo, isRefreshing, profiles }) =>
                 <View style={DetailStyles.shadowContainer}>
                     <View style={DiscoverStyles.cardContainer}>
                         <>
-                            <Image source={{ uri: getCachedImage(drink.id) || drink.imageURL }} style={DiscoverStyles.drinkImg} />
+                            <Image
+                                source={{ uri: cached }}
+                                style={DiscoverStyles.drinkImg}
+                            />
                             {renderText()}
                         </>
                     </View>

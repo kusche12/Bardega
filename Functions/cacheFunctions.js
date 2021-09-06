@@ -17,6 +17,11 @@ export const cacheFirebaseAssets = (ref) => {
     )
 }
 
-export const getCachedImage = (docID) => {
-    return '' + FileSystem.documentDirectory + docID.toString() + ".jpg"
+export const getCachedImage = async (docID) => {
+    let urlString = FileSystem.documentDirectory + docID.toString() + ".jpg";
+    // let { exists } = await FileSystem.getInfoAsync(urlString);
+    // if (exists) {
+    //     return urlString;
+    // }
+    // return null;
 }

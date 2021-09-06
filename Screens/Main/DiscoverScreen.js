@@ -35,7 +35,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 
         // Otherwise, stay on this screen and fetch data
         if (allDrinks && drinks && queries && !initalized && ads) {
-            console.log(ads.length);
             fetchData();
         }
     }, [queries, drinks, allDrinks, drinkID, ads]);
@@ -80,7 +79,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 
     // Either get another horizontal row OR an ad based on the number of currently rendered items
     const retrieveData = async () => {
-        console.log('retreiving data')
         // If the query index is already at the end of all queries
         // then you can no longer retrieve more data
         if (queryIndex >= selectedQueries.length) {
@@ -91,7 +89,6 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
         setIsRefreshing(true);
 
         if (renderItems.length % 5 === 0 && ads && adIndex < ads.length && !isMember) {
-            console.log('render image')
             let currItems = [...renderItems];
             const image = ads[adIndex].imageURL;
             currItems.push({ itemType: 'advertisement', imageURL: image });
@@ -188,7 +185,8 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
 // then render them ads
 const mapStateToProps = (state, ownProps) => {
     const profiles = state.firestore.data.profiles;
-    const userEmail = profiles[state.firebase.auth.uid].email || '';
+    const profile = profiles[state.firebase.auth.uid];
+    const userEmail = profile.email || '';
     const memberEmails = state.firestore.data.memberEmails || [];
     const isMember = memberEmails[userEmail];
     const ads = state.firestore.ordered.ads;

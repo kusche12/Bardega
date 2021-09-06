@@ -28,6 +28,7 @@ const Tab = createBottomTabNavigator();
 
 const MainNavigator = ({ userID, memberEmails, profiles, updateIsMember }) => {
     const [checkMember, setCheckMember] = useState(false);
+    console.log(userID);
     // Ask use for notification permissions on app startup in the main navigator
     useEffect(() => {
         (() => registerForPushNotificationsAsync())();
