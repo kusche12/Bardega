@@ -11,20 +11,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import * as Linking from 'expo-linking';
 
-import { useFonts } from 'expo-font';
-
 // Application Navigator
 const Main = ({ user }) => {
     // Custom fonts
     const [isLoading, setIsLoading] = useState(true);
-    let [fontLoaded] = useFonts({
-        Raisonne: require('../assets/fonts/DMSans-Regular.ttf'),
-        RaisonneMedium: require('../assets/fonts/DMSans-Medium.ttf'),
-        SourceSerifRegular: require('../assets/fonts/SourceSerifPro-Regular.ttf'),
-        SourceSerifItalic: require('../assets/fonts/SourceSerifPro-Italic.ttf'),
-        SourceSerifSemiBold: require('../assets/fonts/SourceSerifPro-SemiBold.ttf'),
-        SourceSerifBold: require('../assets/fonts/SourceSerifPro-Bold.ttf'),
-    });
 
     // Create a linking object that will allow a third party application to enter this app
     const prefix = Linking.createURL('/');
@@ -42,10 +32,10 @@ const Main = ({ user }) => {
     }
 
     useEffect(() => {
-        if (fontLoaded) {
+        if (user) {
             setIsLoading(false);
         }
-    }, [fontLoaded, user]);
+    }, [user]);
 
     // While the app is still loading in data, show the splash screen.
     // After it is loaded, either load the Authentication Flow for unauthenicated users or go directly to the Main Flow
@@ -58,6 +48,7 @@ const Main = ({ user }) => {
 }
 
 const mapStateToProps = (state) => {
+    console.log(state.firebase.auth.isEmpty)
     if (state.firebase.auth.isEmpty) {
         return {
             user: null
