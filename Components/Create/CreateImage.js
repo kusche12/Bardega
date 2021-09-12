@@ -66,7 +66,7 @@ const CreateImage = ({ drinkImage, setDrinkImage }) => {
         } else {
             let result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
+                allowsEditing: false,
                 aspect: [4, 3],
                 quality: .5,
             });

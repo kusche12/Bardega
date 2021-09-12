@@ -34,10 +34,6 @@ const rrfProps = {
   createFirestoreInstance
 }
 
-// TODO: 
-// 1. Make sure all data is loaded in here before showing the Main component
-//        This will allow for the authentication page to not render if the user is already authenticated
-
 // Application container wrapped in the React-Redux-Firebase State
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -54,7 +50,7 @@ const App = () => {
           SourceSerifSemiBold: require('./assets/fonts/SourceSerifPro-SemiBold.ttf'),
           SourceSerifBold: require('./assets/fonts/SourceSerifPro-Bold.ttf'),
         });
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
       } catch (e) {
         console.warn(e);
       } finally {
