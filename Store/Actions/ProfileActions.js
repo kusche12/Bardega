@@ -602,3 +602,10 @@ export const rejectRequest = (data) => {
         }
     }
 };
+
+export const clearReducer = () => {
+    console.log('Clearing Reducer State Action');
+    return async (dispatch) => {
+        dispatch({ type: 'CLEAR_REDUCER' });
+    }
+};

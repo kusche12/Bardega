@@ -4,13 +4,13 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import * as ImagePicker from 'expo-image-picker';
 import { connect } from 'react-redux';
 import { getCachedImage, cacheImages } from '../../Functions/cacheFunctions';
-import { updateProfile, updateImage, deleteProfileImage } from '../../Store/Actions/ProfileActions';
+import { updateProfile, updateImage, deleteProfileImage, clearReducer } from '../../Store/Actions/ProfileActions';
 import ProfileInput from '../../Components/Profile/ProfileInput';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 import UserStyles from '../../Styles/UserStyles';
-// getCachedImage(userID)
-const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, updateImage, deleteProfileImage }) => {
+
+const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, updateImage, deleteProfileImage, clearReducer }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [fName, setFName] = useState('');
     const [lName, setLName] = useState('');
@@ -56,6 +56,13 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
     useEffect(() => {
         setImage(getCachedImage(userID));
     }, [userID]);
+
+    // When the user navigates away from the screen, clear any redux state messages
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => { });
+        clearReducer();
+        return unsubscribe;
+    }, [navigation]);
 
     // Asks user if they want to take a picture, choose from camera roll, or cancel
     const sendAlert = () => {
@@ -153,7 +160,7 @@ const EditProfileScreen = ({ user, navigation, userID, updateProfile, error, upd
                     <ProfileInput name={"Username"} value={userName} setValue={setUserName} />
                     <ProfileInput name={"Bio"} value={bio} setValue={setBio} navigation={navigation} />
                 </View>
-                { error &&
+                {error &&
                     <Text style={[GlobalStyles.paragraphError2, { marginTop: 8 }]}>{error}</Text>
                 }
             </SafeAreaView>
@@ -176,7 +183,7 @@ const mapDispatchToProps = (dispatch) => {
         updateProfile: (data) => dispatch(updateProfile(data)),
         updateImage: (data) => dispatch(updateImage(data)),
         deleteProfileImage: (data) => dispatch(deleteProfileImage(data)),
-
+        clearReducer: () => dispatch(clearReducer())
     }
 }
 

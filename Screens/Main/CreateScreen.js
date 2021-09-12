@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
-import { createDrink, updateDrink } from '../../Store/Actions/DrinkActions';
+import { createDrink, updateDrink, clearDrinkState } from '../../Store/Actions/DrinkActions';
 import CreateDirectionsList from '../../Components/Create/CreateDirectionsList';
 
 import CreateIngredients from '../../Components/Create/CreateIngredients';
@@ -18,7 +18,7 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import Styles from '../../Styles/StyleConstants';
 
-const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigation, drinkError, drinkID }) => {
+const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigation, drinkError, drinkID, clearDrinkState }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
     const [drinkName, setDrinkName] = useState('');
@@ -51,7 +51,14 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
         } else if (drinkError) {
             console.log("THERE WAS AN ERROR IN THE CREATE SCREEN")
         }
-    }, [drinkID, drinkError])
+    }, [drinkID, drinkError]);
+
+    // When the user navigates away from the screen, clear any redux state messages
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => { });
+        clearDrinkState();
+        return unsubscribe;
+    }, [navigation]);
 
     // Handle the submission of the drink
     const handleSubmit = async () => {
@@ -288,7 +295,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         createDrink: (drink) => dispatch(createDrink(drink)),
-        updateDrink: (drink) => dispatch(updateDrink(drink))
+        updateDrink: (drink) => dispatch(updateDrink(drink)),
+        clearDrinkState: () => dispatch(clearDrinkState())
     }
 }
 

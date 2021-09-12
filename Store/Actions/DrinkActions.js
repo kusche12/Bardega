@@ -91,7 +91,8 @@ export const createDrink = (drink) => {
             })
 
             // Add this drink to the user's saved drinks array
-            await firestore.collection('profiles').doc(drink.authorID).update({
+            console.log(authorID);
+            await firestore.collection('profiles').doc(authorID).update({
                 drinks: firebase.firestore.FieldValue.arrayUnion({ id: id })
             })
 
@@ -146,9 +147,9 @@ export const updateDrink = (drink) => {
 // CLEAR DRINK STATE
 // Remove the drink ID from the reducer state so that the Create Screen
 // can start on a clean slate every time it is opened
-export const clearDrinkState = (drink) => {
+export const clearDrinkState = () => {
     console.log('Clear Drink Action')
-    return async (dispatch, getState, { getFirebase }) => {
+    return async (dispatch) => {
         dispatch({ type: 'CLEAR_DRINK_STATE' })
     }
 };

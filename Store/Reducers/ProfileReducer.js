@@ -79,6 +79,12 @@ const profileReducer = (state = initState, action) => {
                 profileError: action.err.message,
                 profileSuccess: null
             }
+        case 'CLEAR_REDUCER':
+            console.log('Clear Reducer Reducer')
+            return {
+                profileError: null,
+                profileSuccess: null
+            }
         default:
             return state;
     }
