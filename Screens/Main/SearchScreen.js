@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Platform, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import SearchResult from '../../Components/Main/SearchResult';
+import { useScrollToTop } from '@react-navigation/native';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
 
 const SearchScreen = ({ route, navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState([]);
+    const ref = React.useRef(null);
+    useScrollToTop(ref);
 
     useEffect(() => {
         if (route.params.results) {
@@ -45,6 +48,7 @@ const SearchScreen = ({ route, navigation }) => {
         } else {
             return (
                 <FlatList
+                    ref={ref}
                     data={items}
                     renderItem={renderItem}
                     keyExtractor={(item, idx) => '' + idx}

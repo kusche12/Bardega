@@ -12,6 +12,7 @@ import Styles from '../../Styles/StyleConstants';
 import { ADMIN_ID } from '../../API/ADMIN_ID';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Images from '../../Images/Images';
+import { useScrollToTop } from '@react-navigation/native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const wait = (timeout) => {
@@ -28,6 +29,9 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits, userID }
     const [selectedQueries, setSelectedQueries] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [drinksRendered, setDrinksRendered] = useState(false);
+
+    const ref = React.useRef(null);
+    useScrollToTop(ref);
 
     // Wait for drinks and queries to be fully loaded into the app
     useEffect(() => {
@@ -80,6 +84,7 @@ const SpiritScreen = ({ spirits, spiritQueries, navigation, allSpirits, userID }
     }
     return (
         <KeyboardAwareScrollView
+            ref={ref}
             enableOnAndroid={true}
             enableAutomaticScroll={(Platform.OS === 'ios')}
             contentContainerStyle={{ flexGrow: 1 }}

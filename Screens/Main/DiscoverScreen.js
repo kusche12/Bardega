@@ -8,6 +8,8 @@ import LoadingImage from '../../Components/Discover/LoadingImage';
 import LoadingBar from '../../Components/Main/LoadingBar';
 import HorizontalList from '../../Components/Discover/HorizontalList';
 import Loading from '../../Components/Main/Loading';
+import { useScrollToTop } from '@react-navigation/native';
+
 import DiscoverStyles from '../../Styles/DiscoverStyles';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -25,6 +27,9 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
     const [queryIndex, setQueryIndex] = useState(0);
     const [adIndex, setAdIndex] = useState(0);
     const [renderItems, setRenderItems] = useState([]);
+
+    const ref = React.useRef(null);
+    useScrollToTop(ref);
 
     useEffect(() => {
         // If the user enters the app from a deep link sent to them by another user,
@@ -153,6 +158,7 @@ const DiscoverScreen = ({ drinks, queries, navigation, drinkID, allDrinks, isMem
                     </View>
                 }
 
+                ref={ref}
                 data={renderItems}
                 keyExtractor={(item, index) => '' + index}
                 renderItem={renderItem}

@@ -10,6 +10,7 @@ import { cacheImages, getCachedImage } from '../../Functions/cacheFunctions';
 import Images from '../../Images/Images';
 import { renderNum } from '../../Functions/miscFunctions';
 import { Placeholder, PlaceholderMedia, Fade, PlaceholderLine } from 'rn-placeholder';
+
 import GlobalStyles from '../../Styles/GlobalStyles';
 import UserStyles from '../../Styles/UserStyles';
 import Styles from '../../Styles/StyleConstants';

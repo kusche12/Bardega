@@ -11,6 +11,9 @@ import CreateIngredients from '../../Components/Create/CreateIngredients';
 import CreateTags from '../../Components/Create/CreateTags';
 import CreateImage from '../../Components/Create/CreateImage';
 import CreateOptionPicker from '../../Components/Create/CreateOptionPicker'
+
+import { useScrollToTop } from '@react-navigation/native';
+
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
 import Styles from '../../Styles/StyleConstants';
@@ -26,6 +29,9 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
     const [drinkPrep, setDrinkPrep] = useState({ value: 'light', label: 'Light' });
     const [drinkStrength, setDrinkStrength] = useState({ value: 'virgin', label: 'Virgin' });
     const [selectedTags, setSelectedTags] = useState([]);
+
+    const ref = React.useRef(null);
+    useScrollToTop(ref);
 
     // If this screen is coming from an "edit drink" button, 
     // then load the state with all of the drink's data
@@ -189,6 +195,7 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                 enableOnAndroid={true}
                 enableAutomaticScroll={(Platform.OS === 'ios')}
                 contentContainerStyle={{ flexGrow: 1 }}
+                ref={ref}
             >
                 <SafeAreaView style={[GlobalStyles.headerSafeArea, CreateStyles.container]}>
 
