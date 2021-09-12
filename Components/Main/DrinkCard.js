@@ -12,7 +12,6 @@ import GlobalStyles from '../../Styles/GlobalStyles';
 
 const DrinkCard = ({ drink, navigation, navigateTo, isRefreshing, profiles }) => {
     const [cached, setCached] = useState(false);
-
     useEffect(() => {
         if (!cached) {
             cacheImages(drink.imageURL, drink.id);
@@ -51,6 +50,7 @@ const DrinkCard = ({ drink, navigation, navigateTo, isRefreshing, profiles }) =>
                 <View style={DetailStyles.shadowContainer}>
                     <View style={DiscoverStyles.cardContainer}>
                         <>
+
                             <Image
                                 source={{ uri: getCachedImage(drink.id) || drink.imageURL }}
                                 style={DiscoverStyles.drinkImg}
