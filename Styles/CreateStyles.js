@@ -95,7 +95,7 @@ export default StyleSheet.create({
         flex: 1,
     },
     tag: {
-        backgroundColor: Styles.DARK_PINK,
+        backgroundColor: Styles.ADA_DARK_PINK,
         borderRadius: 10,
         marginHorizontal: 2,
         marginVertical: 2,
@@ -105,7 +105,11 @@ export default StyleSheet.create({
         alignItems: 'center',
         width: Styles.width * .18,
         maxWidth: Styles.width * .23,
-        opacity: .5
+    },
+    unselectedTag: {
+        backgroundColor: 'white',
+        borderColor: Styles.ADA_DARK_PINK,
+        borderWidth: 1.5
     },
     submitBtn: {
         width: Styles.width * .8,

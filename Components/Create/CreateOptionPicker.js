@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TouchableWithoutFeedback, Text } from 'react-native';
 import GlobalStyles from '../../Styles/GlobalStyles';
 import CreateStyles from '../../Styles/CreateStyles';
+import Styles from '../../Styles/StyleConstants';
 
 // Options for drinks
 const drinkPrepOptions = [
@@ -57,7 +58,7 @@ const CreateOptionPicker = ({ item, setItem, itemType }) => {
         // Selected
         if (option.value === item.value) {
             return (
-                <View key={index} style={[CreateStyles.tag, { opacity: 1 }]}>
+                <View key={index} style={CreateStyles.tag}>
                     <Text style={[GlobalStyles.paragraph3, { color: 'white' }]}>{item.label}</Text>
                 </View>
             )
@@ -65,8 +66,8 @@ const CreateOptionPicker = ({ item, setItem, itemType }) => {
             // Not selected
             return (
                 <TouchableWithoutFeedback key={index} onPress={() => setItem(option)}>
-                    <View style={CreateStyles.tag}>
-                        <Text style={[GlobalStyles.paragraph3, { color: 'white' }]}>{option.label}</Text>
+                    <View style={[CreateStyles.tag, CreateStyles.unselectedTag]}>
+                        <Text style={[GlobalStyles.paragraph3, { color: Styles.ADA_DARK_PINK }]}>{option.label}</Text>
                     </View>
                 </TouchableWithoutFeedback>
             )

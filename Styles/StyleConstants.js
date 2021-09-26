@@ -5,6 +5,7 @@ const height = Dimensions.get('screen').height;
 const Styles = {
     PINK: '#FFF5F4',
     DARK_PINK: '#F29288',
+    ADA_DARK_PINK: '#ed7a6d',
     BRIGHT_PINK: '#F7979D',
     GRAY: '#a1a1a1',
     LIGHT_GRAY: '#cfcfcf',
