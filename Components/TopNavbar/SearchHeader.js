@@ -20,6 +20,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
             if (drinks && profiles && spirits) {
                 navigation.setParams({ query: query });
                 if (query) {
+                    navigation.setParams({ isLoading: true });
                     const drinkRes = await findDrink(drinks);
                     const spiritRes = findSpirit(spirits);
                     const profileRes = findProfile(profiles);
@@ -46,7 +47,7 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
     }
 
     const findDrink = async (drinks) => {
-        const regex = new RegExp(`${query.trim()}`, 'i');
+        const regex = new RegExp(`${query.trim().toLowerCase()}`, 'i');
         const set = new Set();
         for (let i = 0; i < drinks.length; i++) {
             const drink = drinks[i];
@@ -56,17 +57,14 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                 // If the name matches query
                 if (drink.name.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
                     set.add(drink);
-                }
-
-                // If strength level matches query
-                if (drink.strength.value.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
-                    set.add(drink);
+                    continue;
                 }
 
                 // If one of the recipes matches query
                 for (let k = 0; k < drink.recipe.length; k++) {
                     if (drink.recipe[k].type.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
                         set.add(drink);
+                        continue;
                     }
                 }
 
@@ -74,12 +72,13 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
                 for (let j = 0; j < drink.tags.length; j++) {
                     if (drink.tags[j].name.toLowerCase().search(regex) >= 0 && !set.has(drink)) {
                         set.add(drink);
+                        continue;
                     }
                 }
+            }
 
-                if (set.size > 15) {
-                    break;
-                }
+            if (set.size > 8) {
+                break;
             }
         }
         return [...set];
@@ -92,17 +91,20 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
             const profile = profiles[i];
             if (profile.userName.toLowerCase().search(regex) >= 0 && !set.has(profile)) {
                 set.add(profile);
+                continue;
             }
 
             if (profile.fName.toLowerCase().search(regex) >= 0 && !set.has(profile)) {
                 set.add(profile);
+                continue;
             }
 
             if (profile.lName.toLowerCase().search(regex) >= 0 && !set.has(profile)) {
                 set.add(profile);
+                continue;
             }
 
-            if (set.size > 10) {
+            if (set.size > 8) {
                 break;
             }
         }
@@ -119,19 +121,22 @@ const SearchHeader = ({ drinks, navigation, profiles, spirits }) => {
             // If the name matches query
             if (spirit.name.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
                 set.add(spirit);
+                continue;
             }
 
             // If strength level matches query
             if (spirit.drinkability.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
                 set.add(spirit);
+                continue;
             }
 
             // If the spirit type (alcohol) matches the query
             if (spirit.spirit.toLowerCase().search(regex) >= 0 && !set.has(spirit)) {
                 set.add(spirit);
+                continue;
             }
 
-            if (set.size > 10) {
+            if (set.size > 5) {
                 break;
             }
         }

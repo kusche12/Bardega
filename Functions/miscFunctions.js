@@ -59,5 +59,7 @@ export const renderNotificationText = (item, drink) => {
 // user's profile screen on top of the stack
 export const navigateToProfile = async (navigation, item, userID) => {
     await navigation.navigate('Profile');
-    navigation.push('ProfileScreen', { user: item, ownProfile: item.id === userID });
+    setTimeout(async () => {
+        await navigation.push('ProfileScreen', { user: item, ownProfile: item.id === userID });
+    }, 1);
 }

@@ -40,14 +40,14 @@ const ProfileNavigator = ({ route, navigation, user }) => {
             screenOptions={{
                 headerStyle: { elevation: 0 },
                 cardStyle: { backgroundColor: '#FFFFFF' },
-                lazyLoad: false,
+                lazyLoad: true,
                 headerBackTitleVisible: false
             }}>
             <Stack.Screen
                 name='ProfileScreen'
                 component={ProfileScreen}
                 initialParams={{ user: user, ownProfile: true }}
-                options={(props) => ({
+                options={() => ({
                     headerTitle: () => <MainHeader />,
                     headerRight: () => {
                         return <NotificationsHeader navigation={navigation} user={user} />
