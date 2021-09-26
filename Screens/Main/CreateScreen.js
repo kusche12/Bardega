@@ -108,7 +108,9 @@ const CreateScreen = ({ route, tags, userID, createDrink, updateDrink, navigatio
                 });
             }
         }
+        discardChanges();
         setIsUploading(false);
+        navigation.navigate('Profile');
     }
 
     // Handler that prepares the drink image to be sent to firestorage

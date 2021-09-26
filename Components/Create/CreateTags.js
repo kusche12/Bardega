@@ -12,7 +12,7 @@ const CreateTags = ({ tags, setSelectedTags, selectedTags }) => {
             if (selectedTags[i].id === tag.id) {
                 return (
                     <TouchableWithoutFeedback key={index} onPress={() => handleDeselect(tag)}>
-                        <View style={[CreateStyles.tag, { opacity: 1 }]}>
+                        <View style={[CreateStyles.tag]}>
                             <Text style={[GlobalStyles.paragraph3, { color: 'white' }]}>{tag.name}</Text>
                         </View>
                     </TouchableWithoutFeedback>
@@ -22,8 +22,8 @@ const CreateTags = ({ tags, setSelectedTags, selectedTags }) => {
         // Tag not selected
         return (
             <TouchableWithoutFeedback key={index} onPress={() => handleSelect(tag)}>
-                <View style={CreateStyles.tag}>
-                    <Text style={[GlobalStyles.paragraph3, { color: 'white' }]}>{tag.name}</Text>
+                <View style={[CreateStyles.tag, CreateStyles.unselectedTag]}>
+                    <Text style={[GlobalStyles.paragraph3, { color: Styles.ADA_DARK_PINK }]}>{tag.name}</Text>
                 </View>
             </TouchableWithoutFeedback>
         )
