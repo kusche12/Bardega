@@ -124,7 +124,6 @@ export const signUp = (newUser) => {
                 .collection('profileFollowing')
                 .doc(profileFollowID)
                 .set({ 1: 'default' });
-
             await firestore
                 .collection('profileFollowing')
                 .doc(profileFollowID)
@@ -137,7 +136,6 @@ export const signUp = (newUser) => {
                 .collection('profileRequests')
                 .doc(profileFollowID)
                 .set({ 1: 'default' });
-
             await firestore
                 .collection('profileRequests')
                 .doc(profileFollowID)
