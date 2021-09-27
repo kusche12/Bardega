@@ -15,7 +15,6 @@ import * as Linking from 'expo-linking';
 const Main = ({ user, loaded }) => {
     // Custom fonts
     const [isLoading, setIsLoading] = useState(true);
-    // const [runOnce, setRunOnce] = useState(false);
 
     // Create a linking object that will allow a third party application to enter this app
     const prefix = Linking.createURL('/');
@@ -36,6 +35,7 @@ const Main = ({ user, loaded }) => {
         async function fetchData() {
             if (loaded) {
                 setTimeout(async () => {
+                    console.log(user);
                     await setIsLoading(false);
                 }, 800);
             }
