@@ -8,7 +8,10 @@ import ForgotPasswordScreen from '../../Screens/AuthScreens/ForgotPasswordScreen
 
 const Stack = createStackNavigator();
 
-const AuthNavigator = () => {
+const AuthNavigator = ({ loaded }) => {
+    if (!loaded) {
+        return null;
+    }
     return (
         <Stack.Navigator
             initialRouteName='Create'

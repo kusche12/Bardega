@@ -12,9 +12,10 @@ import MainNavigator from './MainNavigator';
 import * as Linking from 'expo-linking';
 
 // Application Navigator
-const Main = ({ user }) => {
+const Main = ({ user, loaded }) => {
     // Custom fonts
     const [isLoading, setIsLoading] = useState(true);
+    // const [runOnce, setRunOnce] = useState(false);
 
     // Create a linking object that will allow a third party application to enter this app
     const prefix = Linking.createURL('/');
@@ -32,26 +33,32 @@ const Main = ({ user }) => {
     }
 
     useEffect(() => {
-        if (user) {
-            setIsLoading(false);
+        async function fetchData() {
+            if (loaded) {
+                setTimeout(async () => {
+                    await setIsLoading(false);
+                }, 800);
+            }
         }
-    }, [user]);
+
+        fetchData();
+    }, [loaded]);
 
     // While the app is still loading in data, show the splash screen.
     // After it is loaded, either load the Authentication Flow for unauthenicated users or go directly to the Main Flow
     if (isLoading) return null;
     return (
         <NavigationContainer linking={linking}>
-            {user ? <MainNavigator userID={user.id} /> : <AuthNavigator />}
+            {user && loaded ? <MainNavigator userID={user.id} /> : <AuthNavigator loaded={loaded} />}
         </NavigationContainer>
     )
 }
 
 const mapStateToProps = (state) => {
-    console.log(state.firebase.auth.isEmpty)
     if (state.firebase.auth.isEmpty) {
         return {
-            user: null
+            user: null,
+            loaded: state.firebase.auth.isLoaded
         }
     } else {
         const profiles = state.firestore.data.profiles;
@@ -59,6 +66,7 @@ const mapStateToProps = (state) => {
         const profile = profiles ? profiles[UID] : null;
         return {
             user: profile,
+            loaded: state.firebase.auth.isLoaded
         }
     }
 }
